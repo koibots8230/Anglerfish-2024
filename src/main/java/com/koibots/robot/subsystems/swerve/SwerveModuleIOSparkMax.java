@@ -17,8 +17,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final CANSparkMax turnSparkMax;
 
     private final RelativeEncoder driveEncoder;
-    private final RelativeEncoder turnRelativeEncoder;
-    private final AbsoluteEncoder turnAbsoluteEncoder;
+    private final AbsoluteEncoder turnEncoder;
 
     private final boolean isTurnMotorInverted = true;
 
@@ -27,8 +26,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveSparkMax = new CANSparkMax(driveId, MotorType.kBrushless);
         turnSparkMax = new CANSparkMax(turnId, MotorType.kBrushless);
 
-        turnAbsoluteEncoder = turnSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
-
         driveSparkMax.restoreFactoryDefaults();
         turnSparkMax.restoreFactoryDefaults();
 
@@ -36,7 +33,19 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         turnSparkMax.setCANTimeout(250);
 
         driveEncoder = driveSparkMax.getEncoder();
-        turnRelativeEncoder = turnSparkMax.getEncoder();
+        turnEncoder = turnSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
+
+        // Apply position and velocity conversion factors for the driving encoder. The
+        // native units for position and velocity are rotations and RPM, respectively,
+        // but we want meters and meters per second to use with WPILib's swerve APIs.
+        driveEncoder.setPositionConversionFactor(DriveConstants.DRIVING_ENCODER_POSITION_FACTOR);
+        driveEncoder.setVelocityConversionFactor(DriveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
+
+        // Apply position and velocity conversion factors for the turning encoder. We
+        // want these in radians and radians per second to use with WPILib's swerve
+        // APIs.
+        turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
         turnSparkMax.setInverted(isTurnMotorInverted);
         driveSparkMax.setSmartCurrentLimit(40);
@@ -47,10 +56,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveEncoder.setPosition(0.0);
         driveEncoder.setMeasurementPeriod(10);
         driveEncoder.setAverageDepth(2);
-
-        turnRelativeEncoder.setPosition(0.0);
-        turnRelativeEncoder.setMeasurementPeriod(10);
-        turnRelativeEncoder.setAverageDepth(2);
 
         driveSparkMax.setCANTimeout(0);
         turnSparkMax.setCANTimeout(0);
@@ -63,13 +68,12 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     public void updateInputs(SwerveModuleInputs inputs) {
         inputs.drivePositionRad = Units.rotationsToRadians(driveEncoder.getPosition())
                 / DriveConstants.DRIVE_GEAR_RATIO;
-        inputs.driveVelocityRadPerSec = turnAbsoluteEncoder.getVelocity();
+        inputs.driveVelocityRadPerSec = driveEncoder.getVelocity();
         inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
         inputs.driveCurrentAmps = new double[] { driveSparkMax.getOutputCurrent() };
 
-        inputs.turnAbsolutePosition = new Rotation2d(turnAbsoluteEncoder.getPosition());
-        inputs.turnPosition = Rotation2d.fromRotations(turnRelativeEncoder.getPosition());
-        inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnRelativeEncoder.getVelocity());
+        inputs.turnPosition = Rotation2d.fromRotations(turnEncoder.getPosition());
+        inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnEncoder.getVelocity());
         inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
         inputs.turnCurrentAmps = new double[] { turnSparkMax.getOutputCurrent() };
     }
