@@ -20,6 +20,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
@@ -45,10 +47,14 @@ public class SwerveModule {
         // separate robot with different tuning)
         switch (Robot.getMode()) {
             case REAL:
+                driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+                driveFeedback = new PIDController(0.0, 0.0, 0.0);
+                turnFeedback = new PIDController(0.0, 0.0, 0.0);
+                break;
             case REPLAY:
-                driveFeedforward = new SimpleMotorFeedforward(0.1, 0.13);
-                driveFeedback = new PIDController(0.05, 0.0, 0.0);
-                turnFeedback = new PIDController(7.0, 0.0, 0.0);
+                driveFeedforward = new SimpleMotorFeedforward(0, 0);
+                driveFeedback = new PIDController(0.01, 0.0, 0.0);
+                turnFeedback = new PIDController(0.0, 0.0, 0.0);
                 break;
             case SIM:
                 driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
@@ -62,23 +68,20 @@ public class SwerveModule {
                 break;
         }
 
-        turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        turnFeedback.enableContinuousInput(0, 2 * Math.PI);
+
+        SmartDashboard.putData("Drive PID " + index , driveFeedback);
+        SmartDashboard.putData("Turn PID " + index, turnFeedback);
+
         setBrakeMode(true);
     }
 
     public void periodic() {
-
         io.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
-        // On first cycle, reset relative turn encoder
-        // Wait until absolute angle is nonzero in case it wasn't initialized yet
-        if (turnRelativeOffset == null && inputs.turnAbsolutePosition.getRadians() != 0.0) {
-            turnRelativeOffset = inputs.turnAbsolutePosition.minus(inputs.turnPosition);
-        }
-
         // Run closed loop turn control
-        if (angleSetpoint != null) {
+        if (angleSetpoint != null && Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) < 0.01) {
             io.setTurnVoltage(
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians()));
 
@@ -94,10 +97,17 @@ public class SwerveModule {
 
                 // Run drive controller
                 double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-                io.setDriveVoltage(
+
+                if (velocityRadPerSec > 0.01 || velocityRadPerSec < -0.01) {
+                    io.setDriveVoltage(
                         driveFeedforward.calculate(velocityRadPerSec)
                                 + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+                } else {
+                    io.setDriveVoltage(0);
+                }
             }
+        } else {
+            io.setTurnVoltage(0);
         }
     }
 
@@ -115,6 +125,11 @@ public class SwerveModule {
         speedSetpoint = optimizedState.speedMetersPerSecond;
 
         return optimizedState;
+    }
+
+    public void setTestVoltages() {
+        io.setDriveVoltage(3);
+        io.setTurnVoltage(3);
     }
 
     /** Disables all outputs to motors. */

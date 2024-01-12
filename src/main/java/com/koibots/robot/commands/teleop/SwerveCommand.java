@@ -54,10 +54,6 @@ public class SwerveCommand extends Command {
         addRequirements(Swerve.get());
     }
 
-    public void setScalingAlgorithm(Function<Double, Double> algorithm) {
-
-    }
-
     @Override
     public void initialize() {
         previousTimestamp = Logger.getRealTimestamp();
@@ -65,14 +61,6 @@ public class SwerveCommand extends Command {
 
     @Override
     public void execute() {
-
-        Logger.recordOutput(
-                "Swerve Command Inputs",
-                new double[] {
-                        vxSupplier.getAsDouble(), vySupplier.getAsDouble(),
-                        vThetaSupplier.getAsDouble()
-                });
-
         if (!this.crossSupplier.getAsBoolean()) { // Normal Field Oriented Drive
             double linearMagnitude = MathUtil.applyDeadband(
                     Math.hypot(vxSupplier.getAsDouble(), vySupplier.getAsDouble()),
