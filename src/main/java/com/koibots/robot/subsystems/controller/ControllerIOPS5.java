@@ -32,7 +32,7 @@ public class ControllerIOPS5 extends ControllerIO {
 
     @Override
     public boolean cross() {
-        return controller.getRawButton(2);
+        return controller.getCrossButton();
     }
 
 }

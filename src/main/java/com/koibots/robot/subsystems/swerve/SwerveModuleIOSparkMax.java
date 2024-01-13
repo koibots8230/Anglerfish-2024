@@ -3,11 +3,15 @@ package com.koibots.robot.subsystems.swerve;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+
+import org.littletonrobotics.junction.Logger;
+
 import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
@@ -41,11 +45,17 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveEncoder.setPositionConversionFactor(DriveConstants.DRIVING_ENCODER_POSITION_FACTOR);
         driveEncoder.setVelocityConversionFactor(DriveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
 
+        turnEncoder.setInverted(true);
+
         // Apply position and velocity conversion factors for the turning encoder. We
         // want these in radians and radians per second to use with WPILib's swerve
         // APIs.
         turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
+
+        if (turnSparkMax.getDeviceId() == DriveConstants.FRONT_LEFT_TURN_ID || turnSparkMax.getDeviceId() == DriveConstants.BACK_RIGHT_TURN_ID) {
+            turnEncoder.setZeroOffset(Math.PI / 2);
+        }
 
         turnSparkMax.setInverted(isTurnMotorInverted);
         driveSparkMax.setSmartCurrentLimit(40);
@@ -80,16 +90,21 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
     @Override
     public void setDriveVoltage(double volts) {
+        Logger.recordOutput("Drive Voltage " + driveSparkMax.getDeviceId(), volts);
+        MathUtil.clamp(volts, -12, 12);
         driveSparkMax.setVoltage(volts);
     }
 
     @Override
     public void setTurnVoltage(double volts) {
-        turnSparkMax.setVoltage(volts);
+        Logger.recordOutput("Turn Voltage " + turnSparkMax.getDeviceId(), volts);
+        MathUtil.clamp(volts, -11.4, 12);
+        turnSparkMax.setVoltage(volts);;
     }
 
     @Override
     public void setDriveBrakeMode(boolean enable) {
+
         driveSparkMax.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
     }
 

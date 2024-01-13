@@ -123,7 +123,7 @@ public class Robot extends LoggedRobot {
             Swerve.get()::runEncoderTest,
             Swerve.get()::stop,
             Swerve.get()
-        );
+        ).schedule();;
     }
 
     public void simulationInit() {

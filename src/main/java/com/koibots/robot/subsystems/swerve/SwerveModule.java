@@ -34,9 +34,8 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveFeedforward;
     private final PIDController driveFeedback;
     private final PIDController turnFeedback;
-    private Rotation2d angleSetpoint = null; // Setpoint for closed loop control, null for open loop
-    private Double speedSetpoint = null; // Setpoint for closed loop control, null for open loop
-    private Rotation2d turnRelativeOffset = null; // Relative + Offset = Absolute
+    private Rotation2d angleSetpoint = new Rotation2d(); // Setpoint for closed loop control, null for open loop
+    private Double speedSetpoint = 0.0; // Setpoint for closed loop control, null for open loop
     private double lastPositionMeters = 0.0; // Used for delta calculation
 
     public SwerveModule(SwerveModuleIO io, int index) {
@@ -49,7 +48,7 @@ public class SwerveModule {
             case REAL:
                 driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
                 driveFeedback = new PIDController(0.0, 0.0, 0.0);
-                turnFeedback = new PIDController(0.0, 0.0, 0.0);
+                turnFeedback = new PIDController(0.01, 0.0, 0.0);
                 break;
             case REPLAY:
                 driveFeedforward = new SimpleMotorFeedforward(0, 0);
@@ -79,9 +78,11 @@ public class SwerveModule {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+        Logger.recordOutput("Drive/Module" + index +"/AngleSetpoint", speedSetpoint);
+        Logger.recordOutput("Drive/Module" + index +"/SpeedSetpoint", angleSetpoint);
 
         // Run closed loop turn control
-        if (angleSetpoint != null && Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) < 0.01) {
+        if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 1) {
             io.setTurnVoltage(
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians()));
 
@@ -118,8 +119,10 @@ public class SwerveModule {
     public SwerveModuleState setState(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null
-        var optimizedState = SwerveModuleState.optimize(state, getAngle());
+        //var optimizedState = SwerveModuleStat
+        e.optimize(state, getAngle());
 
+        var optimizedState = state;
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = optimizedState.angle;
         speedSetpoint = optimizedState.speedMetersPerSecond;
@@ -150,11 +153,7 @@ public class SwerveModule {
 
     /** Returns the current turn angle of the module. */
     public Rotation2d getAngle() {
-        if (turnRelativeOffset == null) {
-            return new Rotation2d();
-        } else {
-            return inputs.turnPosition.plus(turnRelativeOffset);
-        }
+        return inputs.turnPosition;
     }
 
     /** Returns the current drive position of the module in meters. */

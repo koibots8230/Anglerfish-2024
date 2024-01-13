@@ -60,7 +60,10 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-        simulationPeriodic();
+
+        if (Robot.isSimulation()) {
+            simulationPeriodic();
+        }
 
         gyro.updateInputs(gyroInputs);
         Logger.processInputs("Drive/Gyro", gyroInputs);
