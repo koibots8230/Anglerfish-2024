@@ -22,18 +22,6 @@ public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    public enum Mode {
-        REAL,
-        SIM,
-        REPLAY
-    }
-
-    private static final Mode robotMode = isReal() ? Mode.REAL : Constants.SET_REPLAY ? Mode.REPLAY : Mode.SIM;
-
-    public static Mode getMode() {
-        return robotMode;
-    }
-
     /**
      * This function is run when the robot is first started up and should be used
      * for any
@@ -56,7 +44,7 @@ public class Robot extends LoggedRobot {
         // Instantiate our RobotContainer.
         // This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        robotContainer = new RobotContainer(robotMode);
+        robotContainer = new RobotContainer();
     }
 
     /**

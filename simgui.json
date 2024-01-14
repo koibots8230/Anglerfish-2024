@@ -1,0 +1,21 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Controller Chooser": "String Chooser",
+      "/SmartDashboard/Drive PID 0": "PIDController",
+      "/SmartDashboard/Drive PID 1": "PIDController",
+      "/SmartDashboard/Drive PID 2": "PIDController",
+      "/SmartDashboard/Drive PID 3": "PIDController",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Scaling Algorithm": "String Chooser",
+      "/SmartDashboard/Turn PID 0": "PIDController",
+      "/SmartDashboard/Turn PID 1": "PIDController",
+      "/SmartDashboard/Turn PID 2": "PIDController",
+      "/SmartDashboard/Turn PID 3": "PIDController"
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

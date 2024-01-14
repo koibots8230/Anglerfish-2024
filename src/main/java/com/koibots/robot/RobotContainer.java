@@ -6,7 +6,6 @@ import com.koibots.robot.commands.teleop.SwerveCommand;
 import com.koibots.robot.subsystems.controller.ControllerIO;
 import com.koibots.robot.subsystems.controller.ControllerIOPS5;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -45,24 +44,22 @@ public class RobotContainer {
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer(Robot.Mode mode) {
-        switch (mode) {
-            case REPLAY:
-                DriverStation.reportError("Replay not supported", false);
-                throw new RuntimeException("Replay not supported");
-            case REAL:
-            case SIM:
-                controllerChooser = new LoggedDashboardChooser<>("Controller Chooser");
+    public RobotContainer() {
+        controllerChooser = new LoggedDashboardChooser<>("Controller Chooser");
 
-                controllerChooser.addDefaultOption("PS5 Controller", ControllerIOPS5::new);
+        controllerChooser.addDefaultOption("PS5 Controller", ControllerIOPS5::new);
 
-                scalingChooser.addDefaultOption("Linear", ScalingAlgorithm.Linear);
-                scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);
-                scalingChooser.addOption("Cubed", ScalingAlgorithm.Cubed);
-                scalingChooser.addOption("Cosine", ScalingAlgorithm.Cosine);
-                scalingChooser.addOption("Fancy", ScalingAlgorithm.CubedSquareRoot);
+        scalingChooser.addDefaultOption("Linear", ScalingAlgorithm.Linear);
+        scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);
+        scalingChooser.addOption("Cubed", ScalingAlgorithm.Cubed);
+        scalingChooser.addOption("Cosine", ScalingAlgorithm.Cosine);
+        scalingChooser.addOption("Fancy", ScalingAlgorithm.CubedSquareRoot);
 
-                break;
+
+        if (Robot.isReal()) {
+
+        } else {
+
         }
     }
 

@@ -14,6 +14,7 @@
 package com.koibots.robot.subsystems.swerve;
 
 import com.koibots.robot.Robot;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModule {
-    private static final double WHEEL_RADIUS = Units.inchesToMeters(2.0);
+    private static final double WHEEL_RADIUS = Units.inchesToMeters(1.5);
 
     private final SwerveModuleIO io;
     private final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
@@ -44,27 +45,14 @@ public class SwerveModule {
 
         // Switch constants based on mode (the physics simulator is treated as a
         // separate robot with different tuning)
-        switch (Robot.getMode()) {
-            case REAL:
-                driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-                driveFeedback = new PIDController(0.0, 0.0, 0.0);
-                turnFeedback = new PIDController(0.01, 0.0, 0.0);
-                break;
-            case REPLAY:
-                driveFeedforward = new SimpleMotorFeedforward(0, 0);
-                driveFeedback = new PIDController(0.01, 0.0, 0.0);
-                turnFeedback = new PIDController(0.0, 0.0, 0.0);
-                break;
-            case SIM:
-                driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
-                driveFeedback = new PIDController(0.1, 0.0, 0.0);
-                turnFeedback = new PIDController(10.0, 0.0, 0.0);
-                break;
-            default:
-                driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-                driveFeedback = new PIDController(0.0, 0.0, 0.0);
-                turnFeedback = new PIDController(0.0, 0.0, 0.0);
-                break;
+        if (Robot.isReal()) {
+            driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+            driveFeedback = new PIDController(0.0, 0.0, 0.0);
+            turnFeedback = new PIDController(0.01, 0.0, 0.0);
+        } else {
+            driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
+            driveFeedback = new PIDController(0.1, 0.0, 0.0);
+            turnFeedback = new PIDController(10.0, 0.0, 0.0);
         }
 
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
@@ -78,37 +66,23 @@ public class SwerveModule {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
-        Logger.recordOutput("Drive/Module" + index +"/AngleSetpoint", speedSetpoint);
-        Logger.recordOutput("Drive/Module" + index +"/SpeedSetpoint", angleSetpoint);
+        Logger.recordOutput("Drive/Module" + index +"/AngleSetpoint", angleSetpoint);
+        Logger.recordOutput("Drive/Module" + index +"/SpeedSetpoint", speedSetpoint);
 
         // Run closed loop turn control
         if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 1) {
             io.setTurnVoltage(
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians()));
-
-            // Run closed loop drive control
-            // Only allowed if closed loop turn control is running
-            if (speedSetpoint != null) {
-                // Scale velocity based on turn error
-                //
-                // When the error is 90, the velocity setpoint should be 0. As the wheel turns
-                // towards the setpoint, its velocity should increase. This is achieved by
-                // taking the component of the velocity in the direction of the setpoint.
-                double adjustSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
-
-                // Run drive controller
-                double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-
-                if (velocityRadPerSec > 0.01 || velocityRadPerSec < -0.01) {
-                    io.setDriveVoltage(
-                        driveFeedforward.calculate(velocityRadPerSec)
-                                + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
-                } else {
-                    io.setDriveVoltage(0);
-                }
-            }
         } else {
             io.setTurnVoltage(0);
+        }
+
+        // Run closed loop drive control
+        if (speedSetpoint > 0.1 ||speedSetpoint < -0.1) {
+            io.setDriveVoltage(
+                    driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint));
+        } else {
+            io.setDriveVoltage(0);
         }
     }
 
@@ -119,8 +93,7 @@ public class SwerveModule {
     public SwerveModuleState setState(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null
-        //var optimizedState = SwerveModuleStat
-        e.optimize(state, getAngle());
+        SwerveModuleState.optimize(state, getAngle());
 
         var optimizedState = state;
         // Update setpoints, controllers run in "periodic"
@@ -141,8 +114,8 @@ public class SwerveModule {
         io.setDriveVoltage(0.0);
 
         // Disable closed loop control for turn and drive
-        angleSetpoint = null;
-        speedSetpoint = null;
+        angleSetpoint = getAngle();
+        speedSetpoint = 0.0;
     }
 
     /** Sets whether brake mode is enabled. */

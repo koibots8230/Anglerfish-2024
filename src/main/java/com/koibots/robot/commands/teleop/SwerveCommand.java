@@ -130,10 +130,8 @@ public class SwerveCommand extends Command {
                                 Rotation2d.fromDegrees(45))
                 };
 
-                
                 Logger.recordOutput("Module Setpoints", targetModuleStates);
             Swerve.get().setModuleStates(targetModuleStates);
-                    
         }
     }
 }

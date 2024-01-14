@@ -21,41 +21,36 @@ public class Swerve extends SubsystemBase {
     SwerveDrivePoseEstimator odometry;
 
     public Swerve() {
-        switch (Robot.getMode()) {
-            case REAL:
-                swerveModules = new SwerveModule[] { // FL-FR-BL-BR
-                        new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.FRONT_LEFT_DRIVE_ID,
-                                DriveConstants.FRONT_LEFT_TURN_ID), 0),
-                        new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.FRONT_RIGHT_DRIVE_ID,
-                                DriveConstants.FRONT_RIGHT_TURN_ID), 1),
-                        new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.BACK_LEFT_DRIVE_ID,
-                                DriveConstants.BACK_LEFT_TURN_ID), 2),
-                        new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.BACK_RIGHT_DRIVE_ID,
-                                DriveConstants.BACK_RIGHT_TURN_ID), 3),
-                };
+        if(Robot.isReal()) {
+            swerveModules = new SwerveModule[] { // FL-FR-BL-BR
+                    new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.FRONT_LEFT_DRIVE_ID,
+                            DriveConstants.FRONT_LEFT_TURN_ID), 0),
+                    new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.FRONT_RIGHT_DRIVE_ID,
+                            DriveConstants.FRONT_RIGHT_TURN_ID), 1),
+                    new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.BACK_LEFT_DRIVE_ID,
+                            DriveConstants.BACK_LEFT_TURN_ID), 2),
+                    new SwerveModule(new SwerveModuleIOSparkMax(DriveConstants.BACK_RIGHT_DRIVE_ID,
+                            DriveConstants.BACK_RIGHT_TURN_ID), 3),
+            };
 
-                gyro = new GyroIONavX();
+            gyro = new GyroIONavX();
 
-                break;
-            case SIM:
-                swerveModules = new SwerveModule[] {
-                        new SwerveModule(new SwerveModuleIOSim(), 0),
-                        new SwerveModule(new SwerveModuleIOSim(), 1),
-                        new SwerveModule(new SwerveModuleIOSim(), 2),
-                        new SwerveModule(new SwerveModuleIOSim(), 3)
-                };
+        } else {
+            swerveModules = new SwerveModule[] {
+                    new SwerveModule(new SwerveModuleIOSim(), 0),
+                    new SwerveModule(new SwerveModuleIOSim(), 1),
+                    new SwerveModule(new SwerveModuleIOSim(), 2),
+                    new SwerveModule(new SwerveModuleIOSim(), 3)
+            };
 
-                gyro = new GyroIOSim();
-
-                break;
-            case REPLAY:
+            gyro = new GyroIOSim();
         }
 
         odometry = new SwerveDrivePoseEstimator(
-                    Constants.SWERVE_KINEMATICS,
-                    new Rotation2d(),
-                    getModulePositions(),
-                    new Pose2d());
+                Constants.SWERVE_KINEMATICS,
+                new Rotation2d(),
+                getModulePositions(),
+                new Pose2d());
     }
 
     @Override
