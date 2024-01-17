@@ -2,6 +2,8 @@ package com.koibots.robot;
 
 import static java.lang.StrictMath.PI;
 
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -59,6 +61,10 @@ public class Constants {
         / kDrivingMotorReduction; // meters
         public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) / 60.0; // meters per second
-
     }
+
+    public static class ShooterConstants{
+       public static final int IN_MOTOR_1_PORT = 0;
+    }
+
 }
