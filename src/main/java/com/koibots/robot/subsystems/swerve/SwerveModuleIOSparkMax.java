@@ -11,19 +11,14 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
-
     private final CANSparkMax driveSparkMax;
     private final CANSparkMax turnSparkMax;
-
     private final RelativeEncoder driveEncoder;
     private final AbsoluteEncoder turnEncoder;
-
-    private final boolean isTurnMotorInverted = true;
 
     public SwerveModuleIOSparkMax(int driveId, int turnId) {
 
@@ -57,7 +52,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
             turnEncoder.setZeroOffset(Math.PI / 2);
         }
 
-        turnSparkMax.setInverted(isTurnMotorInverted);
+        turnSparkMax.setInverted(true);
         driveSparkMax.setSmartCurrentLimit(40);
         turnSparkMax.setSmartCurrentLimit(20);
         driveSparkMax.enableVoltageCompensation(12.0);
@@ -91,20 +86,17 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     @Override
     public void setDriveVoltage(double volts) {
         Logger.recordOutput("Drive Voltage " + driveSparkMax.getDeviceId(), volts);
-        MathUtil.clamp(volts, -12, 12);
         driveSparkMax.setVoltage(volts);
     }
 
     @Override
     public void setTurnVoltage(double volts) {
         Logger.recordOutput("Turn Voltage " + turnSparkMax.getDeviceId(), volts);
-        MathUtil.clamp(volts, -11.4, 12);
-        turnSparkMax.setVoltage(volts);;
+        turnSparkMax.setVoltage(volts);
     }
 
     @Override
     public void setDriveBrakeMode(boolean enable) {
-
         driveSparkMax.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
     }
 

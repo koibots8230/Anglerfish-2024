@@ -16,7 +16,6 @@ package com.koibots.robot.subsystems.swerve;
 import com.koibots.robot.Robot;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -32,12 +31,11 @@ public class SwerveModule {
     private final SwerveModuleInputsAutoLogged inputs = new SwerveModuleInputsAutoLogged();
     private final int index;
 
-    private final SimpleMotorFeedforward driveFeedforward;
+    // private final SimpleMotorFeedforward driveFeedforward;
     private final PIDController driveFeedback;
     private final PIDController turnFeedback;
     private Rotation2d angleSetpoint = new Rotation2d(); // Setpoint for closed loop control, null for open loop
     private Double speedSetpoint = 0.0; // Setpoint for closed loop control, null for open loop
-    private double lastPositionMeters = 0.0; // Used for delta calculation
 
     public SwerveModule(SwerveModuleIO io, int index) {
         this.io = io;
@@ -46,11 +44,11 @@ public class SwerveModule {
         // Switch constants based on mode (the physics simulator is treated as a
         // separate robot with different tuning)
         if (Robot.isReal()) {
-            driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
+            // driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
             driveFeedback = new PIDController(0.0, 0.0, 0.0);
             turnFeedback = new PIDController(0.01, 0.0, 0.0);
         } else {
-            driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
+            // driveFeedforward = new SimpleMotorFeedforward(0.0, 0.13);
             driveFeedback = new PIDController(0.1, 0.0, 0.0);
             turnFeedback = new PIDController(10.0, 0.0, 0.0);
         }
@@ -65,7 +63,7 @@ public class SwerveModule {
 
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
+        Logger.processInputs("Drive/Module" + index, inputs);
         Logger.recordOutput("Drive/Module" + index +"/AngleSetpoint", angleSetpoint);
         Logger.recordOutput("Drive/Module" + index +"/SpeedSetpoint", speedSetpoint);
 
@@ -90,17 +88,17 @@ public class SwerveModule {
      * Runs the module with the specified setpoint state. Returns the optimized
      * state.
      */
-    public SwerveModuleState setState(SwerveModuleState state) {
+    public void setState(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null
-        SwerveModuleState.optimize(state, getAngle());
+        //SwerveModuleState.optimize(state, getAngle());
 
-        var optimizedState = state;
+        // TODO: Reactivate optimization after it works without it
+
         // Update setpoints, controllers run in "periodic"
-        angleSetpoint = optimizedState.angle;
-        speedSetpoint = optimizedState.speedMetersPerSecond;
+        angleSetpoint = state.angle;
+        speedSetpoint = state.speedMetersPerSecond;
 
-        return optimizedState;
     }
 
     public void setTestVoltages() {
@@ -142,13 +140,6 @@ public class SwerveModule {
     /** Returns the module position (turn angle and drive position). */
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(getPositionMeters(), getAngle());
-    }
-
-    /** Returns the module position delta since the last call to this method. */
-    public SwerveModulePosition getPositionDelta() {
-        var delta = new SwerveModulePosition(getPositionMeters() - lastPositionMeters, getAngle());
-        lastPositionMeters = getPositionMeters();
-        return delta;
     }
 
     /** Returns the module state (turn angle and drive velocity). */

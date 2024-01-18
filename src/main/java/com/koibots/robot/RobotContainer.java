@@ -34,7 +34,7 @@ public class RobotContainer {
 
         public final Function<Double, Double> algorithm;
 
-        private ScalingAlgorithm(Function<Double, Double> algorithm) {
+         ScalingAlgorithm(Function<Double, Double> algorithm) {
             this.algorithm = algorithm;
         }
     }
@@ -54,13 +54,6 @@ public class RobotContainer {
         scalingChooser.addOption("Cubed", ScalingAlgorithm.Cubed);
         scalingChooser.addOption("Cosine", ScalingAlgorithm.Cosine);
         scalingChooser.addOption("Fancy", ScalingAlgorithm.CubedSquareRoot);
-
-
-        if (Robot.isReal()) {
-
-        } else {
-
-        }
     }
 
     /**

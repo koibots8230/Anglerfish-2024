@@ -1,6 +1,6 @@
 package com.koibots.robot.subsystems.swerve;
 
-import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DriveConstants;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger;
 public class GyroIOSim implements GyroIO {
     @Override
     public void updateInputs(GyroIOInputs inputs) {
-        ChassisSpeeds speeds = Constants.SWERVE_KINEMATICS.toChassisSpeeds(Swerve.get().getModuleStates());
+            ChassisSpeeds speeds = DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(Swerve.get().getModuleStates());
 
         Logger.recordOutput(
                 "Calculated Speeds",

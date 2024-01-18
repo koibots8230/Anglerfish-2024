@@ -1,6 +1,7 @@
 package com.koibots.robot.commands.teleop;
 
 import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DriveConstants;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.math.kinematics.SwerveDriveKinematics.desaturateWheelSpeeds;
@@ -46,7 +47,7 @@ public class SwerveCommand extends Command {
                 0.2,
                 0,
                 0,
-                new Constraints(Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND, 4 * Math.PI),
+                new Constraints(DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND, 4 * Math.PI),
                 0.02);
 
         angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
@@ -86,20 +87,20 @@ public class SwerveCommand extends Command {
 
             ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                     linearMagnitude * linearDirection.getCos()
-                            * Constants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
+                    * DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
                     linearMagnitude * linearDirection.getSin()
-                            * Constants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
-                    angularVelocity * Constants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                    * DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
+                    angularVelocity * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
                     Swerve.get().getEstimatedPose().getRotation());
 
             double periodSeconds = Logger.getRealTimestamp() - previousTimestamp;
 
             ChassisSpeeds.discretize(speeds, periodSeconds);
 
-            SwerveModuleState[] targetModuleStates = Constants.SWERVE_KINEMATICS
+            SwerveModuleState[] targetModuleStates = DriveConstants.SWERVE_KINEMATICS
                     .toSwerveModuleStates(speeds);
 
-            desaturateWheelSpeeds(targetModuleStates, Constants.MAX_LINEAR_SPEED_METERS_PER_SECOND);
+            desaturateWheelSpeeds(targetModuleStates, DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND);
 
             if (speeds.vxMetersPerSecond == 0.0
                     && speeds.vyMetersPerSecond == 0.0

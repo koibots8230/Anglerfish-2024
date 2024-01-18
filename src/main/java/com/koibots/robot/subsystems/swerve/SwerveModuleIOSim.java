@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double LOOP_PERIOD_SECS = 0.02;
 
-    private DCMotorSim driveSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
-    private DCMotorSim turnSim = new DCMotorSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
+    private final DCMotorSim driveSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
+    private final DCMotorSim turnSim = new DCMotorSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
 
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;

@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
         }
 
         odometry = new SwerveDrivePoseEstimator(
-                Constants.SWERVE_KINEMATICS,
+                DriveConstants.SWERVE_KINEMATICS,
                 new Rotation2d(),
                 getModulePositions(),
                 new Pose2d());
@@ -79,7 +79,8 @@ public class Swerve extends SubsystemBase {
             swerveModules[2].stop();
             swerveModules[3].stop();
 
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
+            // Record blank states
+            Logger.recordOutput("SwerveStates/Setpoints");
         }
 
         // Log measured states
@@ -88,7 +89,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void simulationPeriodic() {
-        ChassisSpeeds simSpeeds = Constants.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
+        ChassisSpeeds simSpeeds = DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
 
         Constants.FIELD.setRobotPose(getEstimatedPose());
         gyroInputs.yawPosition = gyroInputs.yawPosition

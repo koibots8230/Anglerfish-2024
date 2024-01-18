@@ -6,16 +6,9 @@ import java.util.function.Supplier;
 
 public class Subsystems {
     private static Swerve swerveInstance;
-    public static Supplier<Swerve> Swerve;
-
-    static {
-        Swerve = () -> {
-            swerveInstance = new Swerve();
-            Swerve = () -> {
-                return swerveInstance;
-            };
-
-            return swerveInstance;
-        };
-    }
+    public static Supplier<Swerve> Swerve = () -> {
+        swerveInstance = new Swerve();
+        Swerve = () -> swerveInstance;
+        return swerveInstance;
+    };
 }
