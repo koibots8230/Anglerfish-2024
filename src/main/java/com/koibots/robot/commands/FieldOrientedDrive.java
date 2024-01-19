@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -44,13 +45,15 @@ public class FieldOrientedDrive extends Command {
         this.scalingAlgorithm = scalingAlgorithm;
 
         angleAlignmentController = new ProfiledPIDController(
-                0.2,
+                0.19,
                 0,
                 0,
                 new Constraints(DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND, 4 * Math.PI),
                 0.02);
 
         angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
+
+        SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
         addRequirements(Swerve.get());
     }
@@ -75,7 +78,10 @@ public class FieldOrientedDrive extends Command {
             if (angleSupplier.getAsDouble() != -1) {
                 angularVelocity = angleAlignmentController.calculate(
                         Swerve.get().getEstimatedPose().getRotation().getRadians(),
-                        -Math.toRadians(angleSupplier.getAsDouble()));
+                        Math.toRadians(angleSupplier.getAsDouble()) - Math.PI);
+
+                Logger.recordOutput("Angle Alignement Setpoint", Math.toRadians(angleSupplier.getAsDouble()) - Math .PI);
+                Logger.recordOutput("Angle Alignement Output", angularVelocity);
             } else {
                 angularVelocity = MathUtil.applyDeadband(vThetaSupplier.getAsDouble(),
                         Constants.DEADBAND);
@@ -118,8 +124,6 @@ public class FieldOrientedDrive extends Command {
 
             Swerve.get().setModuleStates(targetModuleStates);
         } else { // Set Cross
-            System.out.println("Setting Cross");
-
             var targetModuleStates = new SwerveModuleState[] {
                         new SwerveModuleState(0,
                                 Rotation2d.fromDegrees(45)),

@@ -4,7 +4,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
-import org.littletonrobotics.junction.Logger;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 
 import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.AbsoluteEncoder;
@@ -12,7 +13,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final CANSparkMax driveSparkMax;
@@ -71,28 +77,25 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
     @Override
     public void updateInputs(SwerveModuleInputs inputs) {
-        inputs.drivePositionRad = Units.rotationsToRadians(driveEncoder.getPosition())
-                / DriveConstants.DRIVE_GEAR_RATIO;
-        inputs.driveVelocityRadPerSec = driveEncoder.getVelocity();
-        inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
-        inputs.driveCurrentAmps = new double[] { driveSparkMax.getOutputCurrent() };
+        inputs.drivePosition = Meters.of(driveEncoder.getPosition());
+        inputs.driveVelocity = MetersPerSecond.of(driveEncoder.getVelocity());
+        inputs.driveAppliedVoltage = Volts.of(driveSparkMax.getBusVoltage()).times(driveSparkMax.getAppliedOutput());
+        inputs.driveCurrent = Amps.of(driveSparkMax.getOutputCurrent());
 
         inputs.turnPosition = Rotation2d.fromRadians(turnEncoder.getPosition()).minus(Rotation2d.fromRadians(Math.PI));
-        inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnEncoder.getVelocity());
-        inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
-        inputs.turnCurrentAmps = new double[] { turnSparkMax.getOutputCurrent() };
+        inputs.turnVelocity = RadiansPerSecond.of(turnEncoder.getVelocity());
+        inputs.turnAppliedVoltage = Volts.of(turnSparkMax.getBusVoltage()).times(turnSparkMax.getAppliedOutput());
+        inputs.turnCurrent = Amps.of(turnSparkMax.getOutputCurrent());
     }
 
     @Override
-    public void setDriveVoltage(double volts) {
-        Logger.recordOutput("Drive Voltage " + driveSparkMax.getDeviceId(), volts);
-        driveSparkMax.setVoltage(volts);
+    public void setDriveVoltage(Measure<Voltage> voltage) {
+        driveSparkMax.setVoltage(voltage.in(Volts));
     }
 
     @Override
-    public void setTurnVoltage(double volts) {
-        Logger.recordOutput("Turn Voltage " + turnSparkMax.getDeviceId(), volts);
-        turnSparkMax.setVoltage(volts);
+    public void setTurnVoltage(Measure<Voltage> voltage) {
+        turnSparkMax.setVoltage(voltage.in(Volts));
     }
 
     @Override

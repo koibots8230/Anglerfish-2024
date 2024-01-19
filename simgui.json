@@ -1,7 +1,15 @@
 {
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
       "/SmartDashboard/Controller Chooser": "String Chooser",
       "/SmartDashboard/Drive PID 0": "PIDController",
       "/SmartDashboard/Drive PID 1": "PIDController",
@@ -18,6 +26,9 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "AdvantageKit": {
         "DashboardInputs": {
@@ -28,7 +39,23 @@
             "double[]##v_/AdvantageKit/Drive/Module0/DriveCurrentAmps": {
               "open": true
             }
-          }
+          },
+          "open": true
+        }
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        }
+      },
+      "Shuffleboard": {
+        "SysId": {
+          "open": true
+        }
+      },
+      "SmartDashboard": {
+        "Angle Alignment Controller": {
+          "open": true
         },
         "open": true
       }

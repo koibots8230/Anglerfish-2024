@@ -7,11 +7,9 @@ package com.koibots.robot;
 import com.koibots.lib.sysid.SysIdTest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,14 +24,12 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
-import static edu.wpi.first.units.Units.Volts;
 
 public class Robot extends LoggedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
     private final SendableChooser<SysIdTest> sysidRoutineChooser = new SendableChooser<>();
     private final SendableChooser<SysIdRoutine.Mechanism> sysidMechanismChooser = new SendableChooser<>();
-    private final GenericEntry sysidButton = Shuffleboard.getTab("SysId").add("Enable SysId", false).getEntry();
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -62,6 +58,7 @@ public class Robot extends LoggedRobot {
 
         SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
         SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
+        SmartDashboard.putBoolean("Enable SysId", false);
     }
 
     /**
@@ -130,7 +127,7 @@ public class Robot extends LoggedRobot {
 
         sysidMechanismChooser.addOption("Swerve Drive",
                 new SysIdRoutine.Mechanism(
-                        (voltage) -> Swerve.get().setDriveVoltages(voltage.in(Volts)),
+                        (voltage) -> Swerve.get().setDriveVoltages(voltage),
                         null,
                         Swerve.get(),
                         "Swerve Drive"
@@ -145,7 +142,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testPeriodic() {
-        if (sysidButton.get().getBoolean()) {
+        if (SmartDashboard.getBoolean("Enable SysId", false)) {
             final var mechanism = sysidMechanismChooser.getSelected();
             if (mechanism == null) {
                 DriverStation.reportError("No SysId Mechanism Selected", false);

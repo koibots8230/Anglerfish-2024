@@ -11,9 +11,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
+
+import static edu.wpi.first.units.Units.Volts;
 
 public class Swerve extends SubsystemBase {
     SwerveModule[] swerveModules;
@@ -99,12 +103,11 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        Logger.recordOutput("SwerveStates/Setpoints", states);
-
-        swerveModules[0].setState(states[0]);
-        swerveModules[1].setState(states[1]);
-        swerveModules[2].setState(states[2]);
-        swerveModules[3].setState(states[3]);
+        Logger.recordOutput("SwerveStates/Setpoints",
+                swerveModules[0].setState(states[0]),
+                swerveModules[1].setState(states[1]),
+                swerveModules[2].setState(states[2]),
+                swerveModules[3].setState(states[3]));
     }
 
     public SwerveModuleState[] getModuleStates() {
@@ -125,19 +128,19 @@ public class Swerve extends SubsystemBase {
         };
     }
 
-    public void setVoltages(double driveVolts, double turnVolts) {
+    public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
         swerveModules[0].setVoltages(driveVolts, turnVolts);
         swerveModules[1].setVoltages(driveVolts, turnVolts);
         swerveModules[2].setVoltages(driveVolts, turnVolts);
         swerveModules[3].setVoltages(driveVolts, turnVolts);
     }
 
-    public void setDriveVoltages(double volts) {
-        setVoltages(volts, 0);
+    public void setDriveVoltages(Measure<Voltage> volts) {
+        setVoltages(volts, Volts.of(0));
     }
 
-    public void setTurnVoltages(double volts) {
-        setVoltages(0, volts);
+    public void setTurnVoltages(Measure<Voltage> volts) {
+        setVoltages(Volts.of(0), volts);
     }
 
     public void stop() {

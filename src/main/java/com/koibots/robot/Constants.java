@@ -1,19 +1,24 @@
 package com.koibots.robot;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
 import static java.lang.StrictMath.PI;
 
 import com.pathplanner.lib.util.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Constants {
 
-    public static final double DEADBAND = 0.02;
+    public static final double DEADBAND = 0.025;
     public static final Field2d FIELD = new Field2d();
 
     public static class DriveConstants {
+        public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
         private static final double ROBOT_WIDTH_METERS = Units.inchesToMeters(25);
         private static final double ROBOT_LENGTH_METERS = Units.inchesToMeters(25);
 
@@ -29,7 +34,6 @@ public class Constants {
 
         // TODO: make sure this correct for competition bot
         private static final int kDrivingMotorPinionTeeth = 13;
-        private static final double kWheelDiameterMeters = Units.inchesToMeters(3);
         public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
 
         public static final int FRONT_LEFT_DRIVE_ID = 7;
@@ -41,16 +45,17 @@ public class Constants {
         public static final int BACK_RIGHT_DRIVE_ID = 4;
         public static final int BACK_RIGHT_TURN_ID = 5;
 
-        public static double DRIVE_GEAR_RATIO = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+        public static double DRIVE_GEAR_RATIO = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15); // 5.07692307692
+        public static double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
 
         public static final PIDConstants MODULE_DRIVE_PID_CONSTANTS = new PIDConstants(0, 0, 0);
         public static final PIDConstants MODULE_TURN_PID_CONSTANTS = new PIDConstants(0, 0, 0);
         public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
         public static final double TURNING_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR = (kWheelDiameterMeters * Math.PI)
+        public static final double DRIVING_ENCODER_POSITION_FACTOR = (WHEEL_RADIUS.in(Meters) * 2 * Math.PI)
         / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
+        public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI)
         / kDrivingMotorReduction) / 60.0; // meters per second
 
     }
