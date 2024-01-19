@@ -1,4 +1,4 @@
-package com.koibots.robot.commands.teleop;
+package com.koibots.robot.commands;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
@@ -18,7 +18,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveCommand extends Command {
+public class FieldOrientedDrive extends Command {
     DoubleSupplier vxSupplier;
     DoubleSupplier vySupplier;
     DoubleSupplier vThetaSupplier;
@@ -29,7 +29,7 @@ public class SwerveCommand extends Command {
 
     ProfiledPIDController angleAlignmentController;
 
-    public SwerveCommand(
+    public FieldOrientedDrive(
             DoubleSupplier vxSupplier,
             DoubleSupplier vySupplier,
             DoubleSupplier vThetaSupplier,

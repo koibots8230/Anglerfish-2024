@@ -9,10 +9,29 @@
       "/SmartDashboard/Drive PID 3": "PIDController",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Scaling Algorithm": "String Chooser",
+      "/SmartDashboard/SysId Mechanism Chooser": "String Chooser",
+      "/SmartDashboard/SysId Routine Chooser": "String Chooser",
       "/SmartDashboard/Turn PID 0": "PIDController",
       "/SmartDashboard/Turn PID 1": "PIDController",
       "/SmartDashboard/Turn PID 2": "PIDController",
       "/SmartDashboard/Turn PID 3": "PIDController"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "AdvantageKit": {
+        "DashboardInputs": {
+          "open": true
+        },
+        "Drive": {
+          "Module0": {
+            "double[]##v_/AdvantageKit/Drive/Module0/DriveCurrentAmps": {
+              "open": true
+            }
+          }
+        },
+        "open": true
+      }
     }
   },
   "NetworkTables Info": {

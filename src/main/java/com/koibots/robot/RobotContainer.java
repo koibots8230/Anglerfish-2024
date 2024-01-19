@@ -2,17 +2,17 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
-import com.koibots.robot.commands.teleop.SwerveCommand;
+import com.koibots.robot.commands.FieldOrientedDrive;
 import com.koibots.robot.subsystems.controller.*;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -21,7 +21,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    LoggedDashboardChooser<Supplier<ControllerIO>> controllerChooser;
+    SendableChooser<Supplier<ControllerIO>> controllerChooser;
 
     // Graph of algorithms here: https://www.desmos.com/calculator/w738aldioj
     enum ScalingAlgorithm {
@@ -38,24 +38,27 @@ public class RobotContainer {
         }
     }
 
-    LoggedDashboardChooser<ScalingAlgorithm> scalingChooser = new LoggedDashboardChooser<>("Scaling Algorithm");
+    SendableChooser<ScalingAlgorithm> scalingChooser = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        controllerChooser = new LoggedDashboardChooser<>("Controller Chooser");
+        controllerChooser = new SendableChooser<>();
 
-        controllerChooser.addDefaultOption("PS5 Controller", ControllerIOPS5::new);
+        controllerChooser.setDefaultOption("PS5 Controller", ControllerIOPS5::new);
         //controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
         //controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
         //controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
 
-        scalingChooser.addDefaultOption("Linear", ScalingAlgorithm.Linear);
+        scalingChooser.setDefaultOption("Linear", ScalingAlgorithm.Linear);
         scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);
         scalingChooser.addOption("Cubed", ScalingAlgorithm.Cubed);
         scalingChooser.addOption("Cosine", ScalingAlgorithm.Cosine);
         scalingChooser.addOption("Fancy", ScalingAlgorithm.CubedSquareRoot);
+
+        SmartDashboard.putData("Scaling Algorithm", scalingChooser);
+        SmartDashboard.putData("Controller Chooser", controllerChooser);
     }
 
     /**
@@ -68,15 +71,15 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
-        ControllerIO controller = controllerChooser.get().get();
+        ControllerIO controller = controllerChooser.getSelected().get();
 
-        Swerve.get().setDefaultCommand(new SwerveCommand(
+        Swerve.get().setDefaultCommand(new FieldOrientedDrive(
                 controller::xTranslation,
                 controller::yTranslation,
                 controller::angularVelocity,
                 controller::anglePosition,
                 controller::cross,
-                scalingChooser.get().algorithm));
+                scalingChooser.getSelected().algorithm));
     }
 
     /**
