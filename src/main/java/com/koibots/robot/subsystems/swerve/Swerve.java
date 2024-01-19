@@ -80,7 +80,7 @@ public class Swerve extends SubsystemBase {
             swerveModules[3].stop();
 
             // Record blank states
-            Logger.recordOutput("SwerveStates/Setpoints");
+            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
         }
 
         // Log measured states

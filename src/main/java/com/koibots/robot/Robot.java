@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,7 +24,6 @@ import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
-import org.littletonrobotics.urcl.URCLJNI;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Volts;
@@ -59,6 +59,9 @@ public class Robot extends LoggedRobot {
         // This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
+
+        SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
+        SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
     }
 
     /**
@@ -134,7 +137,10 @@ public class Robot extends LoggedRobot {
                 )
         );
 
-        //sysidRoutineChooser.addOption();
+        sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
+        sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
+        sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
+        sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
     }
 
     @Override
