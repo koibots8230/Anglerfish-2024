@@ -124,11 +124,19 @@ public class Swerve extends SubsystemBase {
         };
     }
 
-    public void runEncoderTest() {
-        swerveModules[0].setTestVoltages();
-        swerveModules[1].setTestVoltages();
-        swerveModules[2].setTestVoltages();
-        swerveModules[3].setTestVoltages();
+    public void setVoltages(double driveVolts, double turnVolts) {
+        swerveModules[0].setVoltages(driveVolts, turnVolts);
+        swerveModules[1].setVoltages(driveVolts, turnVolts);
+        swerveModules[2].setVoltages(driveVolts, turnVolts);
+        swerveModules[3].setVoltages(driveVolts, turnVolts);
+    }
+
+    public void setDriveVoltages(double volts) {
+        setVoltages(volts, 0);
+    }
+
+    public void setTurnVoltages(double volts) {
+        setVoltages(0, volts);
     }
 
     public void stop() {

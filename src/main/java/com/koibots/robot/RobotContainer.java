@@ -3,8 +3,7 @@ package com.koibots.robot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.robot.commands.teleop.SwerveCommand;
-import com.koibots.robot.subsystems.controller.ControllerIO;
-import com.koibots.robot.subsystems.controller.ControllerIOPS5;
+import com.koibots.robot.subsystems.controller.*;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -48,6 +47,9 @@ public class RobotContainer {
         controllerChooser = new LoggedDashboardChooser<>("Controller Chooser");
 
         controllerChooser.addDefaultOption("PS5 Controller", ControllerIOPS5::new);
+        //controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
+        //controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
+        //controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
 
         scalingChooser.addDefaultOption("Linear", ScalingAlgorithm.Linear);
         scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);

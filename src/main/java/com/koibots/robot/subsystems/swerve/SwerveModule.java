@@ -101,9 +101,9 @@ public class SwerveModule {
 
     }
 
-    public void setTestVoltages() {
-        io.setDriveVoltage(3);
-        io.setTurnVoltage(3);
+    public void setVoltages(double driveVolts, double turnVolts) {
+        io.setDriveVoltage(driveVolts);
+        io.setTurnVoltage(turnVolts);
     }
 
     /** Disables all outputs to motors. */
