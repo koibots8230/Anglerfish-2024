@@ -10,8 +10,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Constants {
 
-
-
     public static final double DEADBAND = 0.02;
     public static final Field2d FIELD = new Field2d();
 
