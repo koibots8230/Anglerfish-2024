@@ -1,6 +1,7 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -21,6 +22,7 @@ public class ShooterPositionSubsystem extends SubsystemBase {
         shooterPositionMotor = new CANSparkMax(Constants.SHOOTER_POSITION_MOTOR, MotorType.kBrushless);
         shooterPositionEncoder = shooterPositionMotor.getAbsoluteEncoder(Type.kDutyCycle);
         shooterPositionEncoder.setZeroOffset(0);
+        shooterPositionEncoder.setPositionConversionFactor(Constants.SHOOTER_POSITION_ENCODER_POSITION_FACTOR);
         shooterPositionMotor.setIdleMode(IdleMode.kBrake);
 
         canLoad = true;
@@ -51,17 +53,17 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     }
 
     //commands
-    
+
     public void loadNote() {
         while(Math.abs(shooterPositionEncoder.getPosition()) != 0) {
         }
     }
 
     public void setShooterPosition(double desiredPosition) {
-        if(shooterPositionEncoder.getPosition() > desiredPosition) {
+        if(shooterPositionEncoder.getPosition() > desiredPosition + Constants.SHOOTER_POSITION_MOTOR_DEADZONE) {
             shooterPositionMotor.set(Constants.SHOOTER_POSITION_MOTOR_REVERSE_SPEED);
         }
-        else if(desiredPosition > shooterPositionEncoder.getPosition()){
+        else if(desiredPosition - Constants.SHOOTER_POSITION_MOTOR_DEADZONE > shooterPositionEncoder.getPosition()){
             shooterPositionMotor.set(Constants.SHOOTER_POSITION_MOTOR_SPEED);
         }
         else {

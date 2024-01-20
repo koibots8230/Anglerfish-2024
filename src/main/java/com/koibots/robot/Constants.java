@@ -12,6 +12,8 @@ public class Constants {
     public static final int SHOOTER_POSITION_MOTOR = 0;
     public static final double SHOOTER_POSITION_MOTOR_SPEED = 0;
     public static final double SHOOTER_POSITION_MOTOR_REVERSE_SPEED = 0;
+    public static final double SHOOTER_POSITION_ENCODER_POSITION_FACTOR = (2 * Math.PI);
+    public static final double SHOOTER_POSITION_MOTOR_DEADZONE = PI/36;
 
     public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 * PI; // Radians per Second
