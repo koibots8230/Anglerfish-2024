@@ -153,6 +153,10 @@ spotless {
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
+
+        formatAnnotations()  // fixes formatting of type annotations, see below
+
+        licenseHeader '// Copyright 2024 (c) FRC 8230 - The KoiBots\n// https://github.com/koibots8230\n\n'
     }
     groovyGradle {
         target fileTree('.') {
