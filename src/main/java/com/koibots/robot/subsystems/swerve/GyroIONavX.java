@@ -22,4 +22,9 @@ public class GyroIONavX implements GyroIO {
 
         inputs.yawVelocityRadPerSec = inputs.yawPosition.minus(previousYaw).getRadians() / 0.02;
     }
+
+    @Override
+    public void zeroYaw() {
+        gyro.zeroYaw();
+    }
 }

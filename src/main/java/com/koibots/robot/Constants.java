@@ -29,7 +29,9 @@ public class Constants {
 
     public static class DriveConstants {
         // TODO: make sure this correct for competition bot
-        private static int kDrivingMotorPinionTeeth = 13;
+        private static final int kDrivingMotorPinionTeeth = 13;
+        private static final double kWheelDiameterMeters = Units.inchesToMeters(3);
+        public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
 
         public static int FRONT_LEFT_DRIVE_ID = 7;
         public static int FRONT_LEFT_TURN_ID = 8;
@@ -41,5 +43,27 @@ public class Constants {
         public static int BACK_RIGHT_TURN_ID = 5;
 
         public static double DRIVE_GEAR_RATIO = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+
+        public static double DRIVE_KP = 0;
+        public static double DRIVE_KI = 0;
+        public static double DRIVE_KD = 0;
+
+        public static double TURN_KP = 0;
+        public static double TURN_KI = 0;
+        public static double TURN_KD = 0;
+
+        public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
+        public static final double TURNING_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second
+
+        public static final double DRIVING_ENCODER_POSITION_FACTOR = (kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction; // meters
+        public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
+        / kDrivingMotorReduction) / 60.0; // meters per second
+
+    }
+
+
+    public static class IntakeConstants {
+        // public static final int INTAKE_MOTOR_PORT = -1;
     }
 }

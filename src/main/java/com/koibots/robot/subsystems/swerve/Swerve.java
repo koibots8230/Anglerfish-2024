@@ -34,6 +34,8 @@ public class Swerve extends SubsystemBase {
                                 DriveConstants.BACK_RIGHT_TURN_ID), 3),
                 };
 
+                gyro = new GyroIONavX();
+
                 break;
             case SIM:
                 swerveModules = new SwerveModule[] {
@@ -45,15 +47,15 @@ public class Swerve extends SubsystemBase {
 
                 gyro = new GyroIOSim();
 
-                odometry = new SwerveDrivePoseEstimator(
-                        Constants.SWERVE_KINEMATICS,
-                        new Rotation2d(),
-                        getModulePositions(),
-                        new Pose2d());
-
                 break;
             case REPLAY:
         }
+
+        odometry = new SwerveDrivePoseEstimator(
+                    Constants.SWERVE_KINEMATICS,
+                    new Rotation2d(),
+                    getModulePositions(),
+                    new Pose2d());
     }
 
     @Override
