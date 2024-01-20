@@ -4,6 +4,8 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.swerve.Swerve;
+import com.koibots.robot.subsystems.vision.Vision;
+
 import java.util.function.Supplier;
 
 public class Subsystems {
@@ -13,5 +15,13 @@ public class Subsystems {
                 swerveInstance = new Swerve();
                 Swerve = () -> swerveInstance;
                 return swerveInstance;
+            };
+
+    private static Vision visionInstance;
+    public static Supplier<Vision> Vision =
+            () -> {
+                visionInstance = new Vision();
+                Vision = () -> visionInstance;
+                return visionInstance;
             };
 }

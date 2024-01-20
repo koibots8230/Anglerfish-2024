@@ -29,38 +29,38 @@ public class Swerve extends SubsystemBase {
     public Swerve() {
         if (Robot.isReal()) {
             swerveModules =
-                    new SwerveModule[] { // FL-FR-BL-BR
-                        new SwerveModule(
-                                new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_LEFT_DRIVE_ID,
-                                        DriveConstants.FRONT_LEFT_TURN_ID),
-                                0),
-                        new SwerveModule(
-                                new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_RIGHT_DRIVE_ID,
-                                        DriveConstants.FRONT_RIGHT_TURN_ID),
-                                1),
-                        new SwerveModule(
-                                new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_LEFT_DRIVE_ID,
-                                        DriveConstants.BACK_LEFT_TURN_ID),
-                                2),
-                        new SwerveModule(
-                                new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_RIGHT_DRIVE_ID,
-                                        DriveConstants.BACK_RIGHT_TURN_ID),
-                                3),
+                    new SwerveModule[]{ // FL-FR-BL-BR
+                            new SwerveModule(
+                                    new SwerveModuleIOSparkMax(
+                                            DriveConstants.FRONT_LEFT_DRIVE_ID,
+                                            DriveConstants.FRONT_LEFT_TURN_ID),
+                                    0),
+                            new SwerveModule(
+                                    new SwerveModuleIOSparkMax(
+                                            DriveConstants.FRONT_RIGHT_DRIVE_ID,
+                                            DriveConstants.FRONT_RIGHT_TURN_ID),
+                                    1),
+                            new SwerveModule(
+                                    new SwerveModuleIOSparkMax(
+                                            DriveConstants.BACK_LEFT_DRIVE_ID,
+                                            DriveConstants.BACK_LEFT_TURN_ID),
+                                    2),
+                            new SwerveModule(
+                                    new SwerveModuleIOSparkMax(
+                                            DriveConstants.BACK_RIGHT_DRIVE_ID,
+                                            DriveConstants.BACK_RIGHT_TURN_ID),
+                                    3),
                     };
 
             gyro = new GyroIONavX();
 
         } else {
             swerveModules =
-                    new SwerveModule[] {
-                        new SwerveModule(new SwerveModuleIOSim(), 0),
-                        new SwerveModule(new SwerveModuleIOSim(), 1),
-                        new SwerveModule(new SwerveModuleIOSim(), 2),
-                        new SwerveModule(new SwerveModuleIOSim(), 3)
+                    new SwerveModule[]{
+                            new SwerveModule(new SwerveModuleIOSim(), 0),
+                            new SwerveModule(new SwerveModuleIOSim(), 1),
+                            new SwerveModule(new SwerveModuleIOSim(), 2),
+                            new SwerveModule(new SwerveModuleIOSim(), 3)
                     };
 
             gyro = new GyroIOSim();
@@ -101,7 +101,7 @@ public class Swerve extends SubsystemBase {
             swerveModules[3].stop();
 
             // Record blank states
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
+            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[]{});
         }
 
         // Log measured states
@@ -120,30 +120,29 @@ public class Swerve extends SubsystemBase {
         gyroInputs.yawVelocityRadPerSec = simSpeeds.omegaRadiansPerSecond;
     }
 
-    public void setModuleStates(SwerveModuleState[] states) {
-        Logger.recordOutput(
-                "SwerveStates/Setpoints",
-                swerveModules[0].setState(states[0]),
-                swerveModules[1].setState(states[1]),
-                swerveModules[2].setState(states[2]),
-                swerveModules[3].setState(states[3]));
+    public void addVisionMeasurement(Pose2d measurement, double timestamp) {
+        odometry.addVisionMeasurement(measurement, timestamp);
+    }
+
+    public Rotation2d getGyroAngle() {
+        return gyroInputs.yawPosition;
     }
 
     public SwerveModuleState[] getModuleStates() {
-        return new SwerveModuleState[] {
-            swerveModules[0].getState(),
-            swerveModules[1].getState(),
-            swerveModules[2].getState(),
-            swerveModules[3].getState()
+        return new SwerveModuleState[]{
+                swerveModules[0].getState(),
+                swerveModules[1].getState(),
+                swerveModules[2].getState(),
+                swerveModules[3].getState()
         };
     }
 
     public SwerveModulePosition[] getModulePositions() {
-        return new SwerveModulePosition[] {
-            swerveModules[0].getPosition(),
-            swerveModules[1].getPosition(),
-            swerveModules[2].getPosition(),
-            swerveModules[3].getPosition()
+        return new SwerveModulePosition[]{
+                swerveModules[0].getPosition(),
+                swerveModules[1].getPosition(),
+                swerveModules[2].getPosition(),
+                swerveModules[3].getPosition()
         };
     }
 
@@ -162,6 +161,15 @@ public class Swerve extends SubsystemBase {
         setVoltages(Volts.of(0), volts);
     }
 
+    public void setModuleStates(SwerveModuleState[] states) {
+        Logger.recordOutput(
+                "SwerveStates/Setpoints",
+                swerveModules[0].setState(states[0]),
+                swerveModules[1].setState(states[1]),
+                swerveModules[2].setState(states[2]),
+                swerveModules[3].setState(states[3]));
+    }
+
     public void stop() {
         swerveModules[0].stop();
         swerveModules[1].stop();
@@ -171,11 +179,11 @@ public class Swerve extends SubsystemBase {
 
     public void setCross() {
         setModuleStates(
-                new SwerveModuleState[] {
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, Rotation2d.fromDegrees(45))
+                new SwerveModuleState[]{
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
+                        new SwerveModuleState(0, Rotation2d.fromDegrees(45))
                 });
     }
 
