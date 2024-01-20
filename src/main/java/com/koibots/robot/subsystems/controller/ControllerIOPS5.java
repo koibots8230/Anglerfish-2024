@@ -34,5 +34,4 @@ public class ControllerIOPS5 extends ControllerIO {
     public boolean cross() {
         return controller.getCrossButton();
     }
-
 }

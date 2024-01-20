@@ -13,6 +13,12 @@
 
 package com.koibots.robot.subsystems.swerve;
 
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Current;
@@ -22,15 +28,9 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 import org.littletonrobotics.junction.AutoLog;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RadiansPerSecond;
-import static edu.wpi.first.units.Units.Volts;
-
 public interface SwerveModuleIO {
     @AutoLog
-      class SwerveModuleInputs {
+    class SwerveModuleInputs {
         public Measure<Distance> drivePosition = Meters.of(0);
         public Measure<Velocity<Distance>> driveVelocity = MetersPerSecond.of(0);
         public Measure<Voltage> driveAppliedVoltage = Volts.of(0);
@@ -43,22 +43,17 @@ public interface SwerveModuleIO {
     }
 
     /** Updates the set of loggable inputs. */
-    default void updateInputs(SwerveModuleInputs inputs) {
-    }
+    default void updateInputs(SwerveModuleInputs inputs) {}
 
     /** Run the drive motor at the specified voltage. */
-    default void setDriveVoltage(Measure<Voltage> volts) {
-    }
+    default void setDriveVoltage(Measure<Voltage> volts) {}
 
     /** Run the turn motor at the specified voltage. */
-    default void setTurnVoltage(Measure<Voltage> volts) {
-    }
+    default void setTurnVoltage(Measure<Voltage> volts) {}
 
     /** Enable or disable brake mode on the drive motor. */
-    default void setDriveBrakeMode(boolean enable) {
-    }
+    default void setDriveBrakeMode(boolean enable) {}
 
     /** Enable or disable brake mode on the turn motor. */
-    default void setTurnBrakeMode(boolean enable) {
-    }
+    default void setTurnBrakeMode(boolean enable) {}
 }

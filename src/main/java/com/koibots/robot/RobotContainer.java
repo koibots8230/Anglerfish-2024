@@ -4,13 +4,11 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.robot.commands.FieldOrientedDrive;
 import com.koibots.robot.subsystems.controller.*;
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,23 +31,21 @@ public class RobotContainer {
 
         public final Function<Double, Double> algorithm;
 
-         ScalingAlgorithm(Function<Double, Double> algorithm) {
+        ScalingAlgorithm(Function<Double, Double> algorithm) {
             this.algorithm = algorithm;
         }
     }
 
     SendableChooser<ScalingAlgorithm> scalingChooser = new SendableChooser<>();
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         controllerChooser = new SendableChooser<>();
 
         controllerChooser.setDefaultOption("PS5 Controller", ControllerIOPS5::new);
-        //controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
-        //controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
-        //controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
+        // controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
+        // controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
+        // controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
 
         scalingChooser.setDefaultOption("Linear", ScalingAlgorithm.Linear);
         scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);
@@ -62,24 +58,23 @@ public class RobotContainer {
     }
 
     /**
-     * Use this method to define your button->command mappings. Buttons can be
-     * created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-     * subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-     * passing it to a
+     * Use this method to define your button->command mappings. Buttons can be created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
         ControllerIO controller = controllerChooser.getSelected().get();
 
-        Swerve.get().setDefaultCommand(new FieldOrientedDrive(
-                controller::xTranslation,
-                controller::yTranslation,
-                controller::angularVelocity,
-                controller::anglePosition,
-                controller::cross,
-                scalingChooser.getSelected().algorithm));
+        Swerve.get()
+                .setDefaultCommand(
+                        new FieldOrientedDrive(
+                                controller::xTranslation,
+                                controller::yTranslation,
+                                controller::angularVelocity,
+                                controller::anglePosition,
+                                controller::cross,
+                                scalingChooser.getSelected().algorithm));
     }
 
     /**

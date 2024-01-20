@@ -1,6 +1,12 @@
 ```mermaid
 flowchart LR
     AdvantageKit ==> Drive
+    AdvantageKit ==> DriverStation
+    AdvantageKit ==> PowerDistribution
+    AdvantageKit ==> RealMetadata
+    AdvantageKit ==> RealOutput
+    AdvantageKit ==> SystemStats
+
     Drive ==> Module0
     Drive ==> Module1
     Drive ==> Module2
@@ -45,6 +51,29 @@ flowchart LR
 
     Gyro --> YawPosition{{YawPosition}}:::Rotation2d
     Gyro --> YawVelocityRadPerSec{{YawVelocityRadPerSec}}:::double
+
+    DriverStation --> AllianceStation{{AllianceStation}}:::int
+    DriverStation --> Autonomous{{Autonomous}}:::boolean
+    DriverStation --> DSAttached{{DSAttached}}:::boolean
+    DriverStation --> EmergencyStop{{EmergencyStop}}:::boolean
+    DriverStation --> Enabled{{Enabled}}:::boolean
+    DriverStation --> EventName{{EventName}}:::string
+    DriverStation --> FMSAttached{{FMSAttached}}:::boolean
+    DriverStation --> GameSpecificMessage{{GameSpecificMessage}}:::string
+    DriverStation ==> Joystick0
+    DriverStation ==> Joystick1
+    DriverStation ==> Joystick2
+    DriverStation ==> Joystick3
+    DriverStation ==> Joystick4
+    DriverStation ==> Joystick5
+    DriverStation --> MatchNumber{{MatchNumber}}:::int
+    DriverStation --> MatchTime{{MatchTime}}:::double
+    DriverStation --> MatchType{{MatchType}}:::int
+    DriverStation --> ReplayNumber{{ReplayNumber}}:::int
+    DriverStation --> Test{{Test}}:::boolean
+
+    Joystick0 --> AxisTypes{{}}:::int[]
+    Joystick0 --> AxisValues{{}}:::float[]
 
     classDef Rotation2d stroke:#f00
     classDef double stroke:#00f

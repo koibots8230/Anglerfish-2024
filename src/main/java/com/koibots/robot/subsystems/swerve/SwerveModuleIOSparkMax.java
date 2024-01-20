@@ -1,24 +1,21 @@
 package com.koibots.robot.subsystems.swerve;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
-
-import com.koibots.robot.Constants.DriveConstants;
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-
 import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
+
+import com.koibots.robot.Constants.DriveConstants;
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkAbsoluteEncoder.Type;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final CANSparkMax driveSparkMax;
@@ -54,7 +51,8 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-        if (turnSparkMax.getDeviceId() == DriveConstants.FRONT_LEFT_TURN_ID || turnSparkMax.getDeviceId() == DriveConstants.BACK_RIGHT_TURN_ID) {
+        if (turnSparkMax.getDeviceId() == DriveConstants.FRONT_LEFT_TURN_ID
+                || turnSparkMax.getDeviceId() == DriveConstants.BACK_RIGHT_TURN_ID) {
             turnEncoder.setZeroOffset(Math.PI / 2);
         }
 
@@ -79,12 +77,16 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     public void updateInputs(SwerveModuleInputs inputs) {
         inputs.drivePosition = Meters.of(driveEncoder.getPosition());
         inputs.driveVelocity = MetersPerSecond.of(driveEncoder.getVelocity());
-        inputs.driveAppliedVoltage = Volts.of(driveSparkMax.getBusVoltage()).times(driveSparkMax.getAppliedOutput());
+        inputs.driveAppliedVoltage =
+                Volts.of(driveSparkMax.getBusVoltage()).times(driveSparkMax.getAppliedOutput());
         inputs.driveCurrent = Amps.of(driveSparkMax.getOutputCurrent());
 
-        inputs.turnPosition = Rotation2d.fromRadians(turnEncoder.getPosition()).minus(Rotation2d.fromRadians(Math.PI));
+        inputs.turnPosition =
+                Rotation2d.fromRadians(turnEncoder.getPosition())
+                        .minus(Rotation2d.fromRadians(Math.PI));
         inputs.turnVelocity = RadiansPerSecond.of(turnEncoder.getVelocity());
-        inputs.turnAppliedVoltage = Volts.of(turnSparkMax.getBusVoltage()).times(turnSparkMax.getAppliedOutput());
+        inputs.turnAppliedVoltage =
+                Volts.of(turnSparkMax.getBusVoltage()).times(turnSparkMax.getAppliedOutput());
         inputs.turnCurrent = Amps.of(turnSparkMax.getOutputCurrent());
     }
 

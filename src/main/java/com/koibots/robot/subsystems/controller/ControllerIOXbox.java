@@ -1,5 +1,3 @@
 package com.koibots.robot.subsystems.controller;
 
-public class ControllerIOXbox {
-
-}
+public class ControllerIOXbox {}

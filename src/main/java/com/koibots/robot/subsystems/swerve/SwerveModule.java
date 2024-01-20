@@ -13,8 +13,11 @@
 
 package com.koibots.robot.subsystems.swerve;
 
-import com.koibots.robot.Robot;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
+import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -23,12 +26,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import org.littletonrobotics.junction.Logger;
-
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 
 public class SwerveModule {
     private final SwerveModuleIO io;
@@ -38,7 +36,8 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveFeedforward;
     private final PIDController driveFeedback;
     private final PIDController turnFeedback;
-    private Rotation2d angleSetpoint = new Rotation2d(); // Setpoint for closed loop control, null for open loop
+    private Rotation2d angleSetpoint =
+            new Rotation2d(); // Setpoint for closed loop control, null for open loop
     private Double speedSetpoint = 0.0; // Setpoint for closed loop control, null for open loop
 
     public SwerveModule(SwerveModuleIO io, int index) {
@@ -61,7 +60,7 @@ public class SwerveModule {
 
         driveFeedback.disableContinuousInput();
 
-        SmartDashboard.putData("Drive PID " + index , driveFeedback);
+        SmartDashboard.putData("Drive PID " + index, driveFeedback);
         SmartDashboard.putData("Turn PID " + index, turnFeedback);
 
         setBrakeMode(true);
@@ -74,7 +73,9 @@ public class SwerveModule {
         // Run closed loop turn control
         if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 1) {
             io.setTurnVoltage(
-                    Volts.of(turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians())));
+                    Volts.of(
+                            turnFeedback.calculate(
+                                    getAngle().getRadians(), angleSetpoint.getRadians())));
         } else {
             io.setTurnVoltage(Volts.of(0));
         }
@@ -82,18 +83,16 @@ public class SwerveModule {
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {
             io.setDriveVoltage(
-                    Volts.of(driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
-                            + driveFeedforward.calculate(speedSetpoint)));
+                    Volts.of(
+                            driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
+                                    + driveFeedforward.calculate(speedSetpoint)));
         } else {
-            //System.out.println("Zeroing voltage");
+            // System.out.println("Zeroing voltage");
             io.setDriveVoltage(Volts.of(0));
         }
     }
 
-    /**
-     * Runs the module with the specified setpoint state. Returns the optimized
-     * state.
-     */
+    /** Runs the module with the specified setpoint state. Returns the optimized state. */
     public SwerveModuleState setState(SwerveModuleState state) {
         // Optimize state based on current angle
         // Controllers run in "periodic" when the setpoint is not null

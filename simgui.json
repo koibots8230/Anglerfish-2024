@@ -31,6 +31,9 @@
     },
     "transitory": {
       "AdvantageKit": {
+        ".schema": {
+          "open": true
+        },
         "DashboardInputs": {
           "open": true
         },
@@ -39,9 +42,15 @@
             "double[]##v_/AdvantageKit/Drive/Module0/DriveCurrentAmps": {
               "open": true
             }
+          }
+        },
+        "DriverStation": {
+          "Joystick0": {
+            "open": true
           },
           "open": true
-        }
+        },
+        "open": true
       },
       "LiveWindow": {
         ".status": {
@@ -62,6 +71,15 @@
     }
   },
   "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
     "visible": true
   }
 }

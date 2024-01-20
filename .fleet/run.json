@@ -22,6 +22,16 @@
         },
         {
             "type": "gradle",
+            "name": "Spotless Format",
+            "tasks": ["spotlessApply"],
+        },
+        {
+            "type": "gradle",
+            "name": "Spotless Check",
+            "tasks": ["spotlessCheck"],
+        },
+        {
+            "type": "gradle",
             "name": "Start Shuffleboard",
             "tasks": ["Shuffleboard"],
         },
