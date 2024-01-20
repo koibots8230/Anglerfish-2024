@@ -3,13 +3,17 @@ package com.koibots.robot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.robot.commands.teleop.SwerveCommand;
+import com.koibots.robot.subsystems.ShooterPositionSubsystem;
 import com.koibots.robot.subsystems.controller.ControllerIO;
 import com.koibots.robot.subsystems.controller.ControllerIOPS5;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -23,6 +27,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private final CommandPS4Controller m_operatorController = new CommandPS4Controller(1);
     LoggedDashboardChooser<Supplier<ControllerIO>> controllerChooser;
 
     // Graph of algorithms here: https://www.desmos.com/calculator/w738aldioj
@@ -77,6 +82,7 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
         ControllerIO controller = controllerChooser.get().get();
+        ShooterPositionSubsystem shooterPosition = new ShooterPositionSubsystem();
 
         Swerve.get().setDefaultCommand(new SwerveCommand(
                 controller::xTranslation,
@@ -85,6 +91,14 @@ public class RobotContainer {
                 controller::anglePosition,
                 controller::cross,
                 scalingChooser.get().algorithm));
+        
+        Trigger shooterAmp = m_operatorController.L2();
+        Trigger shooterSpeaker = m_operatorController.R2();
+        Trigger shooterLoad = m_operatorController.cross();
+
+        shooterAmp.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.AMP_SHOOTER_RADIANS)));
+        shooterSpeaker.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.SPEAKER_SHOOTER_RADIANS)));
+        shooterLoad.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.LOAD_SHOOTER_RADIANS)));
     }
 
     /**

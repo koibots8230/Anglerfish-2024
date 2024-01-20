@@ -18,7 +18,7 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     private boolean canLoad;
 
 
-    ShooterPositionSubsystem() {
+    public ShooterPositionSubsystem() {
         shooterPositionMotor = new CANSparkMax(Constants.SHOOTER_POSITION_MOTOR, MotorType.kBrushless);
         shooterPositionEncoder = shooterPositionMotor.getAbsoluteEncoder(Type.kDutyCycle);
         shooterPositionEncoder.setZeroOffset(0);
@@ -54,11 +54,6 @@ public class ShooterPositionSubsystem extends SubsystemBase {
 
     //commands
 
-    public void loadNote() {
-        while(Math.abs(shooterPositionEncoder.getPosition()) != 0) {
-        }
-    }
-
     public void setShooterPosition(double desiredPosition) {
         if(shooterPositionEncoder.getPosition() > desiredPosition + Constants.SHOOTER_POSITION_MOTOR_DEADZONE) {
             shooterPositionMotor.set(Constants.SHOOTER_POSITION_MOTOR_REVERSE_SPEED);
@@ -68,7 +63,6 @@ public class ShooterPositionSubsystem extends SubsystemBase {
         }
         else {
             shooterPositionMotor.set(0);
-            canLoad = true;
         }
     }
 }
