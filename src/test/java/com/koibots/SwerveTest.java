@@ -7,10 +7,8 @@ import com.koibots.robot.subsystems.swerve.Swerve;
 import org.junit.jupiter.api.Test;
 
 public class SwerveTest {
-    Swerve swerve;
-
     @Test
     void createSwerve() {
-        swerve = new Swerve();
+        new Swerve();
     }
 }

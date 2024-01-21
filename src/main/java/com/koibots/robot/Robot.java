@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot {
 
         if (isReal()) {
             LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
+            // Vision.get();
         }
 
         Logger.start();
@@ -176,6 +177,8 @@ public class Robot extends LoggedRobot {
                                                     new SwerveModuleState(0, new Rotation2d())
                                                 }));
             }
+
+            sysidCommand.schedule();
         }
     }
 
