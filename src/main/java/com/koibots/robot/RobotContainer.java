@@ -10,7 +10,6 @@ import com.koibots.robot.subsystems.controller.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -46,7 +45,8 @@ public class RobotContainer {
         controllerChooser = new SendableChooser<>();
 
         controllerChooser.setDefaultOption("PS5 Controller", ControllerIOPS5::new);
-        // controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
+        // controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new); // TODO: Implement
+        // each of these controllers
         // controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
         // controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
 
@@ -78,14 +78,5 @@ public class RobotContainer {
                                 controller::anglePosition,
                                 controller::cross,
                                 scalingChooser.getSelected().algorithm));
-    }
-
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
-    public Command getAutonomousCommand() {
-        return null;
     }
 }

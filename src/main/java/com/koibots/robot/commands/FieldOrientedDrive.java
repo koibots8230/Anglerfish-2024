@@ -135,20 +135,9 @@ public class FieldOrientedDrive extends Command {
 
             previousTimestamp = Logger.getRealTimestamp();
 
-            Logger.recordOutput("Module Setpoints", targetModuleStates);
-
             Swerve.get().setModuleStates(targetModuleStates);
         } else { // Set Cross
-            var targetModuleStates =
-                    new SwerveModuleState[] {
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(-45)),
-                        new SwerveModuleState(0, Rotation2d.fromDegrees(45))
-                    };
-
-            Logger.recordOutput("Module Setpoints", targetModuleStates);
-            Swerve.get().setModuleStates(targetModuleStates);
+            Swerve.get().setCross();
         }
     }
 }

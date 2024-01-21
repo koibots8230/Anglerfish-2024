@@ -5,12 +5,13 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import com.koibots.lib.dashboard.Alert;
 import com.koibots.lib.sysid.SysIdTest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,11 +25,24 @@ import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
+    private enum AutoMode {
+        TextGenerated,
+        Chooser,
+        SysId,
+    }
+
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private final SendableChooser<AutoMode> autoModeChooser = new SendableChooser<>();
     private final SendableChooser<SysIdTest> sysidRoutineChooser = new SendableChooser<>();
     private final SendableChooser<SysIdRoutine.Mechanism> sysidMechanismChooser =
             new SendableChooser<>();
+    private final Field2d field = new Field2d();
+
+    private final Alert sysIdMechanismAlert =
+            new Alert("No SysId Mechanism Selected", Alert.AlertType.WARNING);
+    private final Alert sysIdRoutineAlert =
+            new Alert("No SysId Routine Selected", Alert.AlertType.WARNING);
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -41,6 +55,8 @@ public class Robot extends LoggedRobot {
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
+
+            SmartDashboard.putData(CommandScheduler.getInstance());
         }
 
         if (isReal()) {
@@ -55,9 +71,26 @@ public class Robot extends LoggedRobot {
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
 
+        autoModeChooser.addOption("Text Input", AutoMode.TextGenerated);
+        autoModeChooser.addOption("Legacy Selector", AutoMode.TextGenerated);
+        autoModeChooser.addOption("SysId", AutoMode.TextGenerated);
+
+        sysidMechanismChooser.addOption(
+                "Swerve Drive",
+                new SysIdRoutine.Mechanism(
+                        (voltage) -> Swerve.get().setDriveVoltages(voltage),
+                        null,
+                        Swerve.get(),
+                        "Swerve Drive"));
+
+        sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
+        sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
+        sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
+        sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
+
+        SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
         SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
         SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
-        SmartDashboard.putBoolean("Enable SysId", false);
     }
 
     /**
@@ -84,19 +117,20 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
-        /*
-         * String autoSelected = SmartDashboard.getString("Auto Selector",
-         * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-         * = new MyAutoCommand(); break; case "Default Auto": default:
-         * autonomousCommand = new ExampleCommand(); break; }
-         */
+        // Swerve.get().setBrake(true); // TODO: Add swerve set brake method
+
+        if (autoModeChooser.getSelected() == AutoMode.SysId) {
+            Logger.registerURCL(URCL.startExternal());
+        }
 
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
     }
+
+    @Override
+    public void autonomousPeriodic() {}
 
     @Override
     public void teleopInit() {
@@ -108,83 +142,9 @@ public class Robot extends LoggedRobot {
             autonomousCommand.cancel();
         }
 
+        // Swerve.get().setBrake(true);
+
         robotContainer.configureButtonBindings();
-    }
-
-    @Override
-    public void testInit() {
-        // Cancels all running commands at the start of test mode.
-        CommandScheduler.getInstance().cancelAll();
-        Logger.end();
-
-        DataLogManager.start();
-        URCL.start();
-
-        sysidMechanismChooser.addOption(
-                "Swerve Drive",
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> Swerve.get().setDriveVoltages(voltage),
-                        null,
-                        Swerve.get(),
-                        "Swerve Drive"));
-
-        sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
-        sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
-        sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
-        sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
-    }
-
-    @Override
-    public void testPeriodic() {
-        if (SmartDashboard.getBoolean("Enable SysId", false)) {
-            final var mechanism = sysidMechanismChooser.getSelected();
-            if (mechanism == null) {
-                DriverStation.reportError("No SysId Mechanism Selected", false);
-                return;
-            }
-
-            final var routine = sysidRoutineChooser.getSelected();
-            if (routine == null) {
-                DriverStation.reportError("No SysId Routine Selected", false);
-                return;
-            }
-
-            Command sysidCommand =
-                    switch (routine) {
-                        case ForwardDynamic -> new SysIdRoutine(
-                                        new SysIdRoutine.Config(), mechanism)
-                                .dynamic(SysIdRoutine.Direction.kForward);
-                        case ReverseDynamic -> new SysIdRoutine(
-                                        new SysIdRoutine.Config(), mechanism)
-                                .dynamic(SysIdRoutine.Direction.kReverse);
-                        case ForwardQuasistatic -> new SysIdRoutine(
-                                        new SysIdRoutine.Config(), mechanism)
-                                .quasistatic(SysIdRoutine.Direction.kForward);
-                        case ReverseQuasistatic -> new SysIdRoutine(
-                                        new SysIdRoutine.Config(), mechanism)
-                                .quasistatic(SysIdRoutine.Direction.kReverse);
-                    };
-
-            if (mechanism.m_name.equals("Swerve")) {
-                sysidCommand.beforeStarting(
-                        () ->
-                                Swerve.get()
-                                        .setModuleStates(
-                                                new SwerveModuleState[] {
-                                                    new SwerveModuleState(0, new Rotation2d()),
-                                                    new SwerveModuleState(0, new Rotation2d()),
-                                                    new SwerveModuleState(0, new Rotation2d()),
-                                                    new SwerveModuleState(0, new Rotation2d())
-                                                }));
-            }
-
-            sysidCommand.schedule();
-        }
-    }
-
-    @Override
-    public void testExit() {
-        Logger.start();
     }
 
     @Override
@@ -192,13 +152,52 @@ public class Robot extends LoggedRobot {
         Swerve.get().stop();
     }
 
-    @Override
-    public void simulationInit() {
-        super.simulationInit();
-    }
+    @Override   
+    public void disabledPeriodic() {
+        switch (autoModeChooser.getSelected()) {
+            case TextGenerated:
+                break;
+            case Chooser:
+                break;
+            case SysId:
+                final var mechanism = sysidMechanismChooser.getSelected();
+                final var routine = sysidRoutineChooser.getSelected();
 
-    @Override
-    public void simulationPeriodic() {
-        Constants.FIELD.setRobotPose(Swerve.get().getEstimatedPose());
+                if (mechanism == null || routine == null) {
+                    sysIdMechanismAlert.set(mechanism == null);
+                    sysIdRoutineAlert.set(routine == null);
+                    return;
+                }
+
+                autonomousCommand =
+                        switch (routine) {
+                            case ForwardDynamic -> new SysIdRoutine(
+                                            new SysIdRoutine.Config(), mechanism)
+                                    .dynamic(SysIdRoutine.Direction.kForward);
+                            case ReverseDynamic -> new SysIdRoutine(
+                                            new SysIdRoutine.Config(), mechanism)
+                                    .dynamic(SysIdRoutine.Direction.kReverse);
+                            case ForwardQuasistatic -> new SysIdRoutine(
+                                            new SysIdRoutine.Config(), mechanism)
+                                    .quasistatic(SysIdRoutine.Direction.kForward);
+                            case ReverseQuasistatic -> new SysIdRoutine(
+                                            new SysIdRoutine.Config(), mechanism)
+                                    .quasistatic(SysIdRoutine.Direction.kReverse);
+                        };
+
+                if (mechanism.m_name.equals("Swerve")) {
+                    autonomousCommand.beforeStarting(
+                            () ->
+                                    Swerve.get()
+                                            .setModuleStates(
+                                                    new SwerveModuleState[] {
+                                                        new SwerveModuleState(0, new Rotation2d()),
+                                                        new SwerveModuleState(0, new Rotation2d()),
+                                                        new SwerveModuleState(0, new Rotation2d()),
+                                                        new SwerveModuleState(0, new Rotation2d())
+                                                    }));
+                }
+                break;
+        }
     }
 }

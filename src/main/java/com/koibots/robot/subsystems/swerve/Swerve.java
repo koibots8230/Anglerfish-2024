@@ -5,18 +5,17 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -72,16 +71,22 @@ public class Swerve extends SubsystemBase {
                         new Rotation2d(),
                         getModulePositions(),
                         new Pose2d());
+
+        try (Notifier odometryUpdater =
+                new Notifier(
+                        () -> {
+                            gyro.updateInputs(gyroInputs);
+                            odometry.updateWithTime(
+                                    Logger.getRealTimestamp(),
+                                    gyroInputs.yawPosition,
+                                    getModulePositions());
+                        })) {
+            odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
+        }
     }
 
     @Override
     public void periodic() {
-
-        if (Robot.isSimulation()) {
-            simulationPeriodic();
-        }
-
-        gyro.updateInputs(gyroInputs);
         Logger.processInputs("Drive/Gyro", gyroInputs);
 
         odometry.update(gyroInputs.yawPosition, getModulePositions());
@@ -93,31 +98,8 @@ public class Swerve extends SubsystemBase {
         swerveModules[2].periodic();
         swerveModules[3].periodic();
 
-        // Stop moving when disabled
-        if (DriverStation.isDisabled()) {
-            swerveModules[0].stop();
-            swerveModules[1].stop();
-            swerveModules[2].stop();
-            swerveModules[3].stop();
-
-            // Record blank states
-            Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
-        }
-
         // Log measured states
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
-    }
-
-    @Override
-    public void simulationPeriodic() {
-        ChassisSpeeds simSpeeds =
-                DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
-
-        Constants.FIELD.setRobotPose(getEstimatedPose());
-        gyroInputs.yawPosition =
-                gyroInputs.yawPosition.plus(
-                        Rotation2d.fromRadians(simSpeeds.omegaRadiansPerSecond * 0.02));
-        gyroInputs.yawVelocityRadPerSec = simSpeeds.omegaRadiansPerSecond;
     }
 
     public void addVisionMeasurement(Pose2d measurement, double timestamp) {
@@ -171,6 +153,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void stop() {
+        Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
         swerveModules[0].stop();
         swerveModules[1].stop();
         swerveModules[2].stop();
@@ -189,5 +172,34 @@ public class Swerve extends SubsystemBase {
 
     public Pose2d getEstimatedPose() {
         return odometry.getEstimatedPosition();
+    }
+
+    @Override
+    public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("SwerveDrive");
+
+        SwerveModuleState[] measuredStates = getModuleStates();
+
+        builder.addDoubleProperty(
+                "Front Left Angle", () -> measuredStates[0].angle.getDegrees(), null);
+        builder.addDoubleProperty(
+                "Front Left Velocity", () -> measuredStates[0].speedMetersPerSecond, null);
+
+        builder.addDoubleProperty(
+                "Front Right Angle", () -> measuredStates[1].angle.getDegrees(), null);
+        builder.addDoubleProperty(
+                "Front Right Velocity", () -> measuredStates[1].speedMetersPerSecond, null);
+
+        builder.addDoubleProperty(
+                "Back Left Angle", () -> measuredStates[2].angle.getDegrees(), null);
+        builder.addDoubleProperty(
+                "Back Left Velocity", () -> measuredStates[2].speedMetersPerSecond, null);
+
+        builder.addDoubleProperty(
+                "Back Right Angle", () -> measuredStates[3].angle.getDegrees(), null);
+        builder.addDoubleProperty(
+                "Back Right Velocity", () -> measuredStates[3].speedMetersPerSecond, null);
+
+        builder.addDoubleProperty("Robot Angle", () -> gyroInputs.yawPosition.getDegrees(), null);
     }
 }

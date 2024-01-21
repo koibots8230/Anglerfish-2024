@@ -16,12 +16,6 @@ public class GyroIOSim implements GyroIO {
         ChassisSpeeds speeds =
                 DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(Swerve.get().getModuleStates());
 
-        Logger.recordOutput(
-                "Calculated Speeds",
-                new double[] {
-                    speeds.vxMetersPerSecond, speeds.vyMetersPerSecond, speeds.omegaRadiansPerSecond
-                });
-
         inputs.yawPosition =
                 inputs.yawPosition.plus(
                         Rotation2d.fromRadians(speeds.omegaRadiansPerSecond * 0.02));

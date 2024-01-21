@@ -33,16 +33,17 @@ public class Vision extends SubsystemBase {
         for (int a = 0; a < 4; a++) {
             idSubscribers[a] =
                     table.getIntegerTopic(VisionConstants.TOPIC_NAMES[a][2])
-                        .subscribe(VisionConstants.ID_DEFAULT_VALUE);
+                            .subscribe(VisionConstants.ID_DEFAULT_VALUE);
             for (int b = 0; b < 2; b++) {
                 vecSubscribers[a][b] =
                         table.getDoubleArrayTopic(VisionConstants.TOPIC_NAMES[a][b])
-                            .subscribe(VisionConstants.VECTOR_DEFAULT_VALUE);
+                                .subscribe(VisionConstants.VECTOR_DEFAULT_VALUE);
             }
         }
     }
 
-    private Pose2d translateToFieldPose(double[] translation, double[] rotation, int tagId, int camera) {
+    private Pose2d translateToFieldPose(
+            double[] translation, double[] rotation, int tagId, int camera) {
         int count = 0;
         Matrix<N3, N3> rotMatrix = new Matrix<>(Nat.N3(), Nat.N3());
         for (int a = 0; a < 3; a++) {
@@ -59,39 +60,43 @@ public class Vision extends SubsystemBase {
         transVec.set(2, 0, translation[2]);
         Matrix<N3, N1> tagToCamTrans = rotMatrix.times(transVec);
 
-        tagToCamTrans.set(0, 0, 
-            (VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() < Math.PI) ? 
-                tagToCamTrans.get(0, 0) : tagToCamTrans.get(0, 0) * -1
-        );
+        tagToCamTrans.set(
+                0,
+                0,
+                (VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() < Math.PI)
+                        ? tagToCamTrans.get(0, 0)
+                        : tagToCamTrans.get(0, 0) * -1);
 
-        double hypotenuse = Math.sqrt(
-            Math.pow(tagToCamTrans.get(0, 0), 2) +
-            Math.pow(tagToCamTrans.get(0, 2), 2)
-        );
-        double hypangle = 
-            VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() - 
-            Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
-        
-        Pose2d camPose = new Pose2d(
-            VisionConstants.TAG_POSES_METERS[tagId].getX() + (hypotenuse * Math.cos(hypangle)),
-            VisionConstants.TAG_POSES_METERS[tagId].getY() + (hypotenuse * Math.sin(hypangle)),
-            new Rotation2d()
-        );
+        double hypotenuse =
+                Math.sqrt(
+                        Math.pow(tagToCamTrans.get(0, 0), 2)
+                                + Math.pow(tagToCamTrans.get(0, 2), 2));
+        double hypangle =
+                VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians()
+                        - Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
 
-        hypotenuse = Math.sqrt(
-            Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getX(), 2) +
-            Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getY(), 2)
-        );
+        Pose2d camPose =
+                new Pose2d(
+                        VisionConstants.TAG_POSES_METERS[tagId].getX()
+                                + (hypotenuse * Math.cos(hypangle)),
+                        VisionConstants.TAG_POSES_METERS[tagId].getY()
+                                + (hypotenuse * Math.sin(hypangle)),
+                        new Rotation2d());
 
-        hypangle = 
-            VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians() + 
-            Swerve.get().getGyroAngle().getRadians() + 90;
+        hypotenuse =
+                Math.sqrt(
+                        Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getX(), 2)
+                                + Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getY(), 2));
+
+        hypangle =
+                VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians()
+                        + Swerve.get().getGyroAngle().getRadians()
+                        + 90;
 
         return new Pose2d(
-            camPose.getX() + (hypotenuse * Math.cos(hypangle)),
-            camPose.getY() + (hypotenuse * Math.sin(hypangle)),
-            Swerve.get().getGyroAngle()
-        );
+                camPose.getX() + (hypotenuse * Math.cos(hypangle)),
+                camPose.getY() + (hypotenuse * Math.sin(hypangle)),
+                Swerve.get().getGyroAngle());
     }
 
     @Override
@@ -103,15 +108,17 @@ public class Vision extends SubsystemBase {
             for (int b = 0; b < ids.length; b++) {
                 if (rvec[b].timestamp == tvec[b].timestamp
                         && tvec[b].timestamp == ids[b].timestamp) {
-                    Pose2d pose = translateToFieldPose(tvec[b].value, rvec[b].value, (int) ids[a].value, a);
-                    if (pose.getX() > 0 && 
-                        pose.getX() < VisionConstants.FIELD_WIDTH_METERS && 
-                        pose.getY() > 0 && 
-                        pose.getY() < VisionConstants.FIELD_LENGTH_METERS && 
-                        Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
-                                < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS && 
-                        Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())
-                                < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS) {
+                    Pose2d pose =
+                            translateToFieldPose(
+                                    tvec[b].value, rvec[b].value, (int) ids[a].value, a);
+                    if (pose.getX() > 0
+                            && pose.getX() < VisionConstants.FIELD_WIDTH_METERS
+                            && pose.getY() > 0
+                            && pose.getY() < VisionConstants.FIELD_LENGTH_METERS
+                            && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
+                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS
+                            && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())
+                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS) {
                         Swerve.get().addVisionMeasurement(pose, (double) ids[b].timestamp);
                     }
                 }
