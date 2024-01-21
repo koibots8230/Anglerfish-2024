@@ -9,6 +9,7 @@ import com.koibots.robot.Constants.VisionConstants;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerSubscriber;
@@ -71,9 +72,24 @@ public class Vision extends SubsystemBase {
             VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() - 
             Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
         
+        Pose2d camPose = new Pose2d(
+            VisionConstants.TAG_POSES_METERS[tagId].getX() + (hypotenuse * Math.cos(hypangle)),
+            VisionConstants.TAG_POSES_METERS[tagId].getY() + (hypotenuse * Math.sin(hypangle)),
+            new Rotation2d()
+        );
+
+        hypotenuse = Math.sqrt(
+            Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getX(), 2) +
+            Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getY(), 2)
+        );
+
+        hypangle = 
+            VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians() + 
+            Swerve.get().getGyroAngle().getRadians() + 90;
+
         return new Pose2d(
-            VisionConstants.TAG_POSES_METERS[tagId].getX() + hypotenuse * Math.cos(hypangle),
-            VisionConstants.TAG_POSES_METERS[tagId].getY() + hypotenuse * Math.sin(hypangle),
+            camPose.getX() + (hypotenuse * Math.cos(hypangle)),
+            camPose.getY() + (hypotenuse * Math.sin(hypangle)),
             Swerve.get().getGyroAngle()
         );
     }
@@ -87,9 +103,7 @@ public class Vision extends SubsystemBase {
             for (int b = 0; b < ids.length; b++) {
                 if (rvec[b].timestamp == tvec[b].timestamp
                         && tvec[b].timestamp == ids[b].timestamp) {
-                    Pose2d pose =
-                            translateToFieldPose(
-                                    tvec[b].value, rvec[b].value, (int) ids[a].value, a);
+                    Pose2d pose = translateToFieldPose(tvec[b].value, rvec[b].value, (int) ids[a].value, a);
                     if (pose.getX() > 0 && 
                         pose.getX() < VisionConstants.FIELD_WIDTH_METERS && 
                         pose.getY() > 0 && 
