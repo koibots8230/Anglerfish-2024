@@ -8,7 +8,6 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import com.koibots.robot.Constants.DriveConstants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import org.littletonrobotics.junction.Logger;
 
 public class GyroIOSim implements GyroIO {
     @Override

@@ -152,7 +152,7 @@ public class Robot extends LoggedRobot {
         Swerve.get().stop();
     }
 
-    @Override   
+    @Override
     public void disabledPeriodic() {
         switch (autoModeChooser.getSelected()) {
             case TextGenerated:

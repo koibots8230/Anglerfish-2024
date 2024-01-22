@@ -99,5 +99,7 @@ public class Constants {
         public static final Pose2d[] TAG_POSES_METERS = {
             new Pose2d(1.5, .5, new Rotation2d()), new Pose2d(2, .5, new Rotation2d())
         };
+
+        public static final Pose2d[] CAMERA_POSITIONS = null;
     }
 }
