@@ -12,11 +12,9 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterPositionSubsystem extends SubsystemBase {
-    private static ShooterPositionSubsystem m_ShooterPositionSubsystem = new ShooterPositionSubsystem();
-    private CANSparkMax shooterPositionMotor;
-    private AbsoluteEncoder shooterPositionEncoder;
+    private final CANSparkMax shooterPositionMotor;
+    private final AbsoluteEncoder shooterPositionEncoder;
 
-    private boolean canLoad;
     private double desiredPos;
 
     ArmFeedforward Feedforward = new ArmFeedforward(0, 0, 0, 0);
@@ -30,14 +28,12 @@ public class ShooterPositionSubsystem extends SubsystemBase {
         shooterPositionEncoder.setPositionConversionFactor(Constants.SHOOTER_POSITION_ENCODER_POSITION_FACTOR);
         shooterPositionMotor.setIdleMode(IdleMode.kBrake);
 
-        canLoad = true;
         desiredPos = 0;
     }
 
     @Override
     public void periodic() {
         shooterPositionMotor.set(PID.calculate(shooterPositionEncoder.getPosition(), desiredPos) + Feedforward.calculate(0, 0, 0));
-        super.periodic();
     }
 
     //getters
@@ -68,10 +64,5 @@ public class ShooterPositionSubsystem extends SubsystemBase {
 
     public void setShooterPosition(double desiredPosition) {
         desiredPos = desiredPosition;
-        if(desiredPosition == 0) {
-            canLoad = true;
-        } else {
-            canLoad = false;
-        }
     }
 }

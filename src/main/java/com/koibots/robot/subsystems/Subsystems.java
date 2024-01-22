@@ -8,14 +8,20 @@ public class Subsystems {
     private static Swerve swerveInstance;
     public static Supplier<Swerve> Swerve;
 
+    private static ShooterPositionSubsystem shooterPositionInstance;
+    public static Supplier<ShooterPositionSubsystem> ShooterPositionSubsystem;
+
     static {
         Swerve = () -> {
             swerveInstance = new Swerve();
-            Swerve = () -> {
-                return swerveInstance;
-            };
-
+            Swerve = () -> swerveInstance;
             return swerveInstance;
+        };
+
+        ShooterPositionSubsystem = () -> {
+            shooterPositionInstance = new ShooterPositionSubsystem();
+            ShooterPositionSubsystem = () -> shooterPositionInstance;
+            return shooterPositionInstance;
         };
     }
 }
