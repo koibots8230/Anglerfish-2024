@@ -1,13 +1,11 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.Constants;
-import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
-import java.lang.Math;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -21,6 +19,9 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     private boolean canLoad;
     private double desiredPos;
 
+    ArmFeedforward Feedforward = new ArmFeedforward(0, 0, 0, 0);
+    PIDController PID = new PIDController(0, 0, 0);
+
 
     public ShooterPositionSubsystem() {
         shooterPositionMotor = new CANSparkMax(Constants.SHOOTER_POSITION_MOTOR, MotorType.kBrushless);
@@ -31,14 +32,11 @@ public class ShooterPositionSubsystem extends SubsystemBase {
 
         canLoad = true;
         desiredPos = 0;
-
-        ArmFeedforward Feedforward = new ArmFeedforward(0, kG, kV, 0);
-        PIDController PID = new PIDController(kP, 0, kD);
     }
 
     @Override
     public void periodic() {
-        shooterPositionMotor.set(PID.calculate(shooterPositionEncoder.getPosition(), desiredPos) + Feedforward.calculate());
+        shooterPositionMotor.set(PID.calculate(shooterPositionEncoder.getPosition(), desiredPos) + Feedforward.calculate(0, 0, 0));
         super.periodic();
     }
 
