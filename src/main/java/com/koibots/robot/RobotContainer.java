@@ -3,7 +3,7 @@ package com.koibots.robot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.robot.commands.teleop.SwerveCommand;
-import com.koibots.robot.subsystems.ShooterPositionSubsystem;
+import com.koibots.robot.subsystems.ShooterPivot;
 import com.koibots.robot.subsystems.controller.ControllerIO;
 import com.koibots.robot.subsystems.controller.ControllerIOPS5;
 
@@ -82,7 +82,7 @@ public class RobotContainer {
      */
     public void configureButtonBindings() {
         ControllerIO controller = controllerChooser.get().get();
-        ShooterPositionSubsystem shooterPosition = new ShooterPositionSubsystem();
+        ShooterPivot shooterPivot = new ShooterPivot();
 
         Swerve.get().setDefaultCommand(new SwerveCommand(
                 controller::xTranslation,
@@ -96,9 +96,9 @@ public class RobotContainer {
         Trigger shooterSpeaker = m_operatorController.R2();
         Trigger shooterLoad = m_operatorController.cross();
 
-        shooterAmp.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.AMP_SHOOTER_RADIANS)));
-        shooterSpeaker.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.SPEAKER_SHOOTER_RADIANS)));
-        shooterLoad.whileTrue(new InstantCommand(() -> shooterPosition.setShooterPosition(Constants.LOAD_SHOOTER_RADIANS)));
+        shooterAmp.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.AMP_SHOOTER_RADIANS)));
+        shooterSpeaker.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.SPEAKER_SHOOTER_RADIANS)));
+        shooterLoad.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.LOAD_SHOOTER_RADIANS)));
     }
 
     /**

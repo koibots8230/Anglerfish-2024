@@ -11,9 +11,9 @@ import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterPositionSubsystem extends SubsystemBase {
-    private final CANSparkMax shooterPositionMotor;
-    private final AbsoluteEncoder shooterPositionEncoder;
+public class ShooterPivot extends SubsystemBase {
+    private final CANSparkMax shooterPivotMotor;
+    private final AbsoluteEncoder shooterPivotEncoder;
 
     private double desiredPos;
 
@@ -21,43 +21,43 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     PIDController PID = new PIDController(0, 0, 0);
 
 
-    public ShooterPositionSubsystem() {
-        shooterPositionMotor = new CANSparkMax(Constants.SHOOTER_POSITION_MOTOR, MotorType.kBrushless);
-        shooterPositionEncoder = shooterPositionMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        shooterPositionEncoder.setZeroOffset(0);
-        shooterPositionEncoder.setPositionConversionFactor(Constants.SHOOTER_POSITION_ENCODER_POSITION_FACTOR);
-        shooterPositionMotor.setIdleMode(IdleMode.kBrake);
+    public ShooterPivot() {
+        shooterPivotMotor = new CANSparkMax(Constants.SHOOTER_PIVOT_MOTOR, MotorType.kBrushless);
+        shooterPivotEncoder = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        shooterPivotEncoder.setZeroOffset(0);
+        shooterPivotEncoder.setPositionConversionFactor(Constants.SHOOTER_PIVOT_ENCODER_POSITION_FACTOR);
+        shooterPivotMotor.setIdleMode(IdleMode.kBrake);
 
         desiredPos = 0;
     }
 
     @Override
     public void periodic() {
-        shooterPositionMotor.set(PID.calculate(shooterPositionEncoder.getPosition(), desiredPos) + Feedforward.calculate(0, 0, 0));
+        shooterPivotMotor.set(PID.calculate(shooterPivotEncoder.getPosition(), desiredPos) + Feedforward.calculate(0, 0, 0));
     }
 
     //getters
 
     public double getShooterMotorPosition() {
-        return shooterPositionEncoder.getPosition();
+        return shooterPivotEncoder.getPosition();
     }
 
     public double getShooterMotorCurrent() {
-        return shooterPositionMotor.getOutputCurrent();
+        return shooterPivotMotor.getOutputCurrent();
     }
 
     //setters
 
     public void resetShooterMotorPosition() {
-        shooterPositionEncoder.setZeroOffset(0);
+        shooterPivotEncoder.setZeroOffset(0);
     }
 
     public void setShooterPositionModeBreak() {
-        shooterPositionMotor.setIdleMode(IdleMode.kBrake);
+        shooterPivotMotor.setIdleMode(IdleMode.kBrake);
     }
 
     public void setShooterPositionModeCoast() {
-        shooterPositionMotor.setIdleMode(IdleMode.kCoast);
+        shooterPivotMotor.setIdleMode(IdleMode.kCoast);
     }
 
     //commands

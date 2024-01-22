@@ -9,11 +9,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Constants {
 
-    public static final int SHOOTER_POSITION_MOTOR = 0;
-    public static final double SHOOTER_POSITION_MOTOR_SPEED = 0;
-    public static final double SHOOTER_POSITION_MOTOR_REVERSE_SPEED = 0;
-    public static final double SHOOTER_POSITION_ENCODER_POSITION_FACTOR = (2 * Math.PI);
-    public static final double SHOOTER_POSITION_MOTOR_DEADZONE = Math.PI / 36;
+    public static final int SHOOTER_PIVOT_MOTOR = 0;
+    public static final double SHOOTER_PIVOT_MOTOR_SPEED = 0;
+    public static final double SHOOTER_PIVOT_MOTOR_REVERSE_SPEED = 0;
+    public static final double SHOOTER_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI);
     public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
     public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
     public static final double LOAD_SHOOTER_RADIANS = 0;
