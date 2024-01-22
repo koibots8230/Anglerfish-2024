@@ -8,6 +8,9 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import java.lang.Math;
+
+import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterPositionSubsystem extends SubsystemBase {
@@ -16,6 +19,7 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     private AbsoluteEncoder shooterPositionEncoder;
 
     private boolean canLoad;
+    private double desiredPos;
 
 
     public ShooterPositionSubsystem() {
@@ -26,6 +30,16 @@ public class ShooterPositionSubsystem extends SubsystemBase {
         shooterPositionMotor.setIdleMode(IdleMode.kBrake);
 
         canLoad = true;
+        desiredPos = 0;
+
+        ArmFeedforward Feedforward = new ArmFeedforward(0, kG, kV, 0);
+        PIDController PID = new PIDController(kP, 0, kD);
+    }
+
+    @Override
+    public void periodic() {
+        shooterPositionMotor.set(PID.calculate(shooterPositionEncoder.getPosition(), desiredPos) + Feedforward.calculate());
+        super.periodic();
     }
 
     //getters
@@ -55,14 +69,11 @@ public class ShooterPositionSubsystem extends SubsystemBase {
     //commands
 
     public void setShooterPosition(double desiredPosition) {
-        if(shooterPositionEncoder.getPosition() > desiredPosition + Constants.SHOOTER_POSITION_MOTOR_DEADZONE) {
-            shooterPositionMotor.set(Constants.SHOOTER_POSITION_MOTOR_REVERSE_SPEED);
-        }
-        else if(desiredPosition - Constants.SHOOTER_POSITION_MOTOR_DEADZONE > shooterPositionEncoder.getPosition()){
-            shooterPositionMotor.set(Constants.SHOOTER_POSITION_MOTOR_SPEED);
-        }
-        else {
-            shooterPositionMotor.set(0);
+        desiredPos = desiredPosition;
+        if(desiredPosition == 0) {
+            canLoad = true;
+        } else {
+            canLoad = false;
         }
     }
 }
