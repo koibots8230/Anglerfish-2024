@@ -64,7 +64,7 @@ public class Constants {
     }
 
     public static class ShooterConstants{
-       public static final int IN_MOTOR_1_PORT = 0;
+       public static final int shooterMotor1 = 0;
     }
 
 }

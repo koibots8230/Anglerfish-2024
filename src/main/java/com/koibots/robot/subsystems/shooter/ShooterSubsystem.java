@@ -4,6 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import com.koibots.robot.Constants;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class ShooterSubsystem {
@@ -11,7 +12,7 @@ public class ShooterSubsystem {
     private static CANSparkMax shooterMotor1;
 
     ShooterSubsystem() {
-        shooterMotor1 = new CANSparkMax(Constants.ShooterConstants.IN_MOTOR_1_PORT, MotorType.kBrushless); //help Motortype is deprecated :(
+        shooterMotor1 = new CANSparkMax(Constants.ShooterConstants.shooterMotor1, MotorType.kBrushless);
     }
 
     public void setSpeed(DoubleSupplier speed) {
@@ -21,4 +22,11 @@ public class ShooterSubsystem {
     public ShooterSubsystem get() {
         return shooterSubsystem;
     }
+
+    private final RelativeEncoder encoder1 = shooterMotor1.getEncoder();
+
+    public void getPosition(){
+        encoder1.getPosition();
+    }
+    
 }
