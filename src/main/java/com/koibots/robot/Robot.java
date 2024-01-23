@@ -24,6 +24,7 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.urcl.URCL;
 
+
 public class Robot extends LoggedRobot {
     private enum AutoMode {
         TextGenerated,

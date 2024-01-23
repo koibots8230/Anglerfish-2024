@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public class Constants {
 
     public static final double DEADBAND = 0.025;
-    public static final Field2d FIELD = new Field2d();
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
