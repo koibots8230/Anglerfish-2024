@@ -52,7 +52,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void robotInit() {
         Logger.recordMetadata("RobotName", "Swerve Chassis");
-        Logger.addDataReceiver(new WPILOGWriter());
+        // Logger.addDataReceiver(new WPILOGWriter());
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
@@ -74,7 +74,7 @@ public class Robot extends LoggedRobot {
 
         autoModeChooser.addOption("Text Input", AutoMode.TextGenerated);
         autoModeChooser.addOption("Legacy Selector", AutoMode.TextGenerated);
-        autoModeChooser.addOption("SysId", AutoMode.TextGenerated);
+        autoModeChooser.setDefaultOption("SysId", AutoMode.TextGenerated);
 
         sysidMechanismChooser.addOption(
                 "Swerve Drive",

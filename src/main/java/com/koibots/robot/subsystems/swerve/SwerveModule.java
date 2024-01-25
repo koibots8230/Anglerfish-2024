@@ -38,15 +38,15 @@ public class SwerveModule {
         // separate robot with different tuning)
         if (Robot.isReal()) {
             driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-            driveFeedback = new PIDController(0.0, 0.0, 0.0);
-            turnFeedback = new PIDController(0.0, 0.0, 0.0);
+            driveFeedback = new PIDController(0.01, 0.0, 0.0);
+            turnFeedback = new PIDController(1.9, 0.0, 0.0);
         } else {
             driveFeedforward = new SimpleMotorFeedforward(0, 2.75);
             driveFeedback = new PIDController(28.5, 0.0, 0.0);
             turnFeedback = new PIDController(35.0, 0.0, 0.0);
         }
 
-        turnFeedback.enableContinuousInput(-Math.PI, Math.PI);
+        turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 
         driveFeedback.disableContinuousInput();
 
@@ -61,7 +61,7 @@ public class SwerveModule {
         Logger.processInputs("Drive/Module" + index, inputs);
 
         // Run closed loop turn control
-        if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 1) {
+        if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 0.0001) {
             io.setTurnVoltage(
                     Volts.of(
                             turnFeedback.calculate(
@@ -91,8 +91,8 @@ public class SwerveModule {
         // TODO: Reactivate optimization after it works without it
 
         // Update setpoints, controllers run in "periodic"
-        angleSetpoint = state.angle;
-        speedSetpoint = state.speedMetersPerSecond;
+        angleSetpoint = optimizedSetpoint.angle;
+        speedSetpoint = optimizedSetpoint.speedMetersPerSecond;
 
         return optimizedSetpoint;
     }

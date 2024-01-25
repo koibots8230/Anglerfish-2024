@@ -45,7 +45,8 @@ public class RobotContainer {
         controllerChooser = new SendableChooser<>();
 
         controllerChooser.setDefaultOption("PS5 Controller", ControllerIOPS5::new);
-        // controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new); // TODO: Implement
+        controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
+        // TODO: Implement
         // each of these controllers
         // controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
         // controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
