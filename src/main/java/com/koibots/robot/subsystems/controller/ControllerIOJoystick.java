@@ -3,4 +3,33 @@
 
 package com.koibots.robot.subsystems.controller;
 
-public class ControllerIOJoystick {}
+import edu.wpi.first.wpilibj.GenericHID;
+
+public class ControllerIOJoystick extends ControllerIO {
+    GenericHID controller = new GenericHID(0);
+
+    @Override
+    public double xTranslation() {
+        return -controller.getRawAxis(1);
+    }
+
+    @Override
+    public double yTranslation() {
+        return -controller.getRawAxis(0);
+    }
+
+    @Override
+    public double angularVelocity() {
+        return -controller.getRawAxis(2);
+    }
+
+    @Override
+    public int anglePosition() {
+        return controller.getPOV();
+    }
+
+    @Override
+    public boolean cross() {
+        return controller.getRawButton(6);
+    }
+}
