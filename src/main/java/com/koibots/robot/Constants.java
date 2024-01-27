@@ -15,7 +15,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Constants {
 
@@ -23,8 +22,8 @@ public class Constants {
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
-        private static final double ROBOT_WIDTH_METERS = Units.inchesToMeters(25);
-        private static final double ROBOT_LENGTH_METERS = Units.inchesToMeters(25);
+        private static final double ROBOT_WIDTH_METERS = Units.inchesToMeters(21.375);
+        private static final double ROBOT_LENGTH_METERS = Units.inchesToMeters(21.375);
 
         public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
         public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =

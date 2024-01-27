@@ -35,10 +35,10 @@ public class SwerveModule {
         this.index = index;
 
         // Switch constants based on mode (the physics simulator is treated as a
-        // separate robot with different tuning)
+        // separate robot with different tuning)x
         if (Robot.isReal()) {
-            driveFeedforward = new SimpleMotorFeedforward(0.0, 0.0);
-            driveFeedback = new PIDController(0.01, 0.0, 0.0);
+            driveFeedforward = new SimpleMotorFeedforward(0.0, 2);
+            driveFeedback = new PIDController(0.4, 0.0, 0.0);
             turnFeedback = new PIDController(1.9, 0.0, 0.0);
         } else {
             driveFeedforward = new SimpleMotorFeedforward(0, 2.75);

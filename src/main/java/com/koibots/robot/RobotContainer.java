@@ -49,7 +49,7 @@ public class RobotContainer {
         // TODO: Implement
         // each of these controllers
         // controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
-        // controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
+        controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
 
         scalingChooser.setDefaultOption("Linear", ScalingAlgorithm.Linear);
         scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);

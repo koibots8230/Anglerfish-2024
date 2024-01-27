@@ -55,17 +55,17 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-
         if (turnId == DriveConstants.FRONT_LEFT_TURN_ID) {
             chassisAngularOffset = Rotation2d.fromRadians((3 * Math.PI) / 2);
         } else if (turnId == DriveConstants.FRONT_RIGHT_TURN_ID) {
-                chassisAngularOffset = new Rotation2d(Math.PI);
+            chassisAngularOffset = new Rotation2d(Math.PI);
         } else if (turnId == DriveConstants.BACK_LEFT_TURN_ID) {
-                chassisAngularOffset = Rotation2d.fromRadians(0);
+            chassisAngularOffset = Rotation2d.fromRadians(0);
         } else if (turnId == DriveConstants.BACK_RIGHT_TURN_ID) {
-                chassisAngularOffset = Rotation2d.fromRadians(Math.PI / 2); // Rotation2d.fromDegrees((3 * Math.PI) / 2);
+            chassisAngularOffset =
+                    Rotation2d.fromRadians(
+                            Math.PI / 2); // Rotation2d.fromDegrees((3 * Math.PI) / 2);
         }
-
 
         turnSparkMax.setInverted(false);
         driveSparkMax.setSmartCurrentLimit(40);
@@ -93,7 +93,9 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         inputs.driveCurrent = Amps.of(driveSparkMax.getOutputCurrent());
 
         inputs.turnPosition =
-                Rotation2d.fromRadians(turnEncoder.getPosition()).plus(chassisAngularOffset).minus(Rotation2d.fromRadians(Math.PI));
+                Rotation2d.fromRadians(turnEncoder.getPosition())
+                        .plus(chassisAngularOffset)
+                        .minus(Rotation2d.fromRadians(Math.PI));
 
         inputs.turnVelocity = RadiansPerSecond.of(turnEncoder.getVelocity());
         inputs.turnAppliedVoltage =

@@ -10,12 +10,12 @@ public class ControllerIOXbox extends ControllerIO {
 
     @Override
     public double xTranslation() {
-        return controller.getRawAxis(1);
+        return -controller.getRawAxis(1);
     }
 
     @Override
     public double yTranslation() {
-        return controller.getRawAxis(0);
+        return -controller.getRawAxis(0);
     }
 
     @Override
