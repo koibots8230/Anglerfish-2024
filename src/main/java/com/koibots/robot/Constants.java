@@ -64,6 +64,10 @@ public class Constants {
 
 
     public static class IntakeConstants {
-        // public static final int INTAKE_MOTOR_PORT = -1;
+        public static final int INTAKE_MOTOR_PORT = -1;
+        public static final int INTAKE_PID_P = 0;
+        public static final int INTAKE_MOTOR_TARGET_RPM = 0;
+        public static final int INTAKE_WHEEL_RADIUS = 0;
+        public static final int INTAKE_MINIMUM_RPM = 0;
     }
 }
