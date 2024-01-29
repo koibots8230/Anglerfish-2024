@@ -1,4 +1,4 @@
-package com.koibots.robot.subsystems;
+package com.koibots.robot.subsystems.ShooterPivot;
 
 public class ShooterPivotIOSim implements ShooterPivotIO{
 

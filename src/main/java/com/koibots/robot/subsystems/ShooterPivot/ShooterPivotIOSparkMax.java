@@ -1,4 +1,4 @@
-package com.koibots.robot.subsystems;
+package com.koibots.robot.subsystems.ShooterPivot;
 
 import com.koibots.robot.Constants;
 import com.revrobotics.AbsoluteEncoder;

@@ -1,4 +1,4 @@
-package com.koibots.robot.subsystems;
+package com.koibots.robot.subsystems.ShooterPivot;
 
 import org.littletonrobotics.junction.AutoLog;
 import edu.wpi.first.math.geometry.Rotation2d;

@@ -1,6 +1,8 @@
-package com.koibots.robot.subsystems;
+package com.koibots.robot.subsystems.ShooterPivot;
 
 import com.koibots.robot.Robot;
+import com.koibots.robot.subsystems.ShooterPivotIOInputsAutoLogged;
+
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;

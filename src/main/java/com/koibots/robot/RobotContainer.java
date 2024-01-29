@@ -3,7 +3,7 @@ package com.koibots.robot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.robot.commands.teleop.SwerveCommand;
-import com.koibots.robot.subsystems.ShooterPivot;
+import com.koibots.robot.subsystems.ShooterPivot.ShooterPivot;
 import com.koibots.robot.subsystems.controller.ControllerIO;
 import com.koibots.robot.subsystems.controller.ControllerIOPS5;
 
