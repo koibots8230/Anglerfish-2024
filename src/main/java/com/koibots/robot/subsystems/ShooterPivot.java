@@ -38,12 +38,12 @@ public class ShooterPivot extends SubsystemBase {
         io.zeroOffset();
     }
 
-    public void setShooterPivotBrake() {
-        io.setBrakeMode();
-    }
-
-    public void setShooterPivotCoast() {
-        io.setCoastMode();
+    public void setShooterPivotMode(boolean desiredMode) {
+        if(desiredMode == true) {
+            io.setBrakeMode();
+        } else {
+            io.setCoastMode();
+        }
     }
 
     //commands
