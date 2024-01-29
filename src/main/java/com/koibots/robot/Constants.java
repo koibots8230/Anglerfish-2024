@@ -69,6 +69,11 @@ public class Constants {
         public static final double INTAKE_DOWN_POSITION = 0.0;
         public static final double INTAKE_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians.
         public static final double INTAKE_PIVOT_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second.
+        public static final int INTAKE_MOTOR_PORT = -1;
+        public static final int INTAKE_PID_P = 0;
+        public static final int INTAKE_MOTOR_TARGET_RPM = 0;
+        public static final int INTAKE_WHEEL_RADIUS = 0;
+        public static final int INTAKE_MINIMUM_RPM = 0;
     }
 
     public static enum IntakePivotState {
