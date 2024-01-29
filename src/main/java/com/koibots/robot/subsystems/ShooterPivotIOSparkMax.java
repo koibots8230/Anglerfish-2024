@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import edu.wpi.first.math.geometry.Rotation2d;
+import static edu.wpi.first.units.Units.*;
 
 public class ShooterPivotIOSparkMax implements ShooterPivotIO {
     private final CANSparkMax shooterPivotMotor;
@@ -21,30 +23,25 @@ public class ShooterPivotIOSparkMax implements ShooterPivotIO {
 
     @Override
     public void updateInputs(ShooterPivotIOInputs inputs) {
-        inputs.shooterPivotPosition = shooterPivotEncoder.getPosition();
+        inputs.position = Rotation2d.fromRadians(shooterPivotEncoder.getPosition());
+        inputs.voltage = Volts.of(shooterPivotMotor.getBusVoltage());
+        inputs.current = Amps.of(shooterPivotMotor.getOutputCurrent());
+        inputs.velocity = RadiansPerSecond.of(shooterPivotEncoder.getVelocity());
     }
 
-    public double getShooterPosition() {
-        return shooterPivotEncoder.getPosition();
+    public void zeroOffset() {
+        shooterPivotEncoder.setZeroOffset(Constants.SHOOTER_PIVOT_ZERO_OFFSET);
     }
 
-    public void zeroShooterPositionOffset() {
-        shooterPivotEncoder.setZeroOffset(0);
-    }
-
-    public double getShooterPivotOutputCurrent() {
-        return shooterPivotMotor.getOutputCurrent();
-    }
-
-    public void setShooterPivotMotorSpeed(double desiredPosition){
+    public void setMotorSpeed(double desiredPosition){
         shooterPivotMotor.set(desiredPosition);
     }
 
-    public void setShooterPivotBrakeMode() {
+    public void setBrakeMode() {
         shooterPivotMotor.setIdleMode(IdleMode.kBrake);
     }
 
-    public void setShooterPivotCoastMode() {
+    public void setCoastMode() {
         shooterPivotMotor.setIdleMode(IdleMode.kCoast);
     }
 }

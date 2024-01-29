@@ -16,6 +16,7 @@ public class Constants {
     public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
     public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
     public static final double LOAD_SHOOTER_RADIANS = 0;
+    public static final double SHOOTER_PIVOT_ZERO_OFFSET = 0;
 
     public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 * PI; // Radians per Second

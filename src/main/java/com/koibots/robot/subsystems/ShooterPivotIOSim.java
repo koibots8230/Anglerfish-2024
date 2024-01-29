@@ -9,37 +9,25 @@ public class ShooterPivotIOSim implements ShooterPivotIO{
     }
 
     @Override
-    public double getShooterPosition() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void zeroShooterPositionOffset() {
+    public void zeroOffset() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public double getShooterPivotOutputCurrent() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void setShooterPivotMotorSpeed(double desiredPosition) {
+    public void setMotorSpeed(double desiredPosition) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void setShooterPivotBrakeMode() {
+    public void setBrakeMode() {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void setShooterPivotCoastMode() {
+    public void setCoastMode() {
         // TODO Auto-generated method stub
         
     }

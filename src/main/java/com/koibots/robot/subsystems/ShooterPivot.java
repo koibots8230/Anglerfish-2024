@@ -29,31 +29,21 @@ public class ShooterPivot extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(pivotInputs);
-        io.setShooterPivotMotorSpeed(PID.calculate(pivotInputs.shooterPivotPosition, desiredPos) + Feedforward.calculate(0, 0, 0));
-    }
-
-    //getters
-
-    public double getShooterMotorPosition() {
-        return io.getShooterPosition();
-    }
-
-    public double getShooterMotorCurrent() {
-        return io.getShooterPivotOutputCurrent();
+        io.setMotorSpeed(PID.calculate(pivotInputs.position.getRadians(), desiredPos) + Feedforward.calculate(0, 0, 0));
     }
 
     //setters
 
     public void resetShooterMotorPosition() {
-        io.zeroShooterPositionOffset();
+        io.zeroOffset();
     }
 
-    public void setShooterPositionModeBreak() {
-        io.setShooterPivotBrakeMode();
+    public void setShooterPivotBrake() {
+        io.setBrakeMode();
     }
 
-    public void setShooterPositionModeCoast() {
-        io.setShooterPivotCoastMode();
+    public void setShooterPivotCoast() {
+        io.setCoastMode();
     }
 
     //commands
