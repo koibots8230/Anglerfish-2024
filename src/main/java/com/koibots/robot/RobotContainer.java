@@ -10,7 +10,9 @@ import com.koibots.robot.subsystems.controller.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -21,6 +23,15 @@ import java.util.function.Supplier;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    enum AutoAction {
+        Shoot(null);
+        public final Command command;
+
+        private AutoAction(Command command) {
+            this.command = command;
+        }
+    }
+
     SendableChooser<Supplier<ControllerIO>> controllerChooser;
 
     // Graph of algorithms here: https://www.desmos.com/calculator/w738aldioj
@@ -40,7 +51,9 @@ public class RobotContainer {
 
     SendableChooser<ScalingAlgorithm> scalingChooser = new SendableChooser<>();
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
     public RobotContainer() {
         controllerChooser = new SendableChooser<>();
 
@@ -79,5 +92,9 @@ public class RobotContainer {
                                 controller::anglePosition,
                                 controller::cross,
                                 scalingChooser.getSelected().algorithm));
+    }
+
+    Command getAutonomousCommand() {
+        return null;
     }
 }

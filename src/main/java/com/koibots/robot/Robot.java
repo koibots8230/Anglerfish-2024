@@ -129,31 +129,29 @@ public class Robot extends LoggedRobot {
                 autonomousCommand =
                         switch (routine) {
                             case ForwardDynamic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
+                                    new SysIdRoutine.Config(), mechanism)
                                     .dynamic(SysIdRoutine.Direction.kForward);
                             case ReverseDynamic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
+                                    new SysIdRoutine.Config(), mechanism)
                                     .dynamic(SysIdRoutine.Direction.kReverse);
                             case ForwardQuasistatic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
+                                    new SysIdRoutine.Config(), mechanism)
                                     .quasistatic(SysIdRoutine.Direction.kForward);
                             case ReverseQuasistatic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
+                                    new SysIdRoutine.Config(), mechanism)
                                     .quasistatic(SysIdRoutine.Direction.kReverse);
                         };
-
-                DriverStation.reportWarning("Set autonomous command", false);
 
                 if (mechanism.m_name.equals("Swerve")) {
                     autonomousCommand.beforeStarting(
                             () ->
                                     Swerve.get()
                                             .setModuleStates(
-                                                    new SwerveModuleState[] {
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d())
+                                                    new SwerveModuleState[]{
+                                                            new SwerveModuleState(0, new Rotation2d()),
+                                                            new SwerveModuleState(0, new Rotation2d()),
+                                                            new SwerveModuleState(0, new Rotation2d()),
+                                                            new SwerveModuleState(0, new Rotation2d())
                                                     }));
                 }
         }
@@ -173,7 +171,8 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void autonomousPeriodic() {}
+    public void autonomousPeriodic() {
+    }
 
     @Override
     public void teleopInit() {
@@ -196,5 +195,6 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void disabledPeriodic() {}
+    public void disabledPeriodic() {
+    }
 }
