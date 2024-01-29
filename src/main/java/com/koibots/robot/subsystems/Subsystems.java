@@ -1,5 +1,6 @@
 package com.koibots.robot.subsystems;
 
+import com.koibots.robot.subsystems.intake.IntakePivot.IntakePivot;
 import com.koibots.robot.subsystems.swerve.Swerve;
 
 import java.util.function.Supplier;
@@ -7,6 +8,8 @@ import java.util.function.Supplier;
 public class Subsystems {
     private static Swerve swerveInstance;
     public static Supplier<Swerve> Swerve;
+    public static IntakePivot intakePivotInstance;
+    public static Supplier<IntakePivot> IntakePivot;
 
     static {
         Swerve = () -> {
@@ -16,6 +19,15 @@ public class Subsystems {
             };
 
             return swerveInstance;
+        };
+
+        IntakePivot = () -> {
+            // intakePivotInstance = new IntakePivot();
+            // IntakePivot = () -> {
+            //     return intakePivotInstance;
+            // };
+
+            return intakePivotInstance;
         };
     }
 }

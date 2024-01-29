@@ -32,7 +32,6 @@ public class Constants {
         private static final int kDrivingMotorPinionTeeth = 13;
         private static final double kWheelDiameterMeters = Units.inchesToMeters(3);
         public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-
         public static int FRONT_LEFT_DRIVE_ID = 7;
         public static int FRONT_LEFT_TURN_ID = 8;
         public static int FRONT_RIGHT_DRIVE_ID = 2;
@@ -64,6 +63,16 @@ public class Constants {
 
 
     public static class IntakeConstants {
-        // public static final int INTAKE_MOTOR_PORT = -1;
+        public static final int INTAKE_PIVOT_MOTOR_PORT = 9;
+        public static final int INTAKE_PIVOT_ENCODER_PORT = 10;
+        public static final double INTAKE_UP_POSITION = 90.0;
+        public static final double INTAKE_DOWN_POSITION = 0.0;
+        public static final double INTAKE_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians.
+        public static final double INTAKE_PIVOT_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second.
     }
+
+    public static enum IntakePivotState {
+        UP,
+        DOWN
+    };
 }
