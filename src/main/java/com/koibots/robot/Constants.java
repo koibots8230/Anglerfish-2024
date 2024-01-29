@@ -2,8 +2,6 @@ package com.koibots.robot;
 
 import static java.lang.StrictMath.PI;
 
-import com.revrobotics.CANSparkMax;
-
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -67,4 +65,6 @@ public class Constants {
        public static final int shooterMotor1 = 0;
     }
 
+    public static final int INDEXER_MOTOR = 0;
+    public static final double INDEXER_SPEED = 0;
 }
