@@ -34,8 +34,8 @@ public class ShooterPivot extends SubsystemBase {
 
     // setters
 
-    public void setShooterPivotMode(boolean mode) {
-        io.setIdleMode(mode);
+    public void setShooterPivotMode(boolean isBrake) {
+        io.setIdleMode(isBrake);
     }
 
     // commands

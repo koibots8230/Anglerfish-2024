@@ -20,7 +20,6 @@ public class ShooterPivotIOSparkMax implements ShooterPivotIO {
     public ShooterPivotIOSparkMax() {
         shooterPivotMotor = new CANSparkMax(ShooterPivotConstants.MOTOR, MotorType.kBrushless);
         shooterPivotEncoder = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        shooterPivotEncoder.setZeroOffset(0);
         shooterPivotEncoder.setPositionConversionFactor(
                 ShooterPivotConstants.ENCODER_POSITION_FACTOR);
         shooterPivotMotor.setIdleMode(IdleMode.kBrake);
@@ -38,7 +37,7 @@ public class ShooterPivotIOSparkMax implements ShooterPivotIO {
         shooterPivotMotor.set(desiredPosition);
     }
 
-    public void setIdleMode(boolean mode) {
-        shooterPivotMotor.setIdleMode(mode ? IdleMode.kBrake : IdleMode.kCoast);
+    public void setIdleMode(boolean isBrake) {
+        shooterPivotMotor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
     }
 }

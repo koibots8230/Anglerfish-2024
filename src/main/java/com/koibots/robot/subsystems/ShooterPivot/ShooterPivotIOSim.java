@@ -17,7 +17,7 @@ public class ShooterPivotIOSim implements ShooterPivotIO {
     }
 
     @Override
-    public void setIdleMode(boolean mode) {
+    public void setIdleMode(boolean isBrake) {
         // TODO Auto-generated method stub
 
     }

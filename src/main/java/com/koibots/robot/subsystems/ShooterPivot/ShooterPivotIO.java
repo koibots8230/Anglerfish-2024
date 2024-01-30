@@ -26,5 +26,5 @@ public interface ShooterPivotIO {
 
     void setMotorSpeed(double desiredPosition);
 
-    void setIdleMode(boolean mode);
+    void setIdleMode(boolean isBrake);
 }
