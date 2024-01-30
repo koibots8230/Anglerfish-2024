@@ -48,6 +48,8 @@ public class Elevator extends SubsystemBase {
         targetState = new TrapezoidProfile.State(0, 0.0);
 
         io = Robot.isReal() ? new ElevatorIOSparkMax() : new ElevatorIOSim();
+
+        io.setBrake();
     }
 
     @Override

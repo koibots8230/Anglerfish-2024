@@ -5,6 +5,7 @@ import static edu.wpi.first.units.Units.Meters;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -14,7 +15,7 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
 
-    private AbsoluteEncoder encoder;
+    private RelativeEncoder encoder;
 
     private double appliedVolts;
 
