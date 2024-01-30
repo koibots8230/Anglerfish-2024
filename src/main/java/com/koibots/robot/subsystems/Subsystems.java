@@ -3,24 +3,34 @@
 
 package com.koibots.robot.subsystems;
 
+import com.koibots.robot.subsystems.intake.IntakePivot.IntakePivot;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
 import java.util.function.Supplier;
 
 public class Subsystems {
     private static Swerve swerveInstance;
-    public static Supplier<Swerve> Swerve =
-            () -> {
-                swerveInstance = new Swerve();
-                Swerve = () -> swerveInstance;
+    public static Supplier<Swerve> Swerve;
+    public static IntakePivot intakePivotInstance;
+    public static Supplier<IntakePivot> IntakePivot;
+
+    static {
+        Swerve = () -> {
+            swerveInstance = new Swerve();
+            Swerve = () -> {
                 return swerveInstance;
             };
 
-    private static Vision visionInstance;
-    public static Supplier<Vision> Vision =
-            () -> {
-                visionInstance = new Vision();
-                Vision = () -> visionInstance;
-                return visionInstance;
-            };
+            return swerveInstance;
+        };
+
+        IntakePivot = () -> {
+            // intakePivotInstance = new IntakePivot();
+            // IntakePivot = () -> {
+            //     return intakePivotInstance;
+            // };
+
+            return intakePivotInstance;
+        };
+    }
 }
