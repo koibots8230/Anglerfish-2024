@@ -65,6 +65,8 @@ public class Constants {
 
     public static class ShooterConstants{
        public static final int shooterMotor1 = 0;
+       public static final int shooterMotor2 = 1;
+       public static final double kP = 0;
     }
 
 }
