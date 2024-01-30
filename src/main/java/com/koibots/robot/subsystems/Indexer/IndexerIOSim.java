@@ -13,7 +13,7 @@ public class IndexerIOSim implements IndexerIO{
     }
 
     @Override
-    public void runMotor() {
+    public void runMotor(double speed) {
         // TODO Auto-generated method stub
     }
 }

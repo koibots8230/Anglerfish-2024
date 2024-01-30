@@ -1,6 +1,6 @@
 package com.koibots.robot.subsystems.Indexer;
 
-import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.IndexerConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -12,14 +12,14 @@ public class IndexerIOSparkMax implements IndexerIO{
     private final RelativeEncoder encoder;
 
     public IndexerIOSparkMax() {
-        motor = new CANSparkMax(Constants.INDEXER_MOTOR, MotorType.kBrushless);
+        motor = new CANSparkMax(IndexerConstants.MOTOR, MotorType.kBrushless);
         motor.setIdleMode(IdleMode.kBrake);
         encoder = motor.getEncoder();
     }
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
-        inputs.velocity = MetersPerSecond.of(encoder.getVelocity());
+        inputs.velocity = RevolutionsPerSecond.of(encoder.getVelocity());
         if(motor.getIdleMode() == IdleMode.kBrake) {
             inputs.mode = true;
         } else {
@@ -27,15 +27,11 @@ public class IndexerIOSparkMax implements IndexerIO{
         }
     }
 
-    public void runMotor() {
-        motor.set(Constants.INDEXER_SPEED);
+    public void runMotor(double speed) {
+        motor.set(speed);
     }
 
     public void setIdle(boolean mode) {
-        if(mode == true) {
-            motor.setIdleMode(IdleMode.kBrake);
-        } else {
-            motor.setIdleMode(IdleMode.kCoast);
-        }
+        motor.setIdleMode(mode ? IdleMode.kBrake : IdleMode.kCoast);
     } 
 }

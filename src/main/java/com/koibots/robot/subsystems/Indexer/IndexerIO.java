@@ -7,11 +7,11 @@ import edu.wpi.first.units.*;
 public interface IndexerIO {
     @AutoLog
     public static class IndexerIOInputs {
-        public Measure<Velocity<Distance>> velocity = MetersPerSecond.of(0); 
+        public Measure<Velocity<Angle>> velocity = RevolutionsPerSecond.of(0); 
         public boolean mode = true;
     }
 
     void updateInputs(IndexerIOInputs inputs);
     void setIdle(boolean mode);
-    void runMotor();
+    void runMotor(double speed);
 }

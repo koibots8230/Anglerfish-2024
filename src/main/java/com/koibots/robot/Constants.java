@@ -65,6 +65,8 @@ public class Constants {
        public static final int shooterMotor1 = 0;
     }
 
-    public static final int INDEXER_MOTOR = 0;
-    public static final double INDEXER_SPEED = 0;
+    public static class IndexerConstants {
+        public static final int MOTOR = 0;
+        public static final double SPEED = 0;
+    }
 }

@@ -1,20 +1,23 @@
 package com.koibots.robot.subsystems.Indexer;
 
 import com.koibots.robot.Robot;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Indexer {
+public class Indexer extends SubsystemBase{
     private final IndexerIO io;
+    private IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
 
     private Indexer() {
-        if(Robot.isReal()) {
-            io = new IndexerIOSparkMax();
-        } else {
-            io = new IndexerIOSim();
-        }
+        io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
     }
 
-    public void runIndexer() {
-        io.runMotor();
+    @Override
+    public void periodic() {
+        io.updateInputs(indexerInputs);
+    }
+
+    public void runIndexer(double speed) {
+        io.runMotor(speed);
     }
 
     public void indexerMode(boolean mode) {
