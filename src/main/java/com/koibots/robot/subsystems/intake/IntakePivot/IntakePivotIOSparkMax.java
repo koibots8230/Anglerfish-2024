@@ -55,4 +55,14 @@ public class IntakePivotIOSparkMax implements IntakePivotIO {
     public void setIntakePivotBrakeMode(boolean enable) {
         intakePivotSparkMax.setIdleMode(enable ? IdleMode.kBrake : IdleMode.kCoast);
     }
+
+    @Override
+    public void setZeroOffset() {
+        intakePivotEncoder.setZeroOffset(IntakeConstants.INTAKE_PIVOT_ZERO_OFFSET);
+    }
+
+    @Override
+    public void setPosition(double position) {
+        intakePivotSparkMax.set(position);
+    }
 }

@@ -27,4 +27,6 @@ public class IntakePivotIOSim implements IntakePivotIO {
         intakePivotAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
         intakePivotSim.setInputVoltage(intakePivotAppliedVolts);
     }
+
+    public void setPosition() {}
 }

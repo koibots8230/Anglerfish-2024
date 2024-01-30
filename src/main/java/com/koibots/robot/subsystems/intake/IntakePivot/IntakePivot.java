@@ -3,7 +3,6 @@ package com.koibots.robot.subsystems.intake.IntakePivot;
 import org.littletonrobotics.junction.Logger;
 
 import com.koibots.robot.Robot;
-import com.koibots.robot.Constants.IntakePivotState;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -14,22 +13,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class IntakePivot extends SubsystemBase {
 
     IntakePivotInputsAutoLogged inputs = new IntakePivotInputsAutoLogged();
-    private IntakePivotState intakePivotState;
 
     private final IntakePivotIO io;
     SimpleMotorFeedforward intakePivotFeedForward;
     private final PIDController intakePivotFeedback;
-    private Rotation2d angleSetpoint = null;
     private Rotation2d turnRelativeOffset = null;
+    private double positionSetPoint;
 
     public IntakePivot() {
-        this.intakePivotState = IntakePivotState.UP;
 
         if (Robot.isReal()) {
+            positionSetPoint = 0;
             this.io = new IntakePivotIOSparkMax(0);
             intakePivotFeedForward = new SimpleMotorFeedforward(0, 0);
             intakePivotFeedback = new PIDController(0, 0, 0);
         } else {
+            positionSetPoint = 0;
             this.io = new IntakePivotIOSim();
             intakePivotFeedForward = new SimpleMotorFeedforward(0, 0);
             intakePivotFeedback = new PIDController(0, 0, 0);
@@ -43,13 +42,7 @@ public class IntakePivot extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Intake Pivot", inputs);
-
-        // Run closed loop pivot control
-        if (angleSetpoint != null) {
-            io.setIntakePivotVoltage(
-                intakePivotFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians())
-            );
-        }
+        io.setPosition(intakePivotFeedback.calculate(inputs.intakePivotPosition.getRadians(), positionSetPoint) + intakePivotFeedForward.calculate(0,0,0));
     }
 
     public Rotation2d getAngle() {
@@ -62,10 +55,9 @@ public class IntakePivot extends SubsystemBase {
 
     public void stop() {
         io.setIntakePivotVoltage(0.0);
-        angleSetpoint = null;
     }
 
-    public IntakePivotState getState() {
-        return this.intakePivotState;
+    public void setIntakePivotPosition(double position) {
+        this.positionSetPoint = position;
     }
 }

@@ -21,4 +21,10 @@ public interface IntakePivotIO {
 
     /* Enable or disable brake mode on the pivot motor. */
     public default void setIntakePivotBrakeMode(boolean enable) {}
+
+    /* Set zero offset for intake pivot encoder. */
+    public default void setZeroOffset() {}
+
+    /* Move the intake to a desired position. */
+    public default void setPosition(double position) {}
 }

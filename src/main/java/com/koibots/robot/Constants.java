@@ -65,10 +65,9 @@ public class Constants {
     public static class IntakeConstants {
         public static final int INTAKE_PIVOT_MOTOR_PORT = 9;
         public static final int INTAKE_PIVOT_ENCODER_PORT = 10;
-        public static final double INTAKE_UP_POSITION = 90.0;
-        public static final double INTAKE_DOWN_POSITION = 0.0;
         public static final double INTAKE_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians.
         public static final double INTAKE_PIVOT_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second.
+        public static final double INTAKE_PIVOT_ZERO_OFFSET = 0;
         public static final int INTAKE_MOTOR_PORT = -1;
         public static final int INTAKE_PID_P = 0;
         public static final int INTAKE_MOTOR_TARGET_RPM = 0;
@@ -77,7 +76,12 @@ public class Constants {
     }
 
     public static enum IntakePivotState {
-        UP,
-        DOWN
+        HANDOFF(90),
+        DOWN(0);
+
+        public final double angle;
+        IntakePivotState(double angle) {
+            this.angle = angle;
+        }
     };
 }
