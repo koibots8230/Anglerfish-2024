@@ -4,6 +4,7 @@
 package com.koibots.robot.subsystems.vision;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
+import static edu.wpi.first.units.Units.Meters;
 
 import com.koibots.robot.Constants.VisionConstants;
 import edu.wpi.first.math.Matrix;
@@ -112,13 +113,13 @@ public class Vision extends SubsystemBase {
                             translateToFieldPose(
                                     tvec[b].value, rvec[b].value, (int) ids[a].value, a);
                     if (pose.getX() > 0
-                            && pose.getX() < VisionConstants.FIELD_WIDTH_METERS
+                            && pose.getX() < VisionConstants.FIELD_WIDTH.in(Meters)
                             && pose.getY() > 0
-                            && pose.getY() < VisionConstants.FIELD_LENGTH_METERS
+                            && pose.getY() < VisionConstants.FIELD_LENGTH.in(Meters)
                             && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
-                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS
+                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
                             && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())
-                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE_METERS) {
+                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)) {
                         Swerve.get().addVisionMeasurement(pose, (double) ids[b].timestamp);
                     }
                 }
