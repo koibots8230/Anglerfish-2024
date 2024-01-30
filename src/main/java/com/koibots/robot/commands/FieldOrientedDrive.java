@@ -5,6 +5,8 @@ package com.koibots.robot.commands;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.math.kinematics.SwerveDriveKinematics.desaturateWheelSpeeds;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
@@ -48,7 +50,7 @@ public class FieldOrientedDrive extends Command {
                         0,
                         0,
                         new Constraints(
-                                DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                                DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                                 4 * Math.PI),
                         0.02);
 
@@ -101,12 +103,12 @@ public class FieldOrientedDrive extends Command {
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                             linearMagnitude
                                     * linearDirection.getCos()
-                                    * DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
+                                    * DriveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             linearMagnitude
                                     * linearDirection.getSin()
-                                    * DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND,
+                                    * DriveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             angularVelocity
-                                    * DriveConstants.MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND,
+                                    * DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                             Swerve.get().getEstimatedPose().getRotation());
 
             double periodSeconds = Logger.getRealTimestamp() - previousTimestamp;
@@ -116,8 +118,7 @@ public class FieldOrientedDrive extends Command {
             SwerveModuleState[] targetModuleStates =
                     DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
 
-            desaturateWheelSpeeds(
-                    targetModuleStates, DriveConstants.MAX_LINEAR_SPEED_METERS_PER_SECOND);
+            desaturateWheelSpeeds(targetModuleStates, DriveConstants.MAX_LINEAR_SPEED);
 
             if (speeds.vxMetersPerSecond == 0.0
                     && speeds.vyMetersPerSecond == 0.0

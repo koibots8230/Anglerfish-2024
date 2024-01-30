@@ -12,8 +12,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 
 public class Constants {
 
@@ -24,9 +26,9 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH_METERS = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH_METERS = Inches.of(21.375);
 
-        public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
-        public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
-                2 * PI; // Radians per Second
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4);
+        public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
+                RadiansPerSecond.of(2 * PI);
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS =
                 new SwerveDriveKinematics(
