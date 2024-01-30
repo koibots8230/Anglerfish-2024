@@ -24,12 +24,12 @@ public class Subsystems {
                 Vision = () -> visionInstance;
                 return visionInstance;
             };
-    
+
     private static ShooterPivot shooterPivotInstance;
-    public static Supplier<ShooterPivot> shooterPivot = 
+    public static Supplier<ShooterPivot> shooterPivot =
             () -> {
                 shooterPivotInstance = new ShooterPivot();
                 shooterPivot = () -> shooterPivotInstance;
-                return shooterPivotInstance;  
+                return shooterPivotInstance;
             };
 }

@@ -1,13 +1,17 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.ShooterPivot;
 
-import org.littletonrobotics.junction.AutoLog;
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Current;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
-import static edu.wpi.first.units.Units.*;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterPivotIO {
     @AutoLog
@@ -19,6 +23,8 @@ public interface ShooterPivotIO {
     }
 
     void updateInputs(ShooterPivotIOInputs inputs);
+
     void setMotorSpeed(double desiredPosition);
+
     void setIdleMode(boolean mode);
 }
