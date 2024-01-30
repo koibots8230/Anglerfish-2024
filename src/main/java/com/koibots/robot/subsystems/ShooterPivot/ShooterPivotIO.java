@@ -19,7 +19,6 @@ public interface ShooterPivotIO {
     }
 
     void updateInputs(ShooterPivotIOInputs inputs);
-    void zeroOffset();
     void setMotorSpeed(double desiredPosition);
     void setBrakeMode();
     void setCoastMode();

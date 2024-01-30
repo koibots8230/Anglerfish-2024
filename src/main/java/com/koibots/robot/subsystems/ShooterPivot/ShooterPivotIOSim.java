@@ -9,12 +9,6 @@ public class ShooterPivotIOSim implements ShooterPivotIO{
     }
 
     @Override
-    public void zeroOffset() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void setMotorSpeed(double desiredPosition) {
         // TODO Auto-generated method stub
         

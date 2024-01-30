@@ -1,7 +1,7 @@
 package com.koibots.robot.subsystems.ShooterPivot;
 
 import com.koibots.robot.Robot;
-import com.koibots.robot.subsystems.ShooterPivotIOInputsAutoLogged;
+import com.koibots.robot.subsystems.ShooterPivot.ShooterPivotIOInputsAutoLogged;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -35,10 +35,6 @@ public class ShooterPivot extends SubsystemBase {
     }
 
     //setters
-
-    public void resetShooterMotorPosition() {
-        io.zeroOffset();
-    }
 
     public void setShooterPivotMode(boolean desiredMode) {
         if(desiredMode == true) {

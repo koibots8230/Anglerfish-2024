@@ -8,15 +8,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Constants {
-
-    public static final int SHOOTER_PIVOT_MOTOR = 0;
-    public static final double SHOOTER_PIVOT_MOTOR_SPEED = 0;
-    public static final double SHOOTER_PIVOT_MOTOR_REVERSE_SPEED = 0;
-    public static final double SHOOTER_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI);
-    public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
-    public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
-    public static final double LOAD_SHOOTER_RADIANS = 0;
-    public static final double SHOOTER_PIVOT_ZERO_OFFSET = 0;
+    public static class ShooterPivotConstants {
+        public static final int MOTOR = 0;
+        public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
+        public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
+        public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
+        public static final double LOAD_SHOOTER_RADIANS = 0;
+    }
 
     public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
     public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND = 2 * PI; // Radians per Second

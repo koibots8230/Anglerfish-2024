@@ -2,6 +2,7 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import com.koibots.robot.Constants.ShooterPivotConstants;
 import com.koibots.robot.commands.teleop.SwerveCommand;
 import com.koibots.robot.subsystems.ShooterPivot.ShooterPivot;
 import com.koibots.robot.subsystems.controller.ControllerIO;
@@ -96,9 +97,9 @@ public class RobotContainer {
         Trigger shooterSpeaker = m_operatorController.R2();
         Trigger shooterLoad = m_operatorController.cross();
 
-        shooterAmp.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.AMP_SHOOTER_RADIANS)));
-        shooterSpeaker.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.SPEAKER_SHOOTER_RADIANS)));
-        shooterLoad.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(Constants.LOAD_SHOOTER_RADIANS)));
+        shooterAmp.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(ShooterPivotConstants.AMP_SHOOTER_RADIANS)));
+        shooterSpeaker.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(ShooterPivotConstants.SPEAKER_SHOOTER_RADIANS)));
+        shooterLoad.whileTrue(new InstantCommand(() -> shooterPivot.setShooterPosition(ShooterPivotConstants.LOAD_SHOOTER_RADIANS)));
     }
 
     /**
