@@ -21,9 +21,9 @@ public class Constants {
 
     public static final double DEADBAND = 0.025;
 
-    public static class ShooterConstants{
+    public static class ShooterConstants {
         public static final int shooterMotor1 = 0;
-     }
+    }
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);

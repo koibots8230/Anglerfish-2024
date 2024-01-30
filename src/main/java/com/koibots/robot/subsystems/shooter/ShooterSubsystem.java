@@ -1,11 +1,13 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.shooter;
 
-import java.util.function.DoubleSupplier;
-
 import com.koibots.robot.Constants.ShooterConstants;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import java.util.function.DoubleSupplier;
 
 public class ShooterSubsystem {
     private static ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
@@ -25,8 +27,7 @@ public class ShooterSubsystem {
 
     private final RelativeEncoder encoder1 = shooterMotor1.getEncoder();
 
-    public void getPosition(){
+    public void getPosition() {
         encoder1.getPosition();
     }
-    
 }

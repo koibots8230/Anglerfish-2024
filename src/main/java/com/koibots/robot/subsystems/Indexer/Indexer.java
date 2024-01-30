@@ -1,9 +1,12 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.Indexer;
 
 import com.koibots.robot.Robot;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Indexer extends SubsystemBase{
+public class Indexer extends SubsystemBase {
     private final IndexerIO io;
     private IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
 
