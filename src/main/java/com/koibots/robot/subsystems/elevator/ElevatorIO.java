@@ -7,8 +7,9 @@ public interface ElevatorIO {
     @AutoLog
     public static class ElevatorInputs {
         public double position = 0.0;
-        public double leftAppliedVoltage = 0.0;
-        public double rightAppliedVoltage = 0.0;
+        public double appliedVoltage = 0.0;
+        public double leftAmperage = 0.0;
+        public double rightAmperage = 0.0;
     }
 
     public default void updateInputs(ElevatorInputs inputs) {}

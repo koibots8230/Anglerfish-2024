@@ -16,6 +16,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
     private AbsoluteEncoder encoder;
 
+    private double appliedVolts;
+
     public ElevatorIOSparkMax() {
         leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
@@ -29,12 +31,14 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     @Override
     public void updateInputs(ElevatorInputs inputs) {
         inputs.position = encoder.getPosition();
-        inputs.leftAppliedVoltage = leftMotor.getAppliedOutput() * leftMotor.getBusVoltage();
-        inputs.rightAppliedVoltage = rightMotor.getAppliedOutput() * rightMotor.getBusVoltage();
+        inputs.appliedVoltage = appliedVolts;
+        inputs.leftAmperage = leftMotor.getOutputCurrent();
+        inputs.rightAmperage = rightMotor.getOutputCurrent();
     }
 
     @Override
     public void setVoltage(double volts) {
+        appliedVolts = volts;
         leftMotor.setVoltage(volts);
         rightMotor.setVoltage(volts);
     }
