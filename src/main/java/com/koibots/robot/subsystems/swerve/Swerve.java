@@ -82,7 +82,6 @@ public class Swerve extends SubsystemBase {
             swerveModules[3].stop();
 
             Logger.recordOutput("SwerveStates/Setpoints", new SwerveModuleState[] {});
-            Logger.recordOutput("SwerveStates/SetpointsOptimized", new SwerveModuleState[] {});
         }
 
         // Log measured states
@@ -93,12 +92,6 @@ public class Swerve extends SubsystemBase {
     public void simulationPeriodic() {
         ChassisSpeeds simSpeeds = Constants.SWERVE_KINEMATICS.toChassisSpeeds(getModuleStates());
 
-        Logger.recordOutput(
-                "Calculated Speeds",
-                new double[] {
-                        simSpeeds.vxMetersPerSecond, simSpeeds.vyMetersPerSecond, simSpeeds.omegaRadiansPerSecond
-                });
-
         Constants.FIELD.setRobotPose(getEstimatedPose());
         gyroInputs.yawPosition = gyroInputs.yawPosition
                 .plus(Rotation2d.fromRadians(simSpeeds.omegaRadiansPerSecond * 0.02));
@@ -106,7 +99,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void setModuleStates(SwerveModuleState[] states) {
-        Logger.recordOutput("Module Setpoints", states);
+        Logger.recordOutput("SwerveStates/Setpoints", states);
 
         swerveModules[0].setState(states[0]);
         swerveModules[1].setState(states[1]);
@@ -130,6 +123,20 @@ public class Swerve extends SubsystemBase {
                 swerveModules[2].getPosition(),
                 swerveModules[3].getPosition()
         };
+    }
+
+    public void runEncoderTest() {
+        swerveModules[0].setTestVoltages();
+        swerveModules[1].setTestVoltages();
+        swerveModules[2].setTestVoltages();
+        swerveModules[3].setTestVoltages();
+    }
+
+    public void stop() {
+        swerveModules[0].stop();
+        swerveModules[1].stop();
+        swerveModules[2].stop();
+        swerveModules[3].stop();
     }
 
     public Pose2d getEstimatedPose() {

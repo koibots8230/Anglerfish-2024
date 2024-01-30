@@ -81,7 +81,7 @@ public class SwerveModule {
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
 
         // Run closed loop turn control
-        if (angleSetpoint != null) {
+        if (angleSetpoint != null && Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) < 0.01) {
             io.setTurnVoltage(
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians()));
 
@@ -97,10 +97,17 @@ public class SwerveModule {
 
                 // Run drive controller
                 double velocityRadPerSec = adjustSpeedSetpoint / WHEEL_RADIUS;
-                io.setDriveVoltage(
+
+                if (velocityRadPerSec > 0.01 || velocityRadPerSec < -0.01) {
+                    io.setDriveVoltage(
                         driveFeedforward.calculate(velocityRadPerSec)
                                 + driveFeedback.calculate(inputs.driveVelocityRadPerSec, velocityRadPerSec));
+                } else {
+                    io.setDriveVoltage(0);
+                }
             }
+        } else {
+            io.setTurnVoltage(0);
         }
     }
 
@@ -118,6 +125,11 @@ public class SwerveModule {
         speedSetpoint = optimizedState.speedMetersPerSecond;
 
         return optimizedState;
+    }
+
+    public void setTestVoltages() {
+        io.setDriveVoltage(3);
+        io.setTurnVoltage(3);
     }
 
     /** Disables all outputs to motors. */
