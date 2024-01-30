@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
-import java.util.function.Function;
 import org.littletonrobotics.junction.Logger;
 
 public class FieldOrientedDrive extends Command {
@@ -27,7 +26,6 @@ public class FieldOrientedDrive extends Command {
     DoubleSupplier vThetaSupplier;
     DoubleSupplier angleSupplier;
     BooleanSupplier crossSupplier;
-    Function<Double, Double> scalingAlgorithm;
     double previousTimestamp;
 
     ProfiledPIDController angleAlignmentController;
@@ -37,14 +35,12 @@ public class FieldOrientedDrive extends Command {
             DoubleSupplier vySupplier,
             DoubleSupplier vThetaSupplier,
             DoubleSupplier angleSupplier,
-            BooleanSupplier crossSupplier,
-            Function<Double, Double> scalingAlgorithm) {
+            BooleanSupplier crossSupplier) {
         this.vxSupplier = vxSupplier;
         this.vySupplier = vySupplier;
         this.vThetaSupplier = vThetaSupplier;
         this.angleSupplier = angleSupplier;
         this.crossSupplier = crossSupplier;
-        this.scalingAlgorithm = scalingAlgorithm;
 
         angleAlignmentController =
                 new ProfiledPIDController(
@@ -98,8 +94,8 @@ public class FieldOrientedDrive extends Command {
             }
 
             // Apply Scaling
-            linearMagnitude = scalingAlgorithm.apply(linearMagnitude);
-            // angularVelocity = scalingFunction.apply(angularVelocity);
+            linearMagnitude *= linearMagnitude * Math.signum(linearMagnitude);
+            angularVelocity *= angularVelocity * angularVelocity;
 
             ChassisSpeeds speeds =
                     ChassisSpeeds.fromFieldRelativeSpeeds(

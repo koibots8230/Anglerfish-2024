@@ -7,7 +7,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Robot;
+import com.koibots.robot.Constants.DriveConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,18 +34,20 @@ public class SwerveModule {
         this.io = io;
         this.index = index;
 
-        // Switch constants based on mode (the physics simulator is treated as a
-        // separate robot with different tuning)x
-        if (Robot.isReal()) {
-            driveFeedforward = new SimpleMotorFeedforward(0.0, 2);
-            driveFeedback = new PIDController(0.4, 0.0, 0.0);
-            turnFeedback = new PIDController(1.9, 0.0, 0.0);
-        } else {
-            driveFeedforward = new SimpleMotorFeedforward(0, 2.75);
-            driveFeedback = new PIDController(28.5, 0.0, 0.0);
-            turnFeedback = new PIDController(35.0, 0.0, 0.0);
-        }
-
+        driveFeedforward =
+                new SimpleMotorFeedforward(
+                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
+                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
+        driveFeedback =
+                new PIDController(
+                        DriveConstants.DRIVE_PID_CONSTANTS.kP,
+                        DriveConstants.DRIVE_PID_CONSTANTS.kI,
+                        DriveConstants.DRIVE_PID_CONSTANTS.kD);
+        turnFeedback =
+                new PIDController(
+                        DriveConstants.TURN_PID_CONSTANTS.kP,
+                        DriveConstants.TURN_PID_CONSTANTS.kI,
+                        DriveConstants.TURN_PID_CONSTANTS.kD);
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 
         driveFeedback.disableContinuousInput();
@@ -85,10 +87,7 @@ public class SwerveModule {
     /** Runs the module with the specified setpoint state. Returns the optimized state. */
     public SwerveModuleState setState(SwerveModuleState state) {
         // Optimize state based on current angle
-        // Controllers run in "periodic" when the setpoint is not null
         var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
-
-        // TODO: Reactivate optimization after it works without it
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = optimizedSetpoint.angle;

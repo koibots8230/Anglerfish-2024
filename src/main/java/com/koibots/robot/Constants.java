@@ -3,16 +3,15 @@
 
 package com.koibots.robot;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
-import com.pathplanner.lib.util.PIDConstants;
+import com.koibots.lib.util.PIDConstantsIO;
+import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 
@@ -22,8 +21,8 @@ public class Constants {
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
-        private static final double ROBOT_WIDTH_METERS = Units.inchesToMeters(21.375);
-        private static final double ROBOT_LENGTH_METERS = Units.inchesToMeters(21.375);
+        private static final Measure<Distance> ROBOT_WIDTH_METERS = Inches.of(21.375);
+        private static final Measure<Distance> ROBOT_LENGTH_METERS = Inches.of(21.375);
 
         public static final int MAX_LINEAR_SPEED_METERS_PER_SECOND = 4; // Meters per Second
         public static final double MAX_ANGULAR_VELOCITY_RADIANS_PER_SECOND =
@@ -32,13 +31,17 @@ public class Constants {
         public static final SwerveDriveKinematics SWERVE_KINEMATICS =
                 new SwerveDriveKinematics(
                         new Translation2d(
-                                ROBOT_LENGTH_METERS / 2, ROBOT_WIDTH_METERS / 2), // Front Left
+                                ROBOT_LENGTH_METERS.divide(2),
+                                ROBOT_WIDTH_METERS.divide(2)), // Front Left
                         new Translation2d(
-                                ROBOT_LENGTH_METERS / 2, -ROBOT_WIDTH_METERS / 2), // Front Right
+                                ROBOT_LENGTH_METERS.divide(2),
+                                ROBOT_WIDTH_METERS.divide(-2)), // Front Right
                         new Translation2d(
-                                -ROBOT_LENGTH_METERS / 2, ROBOT_WIDTH_METERS / 2), // Back Left
+                                ROBOT_LENGTH_METERS.divide(-2),
+                                ROBOT_WIDTH_METERS.divide(2)), // Back Left
                         new Translation2d(
-                                -ROBOT_LENGTH_METERS / 2, -ROBOT_WIDTH_METERS / 2) // Back Right
+                                ROBOT_LENGTH_METERS.divide(-2),
+                                ROBOT_WIDTH_METERS.divide(-2)) // Back Right
                         );
 
         // TODO: make sure this correct for competition bot
@@ -59,8 +62,13 @@ public class Constants {
                 (45.0 * 22) / (kDrivingMotorPinionTeeth * 15); // 5.07692307692
         public static double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
 
-        public static final PIDConstants MODULE_DRIVE_PID_CONSTANTS = new PIDConstants(0, 0, 0);
-        public static final PIDConstants MODULE_TURN_PID_CONSTANTS = new PIDConstants(0, 0, 0);
+        public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
+                new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
+        public static final PIDConstantsIO TURN_PID_CONSTANTS =
+                new PIDConstantsIO(1.9, 0, 0, 35, 0, 0);
+        public static final SimpleMotorFeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
+                new SimpleMotorFeedforwardConstantsIO(0, 2, 0, 2.75);
+
         public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
         public static final double TURNING_ENCODER_VELOCITY_FACTOR =
                 (2 * Math.PI) / 60.0; // radians per second
