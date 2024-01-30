@@ -99,10 +99,10 @@ public class Constants {
         public static final double[] VECTOR_DEFAULT_VALUE = {0, 0, 0};
         public static final int ID_DEFAULT_VALUE = 0;
 
-        public static final double FIELD_WIDTH_METERS = 8.02;
-        public static final double FIELD_LENGTH_METERS = 16.54;
+        public static final Measure<Distance> FIELD_WIDTH = Inches.of(323.25);
+        public static final Measure<Distance> FIELD_LENGTH = Inches.of(651.25);
 
-        public static final double MAX_MEASUREMENT_DIFFERENCE_METERS = 1;
+        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
 
         public static final Pose2d[] TAG_POSES_METERS = {
             new Pose2d(1.5, .5, new Rotation2d()), new Pose2d(2, .5, new Rotation2d())
