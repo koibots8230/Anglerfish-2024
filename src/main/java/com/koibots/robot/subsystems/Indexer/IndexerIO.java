@@ -17,7 +17,7 @@ public interface IndexerIO {
 
     void updateInputs(IndexerIOInputs inputs);
 
-    void setIdle(boolean mode);
+    void setIdle(boolean isBrake);
 
     void runMotor(double speed);
 }

@@ -35,7 +35,7 @@ public class IndexerIOSparkMax implements IndexerIO {
         motor.set(speed);
     }
 
-    public void setIdle(boolean mode) {
-        motor.setIdleMode(mode ? IdleMode.kBrake : IdleMode.kCoast);
+    public void setIdle(boolean isBrake) {
+        motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
     }
 }

@@ -23,7 +23,7 @@ public class Indexer extends SubsystemBase {
         io.runMotor(speed);
     }
 
-    public void indexerMode(boolean mode) {
-        io.setIdle(mode);
+    public void indexerMode(boolean isBrake) {
+        io.setIdle(isBrake);
     }
 }

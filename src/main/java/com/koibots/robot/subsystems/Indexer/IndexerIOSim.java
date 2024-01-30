@@ -11,7 +11,7 @@ public class IndexerIOSim implements IndexerIO {
     }
 
     @Override
-    public void setIdle(boolean mode) {
+    public void setIdle(boolean isBrake) {
         // TODO Auto-generated method stub
     }
 
