@@ -1,6 +1,8 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2024.1.1"
+    id "edu.wpi.first.GradleRIO" version "2024.2.1"
+    id 'com.diffplug.spotless' version '6.20.0'
+    id "com.peterabeles.gversion" version "1.10"
 }
 
 java {
@@ -110,7 +112,11 @@ wpi.sim.addDriverstation()
 // in order to make them all available at runtime. Also adding the manifest so WPILib
 // knows where to look for our Robot Class.
 jar {
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
     from sourceSets.main.allSource
     manifest edu.wpi.first.gradlerio.GradleRIOPlugin.javaManifest(ROBOT_MAIN_CLASS)
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
@@ -124,4 +130,67 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+project.compileJava.dependsOn(createVersionFile)
+gversion {
+    srcDir = "src/main/java/"
+    classPackage = "com.koibots.robot"
+    className = "BuildConstants"
+    dateFormat = "yyyy-MM-dd HH:mm:ss z"
+    timeZone = "America/New_York" // Use preferred time zone
+    indent = "    "
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+spotless {
+    enforceCheck false
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**', 'src/main/java/com/koibots/robot/BuildConstants.java'
+        }
+        toggleOffOn()
+        googleJavaFormat().aosp()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+
+        formatAnnotations()  // fixes formatting of type annotations, see below
+
+        licenseHeader '// Copyright (c) 2024 FRC 8230 - The KoiBots\n// https://github.com/koibots8230\n\n'
+    }
+    groovyGradle {
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        greclipse()
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format 'xml', {
+        target fileTree('.') {
+            include '**/*.xml'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        eclipseWtp('xml')
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    format 'misc', {
+        target fileTree('.') {
+            include '**/*.md', '**/.gitignore'
+            exclude '**/build/**', '**/build-*/**'
+        }
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
 }
