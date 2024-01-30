@@ -1,44 +1,59 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.swerve;
 
+import static edu.wpi.first.units.Units.*;
+
+import com.koibots.robot.Constants.DriveConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double LOOP_PERIOD_SECS = 0.02;
 
-    private DCMotorSim driveSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
-    private DCMotorSim turnSim = new DCMotorSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
+    private final DCMotorSim driveSim =
+            new DCMotorSim(DCMotor.getNEO(1), DriveConstants.DRIVE_GEAR_RATIO, 0.025);
+    private final DCMotorSim turnSim =
+            new DCMotorSim(DCMotor.getNEO(1), DriveConstants.TURN_GEAR_RATIO, 0.004);
 
-    private double driveAppliedVolts = 0.0;
-    private double turnAppliedVolts = 0.0;
+    private Measure<Voltage> driveAppliedVolts = Volts.of(0);
+    private Measure<Voltage> turnAppliedVolts = Volts.of(0);
 
     @Override
     public void updateInputs(SwerveModuleInputs inputs) {
         driveSim.update(LOOP_PERIOD_SECS);
         turnSim.update(LOOP_PERIOD_SECS);
 
-        inputs.drivePositionRad = driveSim.getAngularPositionRad();
-        inputs.driveVelocityRadPerSec = driveSim.getAngularVelocityRadPerSec();
-        inputs.driveAppliedVolts = driveAppliedVolts;
-        inputs.driveCurrentAmps = new double[] { Math.abs(driveSim.getCurrentDrawAmps()) };
+        inputs.drivePosition = DriveConstants.WHEEL_RADIUS.times(driveSim.getAngularPositionRad());
+        inputs.driveVelocity =
+                DriveConstants.WHEEL_RADIUS
+                        .times(driveSim.getAngularVelocityRadPerSec())
+                        .per(Second);
+        inputs.driveAppliedVoltage = driveAppliedVolts;
+        inputs.driveCurrent = Amps.of(driveSim.getCurrentDrawAmps());
 
-        inputs.turnPosition = new Rotation2d(turnSim.getAngularPositionRad());
-        inputs.turnVelocityRadPerSec = turnSim.getAngularVelocityRadPerSec();
-        inputs.turnAppliedVolts = turnAppliedVolts;
-        inputs.turnCurrentAmps = new double[] { Math.abs(turnSim.getCurrentDrawAmps()) };
+        inputs.turnPosition =
+                new Rotation2d(turnSim.getAngularPositionRad() % (2 * Math.PI))
+                        .minus(Rotation2d.fromRadians(Math.PI));
+        inputs.turnVelocity = RadiansPerSecond.of(turnSim.getAngularVelocityRadPerSec());
+        inputs.turnAppliedVoltage = turnAppliedVolts;
+        inputs.turnCurrent = Amps.of(turnSim.getCurrentDrawAmps());
     }
 
     @Override
-    public void setDriveVoltage(double volts) {
-        driveAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        driveSim.setInputVoltage(driveAppliedVolts);
+    public void setDriveVoltage(Measure<Voltage> voltage) {
+        driveAppliedVolts = voltage;
+        driveSim.setInputVoltage(driveAppliedVolts.in(Volts));
     }
 
     @Override
-    public void setTurnVoltage(double volts) {
-        turnAppliedVolts = MathUtil.clamp(volts, -12.0, 12.0);
-        turnSim.setInputVoltage(turnAppliedVolts);
+    public void setTurnVoltage(Measure<Voltage> voltage) {
+        turnAppliedVolts = Volts.of(MathUtil.clamp(voltage.in(Volts), -12.0, 12.0));
+        turnSim.setInputVoltage(turnAppliedVolts.in(Volts));
     }
 }
