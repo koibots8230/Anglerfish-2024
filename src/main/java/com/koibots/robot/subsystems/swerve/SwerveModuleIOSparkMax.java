@@ -1,25 +1,31 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.swerve;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
+import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
-
     private final CANSparkMax driveSparkMax;
     private final CANSparkMax turnSparkMax;
-
     private final RelativeEncoder driveEncoder;
     private final AbsoluteEncoder turnEncoder;
-
-    private final boolean isTurnMotorInverted = true;
+    private Rotation2d chassisAngularOffset;
 
     public SwerveModuleIOSparkMax(int driveId, int turnId) {
 
@@ -41,13 +47,27 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveEncoder.setPositionConversionFactor(DriveConstants.DRIVING_ENCODER_POSITION_FACTOR);
         driveEncoder.setVelocityConversionFactor(DriveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
 
+        turnEncoder.setInverted(true);
+
         // Apply position and velocity conversion factors for the turning encoder. We
         // want these in radians and radians per second to use with WPILib's swerve
         // APIs.
         turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-        turnSparkMax.setInverted(isTurnMotorInverted);
+        if (turnId == DriveConstants.FRONT_LEFT_TURN_ID) {
+            chassisAngularOffset = Rotation2d.fromRadians((3 * Math.PI) / 2);
+        } else if (turnId == DriveConstants.FRONT_RIGHT_TURN_ID) {
+            chassisAngularOffset = new Rotation2d(Math.PI);
+        } else if (turnId == DriveConstants.BACK_LEFT_TURN_ID) {
+            chassisAngularOffset = Rotation2d.fromRadians(0);
+        } else if (turnId == DriveConstants.BACK_RIGHT_TURN_ID) {
+            chassisAngularOffset =
+                    Rotation2d.fromRadians(
+                            Math.PI / 2); // Rotation2d.fromDegrees((3 * Math.PI) / 2);
+        }
+
+        turnSparkMax.setInverted(false);
         driveSparkMax.setSmartCurrentLimit(40);
         turnSparkMax.setSmartCurrentLimit(20);
         driveSparkMax.enableVoltageCompensation(12.0);
@@ -66,26 +86,32 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
     @Override
     public void updateInputs(SwerveModuleInputs inputs) {
-        inputs.drivePositionRad = Units.rotationsToRadians(driveEncoder.getPosition())
-                / DriveConstants.DRIVE_GEAR_RATIO;
-        inputs.driveVelocityRadPerSec = driveEncoder.getVelocity();
-        inputs.driveAppliedVolts = driveSparkMax.getAppliedOutput() * driveSparkMax.getBusVoltage();
-        inputs.driveCurrentAmps = new double[] { driveSparkMax.getOutputCurrent() };
+        inputs.drivePosition = Meters.of(driveEncoder.getPosition());
+        inputs.driveVelocity = MetersPerSecond.of(driveEncoder.getVelocity());
+        inputs.driveAppliedVoltage =
+                Volts.of(driveSparkMax.getBusVoltage()).times(driveSparkMax.getAppliedOutput());
+        inputs.driveCurrent = Amps.of(driveSparkMax.getOutputCurrent());
 
-        inputs.turnPosition = Rotation2d.fromRadians(turnEncoder.getPosition());
-        inputs.turnVelocityRadPerSec = Units.rotationsPerMinuteToRadiansPerSecond(turnEncoder.getVelocity());
-        inputs.turnAppliedVolts = turnSparkMax.getAppliedOutput() * turnSparkMax.getBusVoltage();
-        inputs.turnCurrentAmps = new double[] { turnSparkMax.getOutputCurrent() };
+        inputs.turnPosition =
+                Rotation2d.fromRadians(turnEncoder.getPosition())
+                        .plus(chassisAngularOffset)
+                        .minus(Rotation2d.fromRadians(Math.PI));
+
+        inputs.turnVelocity = RadiansPerSecond.of(turnEncoder.getVelocity());
+        inputs.turnAppliedVoltage =
+                Volts.of(turnSparkMax.getBusVoltage()).times(turnSparkMax.getAppliedOutput());
+        inputs.turnCurrent = Amps.of(turnSparkMax.getOutputCurrent());
     }
 
     @Override
-    public void setDriveVoltage(double volts) {
-        driveSparkMax.setVoltage(volts);
+    public void setDriveVoltage(Measure<Voltage> voltage) {
+        driveSparkMax.setVoltage(voltage.in(Volts));
     }
 
     @Override
-    public void setTurnVoltage(double volts) {
-        turnSparkMax.setVoltage(volts);
+    public void setTurnVoltage(Measure<Voltage> voltage) {
+
+        turnSparkMax.setVoltage(voltage.in(Volts));
     }
 
     @Override
