@@ -20,11 +20,7 @@ public class ShooterPivot extends SubsystemBase {
 
 
     public ShooterPivot() {
-        if (Robot.isReal()) {
-            io = new ShooterPivotIOSparkMax();
-        } else {
-            io = new ShooterPivotIOSim();
-        }
+        io = (Robot.isReal()) ? new ShooterPivotIOSparkMax() : new ShooterPivotIOSim();
         desiredPos = 0;
     }
 
@@ -36,12 +32,8 @@ public class ShooterPivot extends SubsystemBase {
 
     //setters
 
-    public void setShooterPivotMode(boolean desiredMode) {
-        if(desiredMode == true) {
-            io.setBrakeMode();
-        } else {
-            io.setCoastMode();
-        }
+    public void setShooterPivotMode(boolean mode) {
+        io.setIdleMode(mode);
     }
 
     //commands

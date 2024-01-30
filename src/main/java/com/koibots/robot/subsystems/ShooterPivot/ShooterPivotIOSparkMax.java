@@ -33,11 +33,7 @@ public class ShooterPivotIOSparkMax implements ShooterPivotIO {
         shooterPivotMotor.set(desiredPosition);
     }
 
-    public void setBrakeMode() {
-        shooterPivotMotor.setIdleMode(IdleMode.kBrake);
-    }
-
-    public void setCoastMode() {
-        shooterPivotMotor.setIdleMode(IdleMode.kCoast);
+    public void setIdleMode(boolean mode) {
+        shooterPivotMotor.setIdleMode(mode ? IdleMode.kBrake : IdleMode.kCoast);
     }
 }
