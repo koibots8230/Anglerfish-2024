@@ -60,6 +60,8 @@ public class Elevator extends SubsystemBase {
         linearSysLoop.setNextR(lastProfiledReference.position, lastProfiledReference.velocity);
         linearSysLoop.correct(VecBuilder.fill(io.getPosition()));
         linearSysLoop.predict(0.020);
+
+        io.setVoltage(linearSysLoop.getU(0));
     }
 
     public void reset() {
