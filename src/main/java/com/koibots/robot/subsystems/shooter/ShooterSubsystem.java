@@ -2,7 +2,7 @@ package com.koibots.robot.subsystems.shooter;
 
 import java.util.function.DoubleSupplier;
 
-import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -12,7 +12,7 @@ public class ShooterSubsystem {
     private static CANSparkMax shooterMotor1;
 
     ShooterSubsystem() {
-        shooterMotor1 = new CANSparkMax(Constants.ShooterConstants.shooterMotor1, MotorType.kBrushless);
+        shooterMotor1 = new CANSparkMax(ShooterConstants.shooterMotor1, MotorType.kBrushless);
     }
 
     public void setSpeed(DoubleSupplier speed) {
