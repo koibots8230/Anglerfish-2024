@@ -88,6 +88,7 @@ public class Robot extends LoggedRobot {
         sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
         sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
 
+        SmartDashboard.putString("Test", "text");
         SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
         SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
         SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
@@ -118,50 +119,6 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        switch (AutoMode.SysId) {
-            case TextGenerated:
-            case Chooser:
-                break;
-            case SysId:
-                final var mechanism = sysidMechanismChooser.getSelected();
-                final var routine = sysidRoutineChooser.getSelected();
-
-                autonomousCommand =
-                        switch (routine) {
-                            case ForwardDynamic -> new SysIdRoutine(
-                                    new SysIdRoutine.Config(), mechanism)
-                                    .dynamic(SysIdRoutine.Direction.kForward);
-                            case ReverseDynamic -> new SysIdRoutine(
-                                    new SysIdRoutine.Config(), mechanism)
-                                    .dynamic(SysIdRoutine.Direction.kReverse);
-                            case ForwardQuasistatic -> new SysIdRoutine(
-                                    new SysIdRoutine.Config(), mechanism)
-                                    .quasistatic(SysIdRoutine.Direction.kForward);
-                            case ReverseQuasistatic -> new SysIdRoutine(
-                                    new SysIdRoutine.Config(), mechanism)
-                                    .quasistatic(SysIdRoutine.Direction.kReverse);
-                        };
-
-                if (mechanism.m_name.equals("Swerve")) {
-                    autonomousCommand.beforeStarting(
-                            () ->
-                                    Swerve.get()
-                                            .setModuleStates(
-                                                    new SwerveModuleState[]{
-                                                            new SwerveModuleState(0, new Rotation2d()),
-                                                            new SwerveModuleState(0, new Rotation2d()),
-                                                            new SwerveModuleState(0, new Rotation2d()),
-                                                            new SwerveModuleState(0, new Rotation2d())
-                                                    }));
-                }
-        }
-
-        // Swerve.get().setBrake(true); // TODO: Add swerve set brake method
-
-        if (autoModeChooser.getSelected() == AutoMode.SysId) {
-            Logger.registerURCL(URCL.startExternal());
-        }
-
         // schedule the autonomous command (example)
         if (autonomousCommand != null) {
             autonomousCommand.schedule();

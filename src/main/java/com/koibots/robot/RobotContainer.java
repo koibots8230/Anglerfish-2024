@@ -5,12 +5,14 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import com.koibots.lib.auto.AutoRoutine;
 import com.koibots.robot.commands.FieldOrientedDrive;
 import com.koibots.robot.subsystems.controller.*;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import java.util.function.Function;
@@ -23,12 +25,29 @@ import java.util.function.Supplier;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    enum AutoAction {
-        Shoot(null);
-        public final Command command;
+    enum AutoAction implements AutoRoutine.ActionEnum {
+        Wait5(new WaitCommand(5), '5');
 
-        private AutoAction(Command command) {
-            this.command = command;
+        public final Runnable action;
+        public final char signal;
+
+        AutoAction(Runnable action, char signal) {
+            this.action = action;
+            this.signal = signal;
+        }
+        AutoAction(Command action, char signal) {
+            this.action = action::schedule;
+            this.signal = signal;
+        }
+
+        @Override
+        public Runnable getAction() {
+            return this.action;
+        }
+
+        @Override
+        public char getSignal() {
+            return this.signal;
         }
     }
 
