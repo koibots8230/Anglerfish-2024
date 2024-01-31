@@ -3,12 +3,10 @@ package com.koibots.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.koibots.robot.Constants.ElevatorConstants;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 public class ElevatorIOSparkMax implements ElevatorIO {
     
@@ -23,10 +21,12 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
 
-        encoder = leftMotor.getAbsoluteEncoder(Type.kDutyCycle);
+        encoder = leftMotor.getAlternateEncoder(8192);
 
         encoder.setPositionConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
+
+        encoder.setPosition(0);
     }
 
     @Override

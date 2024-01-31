@@ -113,10 +113,10 @@ public class Constants {
 
         public static final double GEAR_RATIO = 60;
         public static final Measure<Mass> MASS = Pounds.of(0); // TODO: Get from cad when it's done
-        public static final Measure<Distance> DRUM_DIAMETER = Inches.of(0); //TODO: Ask cad when they finish
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0); //TODO: Get from cad when it's done
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS = LinearSystemId.createElevatorSystem(
-            DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_DIAMETER.in(Meters), GEAR_RATIO);
+            DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
 
         // ===================================Profile===================================
 
@@ -164,6 +164,10 @@ public class Constants {
         public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> HANDOFF_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> RESTING_POSITION = Inches.of(0); // TODO: Get
+
+        // ===================================Sim===================================
+
+        public static final double MOMENT_OF_INERTIA = 0.0; // TODO: Get from cad when it's finished
     }
 
     public static class VisionConstants {
