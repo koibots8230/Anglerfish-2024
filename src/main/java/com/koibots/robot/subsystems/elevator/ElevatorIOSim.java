@@ -1,5 +1,7 @@
 package com.koibots.robot.subsystems.elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.koibots.robot.Constants.ElevatorConstants;
 
 import edu.wpi.first.math.MathUtil;
@@ -28,27 +30,27 @@ public class ElevatorIOSim implements ElevatorIO {
         0
     );
 
-    private final Mechanism2d m_mech2d = new Mechanism2d(20, 50);
-    private final MechanismRoot2d m_mech2dRoot = m_mech2d.getRoot("Elevator Root", 10, 0);
-    private final MechanismLigament2d m_elevatorMech2d = m_mech2dRoot.append(
+    private final Mechanism2d mech2d = new Mechanism2d(.25, .5);
+    private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Elevator Root", 0.125, 0);
+    private final MechanismLigament2d elevatorMech2d = mech2dRoot.append(
         new MechanismLigament2d("Elevator", elevator.getPositionMeters(), 90)
     );
 
     public ElevatorIOSim() {
-        SmartDashboard.putData("Elevator Sim", m_mech2d);
+        System.out.println("Sim Initialized");
     }
 
     @Override
     public void updateInputs(ElevatorInputs inputs) {
         elevator.update(0.020);
-        m_elevatorMech2d.setLength(elevator.getPositionMeters());
+        elevatorMech2d.setLength(elevator.getPositionMeters());
 
         RoboRioSim.setVInVoltage(
             BatterySim.calculateDefaultBatteryLoadedVoltage(elevator.getCurrentDrawAmps())
         );
 
         inputs.appliedVoltage = appliedVolts;
-        inputs.position = elevator.getPositionMeters();
+        inputs.position = Units.metersToInches(elevator.getPositionMeters());
         inputs.leftAmperage = elevator.getCurrentDrawAmps();
         inputs.rightAmperage = elevator.getCurrentDrawAmps();
     }
@@ -68,5 +70,10 @@ public class ElevatorIOSim implements ElevatorIO {
     @Override
     public double getVelocity() {
         return elevator.getVelocityMetersPerSecond();
+    }
+
+    @Override
+    public Mechanism2d getMechanism() {
+        return mech2d;
     }
 }

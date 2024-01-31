@@ -5,6 +5,7 @@ package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
+import com.koibots.robot.subsystems.elevator.Elevator;
 import java.util.function.Supplier;
 
 public class Subsystems {
@@ -22,5 +23,13 @@ public class Subsystems {
                 visionInstance = new Vision();
                 Vision = () -> visionInstance;
                 return visionInstance;
+            };
+
+    private static Elevator elevatorInstance;
+    public static Supplier<Elevator> Elevator =
+            () -> {
+                elevatorInstance = new Elevator();
+                Elevator = () -> elevatorInstance;
+                return elevatorInstance;
             };
 }

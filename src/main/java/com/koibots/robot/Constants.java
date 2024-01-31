@@ -107,33 +107,27 @@ public class Constants {
         public static final int LEFT_MOTOR_PORT = 1;
         public static final int RIGHT_MOTOR_PORT = 2;
 
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(0); // TODO: Get from cad when it's done
+        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1); // TODO: Get from cad when it's done
 
         // ===================================Linear System===================================
 
-        public static final double GEAR_RATIO = 60;
-        public static final Measure<Mass> MASS = Pounds.of(0); // TODO: Get from cad when it's done
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0); //TODO: Get from cad when it's done
+        public static final double GEAR_RATIO = 25;
+        public static final Measure<Mass> MASS = Kilograms.of(4.5); // TODO: Get from cad when it's done
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.75); //TODO: Get from cad when it's done
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS = LinearSystemId.createElevatorSystem(
             DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
 
         // ===================================Profile===================================
 
-        public static final Measure<Velocity<Distance>> MAX_SPEED = MetersPerSecond.of(0); // TODO: Get from cad when it's done
-        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION = MetersPerSecondPerSecond.of(0); //TODO: Get from cad when it's done
-
-        public static final TrapezoidProfile PROFILE = new TrapezoidProfile(
-            new TrapezoidProfile.Constraints(
-                MAX_SPEED.in(MetersPerSecond),
-                MAX_ACCELERATION.in(MetersPerSecondPerSecond))
-        );
+        public static final Measure<Velocity<Distance>> MAX_SPEED = MetersPerSecond.of(3); // TODO: Get from cad when it's done
+        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION = MetersPerSecondPerSecond.of(3); //TODO: Get from cad when it's done
 
         // ===================================Kalman Filter===================================
 
-        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(0); // TODO: Get
-        public static final Measure<Velocity<Distance>> STDEV_VELOCITY = InchesPerSecond.of(0); //TODO: Get
-        public static final double ENCODER_STDEV = 0.001; //TODO: Get
+        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(2); // TODO: Get
+        public static final Measure<Velocity<Distance>> STDEV_VELOCITY = InchesPerSecond.of(10); //TODO: Get
+        public static final double ENCODER_STDEV = 0.0001; //TODO: Get
 
         public static final KalmanFilter<N2, N1, N1> KALMAN_FILTER =
             new KalmanFilter<>(
@@ -147,8 +141,8 @@ public class Constants {
 
         // ===================================LQR===================================
 
-        public static final Measure<Distance> POSITION_ERROR_TOLERANCE = Inches.of(0); //TODO: Get
-        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE = InchesPerSecond.of(0); // TODO: Get
+        public static final Measure<Distance> POSITION_ERROR_TOLERANCE = Inches.of(0.0001); //TODO: Get
+        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE = InchesPerSecond.of(.1); // TODO: Get
         public static final double VOLTAGE_TOLERANCE = 12;
 
         public static final LinearQuadraticRegulator<N2, N1, N1> LQR =
@@ -158,16 +152,13 @@ public class Constants {
                 VecBuilder.fill(VOLTAGE_TOLERANCE),
                 0.020
             );
+        
 
-        // ===================================Positions===================================
+        // =================================== Positions ===================================
 
         public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> HANDOFF_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> RESTING_POSITION = Inches.of(0); // TODO: Get
-
-        // ===================================Sim===================================
-
-        public static final double MOMENT_OF_INERTIA = 0.0; // TODO: Get from cad when it's finished
     }
 
     public static class VisionConstants {

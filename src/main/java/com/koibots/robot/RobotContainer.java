@@ -3,8 +3,10 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.subsystems.Subsystems.Elevator;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import com.koibots.robot.commands.ElevatorControl;
 import com.koibots.robot.commands.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,5 +41,9 @@ public class RobotContainer {
                                 () -> -controller.getRawAxis(4),
                                 () -> controller.getPOV(),
                                 () -> controller.getRawButton(1)));
+        
+        Elevator.get().setDefaultCommand(
+            new ElevatorControl(() -> controller.getRawAxis(3))
+        );
     }
 }

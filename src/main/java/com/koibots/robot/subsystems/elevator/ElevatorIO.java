@@ -2,11 +2,14 @@ package com.koibots.robot.subsystems.elevator;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+
 public interface ElevatorIO {
 
     @AutoLog
     public static class ElevatorInputs {
         public double position = 0.0;
+        public double setpoint = 0.0;
         public double appliedVoltage = 0.0;
         public double leftAmperage = 0.0;
         public double rightAmperage = 0.0;
@@ -28,5 +31,9 @@ public interface ElevatorIO {
     /* Get the encoder velocity */
     public default double getVelocity() {
         return 0;
+    }
+
+    public default Mechanism2d getMechanism() {
+        return null;
     }
 } 

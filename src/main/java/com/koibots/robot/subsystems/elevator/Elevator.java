@@ -1,5 +1,6 @@
 package com.koibots.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
@@ -29,7 +30,13 @@ public class Elevator extends SubsystemBase {
 
     private TrapezoidProfile.State targetState;
 
+    private double setpoint;
+
+    private double volts;
+
     public Elevator() {
+        System.out.println("Elevator initialized");
+
         linearSysLoop =
             new LinearSystemLoop<>(
                 ElevatorConstants.LINEAR_SYS, 
@@ -55,15 +62,28 @@ public class Elevator extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Elevator", inputs);
 
+        inputs.setpoint = setpoint;
+
+        Logger.processInputs("Elevator/Inputs", inputs);
+
+        Logger.recordOutput("Elevator/SimMechanism", io.getMechanism());
+        
         lastProfiledReference = profile.calculate(0.020, lastProfiledReference, targetState);
 
         linearSysLoop.setNextR(lastProfiledReference.position, lastProfiledReference.velocity);
         linearSysLoop.correct(VecBuilder.fill(io.getPosition()));
         linearSysLoop.predict(0.020);
+        
+        volts = linearSysLoop.getU(0);
+        volts = Robot.isReal() ? (Math.abs(volts) > 0.5) ? volts : 0 : volts;
+        
+        io.setVoltage(volts);
+    }
 
-        io.setVoltage(linearSysLoop.getU(0));
+    @Override
+    public void simulationPeriodic() {
+        
     }
 
     public void reset() {
@@ -74,6 +94,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void setPostion(Measure<Distance> position) {
+        setpoint = position.in(Inches);
         targetState = new TrapezoidProfile.State(position.in(Meters), 0.0);
     }
 }

@@ -5,6 +5,12 @@ import static edu.wpi.first.units.Units.Meters;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -17,6 +23,10 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
     private double appliedVolts;
 
+    private final Mechanism2d mech2d;
+    private final MechanismRoot2d mech2dRoot;
+    private final MechanismLigament2d elevatorMech2d;
+
     public ElevatorIOSparkMax() {
         leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
@@ -27,10 +37,18 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
 
         encoder.setPosition(0);
+
+        mech2d = new Mechanism2d(Units.inchesToMeters(4), 1);
+        mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
+        elevatorMech2d = mech2dRoot.append(
+            new MechanismLigament2d("Elevator", encoder.getPosition(), 90)
+        );
     }
 
     @Override
     public void updateInputs(ElevatorInputs inputs) {
+        elevatorMech2d.setLength(encoder.getPosition());
+
         inputs.position = encoder.getPosition();
         inputs.appliedVoltage = appliedVolts;
         inputs.leftAmperage = leftMotor.getOutputCurrent();
