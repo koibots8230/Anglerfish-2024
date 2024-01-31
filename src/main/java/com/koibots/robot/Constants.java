@@ -24,6 +24,20 @@ public class Constants {
         public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
         public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
         public static final double LOAD_SHOOTER_RADIANS = 0;
+        public static final double SIM_KS = 0;
+        public static final double SIM_KG = 0;
+        public static final double SIM_KV = 0;
+        public static final double SIM_KA = 0;
+        public static final double SIM_KP = 0;
+        public static final double SIM_KI = 0;
+        public static final double SIM_KD = 0;
+        public static final double REAL_KS = 0;
+        public static final double REAL_KG = 0;
+        public static final double REAL_KV = 0;
+        public static final double REAL_KA = 0;
+        public static final double REAL_KP = 0;
+        public static final double REAL_KI = 0;
+        public static final double REAL_KD = 0;
     }
 
     public static final double DEADBAND = 0.025;
