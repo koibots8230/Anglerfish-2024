@@ -1,3 +1,6 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.swerve;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -5,13 +8,12 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface GyroIO {
     @AutoLog
-    public static class GyroIOInputs {
+    class GyroIOInputs {
         public Rotation2d yawPosition = new Rotation2d();
         public double yawVelocityRadPerSec = 0.0;
     }
 
-    public void updateInputs(GyroIOInputs inputs);
+    void updateInputs(GyroIOInputs inputs);
 
-    public default void zeroYaw() {
-    }
+    default void zeroYaw() {}
 }

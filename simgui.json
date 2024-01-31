@@ -1,0 +1,87 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
+      "/SmartDashboard/Auto Mode Chooser": "String Chooser",
+      "/SmartDashboard/Controller Chooser": "String Chooser",
+      "/SmartDashboard/Drive PID 0": "PIDController",
+      "/SmartDashboard/Drive PID 1": "PIDController",
+      "/SmartDashboard/Drive PID 2": "PIDController",
+      "/SmartDashboard/Drive PID 3": "PIDController",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Scaling Algorithm": "String Chooser",
+      "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/SysId Mechanism Chooser": "String Chooser",
+      "/SmartDashboard/SysId Routine Chooser": "String Chooser",
+      "/SmartDashboard/Turn PID 0": "PIDController",
+      "/SmartDashboard/Turn PID 1": "PIDController",
+      "/SmartDashboard/Turn PID 2": "PIDController",
+      "/SmartDashboard/Turn PID 3": "PIDController"
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "transitory": {
+      "AdvantageKit": {
+        ".schema": {
+          "open": true
+        },
+        "DashboardInputs": {
+          "open": true
+        },
+        "Drive": {
+          "Module0": {
+            "double[]##v_/AdvantageKit/Drive/Module0/DriveCurrentAmps": {
+              "open": true
+            }
+          }
+        },
+        "DriverStation": {
+          "Joystick0": {
+            "open": true
+          },
+          "open": true
+        },
+        "open": true
+      },
+      "LiveWindow": {
+        ".status": {
+          "open": true
+        }
+      },
+      "Shuffleboard": {
+        "SysId": {
+          "open": true
+        }
+      },
+      "SmartDashboard": {
+        "Angle Alignment Controller": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Clients": {
+      "open": true
+    },
+    "Connections": {
+      "open": true
+    },
+    "Server": {
+      "open": true
+    },
+    "visible": true
+  }
+}
