@@ -27,7 +27,7 @@ public class ShooterPivot extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(pivotInputs);
-        io.setMotorSpeed(
+        io.setVoltage(
                 PID.calculate(pivotInputs.position.getRadians(), desiredPos)
                         + Feedforward.calculate(0, 0, 0));
     }

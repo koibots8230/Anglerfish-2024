@@ -30,11 +30,11 @@ public class ShooterPivotIOSparkMax implements ShooterPivotIO {
         inputs.position = Rotation2d.fromRadians(shooterPivotEncoder.getPosition());
         inputs.voltage = Volts.of(shooterPivotMotor.getBusVoltage());
         inputs.current = Amps.of(shooterPivotMotor.getOutputCurrent());
-        inputs.velocity = RadiansPerSecond.of(shooterPivotEncoder.getVelocity());
+        inputs.velocity = RotationsPerSecond.of(shooterPivotEncoder.getVelocity());
     }
 
-    public void setMotorSpeed(double desiredPosition) {
-        shooterPivotMotor.set(desiredPosition);
+    public void setVoltage(double volts) {
+        shooterPivotMotor.setVoltage(volts);
     }
 
     public void setIdleMode(boolean isBrake) {

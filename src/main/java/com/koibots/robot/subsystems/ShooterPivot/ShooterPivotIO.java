@@ -19,12 +19,12 @@ public interface ShooterPivotIO {
         public Rotation2d position = new Rotation2d();
         public Measure<Voltage> voltage = Volts.of(0);
         public Measure<Current> current = Amps.of(0);
-        public Measure<Velocity<Angle>> velocity = RadiansPerSecond.of(0);
+        public Measure<Velocity<Angle>> velocity = RotationsPerSecond.of(0);
     }
 
     void updateInputs(ShooterPivotIOInputs inputs);
 
-    void setMotorSpeed(double desiredPosition);
+    void setVoltage(double volts);
 
     void setIdleMode(boolean isBrake);
 }
