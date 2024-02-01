@@ -19,5 +19,9 @@ public interface IndexerIO {
 
     void setIdle(boolean isBrake);
 
-    void runMotor(double speed);
+    void setVoltage(double volts);
+
+    Measure<Velocity<Angle>> getVelocity();
+    
+    double getVoltage();
 }

@@ -118,5 +118,17 @@ public class Constants {
     public static class IndexerConstants {
         public static final int MOTOR = 0;
         public static final double SPEED = 0;
+        public static final double SPARKMAX_KS = 0;
+        public static final double SPARKMAX_KV = 0;
+        public static final double SPARKMAX_KA = 0;
+        public static final double SPARKMAX_KP = 0;
+        public static final double SPARKMAX_KI = 0;
+        public static final double SPARKMAX_KD = 0;
+        public static final double SIM_KS = 0;
+        public static final double SIM_KV = 0;
+        public static final double SIM_KA = 0;
+        public static final double SIM_KP = 0;
+        public static final double SIM_KI = 0;
+        public static final double SIM_KD = 0;
     }
 }
