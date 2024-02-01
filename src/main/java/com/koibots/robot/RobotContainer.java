@@ -41,9 +41,7 @@ public class RobotContainer {
                                 () -> -controller.getRawAxis(4),
                                 () -> controller.getPOV(),
                                 () -> controller.getRawButton(1)));
-        
-        Elevator.get().setDefaultCommand(
-            new ElevatorControl(() -> controller.getRawAxis(3))
-        );
+
+        Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
     }
 }

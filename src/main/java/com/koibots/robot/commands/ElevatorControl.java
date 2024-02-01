@@ -1,16 +1,14 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.commands;
 
 import static com.koibots.robot.subsystems.Subsystems.Elevator;
 import static edu.wpi.first.units.Units.Meters;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
-import com.koibots.robot.Constants.ElevatorConstants;
-
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.wpilibj2.command.Command;
+import java.util.function.DoubleSupplier;
 
 public class ElevatorControl extends Command {
 

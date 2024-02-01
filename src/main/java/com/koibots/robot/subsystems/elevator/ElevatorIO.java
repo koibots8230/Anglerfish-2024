@@ -1,8 +1,10 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.elevator;
 
-import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {
 
@@ -36,4 +38,4 @@ public interface ElevatorIO {
     public default Mechanism2d getMechanism() {
         return null;
     }
-} 
+}

@@ -1,21 +1,22 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.Meters;
 
 import com.koibots.robot.Constants.ElevatorConstants;
+import com.revrobotics.CANSparkBase.IdleMode;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 public class ElevatorIOSparkMax implements ElevatorIO {
-    
+
     private CANSparkMax leftMotor;
     private CANSparkMax rightMotor;
 
@@ -40,9 +41,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
         mech2d = new Mechanism2d(Units.inchesToMeters(4), 1);
         mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
-        elevatorMech2d = mech2dRoot.append(
-            new MechanismLigament2d("Elevator", encoder.getPosition(), 90)
-        );
+        elevatorMech2d =
+                mech2dRoot.append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
     }
 
     @Override

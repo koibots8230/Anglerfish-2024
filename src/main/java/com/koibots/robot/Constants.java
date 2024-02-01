@@ -8,15 +8,6 @@ import static java.lang.StrictMath.PI;
 
 import com.koibots.lib.util.PIDConstantsIO;
 import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
-
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Kilograms;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.InchesPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
-
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -30,7 +21,6 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Mass;
@@ -107,52 +97,61 @@ public class Constants {
         public static final int LEFT_MOTOR_PORT = 1;
         public static final int RIGHT_MOTOR_PORT = 2;
 
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1); // TODO: Get from cad when it's done
+        public static final Measure<Distance> DISTANCE_PER_REVOLUTION =
+                Inches.of(1); // TODO: Get from cad when it's done
 
         // ===================================Linear System===================================
 
-        public static final double GEAR_RATIO = 25;
-        public static final Measure<Mass> MASS = Kilograms.of(4.5); // TODO: Get from cad when it's done
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.75); //TODO: Get from cad when it's done
+        public static final double GEAR_RATIO = 4;
+        public static final Measure<Mass> MASS =
+                Pounds.of(12.632826); // TODO: Get from cad when it's done
+        public static final Measure<Distance> DRUM_RADIUS =
+                Inches.of(0.75); // TODO: Get from cad when it's done
 
-        public static final LinearSystem<N2, N1, N1> LINEAR_SYS = LinearSystemId.createElevatorSystem(
-            DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
+        public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
+                LinearSystemId.createElevatorSystem(
+                        DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
 
         // ===================================Profile===================================
 
-        public static final Measure<Velocity<Distance>> MAX_SPEED = MetersPerSecond.of(3); // TODO: Get from cad when it's done
-        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION = MetersPerSecondPerSecond.of(3); //TODO: Get from cad when it's done
+        public static final Measure<Velocity<Distance>> MAX_SPEED =
+                InchesPerSecond.of(109.76); // TODO: Get from cad when it's done
+        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
+                MetersPerSecondPerSecond.of(28.6766); // TODO: Get from cad when it's done
 
         // ===================================Kalman Filter===================================
 
-        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(2); // TODO: Get
-        public static final Measure<Velocity<Distance>> STDEV_VELOCITY = InchesPerSecond.of(10); //TODO: Get
-        public static final double ENCODER_STDEV = 0.0001; //TODO: Get
+        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(5); // TODO: Get
+        public static final Measure<Velocity<Distance>> STDEV_VELOCITY =
+                InchesPerSecond.of(10); // TODO: Get
+        public static final double ENCODER_STDEV = 0.0001; // TODO: Get
 
         public static final KalmanFilter<N2, N1, N1> KALMAN_FILTER =
-            new KalmanFilter<>(
-                Nat.N2(),
-                Nat.N1(),
-                LINEAR_SYS,
-                VecBuilder.fill(STDEV_DISTANCE.in(Meters), STDEV_VELOCITY.in(MetersPerSecond)),
-                VecBuilder.fill(ENCODER_STDEV),
-                0.020
-            );
+                new KalmanFilter<>(
+                        Nat.N2(),
+                        Nat.N1(),
+                        LINEAR_SYS,
+                        VecBuilder.fill(
+                                STDEV_DISTANCE.in(Meters), STDEV_VELOCITY.in(MetersPerSecond)),
+                        VecBuilder.fill(ENCODER_STDEV),
+                        0.020);
 
         // ===================================LQR===================================
 
-        public static final Measure<Distance> POSITION_ERROR_TOLERANCE = Inches.of(0.0001); //TODO: Get
-        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE = InchesPerSecond.of(.1); // TODO: Get
+        public static final Measure<Distance> POSITION_ERROR_TOLERANCE =
+                Inches.of(0.0001); // TODO: Get
+        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE =
+                InchesPerSecond.of(.01); // TODO: Get
         public static final double VOLTAGE_TOLERANCE = 12;
 
         public static final LinearQuadraticRegulator<N2, N1, N1> LQR =
-            new LinearQuadraticRegulator<>(
-                LINEAR_SYS,
-                VecBuilder.fill(POSITION_ERROR_TOLERANCE.in(Meters), VELOCITY_ERROR_TOLERANCE.in(MetersPerSecond)),
-                VecBuilder.fill(VOLTAGE_TOLERANCE),
-                0.020
-            );
-        
+                new LinearQuadraticRegulator<>(
+                        LINEAR_SYS,
+                        VecBuilder.fill(
+                                POSITION_ERROR_TOLERANCE.in(Meters),
+                                VELOCITY_ERROR_TOLERANCE.in(MetersPerSecond)),
+                        VecBuilder.fill(VOLTAGE_TOLERANCE),
+                        0.020);
 
         // =================================== Positions ===================================
 
