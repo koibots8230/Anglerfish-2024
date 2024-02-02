@@ -182,8 +182,7 @@ public class Swerve extends SubsystemBase {
 
         SwerveModuleState[] measuredStates = getModuleStates();
 
-        builder.addDoubleProperty(
-                "Front Left Angle", measuredStates[0].angle::getDegrees, null);
+        builder.addDoubleProperty("Front Left Angle", measuredStates[0].angle::getDegrees, null);
         builder.addDoubleProperty(
                 "Front Left Velocity", () -> measuredStates[0].speedMetersPerSecond, null);
 

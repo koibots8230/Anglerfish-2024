@@ -5,18 +5,11 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
-import com.koibots.lib.auto.AutoRoutine;
 import com.koibots.robot.commands.FieldOrientedDrive;
-import com.koibots.robot.subsystems.controller.*;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -25,72 +18,11 @@ import java.util.function.Supplier;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    enum AutoAction implements AutoRoutine.ActionEnum {
-        Wait5(new WaitCommand(5), '5');
+    GenericHID controller;
 
-        public final Runnable action;
-        public final char signal;
-
-        AutoAction(Runnable action, char signal) {
-            this.action = action;
-            this.signal = signal;
-        }
-        AutoAction(Command action, char signal) {
-            this.action = action::schedule;
-            this.signal = signal;
-        }
-
-        @Override
-        public Runnable getAction() {
-            return this.action;
-        }
-
-        @Override
-        public char getSignal() {
-            return this.signal;
-        }
-    }
-
-    SendableChooser<Supplier<ControllerIO>> controllerChooser;
-
-    // Graph of algorithms here: https://www.desmos.com/calculator/w738aldioj
-    enum ScalingAlgorithm {
-        Linear((x) -> x),
-        Squared((x) -> Math.signum(x) * x * x),
-        Cubed((x) -> x * x * x),
-        Cosine((x) -> (-Math.signum(x) * Math.cos(Math.PI * 0.5 * x)) + (1 * Math.signum(x))),
-        CubedSquareRoot((x) -> Math.signum(x) * Math.sqrt(Math.abs(x * x * x)));
-
-        public final Function<Double, Double> algorithm;
-
-        ScalingAlgorithm(Function<Double, Double> algorithm) {
-            this.algorithm = algorithm;
-        }
-    }
-
-    SendableChooser<ScalingAlgorithm> scalingChooser = new SendableChooser<>();
-
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        controllerChooser = new SendableChooser<>();
-
-        controllerChooser.setDefaultOption("PS5 Controller", ControllerIOPS5::new);
-        controllerChooser.addOption("Xbox Controller", ControllerIOXbox::new);
-        // TODO: Implement
-        // each of these controllers
-        // controllerChooser.addOption("Drone Controller", ControllerIODrone::new);
-        controllerChooser.addOption("Flight Controller", ControllerIOJoystick::new);
-
-        scalingChooser.setDefaultOption("Linear", ScalingAlgorithm.Linear);
-        scalingChooser.addOption("Squared", ScalingAlgorithm.Squared);
-        scalingChooser.addOption("Cubed", ScalingAlgorithm.Cubed);
-        scalingChooser.addOption("Cosine", ScalingAlgorithm.Cosine);
-        scalingChooser.addOption("Fancy", ScalingAlgorithm.CubedSquareRoot);
-
-        SmartDashboard.putData("Scaling Algorithm", scalingChooser);
-        SmartDashboard.putData("Controller Chooser", controllerChooser);
+        controller = new GenericHID(0);
     }
 
     /**
@@ -100,17 +32,14 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
-        ControllerIO controller = controllerChooser.getSelected().get();
-
         Swerve.get()
                 .setDefaultCommand(
                         new FieldOrientedDrive(
-                                controller::xTranslation,
-                                controller::yTranslation,
-                                controller::angularVelocity,
-                                controller::anglePosition,
-                                controller::cross,
-                                scalingChooser.getSelected().algorithm));
+                                () -> -controller.getRawAxis(1),
+                                () -> -controller.getRawAxis(0),
+                                () -> -controller.getRawAxis(4),
+                                () -> controller.getPOV(),
+                                () -> controller.getRawButton(1)));
     }
 
     Command getAutonomousCommand() {

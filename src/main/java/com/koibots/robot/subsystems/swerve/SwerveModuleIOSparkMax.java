@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
-
 import com.koibots.robot.Constants.DriveConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -80,7 +79,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
         driveSparkMax.setCANTimeout(0);
         turnSparkMax.setCANTimeout(0);
-
     }
 
     @Override
