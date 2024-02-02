@@ -5,7 +5,6 @@ package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.intake.IntakePivot.IntakePivot;
 import com.koibots.robot.subsystems.swerve.Swerve;
-import com.koibots.robot.subsystems.vision.Vision;
 import java.util.function.Supplier;
 
 public class Subsystems {
@@ -15,22 +14,25 @@ public class Subsystems {
     public static Supplier<IntakePivot> IntakePivot;
 
     static {
-        Swerve = () -> {
-            swerveInstance = new Swerve();
-            Swerve = () -> {
-                return swerveInstance;
-            };
+        Swerve =
+                () -> {
+                    swerveInstance = new Swerve();
+                    Swerve =
+                            () -> {
+                                return swerveInstance;
+                            };
 
-            return swerveInstance;
-        };
+                    return swerveInstance;
+                };
 
-        IntakePivot = () -> {
-            // intakePivotInstance = new IntakePivot();
-            // IntakePivot = () -> {
-            //     return intakePivotInstance;
-            // };
+        IntakePivot =
+                () -> {
+                    // intakePivotInstance = new IntakePivot();
+                    // IntakePivot = () -> {
+                    //     return intakePivotInstance;
+                    // };
 
-            return intakePivotInstance;
-        };
+                    return intakePivotInstance;
+                };
     }
 }

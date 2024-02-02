@@ -1,3 +1,6 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.intake.IntakePivot;
 
 import edu.wpi.first.math.MathUtil;
@@ -9,17 +12,18 @@ public class IntakePivotIOSim implements IntakePivotIO {
     public static final double LOOP_PERIOD_SECS = 0.02;
 
     private DCMotorSim intakePivotSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
-    
+
     private double intakePivotAppliedVolts = 0.0;
 
     @Override
     public void updateInputs(IntakePivotInputs inputs) {
         intakePivotSim.update(LOOP_PERIOD_SECS);
-        
+
         inputs.intakePivotPosition = new Rotation2d(intakePivotSim.getAngularPositionRad());
         inputs.intakePivotVelocityRadPerSec = intakePivotSim.getAngularVelocityRadPerSec();
         inputs.intakePivotAppliedVolts = intakePivotAppliedVolts;
-        inputs.intakePivotCurrentAmps = new double[] { Math.abs(intakePivotSim.getCurrentDrawAmps()) };
+        inputs.intakePivotCurrentAmps =
+                new double[] {Math.abs(intakePivotSim.getCurrentDrawAmps())};
     }
 
     @Override
