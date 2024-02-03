@@ -6,8 +6,6 @@ package com.koibots.robot;
 import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
-import com.revrobotics.CANSparkMax;
-
 import com.koibots.lib.util.PIDConstantsIO;
 import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -51,7 +49,7 @@ public class Constants {
                                 ROBOT_LENGTH_METERS.divide(-2),
                                 ROBOT_WIDTH_METERS.divide(-2)) // Back Right
                         );
-                        
+
         // TODO: make sure this correct for competition bot
         private static final int kDrivingMotorPinionTeeth = 13;
         public static final double kDrivingMotorReduction =
@@ -92,13 +90,13 @@ public class Constants {
        public static final double kP = 0;
     }
 
-        public static final double TURNING_ENCODER_VELOCITY_FACTOR =
-                (2 * Math.PI) / 60.0; // radians per second
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR =
+          (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
+     public static final double DRIVING_ENCODER_POSITION_FACTOR =
+         (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+        ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
                         / 60.0; // meters per second
     
 
@@ -121,7 +119,6 @@ public class Constants {
 
         public static final Measure<Distance> FIELD_WIDTH = Inches.of(323.25);
         public static final Measure<Distance> FIELD_LENGTH = Inches.of(651.25);
-
         public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
 
         public static final Pose2d[] TAG_POSES_METERS = {
