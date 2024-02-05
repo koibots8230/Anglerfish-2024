@@ -7,18 +7,15 @@ import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.subsystems.Subsystems;
 import com.pathplanner.lib.commands.PathfindHolonomic;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
-public class AutoAllign extends Command {
+public class AutoAllign extends ParallelCommandGroup {
     Pose2d goal;
+    PathfindHolonomic pathfinder;
 
     public AutoAllign(Pose2d goal) {
-        this.goal = goal;
-    }
-
-    @Override
-    public void initialize() {
-        new PathfindHolonomic(
+        addCommands(
+            new PathfindHolonomic(
                         goal,
                         DriveConstants.CONSTRAINTS,
                         0.0,
@@ -27,7 +24,12 @@ public class AutoAllign extends Command {
                         null,
                         DriveConstants.PATH_CONFIG,
                         0.0,
-                        Subsystems.Swerve.get())
-                .schedule();
+                        Subsystems.Swerve.get()),
+            
+            new ConditionalCommand(() ->  (),
+                                   null,
+                                   () -> Math.sqrt(Math.pow(Swerve.get().getEstimatedPose().relativeTo(goal).getX(), 2) + Math.pow(Swerve.get().getEstimatedPose().relativeTo(goal).getY(), 2)) < 1),
+            new ConditionalCommand()
+        );
     }
 }
