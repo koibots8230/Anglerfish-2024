@@ -45,7 +45,7 @@ public class Robot extends LoggedRobot {
             new Alert("No SysId Routine Selected", Alert.AlertType.WARNING);
 
     /**
-     * This function is run when the robot is first started up and should be used for any
+     * This function is run when the robot is first started upimport and should be used for any
      * initialization code.
      */
     @Override

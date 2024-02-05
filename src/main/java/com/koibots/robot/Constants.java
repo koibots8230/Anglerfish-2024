@@ -88,12 +88,33 @@ public class Constants {
         / kDrivingMotorReduction; // meters
         public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
         / kDrivingMotorReduction) / 60.0; // meters per second
+
+        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
+                MetersPerSecondPerSecond.of(1);
+        public static final double MAX_ANGULAR_ACCELERATION = 0;
+
+        public static final PathConstraints CONSTRAINTS =
+                new PathConstraints(
+                        MAX_LINEAR_SPEED.in(MetersPerSecond),
+                        MAX_ACCELERATION.in(MetersPerSecondPerSecond),
+                        MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                        MAX_ANGULAR_ACCELERATION);
+
+        public static final HolonomicPathFollowerConfig PATH_CONFIG =
+                new HolonomicPathFollowerConfig(
+                        new PIDConstants(0.4, 0.0, 0.0),
+                        new PIDConstants(1.9, 0.0, 0.0),
+                        MAX_LINEAR_SPEED.in(MetersPerSecond),
+                        0,
+                        new ReplanningConfig(false, true, 0, 0));
     }
 
     public static class ShooterConstants{
        public static final int shooterMotor1 = 0;
        public static final int shooterMotor2 = 1;
        public static final double kP = 0;
+
+       public static final double SPEED = 0.75;
     }
 
         public static final double TURNING_ENCODER_VELOCITY_FACTOR =
