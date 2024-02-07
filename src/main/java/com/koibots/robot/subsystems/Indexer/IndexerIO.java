@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
     @AutoLog
-    public static class IndexerIOInputs {
+    class IndexerIOInputs {
         public Measure<Velocity<Angle>> velocity = RevolutionsPerSecond.of(0);
         public boolean mode = true;
     }

@@ -29,11 +29,7 @@ public class IndexerIOSparkMax implements IndexerIO {
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
         inputs.velocity = RevolutionsPerSecond.of(encoder.getVelocity());
-        if (motor.getIdleMode() == IdleMode.kBrake) {
-            inputs.mode = true;
-        } else {
-            inputs.mode = false;
-        }
+        inputs.mode = motor.getIdleMode() == IdleMode.kBrake;
     }
 
     public void setVoltage(double volts) {

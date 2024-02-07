@@ -31,11 +31,6 @@ import edu.wpi.first.units.Velocity;
 public class Constants {
     public static final double DEADBAND = 0.025;
 
-    public static final double kWheelDiameterMeters = 0;
-    private static final int kDrivingMotorReduction = 0;
-    private static final Measure<Distance> WHEEL_RADIUS =
-            null; // these three constants were quick fixes, need to double-check!
-
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
         private static final Measure<Distance> ROBOT_WIDTH_METERS = Inches.of(21.375);

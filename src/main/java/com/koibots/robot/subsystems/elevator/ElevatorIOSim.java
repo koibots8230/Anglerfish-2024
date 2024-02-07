@@ -16,11 +16,11 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 public class ElevatorIOSim implements ElevatorIO {
 
-    private DCMotor gearbox = DCMotor.getNEO(2);
+    private final DCMotor gearbox = DCMotor.getNEO(2);
 
     private double appliedVolts;
 
-    private ElevatorSim elevator =
+    private final ElevatorSim elevator =
             new ElevatorSim(
                     ElevatorConstants.LINEAR_SYS, gearbox, 0, Units.inchesToMeters(9), true, 0);
 

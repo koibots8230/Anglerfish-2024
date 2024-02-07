@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class Alert {
-    private static final Map<String, SendableAlerts> groups = new HashMap<String, SendableAlerts>();
+    private static final Map<String, SendableAlerts> groups = new HashMap<>();
 
     private final AlertType type;
     private boolean active = false;

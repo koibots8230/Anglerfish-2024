@@ -10,19 +10,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IntakeSubsystem extends SubsystemBase {
-
-    private static IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
-
-    public static IntakeSubsystem get() {
-        return intakeSubsystem;
-    }
-
+public class Intake extends SubsystemBase {
     public final CANSparkMax intakeMotor;
-    private RelativeEncoder intakeEncoder;
-    private SparkPIDController intakePidController;
+    private final RelativeEncoder intakeEncoder;
+    private final SparkPIDController intakePidController;
 
-    private IntakeSubsystem() {
+    public Intake() {
         intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
 
         intakeEncoder = intakeMotor.getEncoder();

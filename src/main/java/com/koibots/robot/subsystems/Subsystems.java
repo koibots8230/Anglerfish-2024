@@ -8,6 +8,7 @@ import com.koibots.robot.subsystems.elevator.Elevator;
 import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
+import com.koibots.robot.subsystems.intake.Intake;
 import java.util.function.Supplier;
 
 public class Subsystems {
@@ -17,6 +18,14 @@ public class Subsystems {
                 swerveInstance = new Swerve();
                 Swerve = () -> swerveInstance;
                 return swerveInstance;
+            };
+
+    private static Intake intakeInstance;
+    public static Supplier<Intake> Intake =
+            () -> {
+                intakeInstance = new Intake();
+                Intake = () -> intakeInstance;
+                return intakeInstance;
             };
 
     private static Indexer indexerInstance;

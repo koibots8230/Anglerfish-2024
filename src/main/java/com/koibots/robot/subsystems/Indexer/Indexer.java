@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
-    private IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
+    private final IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
     private final SimpleMotorFeedforward feedforward;
     private final PIDController pid;
     private double desiredVolts;

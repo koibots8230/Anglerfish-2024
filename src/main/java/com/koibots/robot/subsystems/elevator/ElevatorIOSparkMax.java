@@ -13,19 +13,14 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 
 public class ElevatorIOSparkMax implements ElevatorIO {
-
-    private CANSparkMax leftMotor;
-    private CANSparkMax rightMotor;
-
-    private RelativeEncoder encoder;
+    private final CANSparkMax leftMotor;
+    private final CANSparkMax rightMotor;
+    private final RelativeEncoder encoder;
 
     private double appliedVolts;
 
-    private final Mechanism2d mech2d;
-    private final MechanismRoot2d mech2dRoot;
     private final MechanismLigament2d elevatorMech2d;
 
     public ElevatorIOSparkMax() {
@@ -39,10 +34,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
         encoder.setPosition(0);
 
-        mech2d = new Mechanism2d(Units.inchesToMeters(4), 1);
-        mech2dRoot = mech2d.getRoot("Elevator Root", 10, 0);
         elevatorMech2d =
-                mech2dRoot.append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
+                new Mechanism2d(Units.inchesToMeters(4), 1).getRoot("Elevator Root", 10, 0).append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
     }
 
     @Override

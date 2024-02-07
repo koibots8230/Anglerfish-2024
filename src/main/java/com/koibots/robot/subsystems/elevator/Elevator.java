@@ -22,8 +22,8 @@ import org.littletonrobotics.junction.Logger;
 
 public class Elevator extends SubsystemBase {
 
-    private ElevatorIO io;
-    private ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
+    private final ElevatorIO io;
+    private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
 
     private final LinearSystemLoop<N2, N1, N1> linearSysLoop;
     private final TrapezoidProfile profile;
@@ -33,8 +33,6 @@ public class Elevator extends SubsystemBase {
     private TrapezoidProfile.State targetState;
 
     private double setpoint;
-
-    private double volts;
 
     public Elevator() {
         System.out.println("Elevator initialized");
@@ -76,14 +74,11 @@ public class Elevator extends SubsystemBase {
         linearSysLoop.correct(VecBuilder.fill(io.getPosition()));
         linearSysLoop.predict(0.020);
 
-        volts = linearSysLoop.getU(0);
+        double volts = linearSysLoop.getU(0);
         volts = Robot.isReal() ? (Math.abs(volts) > 0.5) ? volts : 0 : volts;
 
         io.setVoltage(volts);
     }
-
-    @Override
-    public void simulationPeriodic() {}
 
     public void reset() {
         linearSysLoop.reset(VecBuilder.fill(io.getPosition(), io.getVelocity()));
