@@ -28,14 +28,14 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
 
         encoder = leftMotor.getAlternateEncoder(8192);
-
         encoder.setPositionConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
-
         encoder.setPosition(0);
 
         elevatorMech2d =
-                new Mechanism2d(Units.inchesToMeters(4), 1).getRoot("Elevator Root", 10, 0).append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
+                new Mechanism2d(Units.inchesToMeters(4), 1)
+                        .getRoot("Elevator Root", 10, 0)
+                        .append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
     }
 
     @Override

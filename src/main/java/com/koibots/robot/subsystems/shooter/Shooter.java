@@ -3,6 +3,9 @@
 
 package com.koibots.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
@@ -11,9 +14,6 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO io;
@@ -30,8 +30,7 @@ public class Shooter extends SubsystemBase {
 
         leftFlywheelFeedbackController =
                 new PIDController(ShooterConstants.kP, 0, 0); // /uhm this was autogenrated...
-        rightFlywheelFeedbackController =
-                new PIDController(0, 0, 0);
+        rightFlywheelFeedbackController = new PIDController(0, 0, 0);
 
         leftFlywheelFeedforwardController = new SimpleMotorFeedforward(0, 0);
         rightFlywheelFeedforwardController = new SimpleMotorFeedforward(0, 0);
@@ -42,9 +41,18 @@ public class Shooter extends SubsystemBase {
         io.updateInputs(inputs);
 
         io.setVoltages(
-                Volts.of(leftFlywheelFeedbackController.calculate(inputs.leftFlywheelVelocity.in(RotationsPerSecond), setpoint.in(RotationsPerSecond)) + leftFlywheelFeedforwardController.calculate(setpoint.in(RotationsPerSecond))),
-                Volts.of(rightFlywheelFeedbackController.calculate(inputs.rightFlywheelVelocity.in(RotationsPerSecond), setpoint.in(RotationsPerSecond)) + rightFlywheelFeedforwardController.calculate(setpoint.in(RotationsPerSecond))
-                ));
+                Volts.of(
+                        leftFlywheelFeedbackController.calculate(
+                                        inputs.leftFlywheelVelocity.in(RotationsPerSecond),
+                                        setpoint.in(RotationsPerSecond))
+                                + leftFlywheelFeedforwardController.calculate(
+                                        setpoint.in(RotationsPerSecond))),
+                Volts.of(
+                        rightFlywheelFeedbackController.calculate(
+                                        inputs.rightFlywheelVelocity.in(RotationsPerSecond),
+                                        setpoint.in(RotationsPerSecond))
+                                + rightFlywheelFeedforwardController.calculate(
+                                        setpoint.in(RotationsPerSecond))));
     }
 
     public void setSpeed(Measure<Velocity<Angle>> speed) {

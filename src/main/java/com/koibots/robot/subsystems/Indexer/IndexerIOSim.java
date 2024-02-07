@@ -12,7 +12,7 @@ import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerIOSim implements IndexerIO {
-    private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 25, 0);
+    private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 25, 1);
     private double volts;
 
     public IndexerIOSim() {

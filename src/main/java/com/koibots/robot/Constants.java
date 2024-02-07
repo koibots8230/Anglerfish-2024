@@ -206,35 +206,16 @@ public class Constants {
         public static final double INTAKE_PID_P = 0.078;
         public static final int INTAKE_MOTOR_TARGET_RPM = 0;
         public static final double INTAKE_WHEEL_RADIUS = 0.037846;
-        //public static final int INTAKE_MINIMUM_RPM = 0;
+        // public static final int INTAKE_MINIMUM_RPM = 0;
         public static final int INTAKE_MINIMUM_VOLTAGE = 0;
     }
-
-    public static enum IntakePivotState {
-        HANDOFF(90),
-        DOWN(0);
-
-        public final double angle;
-
-        IntakePivotState(double angle) {
-            this.angle = angle;
-        }
-    };
 
     public static class IndexerConstants {
         public static final int MOTOR = 0;
         public static final double SPEED = 0;
-        public static final double SPARKMAX_KS = 0;
-        public static final double SPARKMAX_KV = 0;
-        public static final double SPARKMAX_KA = 0;
-        public static final double SPARKMAX_KP = 0;
-        public static final double SPARKMAX_KI = 0;
-        public static final double SPARKMAX_KD = 0;
-        public static final double SIM_KS = 0;
-        public static final double SIM_KV = 0;
-        public static final double SIM_KA = 0;
-        public static final double SIM_KP = 0;
-        public static final double SIM_KI = 0;
-        public static final double SIM_KD = 0;
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS = new PIDConstantsIO(
+                0, 0, 0, 0, 0, 0
+                );
+        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS = new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
     }
 }

@@ -1,6 +1,9 @@
-package com.koibots.robot.subsystems.intake.Intake;
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
 
-//import com.koibots.robot.Constants.DriveConstants;
+package com.koibots.robot.subsystems.intake;
+
+// import com.koibots.robot.Constants.DriveConstants;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -13,9 +16,9 @@ public class IntakeIOSim implements IntakeIO {
     private DCMotorSim intakeMotorSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
 
     @Override
-    public void updateInputs(IntakeInputs inputs) {
+    public void updateInputs(IntakeIOInputs inputs) {
         intakeMotorSim.update(LOOP_PERIOD_SECS);
-        
+
         inputs.intakeVelocity = intakeMotorSim.getAngularVelocityRPM();
         inputs.intakePosition = new Rotation2d(intakeMotorSim.getAngularPositionRotations());
         inputs.intakeVoltage = 0.0;
@@ -23,7 +26,6 @@ public class IntakeIOSim implements IntakeIO {
 
     @Override
     public void setVoltage(double volts) {
-        //intakeMotorSim.setInputVoltage(intakeAppliedVolts);
+        // intakeMotorSim.setInputVoltage(intakeAppliedVolts);
     }
-
 }

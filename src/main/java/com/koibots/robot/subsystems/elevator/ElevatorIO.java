@@ -9,7 +9,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ElevatorIO {
 
     @AutoLog
-   class ElevatorInputs {
+    class ElevatorInputs {
         public double position = 0.0;
         public double setpoint = 0.0;
         public double appliedVoltage = 0.0;
