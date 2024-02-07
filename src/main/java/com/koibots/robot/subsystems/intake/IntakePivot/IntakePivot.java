@@ -1,14 +1,15 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.intake.IntakePivot;
 
-import org.littletonrobotics.junction.Logger;
-
 import com.koibots.robot.Robot;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class IntakePivot extends SubsystemBase {
 
@@ -42,7 +43,10 @@ public class IntakePivot extends SubsystemBase {
     public void periodic() {
         io.updateInputs(inputs);
         Logger.processInputs("Intake Pivot", inputs);
-        io.setPosition(intakePivotFeedback.calculate(inputs.intakePivotPosition.getRadians(), positionSetPoint) + intakePivotFeedForward.calculate(0,0,0));
+        io.setPosition(
+                intakePivotFeedback.calculate(
+                                inputs.intakePivotPosition.getRadians(), positionSetPoint)
+                        + intakePivotFeedForward.calculate(0, 0, 0));
     }
 
     public Rotation2d getAngle() {
