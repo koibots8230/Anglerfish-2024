@@ -31,6 +31,10 @@ import edu.wpi.first.units.Velocity;
 public class Constants {
     public static final double DEADBAND = 0.025;
 
+    public static class ShooterConstants {
+        public static final int shooterMotor1 = 0;
+    }
+
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
         private static final Measure<Distance> ROBOT_WIDTH_METERS = Inches.of(21.375);
@@ -214,4 +218,20 @@ public class Constants {
             this.angle = angle;
         }
     };
+    public static class IndexerConstants {
+        public static final int MOTOR = 0;
+        public static final double SPEED = 0;
+        public static final double SPARKMAX_KS = 0;
+        public static final double SPARKMAX_KV = 0;
+        public static final double SPARKMAX_KA = 0;
+        public static final double SPARKMAX_KP = 0;
+        public static final double SPARKMAX_KI = 0;
+        public static final double SPARKMAX_KD = 0;
+        public static final double SIM_KS = 0;
+        public static final double SIM_KV = 0;
+        public static final double SIM_KA = 0;
+        public static final double SIM_KP = 0;
+        public static final double SIM_KI = 0;
+        public static final double SIM_KD = 0;
+    }
 }
