@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterSubsystem extends SubsystemBase {
@@ -20,14 +19,13 @@ public class ShooterSubsystem extends SubsystemBase {
     SparkPIDController PIDController1;
     SparkPIDController PIDController2;
 
-
-    ShooterSubsystem() { 
-        shooterMotor1 = new CANSparkMax(Constants.ShooterConstants.shooterMotor1, MotorType.kBrushless);
+    public ShooterSubsystem() {
+        shooterMotor1 = new CANSparkMax(ShooterConstants.shooterMotor1, MotorType.kBrushless);
         encoder1 = shooterMotor1.getEncoder();
         PIDController1 = shooterMotor1.getPIDController();
         PIDController1.setP(ShooterConstants.kP);
 
-        shooterMotor2 = new CANSparkMax(Constants.ShooterConstants.shooterMotor2, MotorType.kBrushless);
+        shooterMotor2 = new CANSparkMax(ShooterConstants.shooterMotor2, MotorType.kBrushless);
         encoder2 = shooterMotor2.getEncoder();
         PIDController2 = shooterMotor2.getPIDController();
         PIDController2.setP(ShooterConstants.kP);
@@ -42,11 +40,15 @@ public class ShooterSubsystem extends SubsystemBase {
         return shooterSubsystem;
     }
 
-    public double getPosition1(){
+    public double getPosition1() {
         return encoder1.getPosition();
     }
 
-    public double getPosition2(){
-     return encoder2.getPosition();
+    public double getPosition2() {
+        return encoder2.getPosition();
+    }
+
+    public double getAverageSpeed() {
+        return (encoder1.getVelocity() + encoder2.getVelocity()) / 2;
     }
 }

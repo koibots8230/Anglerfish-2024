@@ -6,8 +6,6 @@ package com.koibots.robot;
 import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
-import com.revrobotics.CANSparkMax;
-
 import com.koibots.lib.util.PIDConstantsIO;
 import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import com.pathplanner.lib.path.PathConstraints;
@@ -25,15 +23,13 @@ import edu.wpi.first.units.Velocity;
 
 public class Constants {
 
+    public static final double SHOOTING_RANGE = 0;
     public static final double DEADBAND = 0.025;
 
     public static final double kWheelDiameterMeters = 0;
     private static final int kDrivingMotorReduction = 0;
-    private static final Measure<Distance> WHEEL_RADIUS = null;//these three constants were quick fixes, need to double-check!
-
-    public static class ShooterConstants {
-        public static final int shooterMotor1 = 0;
-    }
+    private static final Measure<Distance> WHEEL_RADIUS =
+            null; // these three constants were quick fixes, need to double-check!
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
@@ -59,7 +55,7 @@ public class Constants {
                                 ROBOT_LENGTH_METERS.divide(-2),
                                 ROBOT_WIDTH_METERS.divide(-2)) // Back Right
                         );
-                        
+
         // TODO: make sure this correct for competition bot
         private static final int kDrivingMotorPinionTeeth = 13;
         public static final double kDrivingMotorReduction =
@@ -86,12 +82,14 @@ public class Constants {
                 new SimpleMotorFeedforwardConstantsIO(0, 2, 0, 2.75);
 
         public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
-        public static final double TURNING_ENCODER_VELOCITY_FACTOR = (2 * Math.PI) / 60.0; // radians per second
+        public static final double TURNING_ENCODER_VELOCITY_FACTOR =
+                (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR = (kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction) / 60.0; // meters per second
+        public static final double DRIVING_ENCODER_POSITION_FACTOR =
+                (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
+        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+                ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction)
+                        / 60.0; // meters per second
 
         public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
                 MetersPerSecondPerSecond.of(1);
@@ -113,23 +111,22 @@ public class Constants {
                         new ReplanningConfig(false, true, 0, 0));
     }
 
-    public static class ShooterConstants{
-       public static final int shooterMotor1 = 0;
-       public static final int shooterMotor2 = 1;
-       public static final double kP = 0;
+    public static class ShooterConstants {
+        public static final int shooterMotor1 = 0;
+        public static final int shooterMotor2 = 1;
+        public static final double kP = 0;
 
-       public static final double SPEED = 0.75;
+        public static final double SPEED = 0.75;
     }
 
-        public static final double TURNING_ENCODER_VELOCITY_FACTOR =
-                (2 * Math.PI) / 60.0; // radians per second
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR =
+            (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
-                        / 60.0; // meters per second
-    
+    public static final double DRIVING_ENCODER_POSITION_FACTOR =
+            (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+            ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
+                    / 60.0; // meters per second
 
     public static class VisionConstants {
         public static final Pose2d[] CAMERA_DISTANCES_TO_CENTER_METERS = {
@@ -175,5 +172,6 @@ public class Constants {
         public static final double SIM_KP = 0;
         public static final double SIM_KI = 0;
         public static final double SIM_KD = 0;
+        public static final double INDEXER_VOLTS = 7;
     }
 }

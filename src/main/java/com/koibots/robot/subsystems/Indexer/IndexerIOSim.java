@@ -3,18 +3,19 @@
 
 package com.koibots.robot.subsystems.Indexer;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import static edu.wpi.first.units.Units.*;
 
 public class IndexerIOSim implements IndexerIO {
     private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 25, 0);
     private double volts;
 
-    public IndexerIOSim () {
+    public IndexerIOSim() {
         volts = 0;
     }
 
