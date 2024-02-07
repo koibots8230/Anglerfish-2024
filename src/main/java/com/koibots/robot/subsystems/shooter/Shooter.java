@@ -3,14 +3,11 @@
 
 package com.koibots.robot.subsystems.shooter;
 
-import com.koibots.robot.Constants.ShooterConstants;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ShooterConstants;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -24,9 +21,11 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         shooterMotor1 = new CANSparkMax(ShooterConstants.shooterMotor1, MotorType.kBrushless);
         encoder1 = shooterMotor1.getEncoder();
-        PIDController = new PIDController(ShooterConstants.kP, 0, 0);///uhm this was autogenrated...
+        PIDController =
+                new PIDController(ShooterConstants.kP, 0, 0); // /uhm this was autogenrated...
 
-        shooterMotor2 = new CANSparkMax(Constants.ShooterConstants.shooterMotor2, MotorType.kBrushless);
+        shooterMotor2 =
+                new CANSparkMax(Constants.ShooterConstants.shooterMotor2, MotorType.kBrushless);
         encoder2 = shooterMotor2.getEncoder();
     }
 

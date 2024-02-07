@@ -33,7 +33,8 @@ public class Constants {
 
     public static final double kWheelDiameterMeters = 0;
     private static final int kDrivingMotorReduction = 0;
-    private static final Measure<Distance> WHEEL_RADIUS = null;//these three constants were quick fixes, need to double-check!
+    private static final Measure<Distance> WHEEL_RADIUS =
+            null; // these three constants were quick fixes, need to double-check!
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
@@ -89,19 +90,18 @@ public class Constants {
         public static final double TURNING_ENCODER_VELOCITY_FACTOR =
                 (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR = (kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR = ((kWheelDiameterMeters * Math.PI)
-        / kDrivingMotorReduction) / 60.0; // meters per second
+        public static final double DRIVING_ENCODER_POSITION_FACTOR =
+                (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
+        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+                ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction)
+                        / 60.0; // meters per second
     }
 
-    public static class ShooterConstants{
-       public static final int shooterMotor1 = 0;
-       public static final int shooterMotor2 = 1;
-       public static final double kP = 0;
+    public static class ShooterConstants {
+        public static final int shooterMotor1 = 0;
+        public static final int shooterMotor2 = 1;
+        public static final double kP = 0;
     }
-
-
 
     public static class ElevatorConstants {
 
@@ -224,6 +224,7 @@ public class Constants {
             this.angle = angle;
         }
     };
+
     public static class IndexerConstants {
         public static final int MOTOR = 0;
         public static final double SPEED = 0;

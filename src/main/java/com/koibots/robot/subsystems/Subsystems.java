@@ -12,32 +12,36 @@ import java.util.function.Supplier;
 
 public class Subsystems {
     private static Swerve swerveInstance;
-    public static Supplier<Swerve> Swerve = () -> {
-        swerveInstance = new Swerve();
-        Swerve = () -> swerveInstance;
-        return swerveInstance;
-    };
+    public static Supplier<Swerve> Swerve =
+            () -> {
+                swerveInstance = new Swerve();
+                Swerve = () -> swerveInstance;
+                return swerveInstance;
+            };
 
     private static Indexer indexerInstance;
-    public static Supplier<Indexer> Indexer = () -> {
-        indexerInstance = new Indexer();
-        Indexer = () -> indexerInstance;
-        return indexerInstance;
-    };
+    public static Supplier<Indexer> Indexer =
+            () -> {
+                indexerInstance = new Indexer();
+                Indexer = () -> indexerInstance;
+                return indexerInstance;
+            };
 
     private static Shooter shooterInstance;
-    public static Supplier<Shooter> Shooter = () -> {
-        shooterInstance = new Shooter();
-        Shooter = () -> shooterInstance;
-        return  shooterInstance;
-    };
+    public static Supplier<Shooter> Shooter =
+            () -> {
+                shooterInstance = new Shooter();
+                Shooter = () -> shooterInstance;
+                return shooterInstance;
+            };
 
     private static Elevator elevatorInstance;
-    public static Supplier<Elevator> Elevator = () -> {
-        elevatorInstance = new Elevator();
-        Elevator = () -> elevatorInstance;
-        return elevatorInstance;
-    };
+    public static Supplier<Elevator> Elevator =
+            () -> {
+                elevatorInstance = new Elevator();
+                Elevator = () -> elevatorInstance;
+                return elevatorInstance;
+            };
 
     private static Vision visionInstance;
     public static Supplier<Vision> Vision =
