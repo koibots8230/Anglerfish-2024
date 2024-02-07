@@ -14,14 +14,14 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class Shooter extends SubsystemBase {
     private static CANSparkMax shooterMotor1;
     private static CANSparkMax shooterMotor2;
     RelativeEncoder encoder1;
     RelativeEncoder encoder2;
     PIDController PIDController;
 
-    ShooterSubsystem() {
+    public Shooter() {
         shooterMotor1 = new CANSparkMax(ShooterConstants.shooterMotor1, MotorType.kBrushless);
         encoder1 = shooterMotor1.getEncoder();
         PIDController = new PIDController(ShooterConstants.kP, 0, 0);///uhm this was autogenrated...

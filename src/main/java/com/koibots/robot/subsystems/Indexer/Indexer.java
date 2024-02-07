@@ -16,7 +16,7 @@ public class Indexer extends SubsystemBase {
     private final PIDController pid;
     private double desiredVolts;
 
-    private Indexer() {
+    public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
         feedforward = (Robot.isReal()) ? new SimpleMotorFeedforward(IndexerConstants.SPARKMAX_KS, IndexerConstants.SPARKMAX_KV, IndexerConstants.SPARKMAX_KA) : new SimpleMotorFeedforward(IndexerConstants.SIM_KS, IndexerConstants.SIM_KV, IndexerConstants.SIM_KA);
         pid = (Robot.isReal()) ? new PIDController(IndexerConstants.SPARKMAX_KP, IndexerConstants.SPARKMAX_KI, IndexerConstants.SPARKMAX_KD) : new PIDController(IndexerConstants.SIM_KP, IndexerConstants.SIM_KI, IndexerConstants.SIM_KD);
