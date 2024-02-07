@@ -21,6 +21,7 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Mass;
@@ -57,17 +58,17 @@ public class Constants {
 
         // TODO: make sure this correct for competition bot
         private static final int kDrivingMotorPinionTeeth = 13;
+        private static final double kWheelDiameterMeters = Units.inchesToMeters(3);
         public static final double kDrivingMotorReduction =
                 (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-
-        public static final int FRONT_LEFT_DRIVE_ID = 7;
-        public static final int FRONT_LEFT_TURN_ID = 8;
-        public static final int FRONT_RIGHT_DRIVE_ID = 2;
-        public static final int FRONT_RIGHT_TURN_ID = 3;
-        public static final int BACK_LEFT_DRIVE_ID = 6;
-        public static final int BACK_LEFT_TURN_ID = 1;
-        public static final int BACK_RIGHT_DRIVE_ID = 4;
-        public static final int BACK_RIGHT_TURN_ID = 5;
+        public static int FRONT_LEFT_DRIVE_ID = 7;
+        public static int FRONT_LEFT_TURN_ID = 8;
+        public static int FRONT_RIGHT_DRIVE_ID = 2;
+        public static int FRONT_RIGHT_TURN_ID = 3;
+        public static int BACK_LEFT_DRIVE_ID = 6;
+        public static int BACK_LEFT_TURN_ID = 1;
+        public static int BACK_RIGHT_DRIVE_ID = 4;
+        public static int BACK_RIGHT_TURN_ID = 5;
 
         public static double DRIVE_GEAR_RATIO =
                 (45.0 * 22) / (kDrivingMotorPinionTeeth * 15); // 5.07692307692
@@ -188,4 +189,29 @@ public class Constants {
 
         public static final Pose2d[] CAMERA_POSITIONS = null;
     }
+
+    public static class IntakeConstants {
+        public static final int INTAKE_PIVOT_MOTOR_PORT = 9;
+        public static final int INTAKE_PIVOT_ENCODER_PORT = 10;
+        public static final double INTAKE_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians.
+        public static final double INTAKE_PIVOT_ENCODER_VELOCITY_FACTOR =
+                (2 * Math.PI) / 60.0; // radians per second.
+        public static final double INTAKE_PIVOT_ZERO_OFFSET = 0;
+        public static final int INTAKE_MOTOR_PORT = -1;
+        public static final int INTAKE_PID_P = 0;
+        public static final int INTAKE_MOTOR_TARGET_RPM = 0;
+        public static final int INTAKE_WHEEL_RADIUS = 0;
+        public static final int INTAKE_MINIMUM_RPM = 0;
+    }
+
+    public static enum IntakePivotState {
+        HANDOFF(90),
+        DOWN(0);
+
+        public final double angle;
+
+        IntakePivotState(double angle) {
+            this.angle = angle;
+        }
+    };
 }
