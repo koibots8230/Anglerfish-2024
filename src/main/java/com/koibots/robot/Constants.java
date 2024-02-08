@@ -30,6 +30,28 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 
 public class Constants {
+    public static class ShooterPivotConstants {
+        public static final int MOTOR = 0;
+        public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
+        public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
+        public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
+        public static final double LOAD_SHOOTER_RADIANS = 0;
+        public static final double SIM_KS = 0;
+        public static final double SIM_KG = 0;
+        public static final double SIM_KV = 0;
+        public static final double SIM_KA = 0;
+        public static final double SIM_KP = 0;
+        public static final double SIM_KI = 0;
+        public static final double SIM_KD = 0;
+        public static final double REAL_KS = 0;
+        public static final double REAL_KG = 0;
+        public static final double REAL_KV = 0;
+        public static final double REAL_KA = 0;
+        public static final double REAL_KP = 0;
+        public static final double REAL_KI = 0;
+        public static final double REAL_KD = 0;
+    }
+
     public static final double DEADBAND = 0.025;
 
     public static class DriveConstants {
@@ -111,10 +133,8 @@ public class Constants {
         // ===================================Linear System===================================
 
         public static final double GEAR_RATIO = 25;
-        public static final Measure<Mass> MASS =
-                Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS =
-                Inches.of(0.75); // TODO: Ask cad
+        public static final Measure<Mass> MASS = Pounds.of(9.006);
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.75); // TODO: Ask cad
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
                 LinearSystemId.createElevatorSystem(
@@ -122,8 +142,7 @@ public class Constants {
 
         // ===================================Profile===================================
 
-        public static final Measure<Velocity<Distance>> MAX_SPEED =
-                InchesPerSecond.of(18.41);
+        public static final Measure<Velocity<Distance>> MAX_SPEED = InchesPerSecond.of(18.41);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
                 MetersPerSecondPerSecond.of(1.055);
 
@@ -202,7 +221,7 @@ public class Constants {
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
                 new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
-        public static final Wheel WHEELS = Inches.of(1.5);
+        public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
         public static final int MINIMUM_VOLTAGE = 0;
     }
 
