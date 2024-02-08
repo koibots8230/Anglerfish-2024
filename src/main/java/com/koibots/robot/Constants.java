@@ -110,11 +110,11 @@ public class Constants {
 
         // ===================================Linear System===================================
 
-        public static final double GEAR_RATIO = 4;
+        public static final double GEAR_RATIO = 25;
         public static final Measure<Mass> MASS =
-                Pounds.of(12.632826); // TODO: Get from cad when it's done
+                Pounds.of(9.006);
         public static final Measure<Distance> DRUM_RADIUS =
-                Inches.of(0.75); // TODO: Get from cad when it's done
+                Inches.of(0.75); // TODO: Ask cad
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
                 LinearSystemId.createElevatorSystem(
@@ -123,9 +123,9 @@ public class Constants {
         // ===================================Profile===================================
 
         public static final Measure<Velocity<Distance>> MAX_SPEED =
-                InchesPerSecond.of(109.76); // TODO: Get from cad when it's done
+                InchesPerSecond.of(18.41);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-                MetersPerSecondPerSecond.of(28.6766); // TODO: Get from cad when it's done
+                MetersPerSecondPerSecond.of(1.055);
 
         // ===================================Kalman Filter===================================
 
