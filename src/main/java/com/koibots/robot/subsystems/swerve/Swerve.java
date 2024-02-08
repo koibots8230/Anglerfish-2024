@@ -102,6 +102,18 @@ public class Swerve extends SubsystemBase {
 
         // Log measured states
         Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+
+        double[] statesDegrees = new double[8];
+        double[] statesRadians = new double[8];
+        for (int i = 0; i < 4; i++) {
+            statesDegrees[i * 2] = swerveModules[i].getAngle().getDegrees();
+            statesDegrees[(i * 2) + 1] = swerveModules[i].getVelocityMetersPerSec();
+            statesRadians[i * 2] = swerveModules[i].getAngle().getRadians();
+            statesRadians[(i * 2) + 1] = swerveModules[i].getVelocityMetersPerSec();
+        }
+
+        Logger.recordOutput("SwerveStates/Measured", statesDegrees);
+        Logger.recordOutput("SwerveStates/Measured", statesRadians);
     }
 
     public void addVisionMeasurement(Pose2d measurement, double timestamp) {
