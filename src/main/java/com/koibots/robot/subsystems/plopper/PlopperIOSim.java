@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class PlopperIOSim implements PlopperIO {
     private final SingleJointedArmSim sim =
-            new SingleJointedArmSim(DCMotor.getNEO(1), 25, 0, 0, 0, Math.PI * 1 / 2, true, 0);
+            new SingleJointedArmSim(DCMotor.getNEO(1), 25, 1, 1, 0, Math.PI / 2, true, 0);
     private double voltage = 0;
 
     @Override

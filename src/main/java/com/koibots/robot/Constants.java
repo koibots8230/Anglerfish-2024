@@ -134,7 +134,7 @@ public class Constants {
 
         public static final double GEAR_RATIO = 25;
         public static final Measure<Mass> MASS = Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.75); // TODO: Ask cad
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(1); // TODO: Ask cad
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
                 LinearSystemId.createElevatorSystem(
