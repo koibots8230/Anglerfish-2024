@@ -10,6 +10,7 @@ import com.koibots.robot.Robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
@@ -108,6 +109,8 @@ public class Swerve extends SubsystemBase {
         odometry.addVisionMeasurement(measurement, timestamp);
     }
 
+    public void driveRobotRelative(ChassisSpeeds speeds) {}
+
     public Rotation2d getGyroAngle() {
         return gyroInputs.yawPosition;
     }
@@ -128,6 +131,14 @@ public class Swerve extends SubsystemBase {
             swerveModules[2].getPosition(),
             swerveModules[3].getPosition()
         };
+    }
+
+    public ChassisSpeeds getRelativeSpeeds() {
+        return new ChassisSpeeds(); // TODO: Implement this
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        odometry.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
     }
 
     public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {

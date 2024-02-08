@@ -5,16 +5,11 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
-import com.koibots.lib.dashboard.Alert;
-import com.koibots.lib.sysid.SysIdTest;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
@@ -22,24 +17,9 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot {
-    private enum AutoMode {
-        TextGenerated,
-        Chooser,
-        SysId,
-    }
 
     private Command autonomousCommand;
     private RobotContainer robotContainer;
-    private final SendableChooser<AutoMode> autoModeChooser = new SendableChooser<>();
-    private final SendableChooser<SysIdTest> sysidRoutineChooser = new SendableChooser<>();
-    private final SendableChooser<SysIdRoutine.Mechanism> sysidMechanismChooser =
-            new SendableChooser<>();
-    private final Field2d field = new Field2d();
-
-    private final Alert sysIdMechanismAlert =
-            new Alert("No SysId Mechanism Selected", Alert.AlertType.WARNING);
-    private final Alert sysIdRoutineAlert =
-            new Alert("No SysId Routine Selected", Alert.AlertType.WARNING);
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -52,13 +32,11 @@ public class Robot extends LoggedRobot {
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
-
             SmartDashboard.putData(CommandScheduler.getInstance());
         }
 
         if (isReal()) {
             LoggedPowerDistribution.getInstance(0, PowerDistribution.ModuleType.kRev);
-            // Vision.get();
         }
 
         Logger.start();
@@ -68,27 +46,6 @@ public class Robot extends LoggedRobot {
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
 
-        autoModeChooser.addOption("Text Input", AutoMode.TextGenerated);
-        autoModeChooser.addOption("Legacy Selector", AutoMode.TextGenerated);
-        autoModeChooser.setDefaultOption("SysId", AutoMode.TextGenerated);
-
-        sysidMechanismChooser.addOption(
-                "Swerve Drive",
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> Swerve.get().setDriveVoltages(voltage),
-                        null,
-                        Swerve.get(),
-                        "Swerve Drive"));
-
-        sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
-        sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
-        sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
-        sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
-
-        SmartDashboard.putString("Test", "text");
-        SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
-        SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
-        SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
         SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
     }
 
@@ -115,14 +72,7 @@ public class Robot extends LoggedRobot {
      * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
      */
     @Override
-    public void autonomousInit() {
-        // schedule the autonomous command (example)
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-        } else {
-            DriverStation.reportWarning("Autonomous command is null", false);
-        }
-    }
+    public void autonomousInit() {}
 
     @Override
     public void autonomousPeriodic() {}
@@ -136,8 +86,6 @@ public class Robot extends LoggedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-
-        // Swerve.get().setBrake(true);
 
         robotContainer.configureButtonBindings();
     }
