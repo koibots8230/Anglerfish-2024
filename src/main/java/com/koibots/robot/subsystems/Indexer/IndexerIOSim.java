@@ -34,10 +34,6 @@ public class IndexerIOSim implements IndexerIO {
         volts = voltage;
     }
 
-    public Measure<Velocity<Angle>> getVelocity() {
-        return RotationsPerSecond.of(sim.getAngularVelocityRPM());
-    }
-
     public double getVoltage() {
         return volts;
     }

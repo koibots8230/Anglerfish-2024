@@ -20,8 +20,6 @@ public interface IndexerIO {
     void setIdle(boolean isBrake);
 
     void setVoltage(double volts);
-
-    Measure<Velocity<Angle>> getVelocity();
     
     double getVoltage();
 }

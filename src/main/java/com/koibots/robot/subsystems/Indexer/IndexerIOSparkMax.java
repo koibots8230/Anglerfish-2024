@@ -46,10 +46,6 @@ public class IndexerIOSparkMax implements IndexerIO {
         motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
     }
 
-    public Measure<Velocity<Angle>> getVelocity() {
-        return RotationsPerSecond.of(encoder.getVelocity());
-    }
-
     public double getVoltage() {
         return voltage;
     }
