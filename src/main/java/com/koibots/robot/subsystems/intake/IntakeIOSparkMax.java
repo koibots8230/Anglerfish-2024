@@ -11,12 +11,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 public class IntakeIOSparkMax implements IntakeIO {
 
-    private CANSparkMax intakeMotor;
-    private RelativeEncoder intakeEncoder;
+    private final CANSparkMax intakeMotor;
+    private final RelativeEncoder intakeEncoder;
 
     public IntakeIOSparkMax() {
 
-        intakeMotor = new CANSparkMax(IntakeConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(IntakeConstants.MOTOR_PORT, MotorType.kBrushless);
 
         intakeMotor.restoreFactoryDefaults();
 

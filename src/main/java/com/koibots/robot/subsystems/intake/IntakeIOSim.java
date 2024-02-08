@@ -13,7 +13,7 @@ public class IntakeIOSim implements IntakeIO {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    private DCMotorSim intakeMotorSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
+    private final DCMotorSim intakeMotorSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {

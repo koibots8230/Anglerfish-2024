@@ -18,15 +18,23 @@ public class Indexer extends SubsystemBase {
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
-        feedforwardController = new SimpleMotorFeedforward(IndexerConstants.FEEDFORWARD_CONSTANTS.ks, IndexerConstants.FEEDFORWARD_CONSTANTS.kv);
-        feedbackController = new PIDController(IndexerConstants.FEEDBACK_CONSTANTS.kP, IndexerConstants.FEEDBACK_CONSTANTS.kI, IndexerConstants.FEEDBACK_CONSTANTS.kD);
+        feedforwardController =
+                new SimpleMotorFeedforward(
+                        IndexerConstants.FEEDFORWARD_CONSTANTS.ks,
+                        IndexerConstants.FEEDFORWARD_CONSTANTS.kv);
+        feedbackController =
+                new PIDController(
+                        IndexerConstants.FEEDBACK_CONSTANTS.kP,
+                        IndexerConstants.FEEDBACK_CONSTANTS.kI,
+                        IndexerConstants.FEEDBACK_CONSTANTS.kD);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(indexerInputs);
         io.setVoltage(
-                feedbackController.calculate(io.getVoltage(), desiredVolts) + feedforwardController.calculate(0, 0, 0));
+                feedbackController.calculate(io.getVoltage(), desiredVolts)
+                        + feedforwardController.calculate(0, 0, 0));
     }
 
     public void runIndexer(double input) {

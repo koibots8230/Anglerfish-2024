@@ -32,10 +32,12 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
         encoder.setPosition(0);
 
-        elevatorMech2d =
-                new Mechanism2d(Units.inchesToMeters(4), 1)
-                        .getRoot("Elevator Root", 10, 0)
-                        .append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
+        try (Mechanism2d mechanism2d = new Mechanism2d(Units.inchesToMeters(4), 1)) {
+            elevatorMech2d =
+                    mechanism2d
+                            .getRoot("Elevator Root", 10, 0)
+                            .append(new MechanismLigament2d("Elevator", encoder.getPosition(), 90));
+        }
     }
 
     @Override

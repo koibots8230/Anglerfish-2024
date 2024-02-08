@@ -6,6 +6,7 @@ package com.koibots.robot;
 import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
+import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.PIDConstantsIO;
 import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import edu.wpi.first.math.Nat;
@@ -196,26 +197,20 @@ public class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int INTAKE_PIVOT_MOTOR_PORT = 9;
-        public static final int INTAKE_PIVOT_ENCODER_PORT = 10;
-        public static final double INTAKE_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians.
-        public static final double INTAKE_PIVOT_ENCODER_VELOCITY_FACTOR =
-                (2 * Math.PI) / 60.0; // radians per second.
-        public static final double INTAKE_PIVOT_ZERO_OFFSET = 0;
-        public static final int INTAKE_MOTOR_PORT = 10;
-        public static final double INTAKE_PID_P = 0.078;
-        public static final int INTAKE_MOTOR_TARGET_RPM = 0;
-        public static final double INTAKE_WHEEL_RADIUS = 0.037846;
-        // public static final int INTAKE_MINIMUM_RPM = 0;
-        public static final int INTAKE_MINIMUM_VOLTAGE = 0;
+        public static final int MOTOR_PORT = 10;
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
+        public static final Wheel WHEELS = Inches.of(1.5);
+        public static final int MINIMUM_VOLTAGE = 0;
     }
 
     public static class IndexerConstants {
         public static final int MOTOR = 0;
-        public static final double SPEED = 0;
-        public static final PIDConstantsIO FEEDBACK_CONSTANTS = new PIDConstantsIO(
-                0, 0, 0, 0, 0, 0
-                );
-        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS = new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
     }
 }
