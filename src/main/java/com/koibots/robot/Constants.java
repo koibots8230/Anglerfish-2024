@@ -7,8 +7,8 @@ import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
 import com.koibots.lib.geometry.Wheel;
+import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
-import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -30,26 +30,15 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 
 public class Constants {
-    public static class ShooterPivotConstants {
+    public static class PlopperConstants {
         public static final int MOTOR = 0;
         public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
         public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
-        public static final double SPEAKER_SHOOTER_RADIANS = Math.PI * 2 / 3;
         public static final double LOAD_SHOOTER_RADIANS = 0;
-        public static final double SIM_KS = 0;
-        public static final double SIM_KG = 0;
-        public static final double SIM_KV = 0;
-        public static final double SIM_KA = 0;
-        public static final double SIM_KP = 0;
-        public static final double SIM_KI = 0;
-        public static final double SIM_KD = 0;
-        public static final double REAL_KS = 0;
-        public static final double REAL_KG = 0;
-        public static final double REAL_KV = 0;
-        public static final double REAL_KA = 0;
-        public static final double REAL_KP = 0;
-        public static final double REAL_KI = 0;
-        public static final double REAL_KD = 0;
     }
 
     public static final double DEADBAND = 0.025;
@@ -101,8 +90,8 @@ public class Constants {
                 new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(1.9, 0, 0, 35, 0, 0);
-        public static final SimpleMotorFeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new SimpleMotorFeedforwardConstantsIO(0, 2, 0, 2.75);
+        public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 2, 0, 2.75);
 
         public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
         public static final double TURNING_ENCODER_VELOCITY_FACTOR =
@@ -219,8 +208,8 @@ public class Constants {
         public static final int MOTOR_PORT = 10;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
         public static final int MINIMUM_VOLTAGE = 0;
     }
@@ -229,7 +218,7 @@ public class Constants {
         public static final int MOTOR = 0;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final SimpleMotorFeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new SimpleMotorFeedforwardConstantsIO(0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
     }
 }

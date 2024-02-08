@@ -3,7 +3,7 @@
 
 package com.koibots.robot.subsystems.plopper;
 
-import com.koibots.robot.Constants.ShooterPivotConstants;
+import com.koibots.robot.Constants.PlopperConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -11,48 +11,37 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Plopper extends SubsystemBase {
 
-    private PlopperIOInputsAutoLogged pivotInputs = new PlopperIOInputsAutoLogged();
+    private final PlopperIOInputsAutoLogged pivotInputs = new PlopperIOInputsAutoLogged();
 
     private final PlopperIO io;
 
-    private final ArmFeedforward feedforward;
-    private final PIDController PID;
+    private final ArmFeedforward feedforwardController;
+    private final PIDController feedbackController;
 
-    private double desiredPos;
+    private double desiredPos = 0;
 
     public Plopper() {
         io = (Robot.isReal()) ? new PlopperIOSparkMax() : new PlopperIOSim();
-        desiredPos = 0;
-        feedforward =
-                (Robot.isReal())
-                        ? new ArmFeedforward(
-                                ShooterPivotConstants.REAL_KS,
-                                ShooterPivotConstants.REAL_KG,
-                                ShooterPivotConstants.REAL_KV,
-                                ShooterPivotConstants.REAL_KA)
-                        : new ArmFeedforward(
-                                ShooterPivotConstants.SIM_KS,
-                                ShooterPivotConstants.SIM_KG,
-                                ShooterPivotConstants.SIM_KV,
-                                ShooterPivotConstants.SIM_KA);
-        PID =
-                (Robot.isReal())
-                        ? new PIDController(
-                                ShooterPivotConstants.REAL_KP,
-                                ShooterPivotConstants.REAL_KI,
-                                ShooterPivotConstants.REAL_KD)
-                        : new PIDController(
-                                ShooterPivotConstants.SIM_KP,
-                                ShooterPivotConstants.SIM_KI,
-                                ShooterPivotConstants.SIM_KD);
+        feedforwardController =
+                new ArmFeedforward(
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.ks,
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.kv,
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.ka,
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.kg);
+
+        feedbackController =
+                new PIDController(
+                        PlopperConstants.FEEDBACK_CONSTANTS.kP,
+                        PlopperConstants.FEEDBACK_CONSTANTS.kI,
+                        PlopperConstants.FEEDBACK_CONSTANTS.kD);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(pivotInputs);
         io.setVoltage(
-                PID.calculate(pivotInputs.position.getRadians(), desiredPos)
-                        + feedforward.calculate(0, 0, 0));
+                feedbackController.calculate(pivotInputs.position.getRadians(), desiredPos)
+                        + feedforwardController.calculate(0, 0, 0));
     }
 
     // setters
