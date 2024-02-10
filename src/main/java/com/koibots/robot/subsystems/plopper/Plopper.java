@@ -7,32 +7,31 @@ import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.PlopperConstants;
 import com.koibots.robot.Robot;
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Plopper extends SubsystemBase {
 
-    private final PlopperIOInputsAutoLogged plopperInputs = new PlopperIOInputsAutoLogged();
+    private final PlopperIOInputsAutoLogged inputs = new PlopperIOInputsAutoLogged();
 
     private final PlopperIO io;
 
-    private final ArmFeedforward feedforwardController;
-    private final PIDController feedbackController;
+    private final SimpleMotorFeedforward feedforward;
+    private final PIDController feedback;
 
-    private double desiredPos = 0;
+    Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     public Plopper() {
-        io = (Robot.isReal()) ? new PlopperIOSparkMax() : new PlopperIOSim();
-        feedforwardController =
-                new ArmFeedforward(
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.ks,
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.kv,
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.ka,
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.kg);
+        io = Robot.isReal() ? new PlopperIOSparkMax() : new PlopperIOSim();
 
-        feedbackController =
+        feedforward =
+                new SimpleMotorFeedforward(
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.ks,
+                        PlopperConstants.FEEDFORWARD_CONSTANTS.kv);
+        feedback =
                 new PIDController(
                         PlopperConstants.FEEDBACK_CONSTANTS.kP,
                         PlopperConstants.FEEDBACK_CONSTANTS.kI,
@@ -41,23 +40,24 @@ public class Plopper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        io.updateInputs(plopperInputs);
-        Logger.processInputs("Subsystems/Plopper", plopperInputs);
+        io.updateInputs(inputs);
+        Logger.processInputs("Subsystems/Plopper", inputs);
 
         io.setVoltage(
-                feedbackController.calculate(plopperInputs.position.in(Radians), desiredPos)
-                        + feedforwardController.calculate(0, 0, 0));
+                Volts.of(Math.max(Math.min(
+                        (feedback.calculate(
+                                inputs.velocity.in(RPM),
+                                setpoint.in(RPM))
+                        + feedforward.calculate(
+                                setpoint.in(RPM)))
+                        * (12.0 / 11000.0), 12.0), -12.0)));
     }
 
-    // setters
-
-    public void setShooterPivotMode(boolean isBrake) {
-        io.setIdleMode(isBrake);
+    public void setVelocity(Measure<Velocity<Angle>> velocity) {
+        setpoint = velocity;
     }
 
-    // commands
-
-    public void setShooterPosition(double desiredPosition) {
-        desiredPos = desiredPosition;
+    public boolean sensorTriggered() {
+        return io.sensorTriggered();
     }
 }

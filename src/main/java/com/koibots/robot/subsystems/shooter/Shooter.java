@@ -45,20 +45,25 @@ public class Shooter extends SubsystemBase {
 
         io.setVoltages(
                 Volts.of(
-                        leftFlywheelFeedbackController.calculate(
-                                        inputs.leftVelocity.in(RotationsPerSecond),
-                                        setpoint.in(RotationsPerSecond))
+                        Math.max(Math.min(
+                                (leftFlywheelFeedbackController.calculate(
+                                                inputs.leftVelocity.in(RotationsPerSecond),
+                                                setpoint.in(RotationsPerSecond))
                                 + leftFlywheelFeedforwardController.calculate(
-                                        setpoint.in(RotationsPerSecond))),
+                                                setpoint.in(RotationsPerSecond)))
+                                * (12.0 / 5676.0), 12.0), -12.0)),
                 Volts.of(
-                        rightFlywheelFeedbackController.calculate(
-                                        inputs.rightVelocity.in(RotationsPerSecond),
-                                        setpoint.in(RotationsPerSecond))
+                        Math.max(Math.min(
+                                (rightFlywheelFeedbackController.calculate(
+                                                inputs.rightVelocity.in(RotationsPerSecond),
+                                                setpoint.in(RotationsPerSecond))
                                 + rightFlywheelFeedforwardController.calculate(
-                                        setpoint.in(RotationsPerSecond))));
+                                                setpoint.in(RotationsPerSecond)))
+                                * (12.0 / 5676.0), 12.0), -12.0))
+        );
     }
 
-    public void setSpeed(Measure<Velocity<Angle>> speed) {
+    public void setVelocity(Measure<Velocity<Angle>> speed) {
         setpoint = speed;
     }
 }

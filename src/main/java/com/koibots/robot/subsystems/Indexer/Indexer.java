@@ -3,14 +3,13 @@
 
 package com.koibots.robot.subsystems.Indexer;
 
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.IndexerConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -21,7 +20,7 @@ public class Indexer extends SubsystemBase {
     private final SimpleMotorFeedforward feedforwardController;
     private final PIDController feedbackController;
 
-    private Measure<Voltage> setpoint = Volts.of(0);
+    private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
@@ -43,12 +42,20 @@ public class Indexer extends SubsystemBase {
 
         io.setVoltage(
                 Volts.of(
-                        feedbackController.calculate(io.getVoltage().in(Volts), setpoint.in(Volts))
-                                + feedforwardController.calculate(setpoint.in(Volts))));
+                        Math.max(
+                                Math.min(
+                                        (feedbackController.calculate(
+                                                                inputs.velocity.in(RPM),
+                                                                setpoint.in(RPM))
+                                                        + feedforwardController.calculate(
+                                                                setpoint.in(RPM)))
+                                                * (12.0 / 11000.0),
+                                        12.0),
+                                -12.0)));
     }
 
-    public void setVolts(Measure<Voltage> volts) {
-        setpoint = volts;
+    public void setVelocity(Measure<Velocity<Angle>> velocity) {
+        setpoint = velocity;
     }
 
     public void setIdleMode(boolean doBrake) {

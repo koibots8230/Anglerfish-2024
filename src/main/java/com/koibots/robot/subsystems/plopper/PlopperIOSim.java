@@ -6,29 +6,25 @@ package com.koibots.robot.subsystems.plopper;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class PlopperIOSim implements PlopperIO {
-    private final SingleJointedArmSim sim =
-            new SingleJointedArmSim(DCMotor.getNEO(1), 25, 1, 1, 0, Math.PI / 2, true, 0);
-    private double voltage = 0;
+
+    private FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
+
+    private Measure<Voltage> appliedVolts = Volts.of(0);
 
     @Override
     public void updateInputs(PlopperIOInputs inputs) {
-        inputs.position = Radians.of(sim.getAngleRads());
-        inputs.voltage = Volts.of(voltage);
+        inputs.velocity = RadiansPerSecond.of(sim.getAngularVelocityRadPerSec());
         inputs.current = Amps.of(sim.getCurrentDrawAmps());
-        inputs.velocity = RotationsPerSecond.of(sim.getVelocityRadPerSec());
+        inputs.voltage = appliedVolts;
     }
 
     @Override
-    public void setVoltage(double volts) {
-        voltage = volts;
-        sim.setInputVoltage(volts);
-    }
-
-    @Override
-    public void setIdleMode(boolean isBrake) {
-        // TODO Auto-generated method stub
+    public void setVoltage(Measure<Voltage> volts) {
+        sim.setInputVoltage(volts.in(Volts));
+        appliedVolts = volts;
     }
 }

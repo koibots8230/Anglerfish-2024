@@ -6,7 +6,7 @@ package com.koibots.robot.subsystems;
 import com.koibots.robot.subsystems.Indexer.Indexer;
 import com.koibots.robot.subsystems.elevator.Elevator;
 import com.koibots.robot.subsystems.intake.Intake;
-import com.koibots.robot.subsystems.plopper.Plopper;
+import com.koibots.robot.subsystems.plopper.*;
 import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
@@ -59,6 +59,14 @@ public class Subsystems {
                 visionInstance = new Vision();
                 Vision = () -> visionInstance;
                 return visionInstance;
+            };
+
+    private static PlopperPivot plopperPivotInstance;
+    public static Supplier<PlopperPivot> PlopperPivot =
+            () -> {
+                plopperPivotInstance = new PlopperPivot();
+                PlopperPivot = () -> plopperPivotInstance;
+                return plopperPivotInstance;
             };
 
     private static Plopper plopperInstance;

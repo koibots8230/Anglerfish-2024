@@ -6,36 +6,45 @@ package com.koibots.robot.subsystems.plopper;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.PlopperConstants;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 public class PlopperIOSparkMax implements PlopperIO {
-    private final CANSparkMax shooterPivotMotor;
-    private final AbsoluteEncoder shooterPivotEncoder;
+
+    private final CANSparkMax plopperMotor;
+    private final RelativeEncoder plopperEncoder;
+
+    private final DigitalInput noteSwitch;
 
     public PlopperIOSparkMax() {
-        shooterPivotMotor = new CANSparkMax(PlopperConstants.MOTOR, MotorType.kBrushless);
-        shooterPivotEncoder = shooterPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-        shooterPivotEncoder.setPositionConversionFactor(PlopperConstants.ENCODER_POSITION_FACTOR);
-        shooterPivotMotor.setIdleMode(IdleMode.kBrake);
+        plopperMotor = new CANSparkMax(0, MotorType.kBrushless);
+        plopperMotor.setIdleMode(IdleMode.kBrake);
+        plopperMotor.setSmartCurrentLimit(10, 30, 11000);
+
+        plopperEncoder = plopperMotor.getEncoder();
+
+        noteSwitch = new DigitalInput(PlopperConstants.SWITCH_PORT);
     }
 
     @Override
     public void updateInputs(PlopperIOInputs inputs) {
-        inputs.position = Radians.of(shooterPivotEncoder.getPosition());
-        inputs.voltage = Volts.of(shooterPivotMotor.getBusVoltage());
-        inputs.current = Amps.of(shooterPivotMotor.getOutputCurrent());
-        inputs.velocity = RotationsPerSecond.of(shooterPivotEncoder.getVelocity());
+        inputs.velocity = RotationsPerSecond.of(plopperEncoder.getVelocity() * 60);
+        inputs.current = Amps.of(plopperMotor.getOutputCurrent());
+        inputs.voltage =
+                Volts.of(plopperMotor.getBusVoltage()).times(plopperMotor.getAppliedOutput());
     }
 
-    public void setVoltage(double volts) {
-        shooterPivotMotor.setVoltage(volts);
+    @Override
+    public void setVoltage(Measure<Voltage> volts) {
+        plopperMotor.setVoltage(volts.in(Volts));
     }
 
-    public void setIdleMode(boolean isBrake) {
-        shooterPivotMotor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
+    @Override
+    public boolean sensorTriggered() {
+        return noteSwitch.get();
     }
 }

@@ -3,9 +3,7 @@
 
 package com.koibots.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel;
@@ -28,14 +26,17 @@ public class ShooterIOSparkMax implements ShooterIO {
                 new CANSparkMax(
                         ShooterConstants.shooterMotor2, CANSparkLowLevel.MotorType.kBrushless);
 
+        leftMotor.setSmartCurrentLimit(10, 60, 5676);
+        rightMotor.setSmartCurrentLimit(10, 60, 5676);
+
         leftEncoder = leftMotor.getEncoder();
         rightEncoder = rightMotor.getEncoder();
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getVelocity() * 60);
-        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getVelocity() * 60);
+        inputs.leftVelocity = RPM.of(leftEncoder.getVelocity());
+        inputs.rightVelocity = RPM.of(rightEncoder.getVelocity());
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());

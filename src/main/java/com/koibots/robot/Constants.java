@@ -30,15 +30,32 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 
 public class Constants {
-    public static class PlopperConstants {
-        public static final int MOTOR = 0;
+    public static class PlopperPivotConstants {
+        public static final int MOTOR_PORT = 0;
         public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
+
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 0, 0, 0);
-        public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
-        public static final double LOAD_SHOOTER_RADIANS = 0;
+
+        public static final Measure<Angle> AMP_POSITION = Degrees.of(100);
+        public static final Measure<Angle> LOAD_POSITION = Degrees.of(0);
+
+        public static final Measure<Angle> ALLOWED_ERROR = Degrees.of(5);
+    }
+
+    public static class PlopperConstants {
+        public static final int MOTOR_PORT = 0;
+        public static final int SWITCH_PORT = 0;
+
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
+
+        public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(600).times(10);
+        public static final Measure<Velocity<Angle>> PLOP_SPEED = RPM.of(400).times(10);
     }
 
     public static final double DEADBAND = 0.025;
@@ -126,7 +143,7 @@ public class Constants {
 
         public static final double GEAR_RATIO = 25;
         public static final Measure<Mass> MASS = Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.8755); // TODO: Ask cad
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.8755);
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
                 LinearSystemId.createElevatorSystem(
@@ -176,7 +193,9 @@ public class Constants {
 
         public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> HANDOFF_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> RESTING_POSITION = Inches.of(0); // TODO: Get
+        public static final Measure<Distance> SHOOT_POSITION = Inches.of(0); // TODO: Get
+
+        public static final Measure<Distance> ALLOWED_ERROR = Meters.of(0.005);
     }
 
     public static class VisionConstants {
@@ -209,19 +228,25 @@ public class Constants {
 
     public static class IntakeConstants {
         public static final int MOTOR_PORT = 10;
+
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 0, 0, 0);
+
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
         public static final int MINIMUM_VOLTAGE = 0;
     }
 
     public static class IndexerConstants {
         public static final int MOTOR = 0;
+
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 0, 0, 0);
+
+        public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(500).times(10);
+        public static final Measure<Velocity<Angle>> SHOOT_SPEED = RPM.of(1000).times(10);
     }
 }

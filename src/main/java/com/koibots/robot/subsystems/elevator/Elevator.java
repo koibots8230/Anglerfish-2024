@@ -101,4 +101,19 @@ public class Elevator extends SubsystemBase {
         this.volts = volts;
         isSysID = true;
     }
+
+    public boolean atSetpoint() {
+        return inputs.position.in(Meters)
+                        >= ElevatorConstants.HANDOFF_POSITION
+                                .minus(ElevatorConstants.ALLOWED_ERROR)
+                                .in(Meters)
+                && inputs.position.in(Meters)
+                        <= ElevatorConstants.HANDOFF_POSITION
+                                .plus(ElevatorConstants.ALLOWED_ERROR)
+                                .in(Meters);
+    }
+
+    public Measure<Distance> getSetpoint() {
+        return setpoint;
+    }
 }

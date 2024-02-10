@@ -7,14 +7,14 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    private final DCMotorSim simLeft = new DCMotorSim(DCMotor.getNEO(1), 1, 0.025);
-    private final DCMotorSim simRight = new DCMotorSim(DCMotor.getNEO(1), 1, 0.025);
+    private FlywheelSim simLeft = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
+    private FlywheelSim simRight = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
 
     private Measure<Voltage> leftAppliedVolts = Volts.of(0);
     private Measure<Voltage> rightAppliedVolts = Volts.of(0);
