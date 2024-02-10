@@ -3,8 +3,7 @@
 
 package com.koibots.robot;
 
-import static com.koibots.robot.subsystems.Subsystems.Elevator;
-import static com.koibots.robot.subsystems.Subsystems.Swerve;
+import static com.koibots.robot.subsystems.Subsystems.*;
 
 import com.koibots.lib.dashboard.Alert;
 import com.koibots.lib.sysid.SysIdTest;
@@ -83,6 +82,13 @@ public class Robot extends LoggedRobot {
                         null,
                         Swerve.get(),
                         "Swerve Drive"));
+        sysidMechanismChooser.addOption(
+                "Elevator",
+                new SysIdRoutine.Mechanism(
+                        (voltage) -> Elevator.get().setVoltage(voltage),
+                        null,
+                        Swerve.get(),
+                        "Elevator"));
 
         sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
         sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
@@ -95,6 +101,9 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
         Elevator.get().reset();
+        Plopper.get();
+        Shooter.get();
+        Indexer.get();
     }
 
     /**

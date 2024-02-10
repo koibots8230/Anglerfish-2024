@@ -89,7 +89,7 @@ public class Swerve extends SubsystemBase {
     public void periodic() {
         gyro.updateInputs(gyroInputs);
 
-        Logger.processInputs("Drive/Gyro", gyroInputs);
+        Logger.processInputs("Subsystems/Drive/Gyro", gyroInputs);
 
         odometry.update(gyroInputs.yawPosition, getModulePositions());
 

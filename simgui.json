@@ -8,6 +8,8 @@
   },
   "NTProvider": {
     "types": {
+      "/AdvantageKit/RealOutputs/Elevator Mechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Elevator/Mechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Elevator/SimMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",

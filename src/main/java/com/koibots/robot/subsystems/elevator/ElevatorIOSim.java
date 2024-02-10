@@ -3,10 +3,13 @@
 
 package com.koibots.robot.subsystems.elevator;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.koibots.robot.Constants.ElevatorConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.simulation.BatterySim;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.simulation.RoboRioSim;
@@ -18,7 +21,7 @@ public class ElevatorIOSim implements ElevatorIO {
 
     private final DCMotor gearbox = DCMotor.getNEO(2);
 
-    private double appliedVolts;
+    private Measure<Voltage> appliedVolts = Volts.of(0);
 
     private final ElevatorSim elevator =
             new ElevatorSim(
@@ -42,27 +45,29 @@ public class ElevatorIOSim implements ElevatorIO {
         RoboRioSim.setVInVoltage(
                 BatterySim.calculateDefaultBatteryLoadedVoltage(elevator.getCurrentDrawAmps()));
 
-        inputs.appliedVoltage = appliedVolts;
-        inputs.position = Units.metersToInches(elevator.getPositionMeters());
-        inputs.leftAmperage = elevator.getCurrentDrawAmps();
-        inputs.rightAmperage = elevator.getCurrentDrawAmps();
+        inputs.position = Meters.of(elevator.getPositionMeters());
+        inputs.velocity = MetersPerSecond.of(elevator.getVelocityMetersPerSecond());
+
+        inputs.voltage = appliedVolts;
+        inputs.leftCurrent = Amps.of(elevator.getCurrentDrawAmps());
+        inputs.rightCurrent = Amps.of(elevator.getCurrentDrawAmps());
     }
 
     @Override
-    public void setVoltage(double volts) {
-        volts = MathUtil.clamp(volts, -12, 12);
+    public void setVoltage(Measure<Voltage> volts) {
+        volts = Volts.of(MathUtil.clamp(volts.in(Volts), -12, 12));
         appliedVolts = volts;
-        elevator.setInput(volts);
+        elevator.setInput(volts.in(Volts));
     }
 
     @Override
-    public double getPosition() {
-        return elevator.getPositionMeters();
+    public Measure<Distance> getPosition() {
+        return Meters.of(elevator.getPositionMeters());
     }
 
     @Override
-    public double getVelocity() {
-        return elevator.getVelocityMetersPerSecond();
+    public Measure<Velocity<Distance>> getVelocity() {
+        return MetersPerSecond.of(elevator.getVelocityMetersPerSecond());
     }
 
     @Override

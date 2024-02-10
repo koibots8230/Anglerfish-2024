@@ -3,18 +3,21 @@
 
 package com.koibots.robot.subsystems.shooter;
 
+import static edu.wpi.first.units.Units.*;
+
 import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
     @AutoLog
     public class ShooterIOInputs {
-        public Measure<Velocity<Angle>> leftFlywheelVelocity;
-        public Measure<Velocity<Angle>> rightFlywheelVelocity;
-        public Measure<Current> leftMotorCurrent;
-        public Measure<Current> rightMotorCurrent;
-        public Measure<Voltage> leftMotorAppliedVoltage;
-        public Measure<Voltage> rightMotorAppliedVoltage;
+        public Measure<Velocity<Angle>> leftVelocity = RotationsPerSecond.of(0);
+        public Measure<Velocity<Angle>> rightVelocity = RotationsPerSecond.of(0);
+
+        public Measure<Current> leftCurrent = Amps.of(0);
+        public Measure<Current> rightCurrent = Amps.of(0);
+        public Measure<Voltage> leftVoltage = Volts.of(0);
+        public Measure<Voltage> rightVoltage = Volts.of(0);
     }
 
     void updateInputs(ShooterIOInputs inputs);

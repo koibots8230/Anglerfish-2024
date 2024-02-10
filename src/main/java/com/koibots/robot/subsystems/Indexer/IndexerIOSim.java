@@ -9,15 +9,14 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerIOSim implements IndexerIO {
-    private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 25, 1);
-    private double volts;
 
-    public IndexerIOSim() {
-        volts = 0;
-    }
+    private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
+
+    private Measure<Voltage> volts = Volts.of(0);
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
@@ -25,21 +24,16 @@ public class IndexerIOSim implements IndexerIO {
     }
 
     @Override
-    public void setIdle(boolean isBrake) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void setVoltage(double voltage) {
-        sim.setInputVoltage(voltage);
-        volts = voltage;
+    public void setVoltage(Measure<Voltage> volts) {
+        sim.setInputVoltage(volts.in(Volts));
+        this.volts = volts;
     }
 
     public Measure<Velocity<Angle>> getVelocity() {
         return RotationsPerSecond.of(sim.getAngularVelocityRPM());
     }
 
-    public double getVoltage() {
+    public Measure<Voltage> getVoltage() {
         return volts;
     }
 }

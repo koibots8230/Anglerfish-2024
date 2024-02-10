@@ -4,6 +4,7 @@
 package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.koibots.robot.Constants.ShooterConstants;
@@ -33,12 +34,15 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftMotorCurrent = Amps.of(leftMotor.getOutputCurrent());
-        inputs.rightMotorCurrent = Amps.of(rightMotor.getOutputCurrent());
+        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getVelocity() * 60);
+        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getVelocity() * 60);
 
-        inputs.leftMotorAppliedVoltage =
+        inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
+        inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
+
+        inputs.leftVoltage =
                 Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightMotorAppliedVoltage =
+        inputs.rightVoltage =
                 Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
     }
 

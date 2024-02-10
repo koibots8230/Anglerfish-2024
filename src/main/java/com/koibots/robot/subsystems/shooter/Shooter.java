@@ -14,6 +14,7 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Shooter extends SubsystemBase {
     private final ShooterIO io;
@@ -26,30 +27,32 @@ public class Shooter extends SubsystemBase {
     SimpleMotorFeedforward rightFlywheelFeedforwardController;
 
     public Shooter() {
-        io = Robot.isReal() ? new ShooterIOSparkMax() : null;
+        io = Robot.isReal() ? new ShooterIOSparkMax() : new ShooterIOSim();
 
-        leftFlywheelFeedbackController =
-                new PIDController(ShooterConstants.kP, 0, 0); // /uhm this was autogenrated...
-        rightFlywheelFeedbackController = new PIDController(0, 0, 0);
+        leftFlywheelFeedbackController = new PIDController(ShooterConstants.kP, 0, 0);
+        rightFlywheelFeedbackController = new PIDController(ShooterConstants.kP, 0, 0);
 
-        leftFlywheelFeedforwardController = new SimpleMotorFeedforward(0, 0);
-        rightFlywheelFeedforwardController = new SimpleMotorFeedforward(0, 0);
+        leftFlywheelFeedforwardController =
+                new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
+        rightFlywheelFeedforwardController =
+                new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        Logger.processInputs("Subsystems/Shooter", inputs);
 
         io.setVoltages(
                 Volts.of(
                         leftFlywheelFeedbackController.calculate(
-                                        inputs.leftFlywheelVelocity.in(RotationsPerSecond),
+                                        inputs.leftVelocity.in(RotationsPerSecond),
                                         setpoint.in(RotationsPerSecond))
                                 + leftFlywheelFeedforwardController.calculate(
                                         setpoint.in(RotationsPerSecond))),
                 Volts.of(
                         rightFlywheelFeedbackController.calculate(
-                                        inputs.rightFlywheelVelocity.in(RotationsPerSecond),
+                                        inputs.rightVelocity.in(RotationsPerSecond),
                                         setpoint.in(RotationsPerSecond))
                                 + rightFlywheelFeedforwardController.calculate(
                                         setpoint.in(RotationsPerSecond))));
@@ -57,9 +60,5 @@ public class Shooter extends SubsystemBase {
 
     public void setSpeed(Measure<Velocity<Angle>> speed) {
         setpoint = speed;
-    }
-
-    public Measure<Velocity<Angle>> getVelocity() {
-        return inputs.leftFlywheelVelocity;
     }
 }

@@ -107,7 +107,11 @@ public class Constants {
     public static class ShooterConstants {
         public static final int shooterMotor1 = 0;
         public static final int shooterMotor2 = 1;
+
         public static final double kP = 0;
+
+        public static final double kS = 0;
+        public static final double kV = 0;
     }
 
     public static class ElevatorConstants {
@@ -116,14 +120,13 @@ public class Constants {
         public static final int LEFT_MOTOR_PORT = 1;
         public static final int RIGHT_MOTOR_PORT = 2;
 
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION =
-                Inches.of(1); // TODO: Get from cad when it's done
+        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
 
         // ===================================Linear System===================================
 
         public static final double GEAR_RATIO = 25;
         public static final Measure<Mass> MASS = Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(1); // TODO: Ask cad
+        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.8755); // TODO: Ask cad
 
         public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
                 LinearSystemId.createElevatorSystem(
@@ -131,9 +134,9 @@ public class Constants {
 
         // ===================================Profile===================================
 
-        public static final Measure<Velocity<Distance>> MAX_SPEED = InchesPerSecond.of(18.41);
+        public static final Measure<Velocity<Distance>> MAX_SPEED = InchesPerSecond.of(18);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-                MetersPerSecondPerSecond.of(1.055);
+                MetersPerSecondPerSecond.of(Units.inchesToMeters(1));
 
         // ===================================Kalman Filter===================================
 

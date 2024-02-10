@@ -5,6 +5,7 @@ package com.koibots.robot.subsystems.intake;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.koibots.robot.Constants.IntakeConstants;
 import com.koibots.robot.Robot;
@@ -22,11 +23,7 @@ public class Intake extends SubsystemBase {
 
     public Intake() {
         io = Robot.isReal() ? new IntakeIOSparkMax() : new IntakeIOSim();
-        intakeFeedback =
-                new PIDController(
-                        IntakeConstants.FEEDBACK_CONSTANTS.kP,
-                        IntakeConstants.FEEDBACK_CONSTANTS.kI,
-                        IntakeConstants.FEEDBACK_CONSTANTS.kD);
+        intakeFeedback = new PIDController(IntakeConstants.FEEDBACK_CONSTANTS.kP, 0, 0);
         intakeFeedForward =
                 new SimpleMotorFeedforward(
                         IntakeConstants.FEEDFORWARD_CONSTANTS.ks,
@@ -36,16 +33,20 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Intake", inputs);
+        Logger.processInputs("Subsystems/Intake", inputs);
+
         io.setVoltage(
-                intakeFeedback.calculate(
-                                inputs.intakeVoltage,
-                                Math.max(
-                                        intakeVoltsSetPoint,
-                                        IntakeConstants.MINIMUM_VOLTAGE) // wonky?
-                                )
-                        + intakeFeedForward.calculate(
-                                Math.max(intakeVoltsSetPoint, IntakeConstants.MINIMUM_VOLTAGE)));
+                Volts.of(
+                        intakeFeedback.calculate(
+                                        inputs.voltage.in(Volts),
+                                        Math.max(
+                                                intakeVoltsSetPoint,
+                                                IntakeConstants.MINIMUM_VOLTAGE) // wonky?
+                                        )
+                                + intakeFeedForward.calculate(
+                                        Math.max(
+                                                intakeVoltsSetPoint,
+                                                IntakeConstants.MINIMUM_VOLTAGE))));
     }
 
     public void setIntakeVoltsWithTargetRPM(double targetRPM) {

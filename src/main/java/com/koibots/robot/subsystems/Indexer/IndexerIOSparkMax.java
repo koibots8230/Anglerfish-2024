@@ -13,30 +13,31 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 
 public class IndexerIOSparkMax implements IndexerIO {
     private final CANSparkMax motor;
     private final RelativeEncoder encoder;
-    private double voltage;
 
     public IndexerIOSparkMax() {
         motor = new CANSparkMax(IndexerConstants.MOTOR, MotorType.kBrushless);
         motor.setIdleMode(IdleMode.kBrake);
         encoder = motor.getEncoder();
-        voltage = 0;
     }
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
         inputs.velocity = RevolutionsPerSecond.of(encoder.getVelocity());
-        inputs.mode = motor.getIdleMode() == IdleMode.kBrake;
+        inputs.isBrake = motor.getIdleMode() == IdleMode.kBrake;
+        inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
+        inputs.current = Amps.of(motor.getOutputCurrent());
     }
 
-    public void setVoltage(double volts) {
-        motor.setVoltage(volts);
-        voltage = volts;
+    public void setVoltage(Measure<Voltage> volts) {
+        motor.setVoltage(volts.in(Volts));
     }
 
+    @Override
     public void setIdle(boolean isBrake) {
         motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
     }
@@ -45,7 +46,8 @@ public class IndexerIOSparkMax implements IndexerIO {
         return RotationsPerSecond.of(encoder.getVelocity());
     }
 
-    public double getVoltage() {
-        return voltage;
+    @Override
+    public Measure<Voltage> getVoltage() {
+        return Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
     }
 }

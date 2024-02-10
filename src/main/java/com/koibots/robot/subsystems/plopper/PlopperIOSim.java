@@ -5,7 +5,6 @@ package com.koibots.robot.subsystems.plopper;
 
 import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
@@ -16,7 +15,7 @@ public class PlopperIOSim implements PlopperIO {
 
     @Override
     public void updateInputs(PlopperIOInputs inputs) {
-        inputs.position = Rotation2d.fromRadians(sim.getAngleRads());
+        inputs.position = Radians.of(sim.getAngleRads());
         inputs.voltage = Volts.of(voltage);
         inputs.current = Amps.of(sim.getCurrentDrawAmps());
         inputs.velocity = RotationsPerSecond.of(sim.getVelocityRadPerSec());

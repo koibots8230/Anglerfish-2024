@@ -3,18 +3,25 @@
 
 package com.koibots.robot.subsystems.Indexer;
 
+import static edu.wpi.first.units.Units.Volts;
+
 import com.koibots.robot.Constants.IndexerConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
-    private final IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
+    private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+
     private final SimpleMotorFeedforward feedforwardController;
     private final PIDController feedbackController;
-    private double desiredVolts = 0;
+
+    private Measure<Voltage> setpoint = Volts.of(0);
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
@@ -31,17 +38,20 @@ public class Indexer extends SubsystemBase {
 
     @Override
     public void periodic() {
-        io.updateInputs(indexerInputs);
+        io.updateInputs(inputs);
+        Logger.processInputs("Subsystems/Indexer", inputs);
+
         io.setVoltage(
-                feedbackController.calculate(io.getVoltage(), desiredVolts)
-                        + feedforwardController.calculate(0, 0, 0));
+                Volts.of(
+                        feedbackController.calculate(io.getVoltage().in(Volts), setpoint.in(Volts))
+                                + feedforwardController.calculate(setpoint.in(Volts))));
     }
 
-    public void runIndexer(double input) {
-        desiredVolts = input;
+    public void setVolts(Measure<Voltage> volts) {
+        setpoint = volts;
     }
 
-    public void indexerMode(boolean isBrake) {
-        io.setIdle(isBrake);
+    public void setIdleMode(boolean doBrake) {
+        io.setIdle(doBrake);
     }
 }

@@ -3,10 +3,7 @@
 
 package com.koibots.robot.subsystems.elevator;
 
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.MetersPerSecondPerSecond;
+import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Robot;
@@ -15,8 +12,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -32,7 +28,11 @@ public class Elevator extends SubsystemBase {
 
     private TrapezoidProfile.State targetState;
 
-    private double setpoint;
+    private Measure<Distance> setpoint = Meters.of(0);
+
+    private boolean isSysID = false;
+
+    private Measure<Voltage> volts;
 
     public Elevator() {
         System.out.println("Elevator initialized");
@@ -60,34 +60,45 @@ public class Elevator extends SubsystemBase {
 
     @Override
     public void periodic() {
-        io.updateInputs(inputs);
-
         inputs.setpoint = setpoint;
 
-        Logger.processInputs("Elevator/Inputs", inputs);
+        io.updateInputs(inputs);
 
-        Logger.recordOutput("Elevator/SimMechanism", io.getMechanism());
+        Logger.processInputs("Subsystems/Elevator", inputs);
+
+        Logger.recordOutput("Elevator Mechanism", io.getMechanism());
 
         lastProfiledReference = profile.calculate(0.020, lastProfiledReference, targetState);
 
         linearSysLoop.setNextR(lastProfiledReference.position, lastProfiledReference.velocity);
-        linearSysLoop.correct(VecBuilder.fill(io.getPosition()));
+        linearSysLoop.correct(VecBuilder.fill(io.getPosition().in(Meters)));
         linearSysLoop.predict(0.020);
 
-        double volts = linearSysLoop.getU(0);
-        volts = Robot.isReal() ? (Math.abs(volts) > 0.5) ? volts : 0 : volts;
+        if (!isSysID) {
+            volts = Volts.of(linearSysLoop.getU(0));
+            volts =
+                    Robot.isReal()
+                            ? (Math.abs(volts.in(Volts)) > 0.5) ? volts : Volts.of(0)
+                            : volts;
+        }
 
         io.setVoltage(volts);
     }
 
     public void reset() {
-        linearSysLoop.reset(VecBuilder.fill(io.getPosition(), io.getVelocity()));
+        linearSysLoop.reset(
+                VecBuilder.fill(io.getPosition().in(Meters), io.getVelocity().in(MetersPerSecond)));
 
         lastProfiledReference = new TrapezoidProfile.State(io.getPosition(), io.getVelocity());
     }
 
     public void setPostion(Measure<Distance> position) {
-        setpoint = position.in(Inches);
+        setpoint = position;
         targetState = new TrapezoidProfile.State(position.in(Meters), 0.0);
+    }
+
+    public void setVoltage(Measure<Voltage> volts) {
+        this.volts = volts;
+        isSysID = true;
     }
 }

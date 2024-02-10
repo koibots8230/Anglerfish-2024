@@ -3,22 +3,24 @@
 
 package com.koibots.robot.subsystems.intake;
 
-import edu.wpi.first.math.geometry.Rotation2d;
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.units.*;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
 
     @AutoLog
     class IntakeIOInputs {
-        public Rotation2d intakePosition = new Rotation2d();
-        public double intakeVelocity = 0.0;
-        public double intakeCurrentAmps = 0.0;
-        public double intakeVoltage = 0.0;
+        public Measure<Velocity<Angle>> velocity = RotationsPerSecond.of(0);
+
+        public Measure<Current> current = Amps.of(0);
+        public Measure<Voltage> voltage = Volts.of(0);
     }
 
     /* Updates the set of loggable inputs. */
     default void updateInputs(IntakeIOInputs inputs) {}
 
     /* Run the pivot motor at the specified voltage. */
-    default void setVoltage(double volts) {}
+    default void setVoltage(Measure<Voltage> volts) {}
 }

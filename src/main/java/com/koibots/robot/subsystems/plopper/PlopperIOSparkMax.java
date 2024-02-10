@@ -3,9 +3,7 @@
 
 package com.koibots.robot.subsystems.plopper;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.PlopperConstants;
 import com.revrobotics.AbsoluteEncoder;
@@ -13,7 +11,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PlopperIOSparkMax implements PlopperIO {
     private final CANSparkMax shooterPivotMotor;
@@ -28,7 +25,7 @@ public class PlopperIOSparkMax implements PlopperIO {
 
     @Override
     public void updateInputs(PlopperIOInputs inputs) {
-        inputs.position = Rotation2d.fromRadians(shooterPivotEncoder.getPosition());
+        inputs.position = Radians.of(shooterPivotEncoder.getPosition());
         inputs.voltage = Volts.of(shooterPivotMotor.getBusVoltage());
         inputs.current = Amps.of(shooterPivotMotor.getOutputCurrent());
         inputs.velocity = RotationsPerSecond.of(shooterPivotEncoder.getVelocity());

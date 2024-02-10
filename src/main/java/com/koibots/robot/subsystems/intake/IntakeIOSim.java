@@ -3,29 +3,33 @@
 
 package com.koibots.robot.subsystems.intake;
 
-// import com.koibots.robot.Constants.DriveConstants;
+import static edu.wpi.first.units.Units.*;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class IntakeIOSim implements IntakeIO {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    private final DCMotorSim intakeMotorSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
+    private final DCMotorSim sim = new DCMotorSim(DCMotor.getNEO(1), 1, 0.025);
+
+    private Measure<Voltage> appliedVolts = Volts.of(0);
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        intakeMotorSim.update(LOOP_PERIOD_SECS);
+        sim.update(LOOP_PERIOD_SECS);
 
-        inputs.intakeVelocity = intakeMotorSim.getAngularVelocityRPM();
-        inputs.intakePosition = new Rotation2d(intakeMotorSim.getAngularPositionRotations());
-        inputs.intakeVoltage = 0.0;
+        inputs.velocity = RotationsPerSecond.of(sim.getAngularVelocityRPM() * 60);
+
+        inputs.current = Amps.of(sim.getCurrentDrawAmps());
+        inputs.voltage = appliedVolts;
     }
 
     @Override
-    public void setVoltage(double volts) {
-        // intakeMotorSim.setInputVoltage(intakeAppliedVolts);
+    public void setVoltage(Measure<Voltage> volts) {
+        sim.setInputVoltage(volts.in(Volts));
+        appliedVolts = volts;
     }
 }

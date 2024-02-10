@@ -3,15 +3,18 @@
 
 package com.koibots.robot.subsystems.plopper;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.koibots.robot.Constants.PlopperConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Plopper extends SubsystemBase {
 
-    private final PlopperIOInputsAutoLogged pivotInputs = new PlopperIOInputsAutoLogged();
+    private final PlopperIOInputsAutoLogged plopperInputs = new PlopperIOInputsAutoLogged();
 
     private final PlopperIO io;
 
@@ -38,9 +41,11 @@ public class Plopper extends SubsystemBase {
 
     @Override
     public void periodic() {
-        io.updateInputs(pivotInputs);
+        io.updateInputs(plopperInputs);
+        Logger.processInputs("Subsystems/Plopper", plopperInputs);
+
         io.setVoltage(
-                feedbackController.calculate(pivotInputs.position.getRadians(), desiredPos)
+                feedbackController.calculate(plopperInputs.position.in(Radians), desiredPos)
                         + feedforwardController.calculate(0, 0, 0));
     }
 

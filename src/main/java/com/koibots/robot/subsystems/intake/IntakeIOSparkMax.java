@@ -3,11 +3,13 @@
 
 package com.koibots.robot.subsystems.intake;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.koibots.robot.Constants.IntakeConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.*;
 
 public class IntakeIOSparkMax implements IntakeIO {
 
@@ -25,22 +27,15 @@ public class IntakeIOSparkMax implements IntakeIO {
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        inputs.intakeVelocity = intakeEncoder.getVelocity();
-        inputs.intakePosition = new Rotation2d(intakeEncoder.getPosition());
-        inputs.intakeVoltage = intakeMotor.getAppliedOutput();
+        inputs.velocity = RotationsPerSecond.of(intakeEncoder.getVelocity() * 60);
+
+        inputs.current = Amps.of(intakeMotor.getOutputCurrent());
+        inputs.voltage =
+                Volts.of(intakeMotor.getBusVoltage()).times(intakeMotor.getAppliedOutput());
     }
 
     @Override
-    public void setVoltage(double volts) {
-
-        /*
-         *   if this is wrong its not my fault :D (its grant's)
-         */
-
-        // rpm = Intake.get().intakeTrueTargetRPM(rpm);
-        // double volts = Math.max(Math.min(rpm * (12 / 5676), 12.0), -12.0);
-
-        // System.out.println("voltage thingy - " + volts);
-        intakeMotor.setVoltage(-volts);
+    public void setVoltage(Measure<Voltage> volts) {
+        intakeMotor.setVoltage(volts.in(Volts));
     }
 }
