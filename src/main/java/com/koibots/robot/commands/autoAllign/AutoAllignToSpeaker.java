@@ -7,6 +7,7 @@ import static edu.wpi.first.units.Units.Meters;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.FieldConstants;
 import com.koibots.robot.Constants.IndexerConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.subsystems.Subsystems;
@@ -18,23 +19,28 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
-public class AutoAllign extends ParallelCommandGroup {
+public class AutoAllignToSpeaker extends ParallelCommandGroup {
+    Pose2d speaker;
     Pose2d goal;
     PathfindHolonomic pathfinder;
     Translation2d translation;
     Rotation2d rotation;
 
-    public AutoAllign() {
+    public AutoAllignToSpeaker() {
+        speaker =
+                new Pose2d(
+                        new Translation2d(FieldConstants.SPEAKER_X, FieldConstants.SPEAKER_Y),
+                        new Rotation2d());
         rotation =
                 new Rotation2d(
                         Math.atan(
                                         Subsystems.Swerve.get()
                                                         .getEstimatedPose()
-                                                        .relativeTo(goal)
+                                                        .relativeTo(speaker)
                                                         .getX()
                                                 / Subsystems.Swerve.get()
                                                         .getEstimatedPose()
-                                                        .relativeTo(goal)
+                                                        .relativeTo(speaker)
                                                         .getY())
                                 + Math.PI);
         translation =
@@ -45,11 +51,11 @@ public class AutoAllign extends ParallelCommandGroup {
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
                                                                         .getEstimatedPose()
-                                                                        .relativeTo(goal)
+                                                                        .relativeTo(speaker)
                                                                         .getX()
                                                                 / Subsystems.Swerve.get()
                                                                         .getEstimatedPose()
-                                                                        .relativeTo(goal)
+                                                                        .relativeTo(speaker)
                                                                         .getY()))),
                         Meters.of(
                                 Constants.SHOOTING_RANGE
@@ -57,11 +63,11 @@ public class AutoAllign extends ParallelCommandGroup {
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
                                                                         .getEstimatedPose()
-                                                                        .relativeTo(goal)
+                                                                        .relativeTo(speaker)
                                                                         .getX()
                                                                 / Subsystems.Swerve.get()
                                                                         .getEstimatedPose()
-                                                                        .relativeTo(goal)
+                                                                        .relativeTo(speaker)
                                                                         .getY()))));
         goal = new Pose2d(translation, rotation);
         addCommands(

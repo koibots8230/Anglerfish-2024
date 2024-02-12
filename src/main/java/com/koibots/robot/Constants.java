@@ -23,6 +23,7 @@ import edu.wpi.first.units.Velocity;
 
 public class Constants {
 
+    public static final double PLOPPER_RANGE = 0.0;
     public static final double SHOOTING_RANGE = 0;
     public static final double DEADBAND = 0.025;
 
@@ -173,5 +174,12 @@ public class Constants {
         public static final double SIM_KI = 0;
         public static final double SIM_KD = 0;
         public static final double INDEXER_VOLTS = 7;
+    }
+
+    public static class FieldConstants {
+        public static final double SPEAKER_X = 0.0;
+        public static final double SPEAKER_Y = 0.0;
+        public static final double AMP_X = 0.0;
+        public static final double AMP_Y = 0.0;
     }
 }

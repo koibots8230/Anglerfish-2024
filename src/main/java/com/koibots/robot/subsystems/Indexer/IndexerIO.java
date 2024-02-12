@@ -21,7 +21,5 @@ public interface IndexerIO {
 
     void setVoltage(double volts);
 
-    Measure<Velocity<Angle>> getVelocity();
-
     double getVoltage();
 }

@@ -10,9 +10,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
 
 public class IndexerIOSparkMax implements IndexerIO {
     private final CANSparkMax motor;
@@ -43,10 +40,6 @@ public class IndexerIOSparkMax implements IndexerIO {
 
     public void setIdle(boolean isBrake) {
         motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
-    }
-
-    public Measure<Velocity<Angle>> getVelocity() {
-        return RotationsPerSecond.of(encoder.getVelocity());
     }
 
     public double getVoltage() {

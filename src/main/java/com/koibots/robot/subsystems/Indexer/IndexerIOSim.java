@@ -6,9 +6,6 @@ package com.koibots.robot.subsystems.Indexer;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class IndexerIOSim implements IndexerIO {
@@ -33,10 +30,6 @@ public class IndexerIOSim implements IndexerIO {
     public void setVoltage(double voltage) {
         sim.setInputVoltage(voltage);
         volts = voltage;
-    }
-
-    public Measure<Velocity<Angle>> getVelocity() {
-        return RotationsPerSecond.of(sim.getAngularVelocityRPM());
     }
 
     public double getVoltage() {
