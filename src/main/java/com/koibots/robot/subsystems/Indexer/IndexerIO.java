@@ -10,16 +10,26 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
     @AutoLog
-    public static class IndexerIOInputs {
+    class IndexerIOInputs {
         public Measure<Velocity<Angle>> velocity = RevolutionsPerSecond.of(0);
-        public boolean mode = true;
+
+        public boolean isBrake = true;
+
+        public Measure<Voltage> voltage = Volts.of(0);
+        public Measure<Current> current = Amps.of(0);
     }
 
     void updateInputs(IndexerIOInputs inputs);
 
-    void setIdle(boolean isBrake);
+    default void setIdle(boolean isBrake) {};
 
-    void setVoltage(double volts);
+    void setVoltage(Measure<Voltage> volts);
 
-    double getVoltage();
+    Measure<Velocity<Angle>> getVelocity();
+
+    Measure<Voltage> getVoltage();
+
+    default boolean sensorTriggered() {
+        return false;
+    };
 }

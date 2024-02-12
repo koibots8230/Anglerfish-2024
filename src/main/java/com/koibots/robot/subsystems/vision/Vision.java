@@ -22,15 +22,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
 
-    private NetworkTable table = NetworkTableInstance.getDefault().getTable("fisheye");
-
     private final DoubleArraySubscriber[][] vecSubscribers;
     private final IntegerSubscriber[] idSubscribers;
 
     public Vision() {
         vecSubscribers = new DoubleArraySubscriber[4][2];
         idSubscribers = new IntegerSubscriber[4];
-
+        NetworkTable table = NetworkTableInstance.getDefault().getTable("fisheye");
         for (int a = 0; a < 4; a++) {
             idSubscribers[a] =
                     table.getIntegerTopic(VisionConstants.TOPIC_NAMES[a][2])

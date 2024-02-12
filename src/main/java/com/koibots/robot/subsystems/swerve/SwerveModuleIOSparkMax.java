@@ -35,6 +35,9 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveSparkMax.restoreFactoryDefaults();
         turnSparkMax.restoreFactoryDefaults();
 
+        driveSparkMax.setSmartCurrentLimit(10, 60, 5676);
+        turnSparkMax.setSmartCurrentLimit(10, 35, 5676);
+
         driveSparkMax.setCANTimeout(250);
         turnSparkMax.setCANTimeout(250);
 

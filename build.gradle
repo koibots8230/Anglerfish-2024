@@ -152,7 +152,7 @@ spotless {
     java {
         target fileTree('.') {
             include '**/*.java'
-            exclude '**/build/**', '**/build-*/**', 'src/main/java/com/koibots/robot/BuildConstants.java'
+            exclude '**/build/**', '**/build-*/**', 'src/main/java/com/koibots/robot/BuildConstants.java', 'src/main/java/com/koibots/robot/subsystems/shooter/Shooter.java', 'src/main/java/com/koibots/robot/subsystems/plopper/Plopper.java'
         }
         toggleOffOn()
         googleJavaFormat().aosp()

@@ -6,6 +6,7 @@ package com.koibots.robot.commands.autoAllign;
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.FieldConstants;
+import com.koibots.robot.Constants.PlopperConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.subsystems.Subsystems;
 import com.pathplanner.lib.commands.PathfindHolonomic;
@@ -68,6 +69,6 @@ public class AutoAllignToAmp extends ParallelCommandGroup {
                                                                         .relativeTo(goal)
                                                                         .getY(),
                                                                 2))
-                                        == Constants.PLOPPER_RANGE));
+                                        == PlopperConstants.PLOPPER_RANGE));
     }
 }

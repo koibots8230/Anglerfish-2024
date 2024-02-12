@@ -3,11 +3,16 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.subsystems.Subsystems.Elevator;
+import static com.koibots.robot.subsystems.Subsystems.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import com.koibots.robot.commands.ElevatorControl;
 import com.koibots.robot.commands.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /*
@@ -39,5 +44,18 @@ public class RobotContainer {
                                 () -> -controller.getRawAxis(4),
                                 () -> controller.getPOV(),
                                 () -> controller.getRawButton(1)));
+
+        Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
+
+        Intake.get()
+                .setDefaultCommand(
+                        new ConditionalCommand(
+                                new InstantCommand(
+                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(3000),
+                                        Intake.get()),
+                                new InstantCommand(
+                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(0),
+                                        Intake.get()),
+                                () -> controller.getRawButton(5)));
     }
 }

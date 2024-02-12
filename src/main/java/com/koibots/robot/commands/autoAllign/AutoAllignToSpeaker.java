@@ -4,6 +4,7 @@
 package com.koibots.robot.commands.autoAllign;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.RPM;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
@@ -46,7 +47,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
         translation =
                 new Translation2d(
                         Meters.of(
-                                Constants.SHOOTING_RANGE
+                                ShooterConstants.SHOOTING_RANGE
                                         * Math.cos(
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
@@ -58,7 +59,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                                                                         .relativeTo(speaker)
                                                                         .getY()))),
                         Meters.of(
-                                Constants.SHOOTING_RANGE
+                                ShooterConstants.SHOOTING_RANGE
                                         * Math.sin(
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
@@ -83,7 +84,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                         Subsystems.Swerve.get()),
                 new ConditionalCommand(
                         new InstantCommand(
-                                () -> Subsystems.Shooter.get().setSpeed(ShooterConstants.SPEED)),
+                                () -> Subsystems.Shooter.get().setVelocity(ShooterConstants.SPEED)),
                         null,
                         () ->
                                 Math.sqrt(
@@ -99,15 +100,15 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                                                                         .relativeTo(goal)
                                                                         .getY(),
                                                                 2))
-                                        < Constants.SHOOTING_RANGE),
+                                        < ShooterConstants.SHOOTING_RANGE),
                 new ConditionalCommand(
                         new InstantCommand(
                                 () ->
                                         Subsystems.Indexer.get()
-                                                .runIndexer(IndexerConstants.INDEXER_VOLTS)),
+                                                .setVelocity(IndexerConstants.SHOOT_SPEED)),
                         null,
                         () ->
                                 Subsystems.Shooter.get().getAverageSpeed()
-                                        >= ShooterConstants.SPEED));
+                                        >= ShooterConstants.DOUBLE_SPEED));
     }
 }

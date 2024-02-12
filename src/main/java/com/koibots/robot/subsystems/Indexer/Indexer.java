@@ -3,56 +3,62 @@
 
 package com.koibots.robot.subsystems.Indexer;
 
+import static edu.wpi.first.units.Units.*;
+
 import com.koibots.robot.Constants.IndexerConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
-    private IndexerIOInputsAutoLogged indexerInputs = new IndexerIOInputsAutoLogged();
-    private final SimpleMotorFeedforward feedforward;
-    private final PIDController pid;
-    private double desiredVolts;
+    private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+
+    private final SimpleMotorFeedforward feedforwardController;
+    private final PIDController feedbackController;
+
+    private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
-        feedforward =
-                (Robot.isReal())
-                        ? new SimpleMotorFeedforward(
-                                IndexerConstants.SPARKMAX_KS,
-                                IndexerConstants.SPARKMAX_KV,
-                                IndexerConstants.SPARKMAX_KA)
-                        : new SimpleMotorFeedforward(
-                                IndexerConstants.SIM_KS,
-                                IndexerConstants.SIM_KV,
-                                IndexerConstants.SIM_KA);
-        pid =
-                (Robot.isReal())
-                        ? new PIDController(
-                                IndexerConstants.SPARKMAX_KP,
-                                IndexerConstants.SPARKMAX_KI,
-                                IndexerConstants.SPARKMAX_KD)
-                        : new PIDController(
-                                IndexerConstants.SIM_KP,
-                                IndexerConstants.SIM_KI,
-                                IndexerConstants.SIM_KD);
-        desiredVolts = 0;
+        feedforwardController =
+                new SimpleMotorFeedforward(
+                        IndexerConstants.FEEDFORWARD_CONSTANTS.ks,
+                        IndexerConstants.FEEDFORWARD_CONSTANTS.kv);
+        feedbackController =
+                new PIDController(
+                        IndexerConstants.FEEDBACK_CONSTANTS.kP,
+                        IndexerConstants.FEEDBACK_CONSTANTS.kI,
+                        IndexerConstants.FEEDBACK_CONSTANTS.kD);
     }
 
     @Override
     public void periodic() {
-        io.updateInputs(indexerInputs);
+        io.updateInputs(inputs);
+        Logger.processInputs("Subsystems/Indexer", inputs);
+
         io.setVoltage(
-                pid.calculate(io.getVoltage(), desiredVolts) + feedforward.calculate(0, 0, 0));
+                Volts.of(
+                        Math.max(
+                                Math.min(
+                                        (feedbackController.calculate(
+                                                                inputs.velocity.in(RPM),
+                                                                setpoint.in(RPM))
+                                                        + feedforwardController.calculate(
+                                                                setpoint.in(RPM)))
+                                                * (12.0 / 11000.0),
+                                        12.0),
+                                -12.0)));
     }
 
-    public void runIndexer(double input) {
-        desiredVolts = input;
+    public void setVelocity(Measure<Velocity<Angle>> velocity) {
+        setpoint = velocity;
     }
 
-    public void indexerMode(boolean isBrake) {
-        io.setIdle(isBrake);
+    public void setIdleMode(boolean doBrake) {
+        io.setIdle(doBrake);
     }
 }

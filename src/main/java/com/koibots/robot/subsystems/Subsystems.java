@@ -4,7 +4,10 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.Indexer.Indexer;
-import com.koibots.robot.subsystems.shooter.ShooterSubsystem;
+import com.koibots.robot.subsystems.elevator.Elevator;
+import com.koibots.robot.subsystems.intake.Intake;
+import com.koibots.robot.subsystems.plopper.*;
+import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
 import java.util.function.Supplier;
@@ -18,20 +21,12 @@ public class Subsystems {
                 return swerveInstance;
             };
 
-    private static Vision visionInstance;
-    public static Supplier<Vision> Vision =
+    private static Intake intakeInstance;
+    public static Supplier<Intake> Intake =
             () -> {
-                visionInstance = new Vision();
-                Vision = () -> visionInstance;
-                return visionInstance;
-            };
-
-    private static ShooterSubsystem shooterInstance;
-    public static Supplier<ShooterSubsystem> Shooter =
-            () -> {
-                shooterInstance = new ShooterSubsystem();
-                Shooter = () -> shooterInstance;
-                return shooterInstance;
+                intakeInstance = new Intake();
+                Intake = () -> intakeInstance;
+                return intakeInstance;
             };
 
     private static Indexer indexerInstance;
@@ -40,5 +35,45 @@ public class Subsystems {
                 indexerInstance = new Indexer();
                 Indexer = () -> indexerInstance;
                 return indexerInstance;
+            };
+
+    private static Shooter shooterInstance;
+    public static Supplier<Shooter> Shooter =
+            () -> {
+                shooterInstance = new Shooter();
+                Shooter = () -> shooterInstance;
+                return shooterInstance;
+            };
+
+    private static Elevator elevatorInstance;
+    public static Supplier<Elevator> Elevator =
+            () -> {
+                elevatorInstance = new Elevator();
+                Elevator = () -> elevatorInstance;
+                return elevatorInstance;
+            };
+
+    private static Vision visionInstance;
+    public static Supplier<Vision> Vision =
+            () -> {
+                visionInstance = new Vision();
+                Vision = () -> visionInstance;
+                return visionInstance;
+            };
+
+    private static PlopperPivot plopperPivotInstance;
+    public static Supplier<PlopperPivot> PlopperPivot =
+            () -> {
+                plopperPivotInstance = new PlopperPivot();
+                PlopperPivot = () -> plopperPivotInstance;
+                return plopperPivotInstance;
+            };
+
+    private static Plopper plopperInstance;
+    public static Supplier<Plopper> Plopper =
+            () -> {
+                plopperInstance = new Plopper();
+                Plopper = () -> plopperInstance;
+                return plopperInstance;
             };
 }
