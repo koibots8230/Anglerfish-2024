@@ -3,17 +3,19 @@
 
 package com.koibots.robot;
 
-import static com.koibots.robot.subsystems.Subsystems.Elevator;
-import static com.koibots.robot.subsystems.Subsystems.Intake;
-import static com.koibots.robot.subsystems.Subsystems.Swerve;
+import static com.koibots.robot.subsystems.Subsystems.*;
 
+import java.util.function.BooleanSupplier;
 import com.koibots.robot.commands.ElevatorControl;
 import com.koibots.robot.commands.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,5 +59,29 @@ public class RobotContainer {
                                         () -> Intake.get().setIntakeVoltsWithTargetRPM(0),
                                         Intake.get()),
                                 () -> controller.getRawButton(5)));
+
+        LEDs.get()
+                .setDefaultCommand(
+                        new ConditionalCommand(
+                                new InstantCommand(
+                                        () -> LEDs.get().writeSPI(new byte[] {0x00})),
+                                new ConditionalCommand(
+                                        new InstantCommand(
+                                                () -> LEDs.get().writeSPI(new byte[] {0x01})
+                                        ),new ConditionalCommand(
+                                                new InstantCommand(
+                                                        () -> LEDs.get().writeSPI(new byte[] {0x10})
+                                                ), new ConditionalCommand(
+                                                        new InstantCommand(
+                                                                () -> LEDs.get().writeSPI(new byte[] {0x11})
+                                                        ), new InstantCommand(), 
+                                                        () -> controller.getRawButton(4)), 
+                                                () -> controller.getRawButton(3)
+                                        ),
+                                        () -> controller.getRawButton(2)
+                                )
+                                ,
+                                () -> controller.getRawButton(1)));
+
     }
 }

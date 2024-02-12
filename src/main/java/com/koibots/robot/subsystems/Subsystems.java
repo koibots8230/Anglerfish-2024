@@ -4,6 +4,7 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.Indexer.Indexer;
+import com.koibots.robot.subsystems.LED.LEDs;
 import com.koibots.robot.subsystems.elevator.Elevator;
 import com.koibots.robot.subsystems.intake.Intake;
 import com.koibots.robot.subsystems.plopper.Plopper;
@@ -67,5 +68,13 @@ public class Subsystems {
                 plopperInstance = new Plopper();
                 Plopper = () -> plopperInstance;
                 return plopperInstance;
+            };
+
+    private static LEDs ledsInstance;
+    public static Supplier<LEDs> LEDs =
+            () -> {
+                ledsInstance = new LEDs();
+                LEDs = () -> ledsInstance;
+                return ledsInstance;
             };
 }
