@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -24,64 +23,76 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    GenericHID controller;
+        GenericHID controller;
 
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
-        controller = new GenericHID(0);
-    }
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer() {
+                controller = new GenericHID(0);
+        }
 
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
-     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
-     * {@link JoystickButton}.
-     */
-    public void configureButtonBindings() {
-        Swerve.get()
-                .setDefaultCommand(
-                        new FieldOrientedDrive(
-                                () -> -controller.getRawAxis(1),
-                                () -> -controller.getRawAxis(0),
-                                () -> -controller.getRawAxis(4),
-                                () -> controller.getPOV(),
-                                () -> controller.getRawButton(1)));
+        /**
+         * Use this method to define your button->command mappings. Buttons can be
+         * created by
+         * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+         * subclasses ({@link
+         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+         * passing it to a
+         * {@link JoystickButton}.
+         */
+        public void configureButtonBindings() {
+                Swerve.get()
+                                .setDefaultCommand(
+                                                new FieldOrientedDrive(
+                                                                () -> -controller.getRawAxis(1),
+                                                                () -> -controller.getRawAxis(0),
+                                                                () -> -controller.getRawAxis(4),
+                                                                () -> controller.getPOV(),
+                                                                () -> controller.getRawButton(1)));
 
-        Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
+                Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
 
-        Intake.get()
-                .setDefaultCommand(
-                        new ConditionalCommand(
-                                new InstantCommand(
-                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(3000),
-                                        Intake.get()),
-                                new InstantCommand(
-                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(0),
-                                        Intake.get()),
-                                () -> controller.getRawButton(5)));
+                Intake.get()
+                                .setDefaultCommand(
+                                                new ConditionalCommand(
+                                                                new InstantCommand(
+                                                                                () -> Intake.get()
+                                                                                                .setIntakeVoltsWithTargetRPM(
+                                                                                                                3000),
+                                                                                Intake.get()),
+                                                                new InstantCommand(
+                                                                                () -> Intake.get()
+                                                                                                .setIntakeVoltsWithTargetRPM(
+                                                                                                                0),
+                                                                                Intake.get()),
+                                                                () -> controller.getRawButton(5)));
 
-        LEDs.get()
-                .setDefaultCommand(
-                        new ConditionalCommand(
-                                new InstantCommand(
-                                        () -> LEDs.get().writeSPI(new byte[] {0x00})),
-                                new ConditionalCommand(
-                                        new InstantCommand(
-                                                () -> LEDs.get().writeSPI(new byte[] {0x01})
-                                        ),new ConditionalCommand(
-                                                new InstantCommand(
-                                                        () -> LEDs.get().writeSPI(new byte[] {0x10})
-                                                ), new ConditionalCommand(
-                                                        new InstantCommand(
-                                                                () -> LEDs.get().writeSPI(new byte[] {0x11})
-                                                        ), new InstantCommand(), 
-                                                        () -> controller.getRawButton(4)), 
-                                                () -> controller.getRawButton(3)
-                                        ),
-                                        () -> controller.getRawButton(2)
-                                )
-                                ,
-                                () -> controller.getRawButton(1)));
+                LEDs.get()
+                                .setDefaultCommand(
+                                                new ConditionalCommand(
+                                                                new InstantCommand(
+                                                                                () -> LEDs.get().writeSPI(
+                                                                                                new byte[] { 0x00 })),
+                                                                new ConditionalCommand(
+                                                                                new InstantCommand(
+                                                                                                () -> LEDs.get().writeSPI(
+                                                                                                                new byte[] { 0x01 })),
+                                                                                new ConditionalCommand(
+                                                                                                new InstantCommand(
+                                                                                                                () -> LEDs.get().writeSPI(
+                                                                                                                                new byte[] { 0x10 })),
+                                                                                                new ConditionalCommand(
+                                                                                                                new InstantCommand(
+                                                                                                                                () -> LEDs.get().writeSPI(
+                                                                                                                                                new byte[] { 0x11 })),
+                                                                                                                new InstantCommand(),
+                                                                                                                () -> controller.getRawButton(
+                                                                                                                                4)),
+                                                                                                () -> controller.getRawButton(
+                                                                                                                3)),
+                                                                                () -> controller.getRawButton(2)),
+                                                                () -> controller.getRawButton(1)));
 
-    }
+        }
 }
