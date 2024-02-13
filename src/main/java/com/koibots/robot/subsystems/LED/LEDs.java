@@ -13,6 +13,9 @@ public class LEDs extends SubsystemBase {
     }
 
     public void writeSPI(byte[] bytes) {
+        System.out.println("Write ran");
+        System.out.println(bytes.toString());
+        
         spi.write(bytes, Array.getLength(bytes));
     }
 

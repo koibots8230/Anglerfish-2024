@@ -82,17 +82,18 @@ public class RobotContainer {
                                                                                                 new InstantCommand(
                                                                                                                 () -> LEDs.get().writeSPI(
                                                                                                                                 new byte[] { 0x10 })),
+                                                                                                                                
                                                                                                 new ConditionalCommand(
                                                                                                                 new InstantCommand(
                                                                                                                                 () -> LEDs.get().writeSPI(
                                                                                                                                                 new byte[] { 0x11 })),
                                                                                                                 new InstantCommand(),
                                                                                                                 () -> controller.getRawButton(
-                                                                                                                                4)),
+                                                                                                                                3)),
                                                                                                 () -> controller.getRawButton(
-                                                                                                                3)),
-                                                                                () -> controller.getRawButton(2)),
-                                                                () -> controller.getRawButton(1)));
+                                                                                                                2)),
+                                                                                () -> controller.getRawButton(1)),
+                                                                () -> controller.getRawButton(0)));
 
         }
 }
