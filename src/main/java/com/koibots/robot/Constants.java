@@ -192,7 +192,7 @@ public class Constants {
         // =================================== Positions ===================================
 
         public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> HANDOFF_POSITION = Inches.of(0); // TODO: Get
+        public static final Measure<Distance> LOAD_POSITION = Inches.of(0); // TODO: Get
         public static final Measure<Distance> SHOOT_POSITION = Inches.of(0); // TODO: Get
 
         public static final Measure<Distance> ALLOWED_ERROR = Meters.of(0.005);
@@ -235,7 +235,8 @@ public class Constants {
                 new FeedforwardConstantsIO(0, 0, 0, 0);
 
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
-        public static final int MINIMUM_VOLTAGE = 0;
+
+        public static final Measure<Velocity<Angle>> TARGET_VELOCITY = RPM.of(3000);
     }
 
     public static class IndexerConstants {

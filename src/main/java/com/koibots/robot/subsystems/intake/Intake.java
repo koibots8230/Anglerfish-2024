@@ -4,13 +4,13 @@
 package com.koibots.robot.subsystems.intake;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.IntakeConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -38,20 +38,15 @@ public class Intake extends SubsystemBase {
         io.setVoltage(
                 Volts.of(
                         intakeFeedback.calculate(
-                                        inputs.voltage.in(Volts),
-                                        Math.max(
-                                                intakeVoltsSetPoint,
-                                                IntakeConstants.MINIMUM_VOLTAGE) // wonky?
-                                        )
-                                + intakeFeedForward.calculate(
-                                        Math.max(
-                                                intakeVoltsSetPoint,
-                                                IntakeConstants.MINIMUM_VOLTAGE))));
+                                inputs.voltage.in(Volts),
+                                intakeVoltsSetPoint
+                                        + intakeFeedForward.calculate(intakeVoltsSetPoint))));
     }
 
-    public void setIntakeVoltsWithTargetRPM(double targetRPM) {
+    public void setVelocity(Measure<Velocity<Angle>> velocity) {
         double robotSpeed = Swerve.get().getModuleStates()[0].speedMetersPerSecond * 60;
-        double targetDistancePerMinute = targetRPM * IntakeConstants.WHEELS.circumfrence.in(Meters);
+        double targetDistancePerMinute =
+                velocity.in(RPM) * IntakeConstants.WHEELS.circumfrence.in(Meters);
         double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
 
         double trueRPM = trueDistancePerMinute / IntakeConstants.WHEELS.circumfrence.in(Meters);

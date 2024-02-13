@@ -1,7 +1,7 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.commands;
+package com.koibots.robot.commands.Swerve;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.math.kinematics.SwerveDriveKinematics.desaturateWheelSpeeds;

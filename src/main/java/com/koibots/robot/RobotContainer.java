@@ -5,10 +5,13 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.Elevator;
 import static com.koibots.robot.subsystems.Subsystems.Intake;
+import static com.koibots.robot.subsystems.Subsystems.PlopperPivot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
+import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.commands.ElevatorControl;
-import com.koibots.robot.commands.FieldOrientedDrive;
+import com.koibots.robot.Constants.ElevatorConstants;
+import com.koibots.robot.Constants.PlopperPivotConstants;
+import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -45,17 +48,26 @@ public class RobotContainer {
                                 () -> controller.getPOV(),
                                 () -> controller.getRawButton(1)));
 
-        Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
-
         Intake.get()
                 .setDefaultCommand(
                         new ConditionalCommand(
                                 new InstantCommand(
-                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(3000),
-                                        Intake.get()),
+                                        () -> Intake.get().setVelocity(RPM.of(3000)), Intake.get()),
                                 new InstantCommand(
-                                        () -> Intake.get().setIntakeVoltsWithTargetRPM(0),
-                                        Intake.get()),
+                                        () -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
                                 () -> controller.getRawButton(5)));
+
+        Elevator.get()
+                .setDefaultCommand(
+                        new InstantCommand(
+                                () -> Elevator.get().setPostion(ElevatorConstants.LOAD_POSITION),
+                                Elevator.get()));
+        PlopperPivot.get()
+                .setDefaultCommand(
+                        new InstantCommand(
+                                () ->
+                                        PlopperPivot.get()
+                                                .setPosition(PlopperPivotConstants.LOAD_POSITION),
+                                PlopperPivot.get()));
     }
 }

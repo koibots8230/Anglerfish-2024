@@ -61,4 +61,8 @@ public class Indexer extends SubsystemBase {
     public void setIdleMode(boolean doBrake) {
         io.setIdle(doBrake);
     }
+
+    public boolean sensorTriggered() {
+        return io.sensorTriggered();
+    }
 }

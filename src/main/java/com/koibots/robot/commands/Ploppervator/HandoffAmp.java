@@ -1,11 +1,12 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.commands;
+package com.koibots.robot.commands.Ploppervator;
 
 import static com.koibots.robot.subsystems.Subsystems.*;
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.IndexerConstants;
 import com.koibots.robot.Constants.PlopperPivotConstants;
@@ -21,11 +22,11 @@ public class HandoffAmp extends SequentialCommandGroup {
         addCommands(
                 new ConditionalCommand(
                         new InstantCommand(),
-                        new SetPlopperPosition(true),
+                        new SetPloppervatorPosition(PloppervatorPosition.Amp),
                         () ->
                                 ((Elevator.get().atSetpoint()
                                                 && Elevator.get().getSetpoint()
-                                                        == ElevatorConstants.HANDOFF_POSITION)
+                                                        == ElevatorConstants.LOAD_POSITION)
                                         && (PlopperPivot.get().atSetpoint()
                                                 && PlopperPivot.get().getSetpoint()
                                                         == PlopperPivotConstants.LOAD_POSITION))),

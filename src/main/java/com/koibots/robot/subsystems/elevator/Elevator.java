@@ -104,13 +104,9 @@ public class Elevator extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.position.in(Meters)
-                        >= ElevatorConstants.HANDOFF_POSITION
-                                .minus(ElevatorConstants.ALLOWED_ERROR)
-                                .in(Meters)
+                        >= setpoint.minus(ElevatorConstants.ALLOWED_ERROR).in(Meters)
                 && inputs.position.in(Meters)
-                        <= ElevatorConstants.HANDOFF_POSITION
-                                .plus(ElevatorConstants.ALLOWED_ERROR)
-                                .in(Meters);
+                        <= setpoint.plus(ElevatorConstants.ALLOWED_ERROR).in(Meters);
     }
 
     public Measure<Distance> getSetpoint() {
