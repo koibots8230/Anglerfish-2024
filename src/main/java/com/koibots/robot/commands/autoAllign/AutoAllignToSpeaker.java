@@ -6,7 +6,6 @@ package com.koibots.robot.commands.autoAllign;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.FieldConstants;
 import com.koibots.robot.Constants.IndexerConstants;
@@ -47,7 +46,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
         translation =
                 new Translation2d(
                         Meters.of(
-                                ShooterConstants.SHOOTING_RANGE
+                                ShooterConstants.SHOOTING_RANGE.in(Meters)
                                         * Math.cos(
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
@@ -59,7 +58,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                                                                         .relativeTo(speaker)
                                                                         .getY()))),
                         Meters.of(
-                                ShooterConstants.SHOOTING_RANGE
+                                ShooterConstants.SHOOTING_RANGE.in(Meters)
                                         * Math.sin(
                                                 Math.atan(
                                                         Subsystems.Swerve.get()
@@ -100,7 +99,7 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                                                                         .relativeTo(goal)
                                                                         .getY(),
                                                                 2))
-                                        < ShooterConstants.SHOOTING_RANGE),
+                                        < ShooterConstants.SHOOTING_RANGE.in(Meters)),
                 new ConditionalCommand(
                         new InstantCommand(
                                 () ->
@@ -109,6 +108,6 @@ public class AutoAllignToSpeaker extends ParallelCommandGroup {
                         null,
                         () ->
                                 Subsystems.Shooter.get().getAverageSpeed()
-                                        >= ShooterConstants.DOUBLE_SPEED));
+                                        >= ShooterConstants.SPEED.in(RPM)));
     }
 }

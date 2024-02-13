@@ -62,7 +62,7 @@ public class Constants {
                 public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(600).times(10);
                 public static final Measure<Velocity<Angle>> PLOP_SPEED = RPM.of(400).times(10);
 
-                public static final double PLOPPER_RANGE = 0; //temp
+                public static final Measure<Distance> PLOPPER_RANGE = Meters.of(0);
             }
         
             public static final double DEADBAND = 0.025;
@@ -170,9 +170,8 @@ public class Constants {
         public static final double kS = 0;
         public static final double kV = 0;
 
-        public static final Measure<Velocity<Angle>> SPEED = RPM.of(0); //temp
-        public static final double DOUBLE_SPEED = 0; //temp
-        public static final double SHOOTING_RANGE = 0; //temp//
+        public static final Measure<Velocity<Angle>> SPEED = RPM.of(0);
+        public static final Measure<Distance> SHOOTING_RANGE = Meters.of(0);
     }
 
     public static class ElevatorConstants {
