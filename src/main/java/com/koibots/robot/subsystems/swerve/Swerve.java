@@ -11,6 +11,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
@@ -109,7 +110,29 @@ public class Swerve extends SubsystemBase {
         odometry.addVisionMeasurement(measurement, timestamp);
     }
 
-    public void driveRobotRelative(ChassisSpeeds speeds) {}
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        ChassisSpeeds.discretize(speeds, 0.02);
+
+        SwerveModuleState[] targetModuleStates =
+                DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+                targetModuleStates, DriveConstants.MAX_LINEAR_SPEED);
+
+        if (speeds.vxMetersPerSecond == 0.0
+                && speeds.vyMetersPerSecond == 0.0
+                && speeds.omegaRadiansPerSecond == 0) {
+            var currentStates = this.getModuleStates();
+            targetModuleStates[0] = new SwerveModuleState(0, currentStates[0].angle);
+            targetModuleStates[1] = new SwerveModuleState(0, currentStates[1].angle);
+            targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
+            targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
+        }
+
+        this.setModuleStates(targetModuleStates);
+
+        this.setModuleStates(DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds));
+    }
 
     public Rotation2d getGyroAngle() {
         return gyroInputs.yawPosition;
@@ -134,7 +157,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public ChassisSpeeds getRelativeSpeeds() {
-        return new ChassisSpeeds(); // TODO: Implement this
+        return DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(this.getModuleStates());
     }
 
     public void resetOdometry(Pose2d pose) {

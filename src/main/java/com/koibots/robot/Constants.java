@@ -29,6 +29,10 @@ public class Constants {
         public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
                 RadiansPerSecond.of(2 * PI);
+        public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
+                MetersPerSecondPerSecond.of(4);
+        public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
+                RadiansPerSecond.of(Math.PI).per(Second);
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS =
                 new SwerveDriveKinematics(

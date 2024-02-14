@@ -5,6 +5,7 @@ package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.function.Supplier;
 
 public class Subsystems {
@@ -13,6 +14,7 @@ public class Subsystems {
             () -> {
                 swerveInstance = new Swerve();
                 Swerve = () -> swerveInstance;
+                SmartDashboard.putData("Swerve", swerveInstance);
                 return swerveInstance;
             };
 

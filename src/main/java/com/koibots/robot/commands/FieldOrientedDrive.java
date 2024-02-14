@@ -4,7 +4,6 @@
 package com.koibots.robot.commands;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
-import static edu.wpi.first.math.kinematics.SwerveDriveKinematics.desaturateWheelSpeeds;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
@@ -14,7 +13,6 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,7 +26,6 @@ public class FieldOrientedDrive extends Command {
     DoubleSupplier vThetaSupplier;
     DoubleSupplier angleSupplier;
     BooleanSupplier crossSupplier;
-    double previousTimestamp;
 
     ProfiledPIDController angleAlignmentController;
 
@@ -59,11 +56,6 @@ public class FieldOrientedDrive extends Command {
         SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
         addRequirements(Swerve.get());
-    }
-
-    @Override
-    public void initialize() {
-        previousTimestamp = Logger.getRealTimestamp();
     }
 
     @Override
@@ -111,28 +103,7 @@ public class FieldOrientedDrive extends Command {
                                     * DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                             Swerve.get().getEstimatedPose().getRotation());
 
-            double periodSeconds = Logger.getRealTimestamp() - previousTimestamp;
-
-            ChassisSpeeds.discretize(speeds, periodSeconds);
-
-            SwerveModuleState[] targetModuleStates =
-                    DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
-
-            desaturateWheelSpeeds(targetModuleStates, DriveConstants.MAX_LINEAR_SPEED);
-
-            if (speeds.vxMetersPerSecond == 0.0
-                    && speeds.vyMetersPerSecond == 0.0
-                    && speeds.omegaRadiansPerSecond == 0) {
-                var currentStates = Swerve.get().getModuleStates();
-                targetModuleStates[0] = new SwerveModuleState(0, currentStates[0].angle);
-                targetModuleStates[1] = new SwerveModuleState(0, currentStates[1].angle);
-                targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
-                targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
-            }
-
-            previousTimestamp = Logger.getRealTimestamp();
-
-            Swerve.get().setModuleStates(targetModuleStates);
+            Swerve.get().driveRobotRelative(speeds);
         } else { // Set Cross
             Swerve.get().setCross();
         }

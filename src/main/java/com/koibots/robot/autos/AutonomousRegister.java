@@ -21,9 +21,6 @@ public class AutonomousRegister {
             new Alert("No Autonomous Routine Selected", Alert.AlertType.ERROR);
 
     static {
-        autoChooser = new SendableChooser<>();
-        SmartDashboard.putData("Auto Chooser", autoChooser);
-
         AutoBuilder.configureHolonomic(
                 Swerve.get()::getEstimatedPose,
                 Swerve.get()::resetOdometry,
@@ -37,9 +34,13 @@ public class AutonomousRegister {
                         new ReplanningConfig()),
                 () -> {
                     var alliance = DriverStation.getAlliance();
-                    return alliance.filter(value -> value == DriverStation.Alliance.Red).isPresent();
+                    return alliance.filter(value -> value == DriverStation.Alliance.Red)
+                            .isPresent();
                 },
                 Swerve.get());
+
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 
     public static void registerAutoRoutine(String name, Command auto) {
