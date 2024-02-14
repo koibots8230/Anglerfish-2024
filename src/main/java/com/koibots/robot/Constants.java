@@ -9,14 +9,14 @@ import static java.lang.StrictMath.PI;
 import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.LinearQuadraticRegulator;
-import edu.wpi.first.math.estimator.KalmanFilter;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.LinearQuadraticRegulator;
+import edu.wpi.first.math.estimator.KalmanFilter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -35,37 +35,37 @@ import edu.wpi.first.units.Velocity;
 
 public class Constants {
 
-        public static class PlopperPivotConstants {
-                public static final int MOTOR_PORT = 0;
-                public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
-        
-                public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                        new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-                public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                        new FeedforwardConstantsIO(0, 0, 0, 0);
-        
-                public static final Measure<Angle> AMP_POSITION = Degrees.of(100);
-                public static final Measure<Angle> LOAD_POSITION = Degrees.of(0);
-        
-                public static final Measure<Angle> ALLOWED_ERROR = Degrees.of(5);
-            }
-        
-            public static class PlopperConstants {
-                public static final int MOTOR_PORT = 0;
-                public static final int SWITCH_PORT = 0;
-        
-                public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                        new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-                public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                        new FeedforwardConstantsIO(0, 0, 0, 0);
-        
-                public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(600).times(10);
-                public static final Measure<Velocity<Angle>> PLOP_SPEED = RPM.of(400).times(10);
+    public static class PlopperPivotConstants {
+        public static final int MOTOR_PORT = 0;
+        public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
 
-                public static final Measure<Distance> PLOPPER_RANGE = Meters.of(0);
-            }
-        
-            public static final double DEADBAND = 0.025;
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
+
+        public static final Measure<Angle> AMP_POSITION = Degrees.of(100);
+        public static final Measure<Angle> LOAD_POSITION = Degrees.of(0);
+
+        public static final Measure<Angle> ALLOWED_ERROR = Degrees.of(5);
+    }
+
+    public static class PlopperConstants {
+        public static final int MOTOR_PORT = 0;
+        public static final int SWITCH_PORT = 0;
+
+        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 0, 0, 0);
+
+        public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(600).times(10);
+        public static final Measure<Velocity<Angle>> PLOP_SPEED = RPM.of(400).times(10);
+
+        public static final Measure<Distance> PLOPPER_RANGE = Meters.of(0);
+    }
+
+    public static final double DEADBAND = 0.025;
 
     public static final double kWheelDiameterMeters = 0;
     private static final int kDrivingMotorReduction = 0;
@@ -96,7 +96,6 @@ public class Constants {
                                 ROBOT_LENGTH_METERS.divide(-2),
                                 ROBOT_WIDTH_METERS.divide(-2)) // Back Right
                         );
-
 
         // TODO: make sure this correct for competition bot
         private static final int kDrivingMotorPinionTeeth = 13;
@@ -156,11 +155,10 @@ public class Constants {
     public static final double TURNING_ENCODER_VELOCITY_FACTOR =
             (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction)
-                        / 60.0; // meters per second
+    public static final double DRIVING_ENCODER_POSITION_FACTOR =
+            (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+            ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction) / 60.0; // meters per second
 
     public static class ShooterConstants {
         public static final int shooterMotor1 = 0;
@@ -299,5 +297,5 @@ public class Constants {
         public static final double SPEAKER_Y = 0.0;
         public static final double AMP_X = 0.0;
         public static final double AMP_Y = 0.0;
-  }
+    }
 }

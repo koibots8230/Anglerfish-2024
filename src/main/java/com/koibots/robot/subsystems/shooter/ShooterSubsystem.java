@@ -52,4 +52,3 @@ public class ShooterSubsystem extends SubsystemBase {
         return (encoder1.getVelocity() + encoder2.getVelocity()) / 2;
     }
 }
-

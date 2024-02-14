@@ -4,6 +4,7 @@
 package com.koibots.robot.commands.autoAllign;
 
 import static edu.wpi.first.units.Units.Meters;
+
 import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.FieldConstants;
 import com.koibots.robot.Constants.PlopperConstants;
@@ -24,7 +25,10 @@ public class AutoAllignToAmp extends ParallelCommandGroup {
     Rotation2d rotation;
 
     public AutoAllignToAmp() {
-        amp = new Pose2d(new Translation2d(FieldConstants.AMP_X, FieldConstants.AMP_Y), new Rotation2d());
+        amp =
+                new Pose2d(
+                        new Translation2d(FieldConstants.AMP_X, FieldConstants.AMP_Y),
+                        new Rotation2d());
         rotation =
                 new Rotation2d(
                         Math.atan(
@@ -51,8 +55,7 @@ public class AutoAllignToAmp extends ParallelCommandGroup {
                         0.0,
                         Subsystems.Swerve.get()),
                 new ConditionalCommand(
-                        new InstantCommand(
-                        null),
+                        new InstantCommand(null),
                         null,
                         () ->
                                 Math.sqrt(

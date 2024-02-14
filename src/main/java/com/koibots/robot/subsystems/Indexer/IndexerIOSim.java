@@ -17,6 +17,7 @@ public class IndexerIOSim implements IndexerIO {
     private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
 
     private Measure<Voltage> volts = Volts.of(0);
+
     public IndexerIOSim() {
         volts = Volts.of(0);
     }
