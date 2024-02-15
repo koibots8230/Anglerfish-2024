@@ -73,20 +73,20 @@ public class RobotContainer {
                                                 new ConditionalCommand(
                                                                 new InstantCommand(
                                                                                 () -> LEDs.get().writeSPI(
-                                                                                                new byte[] { 0x00 })),
+                                                                                                new byte[] { 0x00 }), LEDs.get()),
                                                                 new ConditionalCommand(
                                                                                 new InstantCommand(
                                                                                                 () -> LEDs.get().writeSPI(
-                                                                                                                new byte[] { 0x01 })),
+                                                                                                                new byte[] { 0x01 }), LEDs.get()),
                                                                                 new ConditionalCommand(
                                                                                                 new InstantCommand(
                                                                                                                 () -> LEDs.get().writeSPI(
-                                                                                                                                new byte[] { 0x10 })),
+                                                                                                                                new byte[] { 0x10 }), LEDs.get()),
                                                                                                                                 
                                                                                                 new ConditionalCommand(
                                                                                                                 new InstantCommand(
                                                                                                                                 () -> LEDs.get().writeSPI(
-                                                                                                                                                new byte[] { 0x11 })),
+                                                                                                                                                new byte[] { 0x11 }), LEDs.get()),
                                                                                                                 new InstantCommand(),
                                                                                                                 () -> controller.getRawButton(
                                                                                                                                 3)),
