@@ -76,9 +76,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
         driveSparkMax.setCANTimeout(0);
         turnSparkMax.setCANTimeout(0);
-
-        driveSparkMax.burnFlash();
-        turnSparkMax.burnFlash();
     }
 
     @Override

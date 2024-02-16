@@ -3,15 +3,10 @@
 
 package com.koibots.robot;
 
-import static com.koibots.robot.subsystems.Subsystems.Elevator;
 import static com.koibots.robot.subsystems.Subsystems.Intake;
-import static com.koibots.robot.subsystems.Subsystems.PlopperPivot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
-import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Constants.ElevatorConstants;
-import com.koibots.robot.Constants.PlopperPivotConstants;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -68,7 +63,8 @@ public class RobotContainer {
         //                 new InstantCommand(
         //                         () ->
         //                                 PlopperPivot.get()
-        //                                         .setPosition(PlopperPivotConstants.LOAD_POSITION),
+        //
+        // .setPosition(PlopperPivotConstants.LOAD_POSITION),
         //                         PlopperPivot.get()));
     }
 }

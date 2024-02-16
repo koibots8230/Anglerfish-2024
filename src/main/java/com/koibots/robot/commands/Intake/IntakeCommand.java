@@ -15,11 +15,11 @@ public class IntakeCommand extends SequentialCommandGroup {
 
     public IntakeCommand() {
         addCommands(
-            // TODO: Path to note command here
-            new ParallelRaceGroup(
-                new StartEndCommand(
-                        () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
-                        () -> Intake.get().setVelocity(RPM.of(0))),
-                new RunIndexer()));
+                // TODO: Path to note command here
+                new ParallelRaceGroup(
+                        new StartEndCommand(
+                                () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                                () -> Intake.get().setVelocity(RPM.of(0))),
+                        new RunIndexer()));
     }
 }

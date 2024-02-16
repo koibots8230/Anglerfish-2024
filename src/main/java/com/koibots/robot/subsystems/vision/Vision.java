@@ -92,11 +92,11 @@ public class Vision extends SubsystemBase {
                         + 90;
 
         Rotation3d rot = new Rotation3d(rotMatrix.transpose().times(-1));
-        
+
         return new Pose2d(
                 camPose.getX() + (hypotenuse * Math.cos(hypangle)),
                 camPose.getY() + (hypotenuse * Math.sin(hypangle)),
-                new Rotation2d(rot.getY())); //TODO: Double check where 0 is on this vs gyro
+                new Rotation2d(rot.getY())); // TODO: Double check where 0 is on this vs gyro
     }
 
     @Override
