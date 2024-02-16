@@ -21,9 +21,9 @@ public class PlopperIOSparkMax implements PlopperIO {
     private final DigitalInput noteSwitch;
 
     public PlopperIOSparkMax() {
-        plopperMotor = new CANSparkMax(0, MotorType.kBrushless);
+        plopperMotor = new CANSparkMax(PlopperConstants.MOTOR_PORT, MotorType.kBrushless);
         plopperMotor.setIdleMode(IdleMode.kBrake);
-        plopperMotor.setSmartCurrentLimit(10, 30, 11000);
+        plopperMotor.setSmartCurrentLimit(10, 35, 11000);
 
         plopperEncoder = plopperMotor.getEncoder();
 

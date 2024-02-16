@@ -20,7 +20,7 @@ public class IntakeIOSparkMax implements IntakeIO {
 
         intakeMotor = new CANSparkMax(IntakeConstants.MOTOR_PORT, MotorType.kBrushless);
 
-        intakeMotor.setSmartCurrentLimit(10, 60, 5670);
+        intakeMotor.setSmartCurrentLimit(40, 60, 5670);
 
         intakeEncoder = intakeMotor.getEncoder();
     }

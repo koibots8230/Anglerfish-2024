@@ -21,13 +21,13 @@ public class ShooterIOSparkMax implements ShooterIO {
     protected ShooterIOSparkMax() {
         leftMotor =
                 new CANSparkMax(
-                        ShooterConstants.shooterMotor1, CANSparkLowLevel.MotorType.kBrushless);
+                        ShooterConstants.RIGHT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
         rightMotor =
                 new CANSparkMax(
-                        ShooterConstants.shooterMotor2, CANSparkLowLevel.MotorType.kBrushless);
+                        ShooterConstants.LEFT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftMotor.setSmartCurrentLimit(10, 60, 5676);
-        rightMotor.setSmartCurrentLimit(10, 60, 5676);
+        leftMotor.setSmartCurrentLimit(20, 60, 5676);
+        rightMotor.setSmartCurrentLimit(20, 60, 5676);
 
         leftEncoder = leftMotor.getEncoder();
         rightEncoder = rightMotor.getEncoder();

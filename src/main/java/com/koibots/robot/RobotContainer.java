@@ -8,6 +8,7 @@ import static com.koibots.robot.subsystems.Subsystems.Intake;
 import static com.koibots.robot.subsystems.Subsystems.PlopperPivot;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.PlopperPivotConstants;
@@ -52,22 +53,22 @@ public class RobotContainer {
                 .setDefaultCommand(
                         new ConditionalCommand(
                                 new InstantCommand(
-                                        () -> Intake.get().setVelocity(RPM.of(3000)), Intake.get()),
+                                        () -> Intake.get().setVoltage(Volts.of(12)), Intake.get()),
                                 new InstantCommand(
-                                        () -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+                                        () -> Intake.get().setVoltage(Volts.of(0)), Intake.get()),
                                 () -> controller.getRawButton(5)));
 
-        Elevator.get()
-                .setDefaultCommand(
-                        new InstantCommand(
-                                () -> Elevator.get().setPostion(ElevatorConstants.LOAD_POSITION),
-                                Elevator.get()));
-        PlopperPivot.get()
-                .setDefaultCommand(
-                        new InstantCommand(
-                                () ->
-                                        PlopperPivot.get()
-                                                .setPosition(PlopperPivotConstants.LOAD_POSITION),
-                                PlopperPivot.get()));
+        // Elevator.get()
+        //         .setDefaultCommand(
+        //                 new InstantCommand(
+        //                         () -> Elevator.get().setPostion(ElevatorConstants.LOAD_POSITION),
+        //                         Elevator.get()));
+        // PlopperPivot.get()
+        //         .setDefaultCommand(
+        //                 new InstantCommand(
+        //                         () ->
+        //                                 PlopperPivot.get()
+        //                                         .setPosition(PlopperPivotConstants.LOAD_POSITION),
+        //                         PlopperPivot.get()));
     }
 }

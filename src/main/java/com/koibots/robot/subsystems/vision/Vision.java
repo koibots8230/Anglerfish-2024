@@ -11,6 +11,7 @@ import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerSubscriber;
@@ -47,18 +48,16 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N3> rotMatrix = new Matrix<>(Nat.N3(), Nat.N3());
         for (int a = 0; a < 3; a++) {
             for (int b = 0; b < 3; b++) {
-                rotMatrix.set(b, a, rotation[count]);
+                rotMatrix.set(b, a, -rotation[count]);
                 count++;
             }
         }
-        rotMatrix.times(-1);
 
         Matrix<N3, N1> transVec = new Matrix<>(Nat.N3(), Nat.N1());
         transVec.set(0, 0, translation[0]);
         transVec.set(1, 0, translation[1]);
         transVec.set(2, 0, translation[2]);
         Matrix<N3, N1> tagToCamTrans = rotMatrix.times(transVec);
-
         tagToCamTrans.set(
                 0,
                 0,
@@ -92,10 +91,12 @@ public class Vision extends SubsystemBase {
                         + Swerve.get().getGyroAngle().getRadians()
                         + 90;
 
+        Rotation3d rot = new Rotation3d(rotMatrix.transpose().times(-1));
+        
         return new Pose2d(
                 camPose.getX() + (hypotenuse * Math.cos(hypangle)),
                 camPose.getY() + (hypotenuse * Math.sin(hypangle)),
-                Swerve.get().getGyroAngle());
+                new Rotation2d(rot.getY())); //TODO: Double check where 0 is on this vs gyro
     }
 
     @Override

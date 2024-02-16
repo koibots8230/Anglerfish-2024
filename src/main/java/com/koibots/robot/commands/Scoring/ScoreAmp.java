@@ -12,7 +12,7 @@ public class ScoreAmp extends SequentialCommandGroup {
 
     public ScoreAmp() {
         addCommands(
-                // TODO: Path to amp command here
+                // TODO: Pathing to amp command here
                 new SetPloppervatorPosition(PloppervatorPosition.Amp), new RunPlopper(false));
     }
 }

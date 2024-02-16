@@ -35,12 +35,12 @@ public class Intake extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Subsystems/Intake", inputs);
 
-        io.setVoltage(
-                Volts.of(
-                        intakeFeedback.calculate(
-                                inputs.voltage.in(Volts),
-                                intakeVoltsSetPoint
-                                        + intakeFeedForward.calculate(intakeVoltsSetPoint))));
+        // io.setVoltage(
+        //         Volts.of(
+        //                 intakeFeedback.calculate(
+        //                         inputs.voltage.in(Volts),
+        //                         intakeVoltsSetPoint
+        //                                 + intakeFeedForward.calculate(intakeVoltsSetPoint))));
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
@@ -51,5 +51,9 @@ public class Intake extends SubsystemBase {
 
         double trueRPM = trueDistancePerMinute / IntakeConstants.WHEELS.circumfrence.in(Meters);
         intakeVoltsSetPoint = Math.max(Math.min(trueRPM * (12.0 / 5676.0), 12.0), -12.0);
+    }
+
+    public void setVoltage(Measure<Voltage> voltage) {
+        io.setVoltage(voltage);
     }
 }

@@ -11,7 +11,7 @@ public class Climb extends SequentialCommandGroup {
 
     public Climb() {
         addCommands(
-                // TODO: Path to stage command here
+                // TODO: Pathing to stage command here
                 new SetPloppervatorPosition(PloppervatorPosition.Climbing),
                 new SetPloppervatorPosition(PloppervatorPosition.Resting));
     }

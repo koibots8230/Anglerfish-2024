@@ -35,8 +35,8 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveSparkMax.restoreFactoryDefaults();
         turnSparkMax.restoreFactoryDefaults();
 
-        driveSparkMax.setSmartCurrentLimit(10, 60, 5676);
-        turnSparkMax.setSmartCurrentLimit(10, 35, 5676);
+        driveSparkMax.setSmartCurrentLimit(30, 60, 5676);
+        turnSparkMax.setSmartCurrentLimit(15, 35);
 
         driveSparkMax.setCANTimeout(250);
         turnSparkMax.setCANTimeout(250);
@@ -44,17 +44,11 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveEncoder = driveSparkMax.getEncoder();
         turnEncoder = turnSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
 
-        // Apply position and velocity conversion factors for the driving encoder. The
-        // native units for position and velocity are rotations and RPM, respectively,
-        // but we want meters and meters per second to use with WPILib's swerve APIs.
         driveEncoder.setPositionConversionFactor(DriveConstants.DRIVING_ENCODER_POSITION_FACTOR);
         driveEncoder.setVelocityConversionFactor(DriveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
 
         turnEncoder.setInverted(true);
 
-        // Apply position and velocity conversion factors for the turning encoder. We
-        // want these in radians and radians per second to use with WPILib's swerve
-        // APIs.
         turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
         turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 

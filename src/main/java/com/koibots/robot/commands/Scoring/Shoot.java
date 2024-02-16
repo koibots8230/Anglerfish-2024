@@ -18,7 +18,7 @@ public class Shoot extends SequentialCommandGroup {
 
     public Shoot(Measure<Velocity<Angle>> velocity) {
         addCommands(
-                // TODO: Path to shoot position here
+                // TODO: Pathing to shoot position here
                 new SetPloppervatorPosition(PloppervatorPosition.Shooting),
                 new ParallelRaceGroup(
                         new StartEndCommand(

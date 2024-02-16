@@ -31,7 +31,7 @@ import edu.wpi.first.units.Velocity;
 
 public class Constants {
     public static class PlopperPivotConstants {
-        public static final int MOTOR_PORT = 0;
+        public static final int MOTOR_PORT = 9;
         public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -46,7 +46,7 @@ public class Constants {
     }
 
     public static class PlopperConstants {
-        public static final int MOTOR_PORT = 0;
+        public static final int MOTOR_PORT = 15;
         public static final int SWITCH_PORT = 0;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -122,8 +122,8 @@ public class Constants {
     }
 
     public static class ShooterConstants {
-        public static final int shooterMotor1 = 0;
-        public static final int shooterMotor2 = 1;
+        public static final int RIGHT_MOTOR_PORT = 11;
+        public static final int LEFT_MOTOR_PORT = 12;
 
         public static final double kP = 0;
 
@@ -134,8 +134,8 @@ public class Constants {
     public static class ElevatorConstants {
 
         // ===================================Motors/Encoders===================================
-        public static final int LEFT_MOTOR_PORT = 1;
-        public static final int RIGHT_MOTOR_PORT = 2;
+        public static final int LEFT_MOTOR_PORT = 13;
+        public static final int RIGHT_MOTOR_PORT = 14;
 
         public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
 
@@ -199,7 +199,7 @@ public class Constants {
     }
 
     public static class VisionConstants {
-        public static final Pose2d[] CAMERA_DISTANCES_TO_CENTER_METERS = {
+        public static final Pose2d[] CAMERA_POSITIONS = {
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(90))),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))),
@@ -220,19 +220,29 @@ public class Constants {
         public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
 
         public static final Pose2d[] TAG_POSES_METERS = {
-            new Pose2d(1.5, .5, new Rotation2d()), new Pose2d(2, .5, new Rotation2d())
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
+            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
         };
 
-        public static final Pose2d[] CAMERA_POSITIONS = null;
     }
 
     public static class IntakeConstants {
         public static final int MOTOR_PORT = 10;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.1, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
+                new FeedforwardConstantsIO(0, 20, 0, 0);
 
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
 
@@ -240,7 +250,7 @@ public class Constants {
     }
 
     public static class IndexerConstants {
-        public static final int MOTOR = 0;
+        public static final int MOTOR = 16;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);

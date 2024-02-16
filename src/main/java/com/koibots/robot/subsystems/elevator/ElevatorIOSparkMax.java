@@ -27,8 +27,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
 
-        leftMotor.setSmartCurrentLimit(10, 60, 5670);
-        rightMotor.setSmartCurrentLimit(10, 60, 5670);
+        leftMotor.setSmartCurrentLimit(30, 60, 5670);
+        rightMotor.setSmartCurrentLimit(30, 60, 5670);
 
         encoder = leftMotor.getAlternateEncoder(8192);
         encoder.setPositionConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
