@@ -237,7 +237,6 @@ public class Constants {
             new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
             new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
         };
-
     }
 
     public static class IntakeConstants {
