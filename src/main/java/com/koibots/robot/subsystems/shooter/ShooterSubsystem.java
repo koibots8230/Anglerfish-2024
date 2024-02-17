@@ -1,11 +1,13 @@
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
+
 package com.koibots.robot.subsystems.shooter;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ShooterConstants;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,13 +19,14 @@ public class ShooterSubsystem extends SubsystemBase {
     RelativeEncoder encoder2;
     PIDController PIDController;
 
-
-    ShooterSubsystem() { 
+    ShooterSubsystem() {
         shooterMotor1 = new CANSparkMax(ShooterConstants.shooterMotor1, MotorType.kBrushless);
         encoder1 = shooterMotor1.getEncoder();
-        PIDController = new PIDController(ShooterConstants.kP, 0, 0);///uhm this was autogenrated...
+        PIDController =
+                new PIDController(ShooterConstants.kP, 0, 0); // /uhm this was autogenrated...
 
-        shooterMotor2 = new CANSparkMax(Constants.ShooterConstants.shooterMotor2, MotorType.kBrushless);
+        shooterMotor2 =
+                new CANSparkMax(Constants.ShooterConstants.shooterMotor2, MotorType.kBrushless);
         encoder2 = shooterMotor2.getEncoder();
     }
 
@@ -35,11 +38,11 @@ public class ShooterSubsystem extends SubsystemBase {
         return shooterSubsystem;
     }
 
-    public double getPosition1(){
+    public double getPosition1() {
         return encoder1.getPosition();
     }
 
-    public double getPosition2(){
-     return encoder2.getPosition();
+    public double getPosition2() {
+        return encoder2.getPosition();
     }
 }
