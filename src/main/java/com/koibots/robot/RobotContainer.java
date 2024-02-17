@@ -3,22 +3,28 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.autos.AutoCommands.*;
 import static com.koibots.robot.subsystems.Subsystems.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.koibots.lib.sysid.SysIDMechanism;
-import com.koibots.robot.autos.AutonomousRegister;
 import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RobotContainer {
     GenericHID controller;
+    List<Command> autos = new ArrayList<>();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -26,11 +32,13 @@ public class RobotContainer {
     }
 
     public void registerAutos() {
-        AutonomousRegister.registerAutoRoutine(
-                "Sysid-Elevator",
-                new SysID(SysIDMechanism.Elevator, () -> controller.getRawButton(1)));
-        AutonomousRegister.registerAutoRoutine(
-                "Sysid-Swerve", new SysID(SysIDMechanism.Swerve, () -> controller.getRawButton(1)));
+        autos.add(new SysID(SysIDMechanism.Elevator, () -> controller.getRawButton(1)));
+        autos.add(new SysID(SysIDMechanism.Swerve, () -> controller.getRawButton(1)));
+        autos.add(
+                new SequentialCommandGroup(
+                        B1_A_N1_S1.command, S1_N4_S2.command, S2_N5_S2.command, S2_N6_S2.command));
+
+        SmartDashboard.putString("Auto Routine", "0");
     }
 
     /**
@@ -72,5 +80,9 @@ public class RobotContainer {
         //
         // .setPosition(PlopperPivotConstants.LOAD_POSITION),
         //                         PlopperPivot.get()));
+    }
+
+    public Command getAutonomousRoutine() {
+        return autos.get(Integer.parseInt(SmartDashboard.getString("Auto Routine", "0")));
     }
 }

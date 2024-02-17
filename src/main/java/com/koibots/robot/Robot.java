@@ -5,7 +5,6 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.*;
 
-import com.koibots.robot.autos.AutonomousRegister;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -29,7 +28,7 @@ public class Robot extends LoggedRobot {
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
-            SmartDashboard.putData(CommandScheduler.getInstance());
+            SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
         }
 
         if (isReal()) {
@@ -39,15 +38,12 @@ public class Robot extends LoggedRobot {
         Logger.start();
 
         // Instantiate our RobotContainer.
-        // This will perform all our button bindings, and put our
-        // autonomous chooser on the dashboard.
+        // and put our autonomous
+        // chooser on the dashboard.
         robotContainer = new RobotContainer();
-
-        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+        robotContainer.registerAutos();
 
         Elevator.get().reset();
-
-        Vision.get();
     }
 
     @Override
@@ -57,7 +53,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        AutonomousRegister.startSelectedAuto();
+        robotContainer.getAutonomousRoutine().schedule();
     }
 
     @Override

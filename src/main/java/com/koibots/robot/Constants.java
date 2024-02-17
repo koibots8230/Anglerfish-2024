@@ -9,8 +9,6 @@ import static java.lang.StrictMath.PI;
 import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
-
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -225,7 +223,7 @@ public class Constants {
         public static final double[] VECTOR_DEFAULT_VALUE = {0, 0, 0};
         public static final int ID_DEFAULT_VALUE = 0;
 
-        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);  
+        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
     }
 
     public static class IntakeConstants {
@@ -251,5 +249,12 @@ public class Constants {
 
         public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(500).times(10);
         public static final Measure<Velocity<Angle>> SHOOT_SPEED = RPM.of(1000).times(10);
+    }
+
+    public static class AutoConstants {
+
+        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VTHETA_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
     }
 }
