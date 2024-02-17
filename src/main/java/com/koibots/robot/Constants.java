@@ -133,6 +133,10 @@ public class Constants {
 
         public static final double kS = 0;
         public static final double kV = 0;
+
+        public static final Measure<Velocity<Angle>> SPEED = RPM.of(5000);
+
+        public static final Measure<Velocity<Angle>> ALLOWED_ERROR = RPM.of(20);
     }
 
     public static class ElevatorConstants {

@@ -1,7 +1,7 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.lib.auto;
+package com.koibots.robot.autos;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 

@@ -9,10 +9,10 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.commands.Ploppervator.SetPloppervatorPosition;
+import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 public class Shoot extends SequentialCommandGroup {
 
@@ -20,13 +20,10 @@ public class Shoot extends SequentialCommandGroup {
         addCommands(
                 // TODO: Pathing to shoot position here
                 new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                new ParallelRaceGroup(
-                        new StartEndCommand(
-                                () -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED),
-                                () -> Indexer.get().setVelocity(RPM.of(0))),
-                        new StartEndCommand(
-                                () -> Shooter.get().setVelocity(velocity),
-                                () -> Shooter.get().setVelocity(RPM.of(0)))));
+                new SpinUpShooter(velocity),
+                new InstantCommand(() -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED)),
+                new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0))),
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0))));
 
         addRequirements(Indexer.get(), Shooter.get());
     }

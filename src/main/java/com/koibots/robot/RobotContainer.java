@@ -7,6 +7,9 @@ import static com.koibots.robot.subsystems.Subsystems.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.koibots.lib.sysid.SysIDMechanism;
+import com.koibots.robot.autos.AutonomousRegister;
+import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
@@ -28,6 +31,14 @@ public class RobotContainer {
         controller = new GenericHID(0);
     }
 
+    public void registerAutos() {
+        AutonomousRegister.registerAutoRoutine(
+                "Sysid-Elevator",
+                new SysID(SysIDMechanism.Elevator, () -> controller.getRawButton(1)));
+        AutonomousRegister.registerAutoRoutine(
+                "Sysid-Swerve", new SysID(SysIDMechanism.Swerve, () -> controller.getRawButton(1)));
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
@@ -35,6 +46,7 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
+
         Swerve.get()
                 .setDefaultCommand(
                         new FieldOrientedDrive(

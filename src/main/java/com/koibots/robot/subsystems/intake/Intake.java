@@ -15,16 +15,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    private final PIDController intakeFeedback;
-    private final SimpleMotorFeedforward intakeFeedForward;
+    private final PIDController feedback;
+    private final SimpleMotorFeedforward feedforward;
     private final IntakeIO io;
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-    private double intakeVoltsSetPoint = 0.0;
+    private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     public Intake() {
         io = Robot.isReal() ? new IntakeIOSparkMax() : new IntakeIOSim();
-        intakeFeedback = new PIDController(IntakeConstants.FEEDBACK_CONSTANTS.kP, 0, 0);
-        intakeFeedForward =
+        feedback = new PIDController(IntakeConstants.FEEDBACK_CONSTANTS.kP, 0, 0);
+        feedforward =
                 new SimpleMotorFeedforward(
                         IntakeConstants.FEEDFORWARD_CONSTANTS.ks,
                         IntakeConstants.FEEDFORWARD_CONSTANTS.kv);
@@ -35,12 +35,17 @@ public class Intake extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Subsystems/Intake", inputs);
 
-        // io.setVoltage(
-        //         Volts.of(
-        //                 intakeFeedback.calculate(
-        //                         inputs.voltage.in(Volts),
-        //                         intakeVoltsSetPoint
-        //                                 + intakeFeedForward.calculate(intakeVoltsSetPoint))));
+        io.setVoltage(
+                Volts.of(
+                        Math.max(
+                                Math.min(
+                                        (feedback.calculate(
+                                                                inputs.velocity.in(RPM),
+                                                                setpoint.in(RPM))
+                                                        + feedforward.calculate(setpoint.in(RPM)))
+                                                * (12.0 / 5676.0),
+                                        12.0),
+                                -12.0)));
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
@@ -49,8 +54,7 @@ public class Intake extends SubsystemBase {
                 velocity.in(RPM) * IntakeConstants.WHEELS.circumfrence.in(Meters);
         double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
 
-        double trueRPM = trueDistancePerMinute / IntakeConstants.WHEELS.circumfrence.in(Meters);
-        intakeVoltsSetPoint = Math.max(Math.min(trueRPM * (12.0 / 5676.0), 12.0), -12.0);
+        setpoint = RPM.of(trueDistancePerMinute / IntakeConstants.WHEELS.circumfrence.in(Meters));
     }
 
     public void setVoltage(Measure<Voltage> voltage) {

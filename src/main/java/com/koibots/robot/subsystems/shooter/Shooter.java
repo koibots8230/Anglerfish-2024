@@ -3,9 +3,12 @@
 
 package com.koibots.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
+import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
@@ -65,5 +68,16 @@ public class Shooter extends SubsystemBase {
 
     public void setVelocity(Measure<Velocity<Angle>> speed) {
         setpoint = speed;
+    }
+
+    public boolean atSetpoint() {
+        return inputs.leftVelocity.in(RPM)
+                        >= setpoint.minus(ShooterConstants.ALLOWED_ERROR).in(RPM)
+                && inputs.leftVelocity.in(RPM)
+                        <= setpoint.plus(ShooterConstants.ALLOWED_ERROR).in(RPM)
+                && inputs.rightVelocity.in(RPM)
+                        >= setpoint.minus(ShooterConstants.ALLOWED_ERROR).in(RPM)
+                && inputs.rightVelocity.in(RPM)
+                        <= setpoint.plus(ShooterConstants.ALLOWED_ERROR).in(RPM);
     }
 }
