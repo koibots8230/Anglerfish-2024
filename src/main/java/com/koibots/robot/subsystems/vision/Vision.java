@@ -6,10 +6,7 @@ package com.koibots.robot.subsystems.vision;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
 
-import java.io.IOException;
-
 import com.koibots.robot.Constants.VisionConstants;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -24,6 +21,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.networktables.TimestampedInteger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.io.IOException;
 
 public class Vision extends SubsystemBase {
 
@@ -48,9 +46,9 @@ public class Vision extends SubsystemBase {
         }
 
         try {
-                layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
-        } catch(IOException e) {
-                System.err.println("Could not find field layout!");
+            layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
+        } catch (IOException e) {
+            System.err.println("Could not find field layout!");
         }
     }
 
@@ -89,8 +87,7 @@ public class Vision extends SubsystemBase {
                 new Pose2d(
                         layout.getTagPose(tagId).get().getRotation().getX()
                                 + (hypotenuse * Math.cos(hypangle)),
-                        layout.getTagPose(tagId).get().getY()
-                                + (hypotenuse * Math.sin(hypangle)),
+                        layout.getTagPose(tagId).get().getY() + (hypotenuse * Math.sin(hypangle)),
                         new Rotation2d());
 
         hypotenuse =

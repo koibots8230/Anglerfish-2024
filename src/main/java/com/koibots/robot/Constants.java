@@ -224,7 +224,7 @@ public class Constants {
         public static final double[] VECTOR_DEFAULT_VALUE = {0, 0, 0};
         public static final int ID_DEFAULT_VALUE = 0;
 
-        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);  
+        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
     }
 
     public static class IntakeConstants {
@@ -250,5 +250,12 @@ public class Constants {
 
         public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(500).times(10);
         public static final Measure<Velocity<Angle>> SHOOT_SPEED = RPM.of(1000).times(10);
+    }
+
+    public static class AutoConstants {
+
+        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VTHETA_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
     }
 }
