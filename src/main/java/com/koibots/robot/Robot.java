@@ -46,6 +46,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
         Elevator.get().reset();
+
+        Vision.get();
     }
 
     @Override

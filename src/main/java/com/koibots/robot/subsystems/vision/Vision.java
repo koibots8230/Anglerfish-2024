@@ -6,7 +6,11 @@ package com.koibots.robot.subsystems.vision;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
 
+import java.io.IOException;
+
 import com.koibots.robot.Constants.VisionConstants;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,6 +30,8 @@ public class Vision extends SubsystemBase {
     private final DoubleArraySubscriber[][] vecSubscribers;
     private final IntegerSubscriber[] idSubscribers;
 
+    private AprilTagFieldLayout layout;
+
     public Vision() {
         vecSubscribers = new DoubleArraySubscriber[4][2];
         idSubscribers = new IntegerSubscriber[4];
@@ -39,6 +45,12 @@ public class Vision extends SubsystemBase {
                         table.getDoubleArrayTopic(VisionConstants.TOPIC_NAMES[a][b])
                                 .subscribe(VisionConstants.VECTOR_DEFAULT_VALUE);
             }
+        }
+
+        try {
+                layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
+        } catch(IOException e) {
+                System.err.println("Could not find field layout!");
         }
     }
 
@@ -61,7 +73,7 @@ public class Vision extends SubsystemBase {
         tagToCamTrans.set(
                 0,
                 0,
-                (VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() < Math.PI)
+                (layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians() < Math.PI)
                         ? tagToCamTrans.get(0, 0)
                         : tagToCamTrans.get(0, 0) * -1);
 
@@ -70,14 +82,14 @@ public class Vision extends SubsystemBase {
                         Math.pow(tagToCamTrans.get(0, 0), 2)
                                 + Math.pow(tagToCamTrans.get(0, 2), 2));
         double hypangle =
-                VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians()
+                layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians()
                         - Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
 
         Pose2d camPose =
                 new Pose2d(
-                        VisionConstants.TAG_POSES_METERS[tagId].getX()
+                        layout.getTagPose(tagId).get().getRotation().getX()
                                 + (hypotenuse * Math.cos(hypangle)),
-                        VisionConstants.TAG_POSES_METERS[tagId].getY()
+                        layout.getTagPose(tagId).get().getY()
                                 + (hypotenuse * Math.sin(hypangle)),
                         new Rotation2d());
 
@@ -112,9 +124,9 @@ public class Vision extends SubsystemBase {
                             translateToFieldPose(
                                     tvec[b].value, rvec[b].value, (int) ids[a].value, a);
                     if (pose.getX() > 0
-                            && pose.getX() < VisionConstants.FIELD_WIDTH.in(Meters)
+                            && pose.getX() < layout.getFieldWidth()
                             && pose.getY() > 0
-                            && pose.getY() < VisionConstants.FIELD_LENGTH.in(Meters)
+                            && pose.getY() < layout.getFieldLength()
                             && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
                                     < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
                             && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())

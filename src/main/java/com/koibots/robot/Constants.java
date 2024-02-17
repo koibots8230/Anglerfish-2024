@@ -9,6 +9,8 @@ import static java.lang.StrictMath.PI;
 import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.LinearQuadraticRegulator;
@@ -223,24 +225,7 @@ public class Constants {
         public static final double[] VECTOR_DEFAULT_VALUE = {0, 0, 0};
         public static final int ID_DEFAULT_VALUE = 0;
 
-        public static final Measure<Distance> FIELD_WIDTH = Inches.of(323.25);
-        public static final Measure<Distance> FIELD_LENGTH = Inches.of(651.25);
-        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
-
-        public static final Pose2d[] TAG_POSES_METERS = {
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-            new Pose2d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), new Rotation2d()),
-        };
+        public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);  
     }
 
     public static class IntakeConstants {
