@@ -21,8 +21,7 @@ public interface IndexerIO {
 
     void updateInputs(IndexerIOInputs inputs);
 
-    default void setIdle(boolean isBrake) {}
-    ;
+    default void setIdle(boolean isBrake) {};
 
     void setVoltage(Measure<Voltage> volts);
 

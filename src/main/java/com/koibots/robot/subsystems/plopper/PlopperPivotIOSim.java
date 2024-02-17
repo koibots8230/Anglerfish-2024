@@ -6,6 +6,8 @@ package com.koibots.robot.subsystems.plopper;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class PlopperPivotIOSim implements PlopperPivotIO {
@@ -25,10 +27,5 @@ public class PlopperPivotIOSim implements PlopperPivotIO {
     public void setVoltage(double volts) {
         voltage = volts;
         sim.setInputVoltage(volts);
-    }
-
-    @Override
-    public void setIdleMode(boolean isBrake) {
-        // TODO Auto-generated method stub
     }
 }

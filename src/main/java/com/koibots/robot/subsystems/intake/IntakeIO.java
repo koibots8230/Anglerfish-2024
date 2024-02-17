@@ -19,8 +19,8 @@ public interface IntakeIO {
     }
 
     /* Updates the set of loggable inputs. */
-    default void updateInputs(IntakeIOInputs inputs) {}
+    void updateInputs(IntakeIOInputs inputs);
 
     /* Run the pivot motor at the specified voltage. */
-    default void setVoltage(Measure<Voltage> volts) {}
+    void setVoltage(Measure<Voltage> volts);
 }

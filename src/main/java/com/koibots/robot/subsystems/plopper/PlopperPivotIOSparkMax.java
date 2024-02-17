@@ -12,6 +12,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+
 public class PlopperPivotIOSparkMax implements PlopperPivotIO {
     private final CANSparkMax plopperPivotMotor;
     private final AbsoluteEncoder plopperPivotEncoder;

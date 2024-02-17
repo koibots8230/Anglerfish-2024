@@ -16,20 +16,20 @@
       "/SmartDashboard/Auto Mode Chooser": "String Chooser",
       "/SmartDashboard/Command Scheduler": "Scheduler",
       "/SmartDashboard/Controller Chooser": "String Chooser",
-      "/SmartDashboard/Drive PID 0": "PIDController",
-      "/SmartDashboard/Drive PID 1": "PIDController",
-      "/SmartDashboard/Drive PID 2": "PIDController",
-      "/SmartDashboard/Drive PID 3": "PIDController",
+      "/SmartDashboard/Drive PID 0": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 1": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 2": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 3": "ProfiledPIDController",
       "/SmartDashboard/Elevator Sim": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Scaling Algorithm": "String Chooser",
       "/SmartDashboard/Scheduler": "Scheduler",
       "/SmartDashboard/SysId Mechanism Chooser": "String Chooser",
       "/SmartDashboard/SysId Routine Chooser": "String Chooser",
-      "/SmartDashboard/Turn PID 0": "PIDController",
-      "/SmartDashboard/Turn PID 1": "PIDController",
-      "/SmartDashboard/Turn PID 2": "PIDController",
-      "/SmartDashboard/Turn PID 3": "PIDController"
+      "/SmartDashboard/Turn PID 0": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 1": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 2": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 3": "ProfiledPIDController"
     }
   },
   "NetworkTables": {
@@ -56,8 +56,7 @@
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       },
       "LiveWindow": {
         ".status": {
@@ -72,8 +71,7 @@
       "SmartDashboard": {
         "Angle Alignment Controller": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },

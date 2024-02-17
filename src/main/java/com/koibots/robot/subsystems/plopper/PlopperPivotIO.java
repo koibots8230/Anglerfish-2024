@@ -22,5 +22,5 @@ public interface PlopperPivotIO {
 
     void setVoltage(double volts);
 
-    void setIdleMode(boolean isBrake);
+    default void setIdleMode(boolean isBrake) {};
 }

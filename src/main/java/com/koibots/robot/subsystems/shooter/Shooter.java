@@ -5,10 +5,6 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.lang.reflect.Array;
-import java.util.List;
-
-import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
@@ -22,22 +18,23 @@ import org.littletonrobotics.junction.Logger;
 public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
+    
     private Measure<Velocity<Angle>> setpoint = RotationsPerSecond.of(0);
 
-    PIDController leftFlywheelFeedbackController;
-    PIDController rightFlywheelFeedbackController;
-    SimpleMotorFeedforward leftFlywheelFeedforwardController;
-    SimpleMotorFeedforward rightFlywheelFeedforwardController;
+    PIDController leftFeedback;
+    PIDController rightFeedback;
+    SimpleMotorFeedforward leftFeedforward;
+    SimpleMotorFeedforward rightFeedforward;
 
     public Shooter() {
         io = Robot.isReal() ? new ShooterIOSparkMax() : new ShooterIOSim();
 
-        leftFlywheelFeedbackController = new PIDController(ShooterConstants.kP, 0, 0);
-        rightFlywheelFeedbackController = new PIDController(ShooterConstants.kP, 0, 0);
+        leftFeedback = new PIDController(ShooterConstants.kP, 0, 0);
+        rightFeedback = new PIDController(ShooterConstants.kP, 0, 0);
 
-        leftFlywheelFeedforwardController =
+        leftFeedforward =
                 new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
-        rightFlywheelFeedforwardController =
+        rightFeedforward =
                 new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
     }
 
@@ -49,18 +46,18 @@ public class Shooter extends SubsystemBase {
         io.setVoltages(
                 Volts.of(
                         Math.max(Math.min(
-                                (leftFlywheelFeedbackController.calculate(
+                                (leftFeedback.calculate(
                                                 inputs.leftVelocity.in(RotationsPerSecond),
                                                 setpoint.in(RotationsPerSecond))
-                                + leftFlywheelFeedforwardController.calculate(
+                                + leftFeedforward.calculate(
                                                 setpoint.in(RotationsPerSecond)))
                                 * (12.0 / 5676.0), 12.0), -12.0)),
                 Volts.of(
                         Math.max(Math.min(
-                                (rightFlywheelFeedbackController.calculate(
+                                (rightFeedback.calculate(
                                                 inputs.rightVelocity.in(RotationsPerSecond),
                                                 setpoint.in(RotationsPerSecond))
-                                + rightFlywheelFeedforwardController.calculate(
+                                + rightFeedforward.calculate(
                                                 setpoint.in(RotationsPerSecond)))
                                 * (12.0 / 5676.0), 12.0), -12.0))
         );

@@ -22,25 +22,17 @@ public interface ElevatorIO {
         public Measure<Current> rightCurrent = Amps.of(0);
     }
 
-    default void updateInputs(ElevatorInputs inputs) {}
+    void updateInputs(ElevatorInputs inputs);
 
     /* Set the motors to a specified voltage */
-    default void setVoltage(Measure<Voltage> volts) {}
+    void setVoltage(Measure<Voltage> volts);
 
     /* Set the motors to brake mode */
     default void setBrake() {}
 
     /* Get the encoder position */
-    default Measure<Distance> getPosition() {
-        return Meters.of(0);
-    }
+    Measure<Distance> getPosition();
 
     /* Get the encoder velocity */
-    default Measure<Velocity<Distance>> getVelocity() {
-        return MetersPerSecond.of(0);
-    }
-
-    default Mechanism2d getMechanism() {
-        return null;
-    }
+    Measure<Velocity<Distance>> getVelocity();
 }

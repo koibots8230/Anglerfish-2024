@@ -69,9 +69,4 @@ public class ElevatorIOSim implements ElevatorIO {
     public Measure<Velocity<Distance>> getVelocity() {
         return MetersPerSecond.of(elevator.getVelocityMetersPerSecond());
     }
-
-    @Override
-    public Mechanism2d getMechanism() {
-        return mech2d;
-    }
 }

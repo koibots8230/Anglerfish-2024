@@ -3,6 +3,7 @@
 
 package com.koibots.robot.subsystems.elevator;
 
+import static com.koibots.robot.subsystems.Subsystems.PlopperPivot;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ElevatorConstants;
@@ -13,6 +14,10 @@ import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.system.LinearSystemLoop;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,6 +38,10 @@ public class Elevator extends SubsystemBase {
     private boolean isSysID = false;
 
     private Measure<Voltage> volts;
+
+    private final Mechanism2d mechanism2d;
+    private final MechanismLigament2d elevatorMech2d;
+    private final MechanismLigament2d plopperMech2d;
 
     public Elevator() {
         System.out.println("Elevator initialized");
@@ -56,6 +65,16 @@ public class Elevator extends SubsystemBase {
         io = Robot.isReal() ? new ElevatorIOSparkMax() : new ElevatorIOSim();
 
         io.setBrake();
+
+        mechanism2d = new Mechanism2d(.5, 1);
+
+        elevatorMech2d =
+                mechanism2d
+                        .getRoot("Elevator Root", 10, 0)
+                        .append(new MechanismLigament2d("Elevator", io.getPosition().in(Meters), 90));
+        
+        plopperMech2d = elevatorMech2d.append(
+            new MechanismLigament2d("Plopper", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
     }
 
     @Override
@@ -64,9 +83,11 @@ public class Elevator extends SubsystemBase {
 
         io.updateInputs(inputs);
 
+        elevatorMech2d.setLength(io.getPosition().in(Meters));
+
         Logger.processInputs("Subsystems/Elevator", inputs);
 
-        Logger.recordOutput("Elevator Mechanism", io.getMechanism());
+        Logger.recordOutput("Elevator Mechanism", mechanism2d);
 
         lastProfiledReference = profile.calculate(0.020, lastProfiledReference, targetState);
 
