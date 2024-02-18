@@ -1,7 +1,7 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.Indexer;
+package com.koibots.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface IndexerIO {
     @AutoLog
-    class IndexerIOInputs {
+    class IndexerInputs {
         public Measure<Velocity<Angle>> velocity = RevolutionsPerSecond.of(0);
 
         public boolean isBrake = true;
@@ -19,7 +19,7 @@ public interface IndexerIO {
         public Measure<Current> current = Amps.of(0);
     }
 
-    void updateInputs(IndexerIOInputs inputs);
+    void updateInputs(IndexerInputs inputs);
 
     default void setIdle(boolean isBrake) {};
 

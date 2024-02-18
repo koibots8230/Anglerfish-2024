@@ -24,11 +24,7 @@ import edu.wpi.first.math.system.LinearSystem;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Mass;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 
 public class Constants {
     public static class PlopperPivotConstants {
@@ -168,8 +164,8 @@ public class Constants {
 
         public static final Measure<Distance> STDEV_DISTANCE = Inches.of(5); // TODO: Get
         public static final Measure<Velocity<Distance>> STDEV_VELOCITY =
-                InchesPerSecond.of(10); // TODO: Get
-        public static final double ENCODER_STDEV = 0.0001; // TODO: Get
+            InchesPerSecond.of(10); // TODO: Get
+        public static final double ENCODER_STDEV = 0.01; // TODO: Get
 
         public static final KalmanFilter<N2, N1, N1> KALMAN_FILTER =
                 new KalmanFilter<>(
@@ -184,9 +180,9 @@ public class Constants {
         // ===================================LQR===================================
 
         public static final Measure<Distance> POSITION_ERROR_TOLERANCE =
-                Inches.of(0.0001); // TODO: Get
+                Inches.of(0.01); // TODO: Get
         public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE =
-                InchesPerSecond.of(.01); // TODO: Get
+                InchesPerSecond.of(.1); // TODO: Get
         public static final double VOLTAGE_TOLERANCE = 12;
 
         public static final LinearQuadraticRegulator<N2, N1, N1> LQR =

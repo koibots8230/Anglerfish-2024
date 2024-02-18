@@ -3,7 +3,6 @@
 
 package com.koibots.robot.subsystems.elevator;
 
-import static com.koibots.robot.subsystems.Subsystems.PlopperPivot;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ElevatorConstants;
@@ -41,8 +40,6 @@ public class Elevator extends SubsystemBase {
 
     private final Mechanism2d mechanism2d;
     private final MechanismLigament2d elevatorMech2d;
-    private final MechanismLigament2d plopperMech2d;
-
     public Elevator() {
         System.out.println("Elevator initialized");
 
@@ -73,7 +70,7 @@ public class Elevator extends SubsystemBase {
                         .getRoot("Elevator Root", 10, 0)
                         .append(new MechanismLigament2d("Elevator", io.getPosition().in(Meters), 90));
         
-        plopperMech2d = elevatorMech2d.append(
+        elevatorMech2d.append(
             new MechanismLigament2d("Plopper", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
     }
 

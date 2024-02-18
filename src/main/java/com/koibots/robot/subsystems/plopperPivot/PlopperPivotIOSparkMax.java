@@ -1,7 +1,7 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.plopper;
+package com.koibots.robot.subsystems.plopperPivot;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -11,9 +11,6 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
-
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
 
 public class PlopperPivotIOSparkMax implements PlopperPivotIO {
     private final CANSparkMax plopperPivotMotor;

@@ -1,11 +1,12 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.Indexer;
+package com.koibots.robot.subsystems.indexer;
 
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.IndexerConstants;
+import com.koibots.robot.subsystems.indexer.IndexerInputsAutoLogged;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -15,20 +16,20 @@ import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
-    private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
+    private final IndexerInputsAutoLogged inputs = new IndexerInputsAutoLogged();
 
-    private final SimpleMotorFeedforward feedforwardController;
-    private final PIDController feedbackController;
+    private final SimpleMotorFeedforward feedforward;
+    private final PIDController feedback;
 
     private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
-        feedforwardController =
+        feedforward =
                 new SimpleMotorFeedforward(
                         IndexerConstants.FEEDFORWARD_CONSTANTS.ks,
                         IndexerConstants.FEEDFORWARD_CONSTANTS.kv);
-        feedbackController =
+        feedback =
                 new PIDController(
                         IndexerConstants.FEEDBACK_CONSTANTS.kP,
                         IndexerConstants.FEEDBACK_CONSTANTS.kI,
@@ -44,10 +45,10 @@ public class Indexer extends SubsystemBase {
                 Volts.of(
                         Math.max(
                                 Math.min(
-                                        (feedbackController.calculate(
+                                        (feedback.calculate(
                                                                 inputs.velocity.in(RPM),
                                                                 setpoint.in(RPM))
-                                                        + feedforwardController.calculate(
+                                                        + feedforward.calculate(
                                                                 setpoint.in(RPM)))
                                                 * (12.0 / 11000.0),
                                         12.0),

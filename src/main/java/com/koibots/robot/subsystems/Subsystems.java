@@ -3,10 +3,11 @@
 
 package com.koibots.robot.subsystems;
 
-import com.koibots.robot.subsystems.Indexer.Indexer;
 import com.koibots.robot.subsystems.elevator.Elevator;
+import com.koibots.robot.subsystems.indexer.Indexer;
 import com.koibots.robot.subsystems.intake.Intake;
-import com.koibots.robot.subsystems.plopper.*;
+import com.koibots.robot.subsystems.plopper.Plopper;
+import com.koibots.robot.subsystems.plopperPivot.PlopperPivot;
 import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;

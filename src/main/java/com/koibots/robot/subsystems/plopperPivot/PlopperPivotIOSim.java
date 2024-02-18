@@ -1,13 +1,11 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.plopper;
+package com.koibots.robot.subsystems.plopperPivot;
 
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 
 public class PlopperPivotIOSim implements PlopperPivotIO {

@@ -1,11 +1,12 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.plopper;
+package com.koibots.robot.subsystems.plopperPivot;
 
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.PlopperPivotConstants;
+import com.koibots.robot.subsystems.plopperPivot.PlopperPivotIOInputsAutoLogged;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;

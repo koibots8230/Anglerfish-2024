@@ -6,7 +6,6 @@ package com.koibots.robot.subsystems.elevator;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import org.littletonrobotics.junction.AutoLog;
 
 public interface ElevatorIO {

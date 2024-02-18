@@ -10,10 +10,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 
 public class ElevatorIOSparkMax implements ElevatorIO {
     private final CANSparkMax leftMotor;
