@@ -6,7 +6,6 @@ package com.koibots.robot.subsystems.plopperPivot;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.PlopperPivotConstants;
-import com.koibots.robot.subsystems.plopperPivot.PlopperPivotIOInputsAutoLogged;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;

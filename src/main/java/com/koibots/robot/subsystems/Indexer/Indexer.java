@@ -1,12 +1,12 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.indexer;
+package com.koibots.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.IndexerConstants;
-import com.koibots.robot.subsystems.indexer.IndexerInputsAutoLogged;
+import com.koibots.robot.subsystems.Indexer.IndexerIOInputsAutoLogged;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 
 public class Indexer extends SubsystemBase {
     private final IndexerIO io;
-    private final IndexerInputsAutoLogged inputs = new IndexerInputsAutoLogged();
+    private final IndexerIOInputsAutoLogged inputs = new IndexerIOInputsAutoLogged();
 
     private final SimpleMotorFeedforward feedforward;
     private final PIDController feedback;
@@ -48,8 +48,7 @@ public class Indexer extends SubsystemBase {
                                         (feedback.calculate(
                                                                 inputs.velocity.in(RPM),
                                                                 setpoint.in(RPM))
-                                                        + feedforward.calculate(
-                                                                setpoint.in(RPM)))
+                                                        + feedforward.calculate(setpoint.in(RPM)))
                                                 * (12.0 / 11000.0),
                                         12.0),
                                 -12.0)));

@@ -5,7 +5,7 @@ package com.koibots.subsystems;
 
 import org.junit.jupiter.api.Test;
 
-import com.koibots.robot.subsystems.indexer.Indexer;
+import com.koibots.robot.subsystems.Indexer.Indexer;
 
 public class IndexerTest {
     @Test

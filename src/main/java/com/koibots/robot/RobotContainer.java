@@ -13,6 +13,7 @@ import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -23,13 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RobotContainer {
-    GenericHID controller;
+    static GenericHID controller = new GenericHID(0);
     List<Command> autos = new ArrayList<>();
-
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer() {
-        controller = new GenericHID(0);
-    }
 
     public void registerAutos() {
         autos.add(new SysID(SysIDMechanism.Elevator, () -> controller.getRawButton(1)));
@@ -48,7 +44,6 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
-
         Swerve.get()
                 .setDefaultCommand(
                         new FieldOrientedDrive(
@@ -84,5 +79,9 @@ public class RobotContainer {
 
     public Command getAutonomousRoutine() {
         return autos.get(Integer.parseInt(SmartDashboard.getString("Auto Routine", "0")));
+    }
+
+    public static void rumbleController(double strength) {
+        controller.setRumble(RumbleType.kBothRumble, strength);
     }
 }

@@ -1,7 +1,7 @@
 // Copyright (c) 2024 FRC 8230 - The KoiBots
 // https://github.com/koibots8230
 
-package com.koibots.robot.subsystems.indexer;
+package com.koibots.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -34,7 +34,7 @@ public class IndexerIOSparkMax implements IndexerIO {
     }
 
     @Override
-    public void updateInputs(IndexerInputs inputs) {
+    public void updateInputs(IndexerIOInputs inputs) {
         inputs.velocity = RPM.of(encoder.getVelocity());
         inputs.isBrake = motor.getIdleMode() == IdleMode.kBrake;
         inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());

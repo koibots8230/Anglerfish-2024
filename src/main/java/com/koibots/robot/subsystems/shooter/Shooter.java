@@ -5,13 +5,14 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -76,5 +77,9 @@ public class Shooter extends SubsystemBase {
                         >= setpoint.minus(ShooterConstants.ALLOWED_ERROR).in(RPM)
                 && inputs.rightVelocity.in(RPM)
                         <= setpoint.plus(ShooterConstants.ALLOWED_ERROR).in(RPM);
+    }
+
+    public List<Measure<Current>> getCurrent() {
+        return Arrays.asList(inputs.leftCurrent, inputs.rightCurrent);
     }
 }

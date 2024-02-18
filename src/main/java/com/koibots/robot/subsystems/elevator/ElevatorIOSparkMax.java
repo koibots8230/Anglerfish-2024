@@ -17,7 +17,6 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     private final CANSparkMax rightMotor;
     private final RelativeEncoder encoder;
 
-
     public ElevatorIOSparkMax() {
         leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
         rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);

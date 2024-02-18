@@ -14,6 +14,7 @@ public class SpinUpShooter extends Command {
 
     public SpinUpShooter(Measure<Velocity<Angle>> speed) {
         this.speed = speed;
+        addRequirements(Shooter.get());
     }
 
     @Override

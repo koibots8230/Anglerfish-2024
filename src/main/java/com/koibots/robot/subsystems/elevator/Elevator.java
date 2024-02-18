@@ -40,6 +40,7 @@ public class Elevator extends SubsystemBase {
 
     private final Mechanism2d mechanism2d;
     private final MechanismLigament2d elevatorMech2d;
+
     public Elevator() {
         System.out.println("Elevator initialized");
 
@@ -68,10 +69,12 @@ public class Elevator extends SubsystemBase {
         elevatorMech2d =
                 mechanism2d
                         .getRoot("Elevator Root", 10, 0)
-                        .append(new MechanismLigament2d("Elevator", io.getPosition().in(Meters), 90));
-        
+                        .append(
+                                new MechanismLigament2d(
+                                        "Elevator", io.getPosition().in(Meters), 90));
+
         elevatorMech2d.append(
-            new MechanismLigament2d("Plopper", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
+                new MechanismLigament2d("Plopper", 0.5, 90, 6, new Color8Bit(Color.kPurple)));
     }
 
     @Override
