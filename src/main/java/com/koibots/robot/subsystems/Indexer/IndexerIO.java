@@ -14,7 +14,7 @@ public interface IndexerIO {
         public Measure<Velocity<Angle>> velocity = RotationsPerSecond.of(0);
 
         public boolean isBrake = true;
-        
+
         public Measure<Current> current = Amps.of(0);
         public Measure<Voltage> voltage = Volts.of(0);
     }

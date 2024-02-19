@@ -12,8 +12,8 @@ import com.koibots.lib.sysid.SysIDMechanism;
 import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
@@ -28,6 +28,7 @@ public class RobotContainer {
     List<Command> autos = new ArrayList<>();
 
     public void registerAutos() {
+        autos.add(new InstantCommand());
         autos.add(new SysID(SysIDMechanism.Elevator, () -> controller.getRawButton(1)));
         autos.add(new SysID(SysIDMechanism.Swerve, () -> controller.getRawButton(1)));
         autos.add(

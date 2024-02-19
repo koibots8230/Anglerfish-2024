@@ -6,7 +6,6 @@ package com.koibots.robot.subsystems.Indexer;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.IndexerConstants;
-import com.koibots.robot.subsystems.Indexer.IndexerIOInputsAutoLogged;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;

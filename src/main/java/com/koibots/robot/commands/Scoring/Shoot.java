@@ -12,7 +12,6 @@ import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Ploppervator.SetPloppervatorPosition;
 import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.AutoAlign;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.*;
@@ -22,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-
 import java.util.Arrays;
 
 public class Shoot extends SequentialCommandGroup {
@@ -108,14 +106,27 @@ public class Shoot extends SequentialCommandGroup {
                     new SetPloppervatorPosition(PloppervatorPosition.Shooting),
                     new SpinUpShooter(velocity),
                     new ParallelRaceGroup(
-                        new InstantCommand(() -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED), Indexer.get()),
-                        new WaitUntilCommand(() -> Shooter.get().getCurrent().get(0).gte(ShooterConstants.CURRENT_ON_SHOOT) && Shooter.get().getCurrent().get(1).gte(ShooterConstants.CURRENT_ON_SHOOT)),
-                        new WaitCommand(1)
-                    ),
+                            new InstantCommand(
+                                    () -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED),
+                                    Indexer.get()),
+                            new WaitUntilCommand(
+                                    () ->
+                                            Shooter.get()
+                                                            .getCurrent()
+                                                            .get(0)
+                                                            .gte(ShooterConstants.CURRENT_ON_SHOOT)
+                                                    && Shooter.get()
+                                                            .getCurrent()
+                                                            .get(1)
+                                                            .gte(
+                                                                    ShooterConstants
+                                                                            .CURRENT_ON_SHOOT)),
+                            new WaitCommand(1)),
                     new ParallelCommandGroup(
-                        new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
-                        new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())
-                    ));
+                            new InstantCommand(
+                                    () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+                            new InstantCommand(
+                                    () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
         } else {
             addCommands(
                     new InstantCommand(() -> RobotContainer.rumbleController(0.4)),

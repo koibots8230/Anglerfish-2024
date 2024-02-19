@@ -17,9 +17,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class ScoreAmp extends SequentialCommandGroup {
-    
+
     public ScoreAmp() {
-        if (Math.abs(Swerve.get().getEstimatedPose().minus(DriveConstants.AMP_POSITION).getX()) < DriveConstants.ALLOWED_DISTANCE_FROM_AMP.getX()
+        if (Math.abs(Swerve.get().getEstimatedPose().minus(DriveConstants.AMP_POSITION).getX())
+                        < DriveConstants.ALLOWED_DISTANCE_FROM_AMP.getX()
                 && Math.abs(
                                 Swerve.get()
                                         .getEstimatedPose()

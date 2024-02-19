@@ -3,9 +3,8 @@
 
 package com.koibots.subsystems;
 
-import org.junit.jupiter.api.Test;
-
 import com.koibots.robot.subsystems.Indexer.Indexer;
+import org.junit.jupiter.api.Test;
 
 public class IndexerTest {
     @Test
