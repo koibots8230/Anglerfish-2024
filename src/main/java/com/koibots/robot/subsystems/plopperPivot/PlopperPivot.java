@@ -10,6 +10,7 @@ import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -19,21 +20,21 @@ public class PlopperPivot extends SubsystemBase {
 
     private final PlopperPivotIO io;
 
-    private final ArmFeedforward feedforwardController;
-    private final PIDController feedbackController;
+    private final ArmFeedforward feedforward;
+    private final PIDController feedback;
 
     private Measure<Angle> setpoint = Radians.of(0);
 
     public PlopperPivot() {
         io = (Robot.isReal()) ? new PlopperPivotIOSparkMax() : new PlopperPivotIOSim();
-        feedforwardController =
+        feedforward =
                 new ArmFeedforward(
                         PlopperPivotConstants.FEEDFORWARD_CONSTANTS.ks,
                         PlopperPivotConstants.FEEDFORWARD_CONSTANTS.kv,
                         PlopperPivotConstants.FEEDFORWARD_CONSTANTS.ka,
                         PlopperPivotConstants.FEEDFORWARD_CONSTANTS.kg);
 
-        feedbackController =
+        feedback =
                 new PIDController(
                         PlopperPivotConstants.FEEDBACK_CONSTANTS.kP,
                         PlopperPivotConstants.FEEDBACK_CONSTANTS.kI,
@@ -46,8 +47,10 @@ public class PlopperPivot extends SubsystemBase {
         Logger.processInputs("Subsystems/PlopperPivot", inputs);
 
         io.setVoltage(
-                feedbackController.calculate(inputs.position.in(Radians), setpoint.in(Radians))
-                        + feedforwardController.calculate(0, 0, 0));
+                feedback.calculate(inputs.position.in(Radians), setpoint.in(Radians))
+                        + feedforward.calculate(0, 0, 0));
+        
+        SmartDashboard.putData("Plopper/Pivot PID", feedback);
     }
 
     // setters

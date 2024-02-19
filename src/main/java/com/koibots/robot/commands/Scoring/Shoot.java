@@ -134,4 +134,36 @@ public class Shoot extends SequentialCommandGroup {
                     new InstantCommand(() -> RobotContainer.rumbleController(0.0)));
         }
     }
+
+    public Shoot(Measure<Velocity<Angle>> velocity, boolean doPathing) {
+        if (doPathing) {
+            addCommands(new Shoot(velocity));
+        } else {
+            addCommands(
+                    new SetPloppervatorPosition(PloppervatorPosition.Shooting),
+                    new SpinUpShooter(velocity),
+                    new ParallelRaceGroup(
+                            new InstantCommand(
+                                    () -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED),
+                                    Indexer.get()),
+                            new WaitUntilCommand(
+                                    () ->
+                                            Shooter.get()
+                                                            .getCurrent()
+                                                            .get(0)
+                                                            .gte(ShooterConstants.CURRENT_ON_SHOOT)
+                                                    && Shooter.get()
+                                                            .getCurrent()
+                                                            .get(1)
+                                                            .gte(
+                                                                    ShooterConstants
+                                                                            .CURRENT_ON_SHOOT)),
+                            new WaitCommand(1)),
+                    new ParallelCommandGroup(
+                            new InstantCommand(
+                                    () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+                            new InstantCommand(
+                                    () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        }
+    }
 }

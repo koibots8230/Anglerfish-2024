@@ -46,4 +46,17 @@ public class IntakeCommand extends SequentialCommandGroup {
                     new InstantCommand(() -> RobotContainer.rumbleController(0.0)));
         }
     }
+
+    public IntakeCommand(boolean doPathing) {
+        if (doPathing) {
+            addCommands(new IntakeCommand());
+        } else {
+            addCommands(
+                    new ParallelRaceGroup(
+                            new StartEndCommand(
+                                    () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                                    () -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+                            new RunIndexer()));
+        }
+    }
 }

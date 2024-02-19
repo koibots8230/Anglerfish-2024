@@ -13,6 +13,7 @@ import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -62,6 +63,9 @@ public class Shooter extends SubsystemBase {
                                                 setpoint.in(RotationsPerSecond)))
                                 * (12.0 / 5676.0), 12.0), -12.0))
         );
+
+        SmartDashboard.putData("Shooter/Left PID", leftFeedback);
+        SmartDashboard.putData("Shooter/Right PID", rightFeedback);
     }
 
     public void setVelocity(Measure<Velocity<Angle>> speed) {

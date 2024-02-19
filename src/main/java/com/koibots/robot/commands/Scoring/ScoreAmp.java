@@ -38,4 +38,15 @@ public class ScoreAmp extends SequentialCommandGroup {
                     new InstantCommand(() -> RobotContainer.rumbleController(0.0)));
         }
     }
+
+    public ScoreAmp(boolean doPathing) {
+        if (doPathing) {
+            addCommands(new ScoreAmp());
+        } else {
+            addCommands(
+                    new AutoAlign(DriveConstants.AMP_POSITION, Meters.of(0)),
+                    new SetPloppervatorPosition(PloppervatorPosition.Amp),
+                    new RunPlopper(false));
+        }
+    }
 }

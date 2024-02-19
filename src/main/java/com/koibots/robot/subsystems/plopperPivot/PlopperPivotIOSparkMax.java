@@ -19,7 +19,7 @@ public class PlopperPivotIOSparkMax implements PlopperPivotIO {
     public PlopperPivotIOSparkMax() {
         plopperPivotMotor = new CANSparkMax(PlopperPivotConstants.MOTOR_PORT, MotorType.kBrushless);
         plopperPivotMotor.setIdleMode(IdleMode.kBrake);
-        plopperPivotMotor.setSmartCurrentLimit(20, 50, 5670);
+        plopperPivotMotor.setSmartCurrentLimit(30, 60, 5670);
 
         plopperPivotEncoder = plopperPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
         plopperPivotEncoder.setPositionConversionFactor(

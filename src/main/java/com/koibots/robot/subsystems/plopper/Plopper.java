@@ -10,6 +10,7 @@ import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -51,6 +52,8 @@ public class Plopper extends SubsystemBase {
                         + feedforward.calculate(
                                 setpoint.in(RPM)))
                         * (12.0 / 11000.0), 12.0), -12.0)));
+        
+        SmartDashboard.putData("Plopper/Spin PID", feedback);
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {

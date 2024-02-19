@@ -59,8 +59,8 @@ public class SwerveModule {
 
         driveFeedback.disableContinuousInput();
 
-        SmartDashboard.putData("Drive PID " + index, driveFeedback);
-        SmartDashboard.putData("Turn PID " + index, turnFeedback);
+        SmartDashboard.putData("Swerve/Drive PID " + index, driveFeedback);
+        SmartDashboard.putData("Swerve/Turn PID " + index, turnFeedback);
 
         setBrakeMode(true);
     }

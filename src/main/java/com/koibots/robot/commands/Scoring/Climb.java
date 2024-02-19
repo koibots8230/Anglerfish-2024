@@ -32,4 +32,14 @@ public class Climb extends SequentialCommandGroup {
                     new InstantCommand(() -> RobotContainer.rumbleController(0.0)));
         }
     }
+
+    public Climb(boolean doPathing) {
+        if (doPathing) {
+            addCommands(new Climb());
+        } else {
+            addCommands(
+                    new SetPloppervatorPosition(PloppervatorPosition.Climbing),
+                    new SetPloppervatorPosition(PloppervatorPosition.Resting));
+        }
+    }
 }
