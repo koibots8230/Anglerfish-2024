@@ -55,7 +55,8 @@ public class IntakeCommand extends SequentialCommandGroup {
                     new ParallelRaceGroup(
                             new StartEndCommand(
                                     () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
-                                    () -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+                                    () -> Intake.get().setVelocity(RPM.of(0)),
+                                    Intake.get()),
                             new RunIndexer()));
         }
     }
