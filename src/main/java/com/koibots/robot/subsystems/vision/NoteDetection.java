@@ -3,6 +3,10 @@ package com.koibots.robot.subsystems.vision;
 import com.koibots.robot.Constants.VisionConstants;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.BooleanSubscriber;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -36,26 +40,33 @@ public class NoteDetection extends SubsystemBase{
         //went from plurals to different word functions for varibles and i think thats so wonderful
 
         for(int i = 0; i < yaws.length; i++) {
-            double distance = Math.tan(pitches[i].value * -1) * VisionConstants.NOTE_CAMERA_POSE.getZ();//opposite(?)
-            double x = Math.cos(yaws[i].value) * distance;//hypotenuse(?)
-            double y = Math.sin(yaws[i].value) * distance;//talked to (ben?) and flipped the variables
+            double distance = Math.tan(Units.degreesToRadians(pitches[i].value) * -1) * VisionConstants.NOTE_CAMERA_POSE.getZ();//also the hypotenuse
+            double x = Math.cos(Units.degreesToRadians(yaws[i].value)) * distance;
+            double y = Math.sin(Units.degreesToRadians(yaws[i].value)) * distance;//talked to (ben?) and flipped the variables
 
             x = x - VisionConstants.NOTE_CAMERA_POSE.getX();
             y = y - VisionConstants.NOTE_CAMERA_POSE.getY();
 
-            double hypotenuse = Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2)));
-            double note_angle = Swerve.get().getGyroAngle().getRadians() + yaws[i].value; //radians are weird, this is probably wrong
+            double hypotenuse = Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2)));//aka distance
+            double note_angle = Swerve.get().getGyroAngle().getRadians() + Units.degreesToRadians(yaws[i].value); 
+            //i feel like a bully for not using this. should the dirvers know the angle? (do they want to, more of)
 
             if(controller.getAButton() == true){
-                if(founder[i].value == true){//i hope that using i again won't break this???
-                    System.out.println("Note is detected" + hypotenuse + "meters away");//meters is just an assumption right now
+                if(founder[i].value == true){
+                    double NOTE_X_COORDINATE = Swerve.get().getEstimatedPose().getX() + x;
+                    double NOTE_Y_COORDINATE = Swerve.get().getEstimatedPose().getY() + y;
+                    Pose2d NOTE_FIELD_COORDINATE = new Pose2d (NOTE_X_COORDINATE, NOTE_Y_COORDINATE, Swerve.get().getEstimatedPose().getRotation());
+                    //that rotation might be wrong, but oh well
+
+                    System.out.println("Note is detected" + hypotenuse + "meters away" + NOTE_FIELD_COORDINATE);
+                    Logger.recordOutput("NoteDetection/Note1", NOTE_FIELD_COORDINATE);
                     
                     if (yaws[i].value < 0){
                         System.out.println("Note is on left");
                     } else if (yaws[i].value > 0) {
-                        System.out.println ("Note is on right");}//i may be imagining this wrong...
-                    else {
-                        System.out.println("Note not detected");
+                        System.out.println ("Note is on right");
+                    } else {
+                        System.out.println("Note not detected");//this should probably print to the driver station...
                     }
                 }
             }
