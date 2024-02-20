@@ -24,12 +24,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
         GenericHID controller;
+        GenericHID oppController;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
                 controller = new GenericHID(0);
+                oppController = new GenericHID(1);
         }
 
         /**
@@ -88,12 +90,12 @@ public class RobotContainer {
                                                                                                                                 () -> LEDs.get().writeSPI(
                                                                                                                                                 new byte[] { 0x11 })),
                                                                                                                 new InstantCommand(),
-                                                                                                                () -> controller.getRawButton(
+                                                                                                                () -> oppController.getRawButton(
                                                                                                                                 3)),
-                                                                                                () -> controller.getRawButton(
+                                                                                                () -> oppController.getRawButton(
                                                                                                                 2)),
-                                                                                () -> controller.getRawButton(1)),
-                                                                () -> controller.getRawButton(0)));
+                                                                                () -> oppController.getRawButton(1)),
+                                                                () -> oppController.getRawButton(0)));
 
         }
 }
