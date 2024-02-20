@@ -47,8 +47,6 @@ public class Intake extends SubsystemBase {
                                                 * (12.0 / 5676.0),
                                         12.0),
                                 -12.0)));
-
-        SmartDashboard.putData("Intake/PID", feedback);
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {

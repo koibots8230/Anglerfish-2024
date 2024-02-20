@@ -32,7 +32,7 @@ import java.util.List;
 
 public class Constants {
     public static class PlopperPivotConstants {
-        public static final int MOTOR_PORT = 9;
+        public static final int MOTOR_PORT = 10;
         public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -47,7 +47,7 @@ public class Constants {
     }
 
     public static class PlopperConstants {
-        public static final int MOTOR_PORT = 15;
+        public static final int MOTOR_PORT = 16;
         public static final int SWITCH_PORT = 0;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -161,7 +161,7 @@ public class Constants {
     }
 
     public static class ShooterConstants {
-        public static final int RIGHT_MOTOR_PORT = 11;
+        public static final int RIGHT_MOTOR_PORT = 14;
         public static final int LEFT_MOTOR_PORT = 12;
 
         public static final double kP = 0;
@@ -180,7 +180,7 @@ public class Constants {
 
         // ===================================Motors/Encoders===================================
         public static final int LEFT_MOTOR_PORT = 13;
-        public static final int RIGHT_MOTOR_PORT = 14;
+        public static final int RIGHT_MOTOR_PORT = 11;
 
         public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
 
@@ -264,25 +264,25 @@ public class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int MOTOR_PORT = 10;
+        public static final int MOTOR_PORT = 15;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0.1, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 20, 0, 0);
+                new FeedforwardConstantsIO(0, 11, 0, 0);
 
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
 
-        public static final Measure<Velocity<Angle>> TARGET_VELOCITY = RPM.of(3000);
+        public static final Measure<Velocity<Angle>> TARGET_VELOCITY = RPM.of(400);
     }
 
     public static class IndexerConstants {
-        public static final int MOTOR = 16;
+        public static final int MOTOR = 9;
 
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.009, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
+                new FeedforwardConstantsIO(0, 10, 0, 0);
 
         public static final Measure<Velocity<Angle>> LOAD_SPEED = RPM.of(500).times(10);
         public static final Measure<Velocity<Angle>> SHOOT_SPEED = RPM.of(1000).times(10);

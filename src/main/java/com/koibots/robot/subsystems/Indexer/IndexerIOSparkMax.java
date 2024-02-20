@@ -26,17 +26,16 @@ public class IndexerIOSparkMax implements IndexerIO {
         motor = new CANSparkMax(IndexerConstants.MOTOR, MotorType.kBrushless);
 
         motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(15, 35, 11000);
+        motor.setSmartCurrentLimit(20, 40, 11000);
 
         encoder = motor.getEncoder();
 
-        proximititySwitch = new DigitalInput(0);
+        proximititySwitch = new DigitalInput(1);
     }
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
         inputs.velocity = RPM.of(encoder.getVelocity());
-        inputs.isBrake = motor.getIdleMode() == IdleMode.kBrake;
         inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
         inputs.current = Amps.of(motor.getOutputCurrent());
     }

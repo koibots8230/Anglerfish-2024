@@ -21,13 +21,15 @@ public class ShooterIOSparkMax implements ShooterIO {
     protected ShooterIOSparkMax() {
         leftMotor =
                 new CANSparkMax(
-                        ShooterConstants.RIGHT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
+                        ShooterConstants.LEFT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
         rightMotor =
                 new CANSparkMax(
-                        ShooterConstants.LEFT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
+                        ShooterConstants.RIGHT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftMotor.setSmartCurrentLimit(20, 60, 5676);
-        rightMotor.setSmartCurrentLimit(20, 60, 5676);
+        rightMotor.setInverted(true);
+
+        leftMotor.setSmartCurrentLimit(30, 60, 5676);
+        rightMotor.setSmartCurrentLimit(30, 60, 5676);
 
         leftEncoder = leftMotor.getEncoder();
         rightEncoder = rightMotor.getEncoder();
@@ -51,5 +53,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
         leftMotor.setVoltage(left.in(Volts));
         rightMotor.setVoltage(right.in(Volts));
+        System.out.println("Left: " + left.in(Volts));
+        System.out.println("Right: " + right.in(Volts));
     }
 }
