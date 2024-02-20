@@ -31,7 +31,7 @@ import edu.wpi.first.units.Velocity;
 
 public class Constants {
     public static class PlopperConstants {
-        public static final int MOTOR = 0;
+        public static final int MOTOR = 10;
         public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
@@ -117,8 +117,8 @@ public class Constants {
     public static class ElevatorConstants {
 
         // ===================================Motors/Encoders===================================
-        public static final int LEFT_MOTOR_PORT = 1;
-        public static final int RIGHT_MOTOR_PORT = 2;
+        public static final int LEFT_MOTOR_PORT = 11;
+        public static final int RIGHT_MOTOR_PORT = 12;
 
         public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
 
@@ -208,7 +208,7 @@ public class Constants {
     }
 
     public static class IntakeConstants {
-        public static final int MOTOR_PORT = 10;
+        public static final int MOTOR_PORT = 13;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
@@ -218,7 +218,7 @@ public class Constants {
     }
 
     public static class IndexerConstants {
-        public static final int MOTOR = 0;
+        public static final int MOTOR = 14;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
