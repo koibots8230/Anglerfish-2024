@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.plopperPivot;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.PlopperPivotConstants;
+import com.koibots.robot.Constants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -17,13 +17,13 @@ public class PlopperPivotIOSparkMax implements PlopperPivotIO {
     private final AbsoluteEncoder plopperPivotEncoder;
 
     public PlopperPivotIOSparkMax() {
-        plopperPivotMotor = new CANSparkMax(PlopperPivotConstants.MOTOR_PORT, MotorType.kBrushless);
+        plopperPivotMotor = new CANSparkMax(Constants.DeviceIDs.PLOPPER_PIVOT, MotorType.kBrushless);
         plopperPivotMotor.setIdleMode(IdleMode.kBrake);
         plopperPivotMotor.setSmartCurrentLimit(30, 60, 5670);
 
         plopperPivotEncoder = plopperPivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
         plopperPivotEncoder.setPositionConversionFactor(
-                PlopperPivotConstants.ENCODER_POSITION_FACTOR);
+                Constants.RobotConstants.PLOPPER_PIVOT_ENCODER_POSITION_FACTOR);
     }
 
     @Override

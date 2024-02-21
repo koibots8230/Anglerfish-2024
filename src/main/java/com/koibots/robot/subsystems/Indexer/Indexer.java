@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.IndexerConstants;
+import com.koibots.robot.Constants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -27,13 +27,13 @@ public class Indexer extends SubsystemBase {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
         feedforward =
                 new SimpleMotorFeedforward(
-                        IndexerConstants.FEEDFORWARD_CONSTANTS.ks,
-                        IndexerConstants.FEEDFORWARD_CONSTANTS.kv);
+                        Constants.ControlConstants.INDEXER_FEEDFORWARD_CONSTANTS.ks,
+                        Constants.ControlConstants.INDEXER_FEEDFORWARD_CONSTANTS.kv);
         feedback =
                 new PIDController(
-                        IndexerConstants.FEEDBACK_CONSTANTS.kP,
-                        IndexerConstants.FEEDBACK_CONSTANTS.kI,
-                        IndexerConstants.FEEDBACK_CONSTANTS.kD);
+                        Constants.ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kP,
+                        Constants.ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kI,
+                        Constants.ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kD);
 
                      SmartDashboard.putData("Indexer/PID", feedback);
     }

@@ -10,7 +10,6 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.sysid.SysIDMechanism;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.autos.SysID;
-import com.koibots.robot.commands.Intake.RunIndexer;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -59,7 +58,7 @@ public class RobotContainer {
         Trigger intake = new Trigger(() -> controller.getRawButton(5));
         intake.onTrue(
                 new InstantCommand(
-                        () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                        () -> Intake.get().setVelocity(SetpointConstants.INTAKE_TARGET_VELOCITY),
                         Intake.get()));
         // intake.onTrue(new IntakeCommand());
         intake.onFalse(new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()));

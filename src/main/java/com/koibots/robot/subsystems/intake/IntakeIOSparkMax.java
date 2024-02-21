@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.intake;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.IntakeConstants;
+import com.koibots.robot.Constants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -18,7 +18,7 @@ public class IntakeIOSparkMax implements IntakeIO {
 
     public IntakeIOSparkMax() {
 
-        intakeMotor = new CANSparkMax(IntakeConstants.MOTOR_PORT, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(Constants.DeviceIDs.INTAKE, MotorType.kBrushless);
 
         intakeMotor.setSmartCurrentLimit(40, 60, 5670);
 

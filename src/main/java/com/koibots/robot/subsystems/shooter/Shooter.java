@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Arrays;
 import java.util.List;
 
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
@@ -31,13 +33,13 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         io = Robot.isReal() ? new ShooterIOSparkMax() : new ShooterIOSim();
 
-        leftFeedback = new PIDController(ShooterConstants.kP, 0, 0);
-        rightFeedback = new PIDController(ShooterConstants.kP, 0, 0);
+        leftFeedback = new PIDController(ControlConstants.SHOOTER_FEEDBACK.kP, 0, 0);
+        rightFeedback = new PIDController(ControlConstants.SHOOTER_FEEDBACK.kP, 0, 0);
 
         leftFeedforward =
-                new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
+                new SimpleMotorFeedforward(ControlConstants.SHOOTER_FEEEDFORWARD.ks, ControlConstants.SHOOTER_FEEEDFORWARD.kv);
         rightFeedforward =
-                new SimpleMotorFeedforward(ShooterConstants.kS, ShooterConstants.kV);
+                new SimpleMotorFeedforward(ControlConstants.SHOOTER_FEEEDFORWARD.ks, ControlConstants.SHOOTER_FEEEDFORWARD.kv);
     }
 
     @Override

@@ -5,6 +5,7 @@ package com.koibots.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -18,8 +19,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     private final RelativeEncoder encoder;
 
     public ElevatorIOSparkMax() {
-        leftMotor = new CANSparkMax(ElevatorConstants.LEFT_MOTOR_PORT, MotorType.kBrushless);
-        rightMotor = new CANSparkMax(ElevatorConstants.RIGHT_MOTOR_PORT, MotorType.kBrushless);
+        leftMotor = new CANSparkMax(Constants.DeviceIDs.LEFT_ELEVATOR, MotorType.kBrushless);
+        rightMotor = new CANSparkMax(Constants.DeviceIDs.RIGHT_ELEVATOR, MotorType.kBrushless);
 
         leftMotor.setSmartCurrentLimit(30, 60, 5676);
         rightMotor.setSmartCurrentLimit(30, 60, 5676);

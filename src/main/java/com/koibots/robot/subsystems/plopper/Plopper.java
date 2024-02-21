@@ -5,7 +5,8 @@ package com.koibots.robot.subsystems.plopper;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.PlopperConstants;
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -30,13 +31,13 @@ public class Plopper extends SubsystemBase {
 
         feedforward =
                 new SimpleMotorFeedforward(
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.ks,
-                        PlopperConstants.FEEDFORWARD_CONSTANTS.kv);
+                        ControlConstants.PLOPPER_FEEDFORWARD.ks,
+                        ControlConstants.PLOPPER_FEEDFORWARD.kv);
         feedback =
                 new PIDController(
-                        PlopperConstants.FEEDBACK_CONSTANTS.kP,
-                        PlopperConstants.FEEDBACK_CONSTANTS.kI,
-                        PlopperConstants.FEEDBACK_CONSTANTS.kD);
+                        ControlConstants.PLOPPER_FEEDBACK.kP,
+                        ControlConstants.PLOPPER_FEEDBACK.kI,
+                        ControlConstants.PLOPPER_FEEDBACK.kD);
     }
 
     @Override

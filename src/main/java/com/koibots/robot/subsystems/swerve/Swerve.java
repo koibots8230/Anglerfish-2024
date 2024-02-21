@@ -5,7 +5,11 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
+import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -23,6 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
+import javax.naming.ldap.Control;
+
 public class Swerve extends SubsystemBase {
     SwerveModule[] swerveModules;
     GyroIO gyro;
@@ -37,23 +43,23 @@ public class Swerve extends SubsystemBase {
                     new SwerveModule[] { // FL-FR-BL-BR
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_LEFT_DRIVE_ID,
-                                        DriveConstants.FRONT_LEFT_TURN_ID),
+                                        DeviceIDs.FRONT_LEFT_DRIVE,
+                                        DeviceIDs.FRONT_LEFT_TURN),
                                 0),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_RIGHT_DRIVE_ID,
-                                        DriveConstants.FRONT_RIGHT_TURN_ID),
+                                        DeviceIDs.FRONT_RIGHT_DRIVE,
+                                        DeviceIDs.FRONT_RIGHT_TURN),
                                 1),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_LEFT_DRIVE_ID,
-                                        DriveConstants.BACK_LEFT_TURN_ID),
+                                        DeviceIDs.BACK_LEFT_DRIVE,
+                                        DeviceIDs.BACK_LEFT_TURN),
                                 2),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_RIGHT_DRIVE_ID,
-                                        DriveConstants.BACK_RIGHT_TURN_ID),
+                                        DeviceIDs.BACK_RIGHT_DRIVE,
+                                        DeviceIDs.BACK_RIGHT_TURN),
                                 3),
                     };
 
@@ -73,7 +79,7 @@ public class Swerve extends SubsystemBase {
 
         odometry =
                 new SwerveDrivePoseEstimator(
-                        DriveConstants.SWERVE_KINEMATICS,
+                        ControlConstants.SWERVE_KINEMATICS,
                         new Rotation2d(),
                         getModulePositions(),
                         new Pose2d());
@@ -133,10 +139,10 @@ public class Swerve extends SubsystemBase {
         ChassisSpeeds.discretize(speeds, 0.02);
 
         SwerveModuleState[] targetModuleStates =
-                DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+                ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
 
         SwerveDriveKinematics.desaturateWheelSpeeds(
-                targetModuleStates, DriveConstants.MAX_LINEAR_SPEED);
+                targetModuleStates, RobotConstants.MAX_LINEAR_SPEED);
 
         if (speeds.vxMetersPerSecond == 0.0
                 && speeds.vyMetersPerSecond == 0.0
@@ -150,7 +156,7 @@ public class Swerve extends SubsystemBase {
 
         this.setModuleStates(targetModuleStates);
 
-        this.setModuleStates(DriveConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds));
+        this.setModuleStates(ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds));
     }
 
     public Rotation2d getGyroAngle() {
@@ -176,7 +182,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public ChassisSpeeds getRelativeSpeeds() {
-        return DriveConstants.SWERVE_KINEMATICS.toChassisSpeeds(this.getModuleStates());
+        return ControlConstants.SWERVE_KINEMATICS.toChassisSpeeds(this.getModuleStates());
     }
 
     public void resetOdometry(Pose2d pose) {

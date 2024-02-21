@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.Indexer;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.IndexerConstants;
+import com.koibots.robot.Constants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -23,7 +23,8 @@ public class IndexerIOSparkMax implements IndexerIO {
     private final DigitalInput proximititySwitch;
 
     public IndexerIOSparkMax() {
-        motor = new CANSparkMax(IndexerConstants.MOTOR, MotorType.kBrushless);
+        motor = new CANSparkMax(Constants.DeviceIDs.INDEXER, MotorType.kBrushless);
+
 
         motor.setIdleMode(IdleMode.kBrake);
         motor.setSmartCurrentLimit(20, 40, 11000);
