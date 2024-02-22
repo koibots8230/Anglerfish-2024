@@ -132,7 +132,8 @@ public class Constants {
 
         public static final Pose2d[] CAMERA_POSITIONS = null;
 
-        public static final  Pose3d NOTE_CAMERA_POSE = new Pose3d(0.1, 1, 1, new Rotation3d());
+        public static final  Pose3d NOTE_CAMERA_POSE = new Pose3d(0.25, .5, 1, new Rotation3d());
+        public static final double NOTE_CAMERA_DISTANCE_TO_CENTER = Math.sqrt(Math.pow(NOTE_CAMERA_POSE.getX(), 2) + Math.pow(NOTE_CAMERA_POSE.getY(), 2));
         public static final int XboxControllerport = 0;
     }
 }
