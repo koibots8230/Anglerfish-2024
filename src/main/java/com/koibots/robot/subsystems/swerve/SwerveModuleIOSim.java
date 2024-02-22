@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -17,9 +17,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     private static final double LOOP_PERIOD_SECS = 0.02;
 
     private final DCMotorSim driveSim =
-            new DCMotorSim(DCMotor.getNEO(1), DriveConstants.DRIVE_GEAR_RATIO, 0.025);
+            new DCMotorSim(DCMotor.getNEO(1), RobotConstants.DRIVE_GEAR_RATIO, 0.025);
     private final DCMotorSim turnSim =
-            new DCMotorSim(DCMotor.getNEO(1), DriveConstants.TURN_GEAR_RATIO, 0.004);
+            new DCMotorSim(DCMotor.getNEO(1), RobotConstants.TURN_GEAR_RATIO, 0.004);
 
     private Measure<Voltage> driveAppliedVolts = Volts.of(0);
     private Measure<Voltage> turnAppliedVolts = Volts.of(0);
@@ -29,9 +29,9 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         driveSim.update(LOOP_PERIOD_SECS);
         turnSim.update(LOOP_PERIOD_SECS);
 
-        inputs.drivePosition = DriveConstants.WHEEL_RADIUS.times(driveSim.getAngularPositionRad());
+        inputs.drivePosition = RobotConstants.WHEEL_RADIUS.times(driveSim.getAngularPositionRad());
         inputs.driveVelocity =
-                DriveConstants.WHEEL_RADIUS
+                RobotConstants.WHEEL_RADIUS
                         .times(driveSim.getAngularVelocityRadPerSec())
                         .per(Second);
         inputs.driveAppliedVoltage = driveAppliedVolts;

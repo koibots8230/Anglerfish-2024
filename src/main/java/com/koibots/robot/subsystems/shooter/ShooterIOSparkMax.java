@@ -5,6 +5,8 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
@@ -22,10 +24,11 @@ public class ShooterIOSparkMax implements ShooterIO {
     protected ShooterIOSparkMax() {
         leftMotor =
                 new CANSparkMax(
-                        ShooterConstants.LEFT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
+                        DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+
         rightMotor =
                 new CANSparkMax(
-                        ShooterConstants.RIGHT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
+                        DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
 
         leftMotor.setSmartCurrentLimit(30, 60, 5676);
         rightMotor.setSmartCurrentLimit(30, 60, 5676);

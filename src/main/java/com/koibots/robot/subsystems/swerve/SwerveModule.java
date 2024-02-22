@@ -5,7 +5,10 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -16,6 +19,8 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
+
+import javax.naming.ldap.Control;
 
 public class SwerveModule {
     private final SwerveModuleIO io;
@@ -35,25 +40,25 @@ public class SwerveModule {
 
         driveFeedforward =
                 new SimpleMotorFeedforward(
-                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
-                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
         driveFeedback =
                 new ProfiledPIDController(
-                        DriveConstants.DRIVE_PID_CONSTANTS.kP,
-                        DriveConstants.DRIVE_PID_CONSTANTS.kI,
-                        DriveConstants.DRIVE_PID_CONSTANTS.kD,
+                        ControlConstants.DRIVE_PID_CONSTANTS.kP,
+                        ControlConstants.DRIVE_PID_CONSTANTS.kI,
+                        ControlConstants.DRIVE_PID_CONSTANTS.kD,
                         new TrapezoidProfile.Constraints(
-                                DriveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-                                DriveConstants.MAX_LINEAR_ACCELERATION.in(
+                                RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                                RobotConstants.MAX_LINEAR_ACCELERATION.in(
                                         MetersPerSecondPerSecond)));
         turnFeedback =
                 new ProfiledPIDController(
-                        DriveConstants.TURN_PID_CONSTANTS.kP,
-                        DriveConstants.TURN_PID_CONSTANTS.kI,
-                        DriveConstants.TURN_PID_CONSTANTS.kD,
+                        ControlConstants.TURN_PID_CONSTANTS.kP,
+                        ControlConstants.TURN_PID_CONSTANTS.kI,
+                        ControlConstants.TURN_PID_CONSTANTS.kD,
                         new TrapezoidProfile.Constraints(
-                                DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                DriveConstants.MAX_ANGULAR_ACCELERATION.in(
+                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                                RobotConstants.MAX_ANGULAR_ACCELERATION.in(
                                         RadiansPerSecond.per(Second))));
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 

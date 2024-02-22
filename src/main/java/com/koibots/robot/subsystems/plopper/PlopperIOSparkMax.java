@@ -5,7 +5,7 @@ package com.koibots.robot.subsystems.plopper;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.PlopperConstants;
+import com.koibots.robot.Constants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -21,7 +21,7 @@ public class PlopperIOSparkMax implements PlopperIO {
     //private final DigitalInput noteSwitch;
 
     public PlopperIOSparkMax() {
-        plopperMotor = new CANSparkMax(PlopperConstants.MOTOR_PORT, MotorType.kBrushless);
+        plopperMotor = new CANSparkMax(Constants.DeviceIDs.PLOPPER, MotorType.kBrushless);
         plopperMotor.setIdleMode(IdleMode.kBrake);
         plopperMotor.setSmartCurrentLimit(10, 35, 11000);
 

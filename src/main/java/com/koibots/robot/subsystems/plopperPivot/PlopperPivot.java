@@ -5,7 +5,9 @@ package com.koibots.robot.subsystems.plopperPivot;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.PlopperPivotConstants;
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
+import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -29,16 +31,16 @@ public class PlopperPivot extends SubsystemBase {
         io = (Robot.isReal()) ? new PlopperPivotIOSparkMax() : new PlopperPivotIOSim();
         feedforward =
                 new ArmFeedforward(
-                        PlopperPivotConstants.FEEDFORWARD_CONSTANTS.ks,
-                        PlopperPivotConstants.FEEDFORWARD_CONSTANTS.kv,
-                        PlopperPivotConstants.FEEDFORWARD_CONSTANTS.ka,
-                        PlopperPivotConstants.FEEDFORWARD_CONSTANTS.kg);
+                        ControlConstants.PLOPPER_PIVOT_FEEDFORWARD.ks,
+                        ControlConstants.PLOPPER_PIVOT_FEEDFORWARD.kv,
+                        ControlConstants.PLOPPER_PIVOT_FEEDFORWARD.ka,
+                        ControlConstants.PLOPPER_PIVOT_FEEDFORWARD.kg);
 
         feedback =
                 new PIDController(
-                        PlopperPivotConstants.FEEDBACK_CONSTANTS.kP,
-                        PlopperPivotConstants.FEEDBACK_CONSTANTS.kI,
-                        PlopperPivotConstants.FEEDBACK_CONSTANTS.kD);
+                        ControlConstants.PLOPPER_PIVOT_FEEDBACK.kP,
+                        ControlConstants.PLOPPER_PIVOT_FEEDBACK.kI,
+                        ControlConstants.PLOPPER_PIVOT_FEEDBACK.kD);
     }
 
     @Override
@@ -67,12 +69,12 @@ public class PlopperPivot extends SubsystemBase {
 
     public boolean atSetpoint() {
         return inputs.position.in(Radians)
-                        >= PlopperPivotConstants.LOAD_POSITION
-                                .minus(PlopperPivotConstants.ALLOWED_ERROR)
+                        >= SetpointConstants.PLOPPPER_PIVOT_LOAD_POSITION
+                                .minus(Degrees.of(2))
                                 .in(Radians)
                 && inputs.position.in(Radians)
-                        <= PlopperPivotConstants.LOAD_POSITION
-                                .plus(PlopperPivotConstants.ALLOWED_ERROR)
+                        <= SetpointConstants.PLOPPPER_PIVOT_LOAD_POSITION
+                                .plus(Degrees.of(2))
                                 .in(Radians);
     }
 

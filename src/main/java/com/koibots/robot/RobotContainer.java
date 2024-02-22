@@ -58,7 +58,7 @@ public class RobotContainer {
         Trigger intake = new Trigger(() -> controller.getRawButton(5));
         intake.onTrue(
                 new InstantCommand(
-                        () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                        () -> Intake.get().setVelocity(SetpointConstants.INTAKE_TARGET_VELOCITY),
                         Intake.get()));
         // intake.onTrue(new IntakeCommand());
         intake.onFalse(new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()));

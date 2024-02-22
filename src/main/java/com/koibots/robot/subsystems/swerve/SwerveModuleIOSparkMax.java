@@ -9,7 +9,10 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
+import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -44,21 +47,21 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         driveEncoder = driveSparkMax.getEncoder();
         turnEncoder = turnSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
 
-        driveEncoder.setPositionConversionFactor(DriveConstants.DRIVING_ENCODER_POSITION_FACTOR);
-        driveEncoder.setVelocityConversionFactor(DriveConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
+        driveEncoder.setPositionConversionFactor(RobotConstants.DRIVING_ENCODER_POSITION_FACTOR);
+        driveEncoder.setVelocityConversionFactor(RobotConstants.DRIVING_ENCODER_VELOCITY_FACTOR);
 
         turnEncoder.setInverted(true);
 
-        turnEncoder.setPositionConversionFactor(DriveConstants.TURNING_ENCODER_POSITION_FACTOR);
-        turnEncoder.setVelocityConversionFactor(DriveConstants.TURNING_ENCODER_VELOCITY_FACTOR);
+        turnEncoder.setPositionConversionFactor(RobotConstants.TURNING_ENCODER_POSITION_FACTOR);
+        turnEncoder.setVelocityConversionFactor(RobotConstants.TURNING_ENCODER_VELOCITY_FACTOR);
 
-        if (turnId == DriveConstants.FRONT_LEFT_TURN_ID) {
+        if (turnId == DeviceIDs.FRONT_LEFT_TURN) {
             chassisAngularOffset = Rotation2d.fromRadians((3 * Math.PI) / 2);
-        } else if (turnId == DriveConstants.FRONT_RIGHT_TURN_ID) {
+        } else if (turnId == DeviceIDs.FRONT_RIGHT_TURN) {
             chassisAngularOffset = new Rotation2d(Math.PI);
-        } else if (turnId == DriveConstants.BACK_LEFT_TURN_ID) {
+        } else if (turnId == DeviceIDs.BACK_LEFT_TURN) {
             chassisAngularOffset = Rotation2d.fromRadians(0);
-        } else if (turnId == DriveConstants.BACK_RIGHT_TURN_ID) {
+        } else if (turnId == DeviceIDs.BACK_RIGHT_TURN) {
             chassisAngularOffset =
                     Rotation2d.fromRadians(
                             Math.PI / 2); // Rotation2d.fromDegrees((3 * Math.PI) / 2);

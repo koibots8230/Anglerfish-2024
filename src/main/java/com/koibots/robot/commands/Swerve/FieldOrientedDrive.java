@@ -8,7 +8,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
 import com.koibots.robot.Constants;
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -47,7 +47,7 @@ public class FieldOrientedDrive extends Command {
                         0,
                         0,
                         new Constraints(
-                                DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                                 4 * Math.PI),
                         0.02);
 
@@ -95,12 +95,12 @@ public class FieldOrientedDrive extends Command {
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                             linearMagnitude
                                     * linearDirection.getCos()
-                                    * DriveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                            * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             linearMagnitude
                                     * linearDirection.getSin()
-                                    * DriveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                            * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             angularVelocity
-                                    * DriveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                            * RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                             Swerve.get().getEstimatedPose().getRotation());
 
             Swerve.get().driveRobotRelative(speeds);
