@@ -5,9 +5,7 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DeviceIDs;
-import com.koibots.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.units.Measure;

@@ -6,7 +6,8 @@ package com.koibots.robot.commands.Ploppervator;
 import static com.koibots.robot.subsystems.Subsystems.Plopper;
 import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.Constants.PlopperConstants;
+import com.koibots.robot.Constants.SetpointConstants;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunPlopper extends Command {
@@ -22,7 +23,7 @@ public class RunPlopper extends Command {
 
     @Override
     public void initialize() {
-        Plopper.get().setVelocity(load ? PlopperConstants.LOAD_SPEED : PlopperConstants.PLOP_SPEED);
+        Plopper.get().setVelocity(load ? SetpointConstants.PLOPPER_LOAD_SPEED : SetpointConstants.PLOPPER_PLOP_SPEED);
     }
 
     @Override

@@ -9,9 +9,7 @@ import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.DeviceIDs;
-import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;

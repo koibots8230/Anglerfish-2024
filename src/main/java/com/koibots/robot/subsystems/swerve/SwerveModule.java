@@ -5,9 +5,7 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ControlConstants;
-import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -19,8 +17,6 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
-
-import javax.naming.ldap.Control;
 
 public class SwerveModule {
     private final SwerveModuleIO io;

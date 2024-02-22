@@ -20,13 +20,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import java.util.Arrays;
 
 public class Shoot extends SequentialCommandGroup {
 
-    public Shoot(Measure<Velocity<Angle>> velocity) {
+    public Shoot() {
         Pose2d nearestPoint = new Pose2d(1000, 1000, new Rotation2d());
+        int whichDistance = 0;
 
         for (int a = 0; a < DriveConstants.SHOOT_DISTANCES_METERS.size(); a++) {
             Pose2d nearestPointOnCircle =
@@ -80,6 +80,7 @@ public class Shoot extends SequentialCommandGroup {
                     Swerve.get()
                             .getEstimatedPose()
                             .nearest(Arrays.asList(nearestPoint, nearestPointOnCircle));
+            whichDistance = (nearestPoint == nearestPointOnCircle) ? a : whichDistance;
         }
         if (Math.abs(Swerve.get().getEstimatedPose().getX() - nearestPoint.getX())
                         < DriveConstants.ALLOWED_DISTANCE_FROM_SHOOT.getX()
@@ -104,24 +105,12 @@ public class Shoot extends SequentialCommandGroup {
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
                     new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                    new SpinUpShooter(velocity),
+                    new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
                     new ParallelRaceGroup(
                             new InstantCommand(
-                                    () -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED),
+                                    () -> Indexer.get().setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
                                     Indexer.get()),
-                            new WaitUntilCommand(
-                                    () ->
-                                            Shooter.get()
-                                                            .getCurrent()
-                                                            .get(0)
-                                                            .gte(ShooterConstants.CURRENT_ON_SHOOT)
-                                                    && Shooter.get()
-                                                            .getCurrent()
-                                                            .get(1)
-                                                            .gte(
-                                                                    ShooterConstants
-                                                                            .CURRENT_ON_SHOOT)),
-                            new WaitCommand(1)),
+                            new WaitCommand(2)),
                     new ParallelCommandGroup(
                             new InstantCommand(
                                     () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
@@ -137,27 +126,15 @@ public class Shoot extends SequentialCommandGroup {
 
     public Shoot(Measure<Velocity<Angle>> velocity, boolean doPathing) {
         if (doPathing) {
-            addCommands(new Shoot(velocity));
+            addCommands(new Shoot());
         } else {
             addCommands(
                     new SetPloppervatorPosition(PloppervatorPosition.Shooting),
                     new SpinUpShooter(velocity),
                     new ParallelRaceGroup(
                             new InstantCommand(
-                                    () -> Indexer.get().setVelocity(IndexerConstants.SHOOT_SPEED),
+                                    () -> Indexer.get().setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
                                     Indexer.get()),
-                            new WaitUntilCommand(
-                                    () ->
-                                            Shooter.get()
-                                                            .getCurrent()
-                                                            .get(0)
-                                                            .gte(ShooterConstants.CURRENT_ON_SHOOT)
-                                                    && Shooter.get()
-                                                            .getCurrent()
-                                                            .get(1)
-                                                            .gte(
-                                                                    ShooterConstants
-                                                                            .CURRENT_ON_SHOOT)),
                             new WaitCommand(1)),
                     new ParallelCommandGroup(
                             new InstantCommand(

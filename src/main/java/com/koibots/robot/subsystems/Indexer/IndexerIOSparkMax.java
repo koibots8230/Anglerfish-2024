@@ -31,7 +31,7 @@ public class IndexerIOSparkMax implements IndexerIO {
 
         encoder = motor.getEncoder();
 
-        proximititySwitch = new DigitalInput(4);
+        proximititySwitch = new DigitalInput(5);
     }
 
     @Override

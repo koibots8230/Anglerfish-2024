@@ -7,7 +7,6 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants;
-import com.koibots.robot.Constants.IntakeConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;

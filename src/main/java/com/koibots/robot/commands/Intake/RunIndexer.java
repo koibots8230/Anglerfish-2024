@@ -6,7 +6,8 @@ package com.koibots.robot.commands.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Indexer;
 import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.Constants.IndexerConstants;
+import com.koibots.robot.Constants.SetpointConstants;
+
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunIndexer extends Command {
@@ -17,7 +18,7 @@ public class RunIndexer extends Command {
 
     @Override
     public void initialize() {
-        Indexer.get().setVelocity(IndexerConstants.LOAD_SPEED);
+        Indexer.get().setVelocity(SetpointConstants.INDEXER_LOAD_SPEED);
     }
 
     @Override

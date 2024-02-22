@@ -65,14 +65,17 @@ public class Constants {
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO PLOPPER_FEEDFORWARD =
                 new FeedforwardConstantsIO(0, 0, 0, 0);
+
                 public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
                 new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
                 public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(1.9, 0, 0, 35, 0, 0);
                 public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2, 0, 2.75);
+
                 public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD = new FeedforwardConstantsIO(0, 0, 0, 0);
+
                 public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO INTAKE_FEEDFORWARD_CONSTANTS =
@@ -127,12 +130,16 @@ public class Constants {
         public static final class SetpointConstants {
                 public static final Measure<Angle> PLOPPER_PIVOT_AMP_POSITION = Degrees.of(100);
                 public static final Measure<Angle> PLOPPPER_PIVOT_LOAD_POSITION = Degrees.of(0);
+
                 public static final Measure<Velocity<Angle>> PLOPPER_LOAD_SPEED = RPM.of(600).times(10);
                 public static final Measure<Velocity<Angle>> PLOPPER_PLOP_SPEED = RPM.of(400).times(10);
-                public static final Measure<Velocity<Angle>> INTAKE_TARGET_VELOCITY = RPM.of(400);
-                public static final Measure<Velocity<Angle>> INDEXER_LOAD_SPEED = RPM.of(500).times(10);
-                public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(1000).times(10);
-                public static final Measure<Velocity<Angle>> SPEED = RPM.of(5000);
+
+                public static final Measure<Velocity<Angle>> INTAKE_TARGET_VELOCITY = RPM.of(500);
+
+                public static final Measure<Velocity<Angle>> INDEXER_LOAD_SPEED = RPM.of(100).times(10);
+                public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(110).times(10);
+
+                public static final List<Measure<Velocity<Angle>>> SHOOTER_SPEEDS = Arrays.asList(RPM.of(5000));
         }
 
         public static final class RobotConstants {

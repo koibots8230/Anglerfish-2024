@@ -9,7 +9,7 @@ import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.koibots.robot.Constants.DriveConstants;
-import com.koibots.robot.Constants.IntakeConstants;
+import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Swerve.AutoAlign;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,7 +36,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                     new AutoAlign(nearestNote, Meters.of(0)),
                     new ParallelRaceGroup(
                             new StartEndCommand(
-                                    () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                                    () -> Intake.get().setVelocity(SetpointConstants.INTAKE_TARGET_VELOCITY),
                                     () -> Intake.get().setVelocity(RPM.of(0))),
                             new RunIndexer()));
         } else {
@@ -54,7 +54,7 @@ public class IntakeCommand extends SequentialCommandGroup {
             addCommands(
                     new ParallelRaceGroup(
                             new StartEndCommand(
-                                    () -> Intake.get().setVelocity(IntakeConstants.TARGET_VELOCITY),
+                                    () -> Intake.get().setVelocity(SetpointConstants.INTAKE_TARGET_VELOCITY),
                                     () -> Intake.get().setVelocity(RPM.of(0)),
                                     Intake.get()),
                             new RunIndexer()));

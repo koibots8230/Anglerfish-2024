@@ -5,7 +5,6 @@ package com.koibots.robot.subsystems.plopper;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;

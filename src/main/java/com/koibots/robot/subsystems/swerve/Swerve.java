@@ -5,10 +5,8 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
-import com.koibots.robot.Constants.DriveConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -26,8 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
-
-import javax.naming.ldap.Control;
 
 public class Swerve extends SubsystemBase {
     SwerveModule[] swerveModules;

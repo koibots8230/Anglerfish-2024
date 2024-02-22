@@ -6,7 +6,7 @@ package com.koibots.robot.commands.Swerve;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
@@ -25,12 +25,12 @@ public class AutoAlign extends Command {
         pathfindingCommand =
                 new PathfindHolonomic(
                         targetPose,
-                        DriveConstants.PATH_CONSTRAINTS,
+                        ControlConstants.PATH_CONSTRAINTS,
                         0.0,
                         Swerve.get()::getEstimatedPose,
                         Swerve.get()::getRelativeSpeeds,
                         Swerve.get()::driveRobotRelative,
-                        DriveConstants.HOLONOMIC_CONFIG,
+                        ControlConstants.HOLONOMIC_CONFIG,
                         rotationDelay.in(Meters),
                         Swerve.get());
     }
@@ -44,18 +44,18 @@ public class AutoAlign extends Command {
         PathPlannerPath path =
                 new PathPlannerPath(
                         points,
-                        DriveConstants.PATH_CONSTRAINTS,
+                        ControlConstants.PATH_CONSTRAINTS,
                         new GoalEndState(0, targetPose.getRotation()));
         path.preventFlipping = true;
 
         pathfindingCommand =
                 new PathfindThenFollowPathHolonomic(
                         path,
-                        DriveConstants.PATH_CONSTRAINTS,
+                        ControlConstants.PATH_CONSTRAINTS,
                         Swerve.get()::getEstimatedPose,
                         Swerve.get()::getRelativeSpeeds,
                         Swerve.get()::driveRobotRelative,
-                        DriveConstants.HOLONOMIC_CONFIG,
+                        ControlConstants.HOLONOMIC_CONFIG,
                         rotationDelay.in(Meters),
                         () -> false,
                         Swerve.get());

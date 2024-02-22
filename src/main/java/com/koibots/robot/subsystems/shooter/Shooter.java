@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Arrays;
 import java.util.List;
 
-import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.koibots.robot.Robot;
