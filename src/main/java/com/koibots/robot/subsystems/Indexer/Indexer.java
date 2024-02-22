@@ -35,7 +35,7 @@ public class Indexer extends SubsystemBase {
                         IndexerConstants.FEEDBACK_CONSTANTS.kI,
                         IndexerConstants.FEEDBACK_CONSTANTS.kD);
 
-                     SmartDashboard.putData("Indexer/PID", feedback);
+        SmartDashboard.putData("Indexer/PID", feedback);
     }
 
     @Override
@@ -50,13 +50,10 @@ public class Indexer extends SubsystemBase {
                                         (feedback.calculate(
                                                                 inputs.velocity.in(RPM),
                                                                 setpoint.in(RPM))
-                                                        +
-        feedforward.calculate(setpoint.in(RPM)))
+                                                        + feedforward.calculate(setpoint.in(RPM)))
                                                 * (12.0 / 11000.0),
                                         12.0),
                                 -12.0)));
-
-       
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {

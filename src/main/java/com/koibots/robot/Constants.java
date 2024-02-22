@@ -161,15 +161,15 @@ public class Constants {
     }
 
     public static class ShooterConstants {
-        public static final int RIGHT_MOTOR_PORT = 14;
-        public static final int LEFT_MOTOR_PORT = 12;
+        public static final int RIGHT_MOTOR_PORT = 12;
+        public static final int LEFT_MOTOR_PORT = 14;
 
         public static final double kP = 0;
 
         public static final double kS = 0;
-        public static final double kV = 0;
+        public static final double kV = 4;
 
-        public static final Measure<Velocity<Angle>> SPEED = RPM.of(5000);
+        public static final Measure<Velocity<Angle>> SPEED = RPM.of(2000);
 
         public static final Measure<Velocity<Angle>> ALLOWED_ERROR = RPM.of(20);
 
@@ -273,7 +273,7 @@ public class Constants {
 
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
 
-        public static final Measure<Velocity<Angle>> TARGET_VELOCITY = RPM.of(400);
+        public static final Measure<Velocity<Angle>> TARGET_VELOCITY = RPM.of(500);
     }
 
     public static class IndexerConstants {

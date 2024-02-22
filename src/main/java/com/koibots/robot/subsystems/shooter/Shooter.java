@@ -45,24 +45,24 @@ public class Shooter extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Subsystems/Shooter", inputs);
 
-        // io.setVoltages(
-        //         Volts.of(
-        //                 Math.max(Math.min(
-        //                         (leftFeedback.calculate(
-        //                                         inputs.leftVelocity.in(RotationsPerSecond),
-        //                                         setpoint.in(RotationsPerSecond))
-        //                         + leftFeedforward.calculate(
-        //                                         setpoint.in(RotationsPerSecond)))
-        //                         * (12.0 / 5676.0), 12.0), -12.0)),
-        //         Volts.of(
-        //                 Math.max(Math.min(
-        //                         (rightFeedback.calculate(
-        //                                         inputs.rightVelocity.in(RotationsPerSecond),
-        //                                         setpoint.in(RotationsPerSecond))
-        //                         + rightFeedforward.calculate(
-        //                                         setpoint.in(RotationsPerSecond)))
-        //                         * (12.0 / 5676.0), 12.0), -12.0))
-        // );
+        io.setVoltages(
+                Volts.of(
+                        Math.max(Math.min(
+                                (leftFeedback.calculate(
+                                                inputs.leftVelocity.in(RotationsPerSecond),
+                                                setpoint.in(RotationsPerSecond))
+                                + leftFeedforward.calculate(
+                                                setpoint.in(RotationsPerSecond)))
+                                * (12.0 / 5676.0), 12.0), -12.0)),
+                Volts.of(
+                        Math.max(Math.min(
+                                (rightFeedback.calculate(
+                                                inputs.rightVelocity.in(RotationsPerSecond),
+                                                setpoint.in(RotationsPerSecond))
+                                + rightFeedforward.calculate(
+                                                setpoint.in(RotationsPerSecond)))
+                                * (12.0 / 5676.0), 12.0), -12.0))
+        );
 
         SmartDashboard.putData("Shooter/Left PID", leftFeedback);
         SmartDashboard.putData("Shooter/Right PID", rightFeedback);

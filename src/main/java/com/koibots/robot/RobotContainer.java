@@ -10,7 +10,6 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.sysid.SysIDMechanism;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.autos.SysID;
-import com.koibots.robot.commands.Intake.RunIndexer;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
@@ -65,7 +64,8 @@ public class RobotContainer {
         intake.onFalse(new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()));
 
         Trigger indexer = new Trigger(() -> controller.getRawButton(6));
-        indexer.onTrue(new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get()));
+        indexer.onTrue(
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get()));
         indexer.onFalse(
                 new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()));
 
@@ -110,22 +110,11 @@ public class RobotContainer {
 
         Trigger shoot = new Trigger(() -> controller.getRawAxis(3) > 0.15);
         shoot.onTrue(
-                new ParallelCommandGroup(
                         new InstantCommand(
-                                () -> Shooter.get().setVoltage(Volts.of(11)), Shooter.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVoltage(Volts.of(11)), Indexer.get()),
-                        new InstantCommand(() -> Intake.get().setVoltage(Volts.of(11)))
-                ));
-        // shoot.onTrue(new Shoot(ShooterConstants.SPEED, false));
+                                () -> Shooter.get().setVelocity(RPM.of(2000)), Shooter.get()));
         shoot.onFalse(
-                new ParallelCommandGroup(
                         new InstantCommand(
-                                () -> Shooter.get().setVoltage(Volts.of(0)), Shooter.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVoltage(Volts.of(0)), Indexer.get()),
-                        new InstantCommand(() -> Intake.get().setVoltage(Volts.of(0)))
-                                ));
+                                () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()));
     }
 
     public Command getAutonomousRoutine() {

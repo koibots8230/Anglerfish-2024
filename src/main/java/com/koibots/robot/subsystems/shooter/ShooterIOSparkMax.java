@@ -8,15 +8,16 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.robot.Constants.ShooterConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
     CANSparkMax rightMotor;
-    RelativeEncoder leftEncoder;
-    RelativeEncoder rightEncoder;
+
+    Encoder rightEncoder;
+    Encoder leftEncoder;
 
     protected ShooterIOSparkMax() {
         leftMotor =
@@ -26,19 +27,20 @@ public class ShooterIOSparkMax implements ShooterIO {
                 new CANSparkMax(
                         ShooterConstants.RIGHT_MOTOR_PORT, CANSparkLowLevel.MotorType.kBrushless);
 
-        rightMotor.setInverted(true);
-
         leftMotor.setSmartCurrentLimit(30, 60, 5676);
         rightMotor.setSmartCurrentLimit(30, 60, 5676);
 
-        leftEncoder = leftMotor.getEncoder();
-        rightEncoder = rightMotor.getEncoder();
+        rightEncoder = new Encoder(2, 3);
+        leftEncoder = new Encoder(0, 1);
+
+        leftEncoder.setDistancePerPulse(1 / 8192);
+        rightEncoder.setDistancePerPulse(1 / 8192);
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RPM.of(leftEncoder.getVelocity());
-        inputs.rightVelocity = RPM.of(rightEncoder.getVelocity());
+        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getRate());
+        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate());
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
@@ -52,7 +54,7 @@ public class ShooterIOSparkMax implements ShooterIO {
     @Override
     public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
         leftMotor.setVoltage(left.in(Volts));
-        rightMotor.setVoltage(right.in(Volts));
+        rightMotor.setVoltage(-right.in(Volts));
         System.out.println("Left: " + left.in(Volts));
         System.out.println("Right: " + right.in(Volts));
     }

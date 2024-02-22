@@ -18,7 +18,7 @@ public class PlopperIOSparkMax implements PlopperIO {
     private final CANSparkMax plopperMotor;
     private final RelativeEncoder plopperEncoder;
 
-    private final DigitalInput noteSwitch;
+    //private final DigitalInput noteSwitch;
 
     public PlopperIOSparkMax() {
         plopperMotor = new CANSparkMax(PlopperConstants.MOTOR_PORT, MotorType.kBrushless);
@@ -27,7 +27,7 @@ public class PlopperIOSparkMax implements PlopperIO {
 
         plopperEncoder = plopperMotor.getEncoder();
 
-        noteSwitch = new DigitalInput(PlopperConstants.SWITCH_PORT);
+        //noteSwitch = new DigitalInput(4);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class PlopperIOSparkMax implements PlopperIO {
         plopperMotor.setVoltage(volts.in(Volts));
     }
 
-    @Override
-    public boolean sensorTriggered() {
-        return noteSwitch.get();
-    }
+    // @Override
+    // public boolean sensorTriggered() {
+    //     return noteSwitch.get();
+    // }
 }
