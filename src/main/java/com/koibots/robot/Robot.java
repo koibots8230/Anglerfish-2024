@@ -3,6 +3,7 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.subsystems.Subsystems.Note;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.koibots.lib.dashboard.Alert;
@@ -92,6 +93,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
         SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
         SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+
+        Note.get();
     }
 
     /**

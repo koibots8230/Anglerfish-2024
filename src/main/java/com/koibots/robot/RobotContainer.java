@@ -17,11 +17,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    GenericHID controller;
+    //GenericHID controller;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        controller = new GenericHID(0);
+        //controller = new GenericHID(0);
     }
 
     /**
@@ -31,13 +31,13 @@ public class RobotContainer {
      * {@link JoystickButton}.
      */
     public void configureButtonBindings() {
-        Swerve.get()
-                .setDefaultCommand(
-                        new FieldOrientedDrive(
-                                () -> -controller.getRawAxis(1),
-                                () -> -controller.getRawAxis(0),
-                                () -> -controller.getRawAxis(4),
-                                () -> controller.getPOV(),
-                                () -> controller.getRawButton(1)));
+        // Swerve.get()
+        //         .setDefaultCommand(
+        //                 new FieldOrientedDrive(
+        //                         () -> -controller.getRawAxis(1),
+        //                         () -> -controller.getRawAxis(0),
+        //                         () -> -controller.getRawAxis(4),
+        //                         () -> controller.getPOV(),
+        //                         () -> controller.getRawButton(1)));
     }
 }

@@ -37,15 +37,21 @@ public class NoteDetection extends SubsystemBase{
 
     @Override
     public void periodic() {
-        notePoses.clear();
         TimestampedDouble[] pitches = pitch.readQueue();
+
+        if (pitches.length > 0) {
+            System.out.println("Pitches: " + pitches[0].value);
+        }
 
         notePoses = new LinkedList<>();
 
         for(int i = 0; i < pitches.length; i++) {
+            if (pitches.length == 0) {
+                break;
+            }
             double distance = Math.tan(Units.degreesToRadians(pitches[i].value) * -1) * VisionConstants.NOTE_CAMERA_POSE.getZ();//also the hypotenuse
             double y = Math.cos(Swerve.get().getEstimatedPose().getRotation().getRadians()) * distance;
-            double x = Math.sin(Swerve.get().getEstimatedPose().getRotation().getRadians()) * distance;//talked to (ben?) and flipped the variables
+            double x = Math.sin(Swerve.get().getEstimatedPose().getRotation().getRadians()) * distance;
 
             x = x - (VisionConstants.NOTE_CAMERA_DISTANCE_TO_CENTER * Math.sin(Swerve.get().getEstimatedPose().getRotation().getRadians()));
             y = y - (VisionConstants.NOTE_CAMERA_DISTANCE_TO_CENTER * Math.sin(Swerve.get().getEstimatedPose().getRotation().getRadians()));
