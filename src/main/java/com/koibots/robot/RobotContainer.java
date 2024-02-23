@@ -110,10 +110,14 @@ public class RobotContainer {
         Trigger shoot = new Trigger(() -> controller.getRawAxis(3) > 0.15);
         shoot.onTrue(
                         new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(2000)), Shooter.get()));
+                                () -> Shooter.get().setVoltage(Volts.of(11)), Shooter.get()));
         shoot.onFalse(
                         new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()));
+                                () -> Shooter.get().setVoltage(Volts.of(0)), Shooter.get()));
+
+        Trigger elevator = new Trigger(() -> controller.getRawAxis(2) > 0.15);
+        elevator.onTrue(new InstantCommand(() -> Elevator.get().setVoltage(Volts.of(9)), Elevator.get()));
+        elevator.onFalse(new InstantCommand(() -> Elevator.get().setVoltage(Volts.of(0)), Elevator.get()));
     }
 
     public Command getAutonomousRoutine() {

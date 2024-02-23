@@ -8,6 +8,8 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
@@ -31,17 +33,14 @@ public class ShooterIOSparkMax implements ShooterIO {
         leftMotor.setSmartCurrentLimit(30, 60, 5676);
         rightMotor.setSmartCurrentLimit(30, 60, 5676);
 
-        rightEncoder = new Encoder(2, 3);
-        leftEncoder = new Encoder(0, 1);
-
-        leftEncoder.setDistancePerPulse(1 / 8192);
-        rightEncoder.setDistancePerPulse(1 / 8192);
+        rightEncoder = new Encoder(0, 1);
+        leftEncoder = new Encoder(2, 3);
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getRate());
-        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate());
+        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getRate() / 8192);
+        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate() / 8192);
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());

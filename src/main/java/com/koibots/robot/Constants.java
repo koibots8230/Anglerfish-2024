@@ -46,13 +46,13 @@ public class Constants {
                 public static final int FRONT_LEFT_DRIVE = 7;
                 public static final int FRONT_LEFT_TURN = 8;
                 public static final int INDEXER = 9;
-                public static final int PLOPPER_PIVOT = 10;
-                public static final int RIGHT_ELEVATOR = 11;
-                public static final int SHOOTER_LEFT = 12;
-                public static final int LEFT_ELEVATOR = 13;
-                public static final int SHOOTER_RIGHT = 14;
+                public static final int PLOPPER_PIVOT = 11;
+                public static final int RIGHT_ELEVATOR = 16;
+                public static final int LEFT_ELEVATOR = 10;
+                public static final int SHOOTER_LEFT = 14;
+                public static final int SHOOTER_RIGHT = 12;
                 public static final int INTAKE = 15;
-                public static final int PLOPPER = 16;
+                public static final int PLOPPER = 13;
         }
 
         public static class ControlConstants {
@@ -73,7 +73,7 @@ public class Constants {
                 public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2, 0, 2.75);
 
-                public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 10, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD = new FeedforwardConstantsIO(0, 0, 0, 0);
 
                 public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
