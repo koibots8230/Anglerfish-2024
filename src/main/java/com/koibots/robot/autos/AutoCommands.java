@@ -17,6 +17,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+import java.util.function.Supplier;
+
 public enum AutoCommands {
     B1_A_N1_S1(
             followChoreoTrajectory("B1_A_N1_S1.1"),
@@ -83,10 +85,10 @@ public enum AutoCommands {
             followChoreoTrajectory("B1_A_N4_S1.3"),
             new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false));
 
-    public final Command command;
+    public final Supplier<Command> command;
 
     AutoCommands(Command... commands) {
-        this.command = new SequentialCommandGroup(commands);
+        this.command = () -> new SequentialCommandGroup(commands);
     }
 
     private static Command followChoreoTrajectory(String trajectory) {
