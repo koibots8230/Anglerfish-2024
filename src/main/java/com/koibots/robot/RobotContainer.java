@@ -33,7 +33,7 @@ public class RobotContainer {
         autos.add(new SysID(SysIDMechanism.Swerve, () -> controller.getRawButton(1)));
         autos.add(
                 new SequentialCommandGroup(
-                        B1_A_N1_S1.command, S1_N4_S2.command, S2_N5_S2.command, S2_N6_S2.command));
+                        B1_A_N1_S1.command.get(), S1_N4_S2.command.get(), S2_N5_S2.command.get(), S2_N6_S2.command.get()));
 
         SmartDashboard.putString("Auto Routine", "0");
     }
