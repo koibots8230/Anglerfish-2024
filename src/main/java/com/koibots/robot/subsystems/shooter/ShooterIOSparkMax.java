@@ -13,6 +13,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
@@ -33,14 +34,17 @@ public class ShooterIOSparkMax implements ShooterIO {
         leftMotor.setSmartCurrentLimit(30, 60, 5676);
         rightMotor.setSmartCurrentLimit(30, 60, 5676);
 
-        rightEncoder = new Encoder(0, 1);
-        leftEncoder = new Encoder(2, 3);
+        rightEncoder = new Encoder(0, 1, false, EncodingType.k2X);
+        leftEncoder = new Encoder(2, 3, false, EncodingType.k2X); // TODO: Encoders need smoothening??
+
+        // rightEncoder.setDistancePerPulse(1/2048);
+        // leftEncoder.setDistancePerPulse(1/2048);
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getRate() / 8192);
-        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate() / 8192);
+        inputs.leftVelocity = RotationsPerSecond.of(-leftEncoder.getRate());
+        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate());
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
@@ -53,9 +57,7 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
-        leftMotor.setVoltage(left.in(Volts));
-        rightMotor.setVoltage(-right.in(Volts));
-        System.out.println("Left: " + left.in(Volts));
-        System.out.println("Right: " + right.in(Volts));
+        leftMotor.setVoltage(-left.in(Volts));
+        rightMotor.setVoltage(right.in(Volts));
     }
 }

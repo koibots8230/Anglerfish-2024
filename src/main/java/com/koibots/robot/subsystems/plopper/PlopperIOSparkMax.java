@@ -27,7 +27,7 @@ public class PlopperIOSparkMax implements PlopperIO {
 
         plopperEncoder = plopperMotor.getEncoder();
 
-        noteSwitch = new DigitalInput(4);
+        noteSwitch = new DigitalInput(6);
     }
 
     @Override

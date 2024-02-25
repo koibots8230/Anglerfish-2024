@@ -105,8 +105,9 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
     @Override
     public void setTurnVoltage(Measure<Voltage> voltage) {
-
-        turnSparkMax.setVoltage(voltage.in(Volts));
+        if(Math.abs(voltage.in(Volts)) > 0.25) {
+             turnSparkMax.setVoltage(voltage.in(Volts));
+        }
     }
 
     @Override

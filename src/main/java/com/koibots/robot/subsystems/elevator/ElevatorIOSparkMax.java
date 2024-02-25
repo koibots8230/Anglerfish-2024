@@ -22,8 +22,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         leftMotor = new CANSparkMax(Constants.DeviceIDs.LEFT_ELEVATOR, MotorType.kBrushless);
         rightMotor = new CANSparkMax(Constants.DeviceIDs.RIGHT_ELEVATOR, MotorType.kBrushless);
 
-        leftMotor.setSmartCurrentLimit(30, 60, 5676);
-        rightMotor.setSmartCurrentLimit(30, 60, 5676);
+        leftMotor.setSmartCurrentLimit(45, 60, 5676);
+        rightMotor.setSmartCurrentLimit(45, 60, 5676);
 
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);
@@ -42,14 +42,15 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         inputs.position = Meters.of(encoder.getPosition());
         inputs.velocity = MetersPerSecond.of(encoder.getVelocity());
 
-        inputs.voltage = Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        inputs.leftVoltage = Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        inputs.rightVoltage = Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
     }
 
     @Override
     public void setVoltage(Measure<Voltage> volts) {
-        leftMotor.setVoltage(volts.in(Volts));
+        leftMotor.setVoltage(-volts.in(Volts));
         rightMotor.setVoltage(volts.in(Volts));
     }
 

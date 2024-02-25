@@ -59,12 +59,12 @@ public class Constants {
                 public static final PIDConstantsIO PLOPPER_PIVOT_FEEDBACK =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO PLOPPER_PIVOT_FEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
+                new FeedforwardConstantsIO(0, 0, 0, 0, 0, 0, 0, 0);
 
                 public static final PIDConstantsIO PLOPPER_FEEDBACK =
                 new PIDConstantsIO(0, 0, 0, 0, 0, 0);
                 public static final FeedforwardConstantsIO PLOPPER_FEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
+                new FeedforwardConstantsIO(0, 5, 0, 0);
 
                 public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
                 new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
@@ -73,8 +73,8 @@ public class Constants {
                 public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2, 0, 2.75);
 
-                public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 10, 0, 0, 0, 0);
-                public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD = new FeedforwardConstantsIO(0, 0, 0, 0);
+                public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD = new FeedforwardConstantsIO(0, 11, 0, 0);
 
                 public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
@@ -140,6 +140,7 @@ public class Constants {
                 public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(110).times(10);
 
                 public static final List<Measure<Velocity<Angle>>> SHOOTER_SPEEDS = Arrays.asList(RPM.of(5000));
+                public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
         }
 
         public static final class RobotConstants {
@@ -162,19 +163,19 @@ public class Constants {
                 private static final int DRIVING_PINION_TEETH = 13;
                 public static final double DRIVE_GEAR_RATIO =
                 (45.0 * 22) / (DRIVING_PINION_TEETH * 15); // 5.07692307692
-        public static final double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
+                public static final double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
 
-        public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
-        public static final double TURNING_ENCODER_VELOCITY_FACTOR =
-                (2 * Math.PI) / 60.0; // radians per second
+                public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
+                public static final double TURNING_ENCODER_VELOCITY_FACTOR =
+                        (2 * Math.PI) / 60.0; // radians per second
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / DRIVE_GEAR_RATIO; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / DRIVE_GEAR_RATIO)
-                / 60.0; // meters per second
-        public static final Measure<Velocity<Distance>> MAX_MODULE_SPEED = MetersPerSecond.of(4);
-        public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
+                public static final double DRIVING_ENCODER_POSITION_FACTOR =
+                        (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / DRIVE_GEAR_RATIO; // meters
+                public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+                        ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / DRIVE_GEAR_RATIO)
+                        / 60.0; // meters per second
+                public static final Measure<Velocity<Distance>> MAX_MODULE_SPEED = MetersPerSecond.of(4);
+                public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
         }
 
 
@@ -194,13 +195,6 @@ public class Constants {
         public static final Translation2d ALLOWED_DISTANCE_FROM_SHOOT = new Translation2d(2, 2);
 
         public static final Translation2d ALLOWED_DISTANCE_FROM_NOTE = new Translation2d(2, 2);
-    }
-
-    public static class ShooterConstants {
-
-
-
-        public static final Measure<Velocity<Angle>> ALLOWED_ERROR = RPM.of(20);
     }
 
     public static class ElevatorConstants {

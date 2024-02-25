@@ -16,7 +16,8 @@ public interface ElevatorIO {
         public Measure<Distance> setpoint = Meters.of(0);
         public Measure<Velocity<Distance>> velocity = MetersPerSecond.of(0);
 
-        public Measure<Voltage> voltage = Volts.of(0);
+        public Measure<Voltage> leftVoltage = Volts.of(0);
+        public Measure<Voltage> rightVoltage = Volts.of(0);
         public Measure<Current> leftCurrent = Amps.of(0);
         public Measure<Current> rightCurrent = Amps.of(0);
     }

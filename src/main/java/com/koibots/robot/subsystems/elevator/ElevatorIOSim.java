@@ -48,7 +48,7 @@ public class ElevatorIOSim implements ElevatorIO {
         inputs.position = Meters.of(elevator.getPositionMeters());
         inputs.velocity = MetersPerSecond.of(elevator.getVelocityMetersPerSecond());
 
-        inputs.voltage = appliedVolts;
+        inputs.leftVoltage = appliedVolts;
         inputs.leftCurrent = Amps.of(elevator.getCurrentDrawAmps());
         inputs.rightCurrent = Amps.of(elevator.getCurrentDrawAmps());
     }

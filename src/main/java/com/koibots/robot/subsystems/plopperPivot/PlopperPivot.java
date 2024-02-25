@@ -47,9 +47,9 @@ public class PlopperPivot extends SubsystemBase {
         io.updateInputs(inputs);
         Logger.processInputs("Subsystems/PlopperPivot", inputs);
 
-        io.setVoltage(
-                feedback.calculate(inputs.position.in(Radians), setpoint.in(Radians))
-                        + feedforward.calculate(0, 0, 0));
+        // io.setVoltage(
+        //         feedback.calculate(inputs.position.in(Radians), setpoint.in(Radians))
+        //                 + feedforward.calculate(setpoint.in(Radians), 0));
 
         SmartDashboard.putData("Plopper/Pivot PID", feedback);
     }
