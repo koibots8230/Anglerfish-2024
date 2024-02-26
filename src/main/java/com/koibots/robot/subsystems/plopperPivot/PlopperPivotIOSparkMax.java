@@ -7,12 +7,9 @@ import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.RobotConstants;
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 
 public class PlopperPivotIOSparkMax implements PlopperPivotIO {

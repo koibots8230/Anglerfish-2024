@@ -10,7 +10,6 @@ import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Ploppervator.SetPloppervatorPosition;
-import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.AutoAlign;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;

@@ -19,8 +19,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
     CANSparkMax rightMotor;
 
-    RelativeEncoder rightEncoder;
-    RelativeEncoder leftEncoder;
+    Encoder rightEncoder;
+    Encoder leftEncoder;
 
     protected ShooterIOSparkMax() {
         leftMotor = new CANSparkMax(
@@ -35,8 +35,8 @@ public class ShooterIOSparkMax implements ShooterIO {
         leftMotor.setSmartCurrentLimit(40, 60, 5676);
         rightMotor.setSmartCurrentLimit(40, 60, 5676);
 
-        rightEncoder = rightMotor.getEncoder();
-        leftEncoder = leftMotor.getEncoder();
+        rightEncoder = new Encoder(0, 1, false);
+        leftEncoder = new Encoder(2, 3, false);
 
         leftMotor.clearFaults();
         rightMotor.clearFaults();
@@ -46,8 +46,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = leftEncoder.getVelocity();
-        inputs.rightVelocity = rightEncoder.getVelocity();
+        inputs.leftVelocity = leftEncoder.getRate();
+        inputs.rightVelocity = rightEncoder.getRate();
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
