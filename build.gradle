@@ -152,7 +152,7 @@ spotless {
     java {
         target fileTree('.') {
             include '**/*.java'
-            exclude '**/build/**', '**/build-*/**', 'src/main/java/com/koibots/robot/BuildConstants.java', 'src/main/java/com/koibots/robot/subsystems/shooter/Shooter.java', 'src/main/java/com/koibots/robot/subsystems/plopper/Plopper.java'
+            exclude '**/build/**', '**/build-*/**', 'src/main/java/com/koibots/robot/BuildConstants.java', 'src/main/java/com/koibots/robot/subsystems/shooter/Shooter.java', 'src/main/java/com/koibots/robot/subsystems/plopper/Plopper.java', 'src/main/java/com/koibots/robot/commands/Scoring/Shoot.java'
         }
         toggleOffOn()
         googleJavaFormat().aosp()

@@ -28,59 +28,39 @@ public class Shoot extends SequentialCommandGroup {
         int whichDistance = 0;
 
         for (int a = 0; a < DriveConstants.SHOOT_DISTANCES_METERS.size(); a++) {
-            Pose2d nearestPointOnCircle =
+            Pose2d nearestPointOnCircle = // Looks complicated, but is just this https://math.stackexchange.com/a/127615
                     new Pose2d(
                             DriveConstants.SPEAKER_POSITION.getX()
                                     + (DriveConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
                                             * ((Swerve.get().getEstimatedPose().getX()
-                                                            - DriveConstants.SPEAKER_POSITION
-                                                                    .getX())
+                                                            - DriveConstants.SPEAKER_POSITION.getX())
                                                     / Math.sqrt(
                                                             Math.pow(
-                                                                            Swerve.get()
-                                                                                            .getEstimatedPose()
-                                                                                            .getX()
-                                                                                    - DriveConstants
-                                                                                            .SPEAKER_POSITION
-                                                                                            .getX(),
-                                                                            2)
-                                                                    + Math.pow(
-                                                                            Swerve.get()
-                                                                                            .getEstimatedPose()
-                                                                                            .getY()
-                                                                                    - DriveConstants
-                                                                                            .SPEAKER_POSITION
-                                                                                            .getY(),
-                                                                            2)))),
+                                                                    Swerve.get().getEstimatedPose().getX()
+                                                                            - DriveConstants.SPEAKER_POSITION.getX(), 2)
+                                                            + Math.pow(
+                                                                    Swerve.get().getEstimatedPose().getY()
+                                                                            - DriveConstants.SPEAKER_POSITION.getY(), 2)))),
                             DriveConstants.SPEAKER_POSITION.getY()
                                     + (DriveConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
                                             * ((Swerve.get().getEstimatedPose().getY()
-                                                            - DriveConstants.SPEAKER_POSITION
-                                                                    .getY())
+                                                            - DriveConstants.SPEAKER_POSITION.getY())
                                                     / Math.sqrt(
                                                             Math.pow(
-                                                                            Swerve.get()
-                                                                                            .getEstimatedPose()
-                                                                                            .getX()
-                                                                                    - DriveConstants
-                                                                                            .SPEAKER_POSITION
-                                                                                            .getX(),
-                                                                            2)
-                                                                    + Math.pow(
-                                                                            Swerve.get()
-                                                                                            .getEstimatedPose()
-                                                                                            .getY()
-                                                                                    - DriveConstants
-                                                                                            .SPEAKER_POSITION
-                                                                                            .getY(),
-                                                                            2)))),
+                                                                    Swerve.get().getEstimatedPose().getX()
+                                                                            - DriveConstants.SPEAKER_POSITION.getX(), 2)
+                                                            + Math.pow(
+                                                                    Swerve.get().getEstimatedPose().getY()
+                                                                            - DriveConstants.SPEAKER_POSITION.getY(), 2)))),
                             new Rotation2d());
+
             nearestPoint =
                     Swerve.get()
                             .getEstimatedPose()
                             .nearest(Arrays.asList(nearestPoint, nearestPointOnCircle));
             whichDistance = (nearestPoint == nearestPointOnCircle) ? a : whichDistance;
         }
+
         if (Math.abs(Swerve.get().getEstimatedPose().getX() - nearestPoint.getX())
                         < DriveConstants.ALLOWED_DISTANCE_FROM_SHOOT.getX()
                 && Math.abs(Swerve.get().getEstimatedPose().getY() - nearestPoint.getY())
@@ -89,17 +69,13 @@ public class Shoot extends SequentialCommandGroup {
                     new Pose2d(
                             nearestPoint.getX(),
                             nearestPoint.getY(),
-                            new Rotation2d(
+                            new Rotation2d( // Finds the right angle to point at
                                     Math.atan(
                                             (nearestPoint.getX()
-                                                                    - DriveConstants
-                                                                            .SPEAKER_POSITION
-                                                                            .getX())
-                                                            / (nearestPoint.getY()
-                                                                    - DriveConstants
-                                                                            .SPEAKER_POSITION
-                                                                            .getY())
-                                                    - (1.5 * Math.PI))));
+                                                - DriveConstants.SPEAKER_POSITION.getX())
+                                        / (nearestPoint.getY()
+                                                - DriveConstants.SPEAKER_POSITION.getY())
+                                    - (1.5 * Math.PI)))); // Transforms the angle to be in gyro units
 
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
