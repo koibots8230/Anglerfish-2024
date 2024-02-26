@@ -39,23 +39,19 @@ public class Swerve extends SubsystemBase {
                     new SwerveModule[] { // FL-FR-BL-BR
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DeviceIDs.FRONT_LEFT_DRIVE,
-                                        DeviceIDs.FRONT_LEFT_TURN),
+                                        DeviceIDs.FRONT_LEFT_DRIVE, DeviceIDs.FRONT_LEFT_TURN),
                                 0),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DeviceIDs.FRONT_RIGHT_DRIVE,
-                                        DeviceIDs.FRONT_RIGHT_TURN),
+                                        DeviceIDs.FRONT_RIGHT_DRIVE, DeviceIDs.FRONT_RIGHT_TURN),
                                 1),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DeviceIDs.BACK_LEFT_DRIVE,
-                                        DeviceIDs.BACK_LEFT_TURN),
+                                        DeviceIDs.BACK_LEFT_DRIVE, DeviceIDs.BACK_LEFT_TURN),
                                 2),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DeviceIDs.BACK_RIGHT_DRIVE,
-                                        DeviceIDs.BACK_RIGHT_TURN),
+                                        DeviceIDs.BACK_RIGHT_DRIVE, DeviceIDs.BACK_RIGHT_TURN),
                                 3),
                     };
 

@@ -51,10 +51,15 @@ public class Intake extends SubsystemBase {
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
         double robotSpeed = Swerve.get().getModuleStates()[0].speedMetersPerSecond * 60;
         double targetDistancePerMinute =
-                velocity.in(RPM) * Constants.RobotConstants.WHEELS.circumfrence.in(Meters); // TODO: Change this name
+                velocity.in(RPM)
+                        * Constants.RobotConstants.WHEELS.circumfrence.in(
+                                Meters); // TODO: Change this name
         double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
 
-        setpoint = RPM.of(trueDistancePerMinute / Constants.RobotConstants.WHEELS.circumfrence.in(Meters));
+        setpoint =
+                RPM.of(
+                        trueDistancePerMinute
+                                / Constants.RobotConstants.WHEELS.circumfrence.in(Meters));
     }
 
     public void setVoltage(Measure<Voltage> voltage) {

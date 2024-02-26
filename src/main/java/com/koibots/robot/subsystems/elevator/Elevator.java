@@ -5,12 +5,11 @@ package com.koibots.robot.subsystems.elevator;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Robot;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.system.LinearSystemLoop;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
@@ -25,14 +24,15 @@ public class Elevator extends SubsystemBase {
     private final ElevatorIO io;
     private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
 
-    private final LinearSystemLoop<N2, N1, N1> linearSysLoop;
-    private final TrapezoidProfile profile;
-
-    private TrapezoidProfile.State lastProfiledReference;
-
-    private TrapezoidProfile.State targetState;
+    private final TrapezoidProfile.Constraints constraints =
+            new TrapezoidProfile.Constraints(
+                    ElevatorConstants.MAX_SPEED, ElevatorConstants.MAX_ACCELERATION);
+    private final ProfiledPIDController feedback;
+    private final ElevatorFeedforward feedforward;
 
     private Measure<Distance> setpoint = Meters.of(0);
+    private TrapezoidProfile.State targetState =
+            new TrapezoidProfile.State(Meters.of(0), MetersPerSecond.of(0));
 
     private boolean isSysID = false;
 
@@ -42,23 +42,19 @@ public class Elevator extends SubsystemBase {
     private final MechanismLigament2d elevatorMech2d;
 
     public Elevator() {
-        System.out.println("Elevator initialized");
-
-        linearSysLoop =
-                new LinearSystemLoop<>(
-                        ElevatorConstants.LINEAR_SYS,
-                        ElevatorConstants.LQR,
-                        ElevatorConstants.KALMAN_FILTER,
-                        12.0,
+        feedback =
+                new ProfiledPIDController(
+                        ControlConstants.ELEVATOR_FEEDBACK_CONSTANTS.kP,
+                        ControlConstants.ELEVATOR_FEEDBACK_CONSTANTS.kI,
+                        ControlConstants.ELEVATOR_FEEDBACK_CONSTANTS.kD,
+                        constraints,
                         0.020);
-
-        profile =
-                new TrapezoidProfile(
-                        new TrapezoidProfile.Constraints(
-                                ElevatorConstants.MAX_SPEED.in(MetersPerSecond),
-                                ElevatorConstants.MAX_ACCELERATION.in(MetersPerSecondPerSecond)));
-
-        targetState = new TrapezoidProfile.State(0, 0.0);
+        feedforward =
+                new ElevatorFeedforward(
+                        ControlConstants.ELEVATOR_FEEDFORWARD_CONSTANTS.ks,
+                        ControlConstants.ELEVATOR_FEEDFORWARD_CONSTANTS.kg,
+                        ControlConstants.ELEVATOR_FEEDFORWARD_CONSTANTS.kv,
+                        ControlConstants.ELEVATOR_FEEDFORWARD_CONSTANTS.ka);
 
         io = Robot.isReal() ? new ElevatorIOSparkMax() : new ElevatorIOSim();
 
@@ -89,28 +85,16 @@ public class Elevator extends SubsystemBase {
 
         Logger.recordOutput("Elevator Mechanism", mechanism2d);
 
-        lastProfiledReference = profile.calculate(0.020, lastProfiledReference, targetState);
-
-        linearSysLoop.setNextR(lastProfiledReference.position, lastProfiledReference.velocity);
-        linearSysLoop.correct(VecBuilder.fill(io.getPosition().in(Meters)));
-        linearSysLoop.predict(0.020);
-
         if (!isSysID) {
-            volts = Volts.of(linearSysLoop.getU(0));
+            feedback.setGoal(targetState);
+
             volts =
-                    Robot.isReal()
-                            ? (Math.abs(volts.in(Volts)) > 0.5) ? volts : Volts.of(0)
-                            : volts;
+                    Volts.of(
+                            feedback.calculate(io.getPosition().in(Meters))
+                                    + feedforward.calculate(feedback.getSetpoint().velocity));
         }
 
         io.setVoltage(volts);
-    }
-
-    public void reset() {
-        linearSysLoop.reset(
-                VecBuilder.fill(io.getPosition().in(Meters), io.getVelocity().in(MetersPerSecond)));
-
-        lastProfiledReference = new TrapezoidProfile.State(io.getPosition(), io.getVelocity());
     }
 
     public void setPostion(Measure<Distance> position) {

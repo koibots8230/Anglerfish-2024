@@ -24,8 +24,8 @@ public class ShooterIOSim implements ShooterIO {
         simLeft.update(LOOP_PERIOD_SECS);
         simLeft.update(LOOP_PERIOD_SECS);
 
-        inputs.leftVelocity = simLeft.getAngularVelocityRadPerSec() * (60/(2 * Math.PI));
-        inputs.rightVelocity = simRight.getAngularVelocityRadPerSec() * (60/(2 * Math.PI));
+        inputs.leftVelocity = simLeft.getAngularVelocityRadPerSec() * (60 / (2 * Math.PI));
+        inputs.rightVelocity = simRight.getAngularVelocityRadPerSec() * (60 / (2 * Math.PI));
 
         inputs.leftVoltage = leftAppliedVolts;
         inputs.rightVoltage = rightAppliedVolts;

@@ -32,7 +32,7 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
         encoder.setPositionConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
-        
+
         encoder.setPosition(0);
     }
 
@@ -42,8 +42,10 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         inputs.position = Meters.of(encoder.getPosition());
         inputs.velocity = MetersPerSecond.of(encoder.getVelocity());
 
-        inputs.leftVoltage = Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage = Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        inputs.leftVoltage =
+                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        inputs.rightVoltage =
+                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
     }

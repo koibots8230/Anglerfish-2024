@@ -42,8 +42,6 @@ public class Robot extends LoggedRobot {
         // chooser on the dashboard.
         robotContainer = new RobotContainer();
         robotContainer.registerAutos();
-
-        Elevator.get().reset();
     }
 
     @Override

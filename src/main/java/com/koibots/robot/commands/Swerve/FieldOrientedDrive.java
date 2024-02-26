@@ -95,12 +95,12 @@ public class FieldOrientedDrive extends Command {
                     ChassisSpeeds.fromFieldRelativeSpeeds(
                             linearMagnitude
                                     * linearDirection.getCos()
-                            * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                                    * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             linearMagnitude
                                     * linearDirection.getSin()
-                            * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                                    * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                             angularVelocity
-                            * RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                                    * RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                             Swerve.get().getEstimatedPose().getRotation());
 
             Swerve.get().driveRobotRelative(speeds);

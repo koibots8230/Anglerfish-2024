@@ -8,12 +8,9 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
@@ -23,11 +20,10 @@ public class ShooterIOSparkMax implements ShooterIO {
     Encoder leftEncoder;
 
     protected ShooterIOSparkMax() {
-        leftMotor = new CANSparkMax(
-                 DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        leftMotor = new CANSparkMax(DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
 
-        rightMotor = new CANSparkMax(
-                DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        rightMotor =
+                new CANSparkMax(DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
 
         leftMotor.restoreFactoryDefaults();
         rightMotor.restoreFactoryDefaults();
@@ -52,8 +48,10 @@ public class ShooterIOSparkMax implements ShooterIO {
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
 
-        inputs.leftVoltage = Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage = Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        inputs.leftVoltage =
+                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        inputs.rightVoltage =
+                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
     }
 
     @Override

@@ -104,10 +104,13 @@ public class Shoot extends SequentialCommandGroup {
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
                     new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                    //new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
+                    // new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
                     new ParallelRaceGroup(
                             new InstantCommand(
-                                    () -> Indexer.get().setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
+                                    () ->
+                                            Indexer.get()
+                                                    .setVelocity(
+                                                            SetpointConstants.INDEXER_SHOOT_SPEED),
                                     Indexer.get()),
                             new WaitCommand(2)),
                     new ParallelCommandGroup(
@@ -129,10 +132,13 @@ public class Shoot extends SequentialCommandGroup {
         } else {
             addCommands(
                     new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                    //new SpinUpShooter(velocity),
+                    // new SpinUpShooter(velocity),
                     new ParallelRaceGroup(
                             new InstantCommand(
-                                    () -> Indexer.get().setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
+                                    () ->
+                                            Indexer.get()
+                                                    .setVelocity(
+                                                            SetpointConstants.INDEXER_SHOOT_SPEED),
                                     Indexer.get()),
                             new WaitCommand(1)),
                     new ParallelCommandGroup(

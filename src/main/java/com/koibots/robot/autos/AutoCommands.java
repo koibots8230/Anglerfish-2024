@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
 import java.util.function.Supplier;
 
 public enum AutoCommands {
@@ -40,7 +39,9 @@ public enum AutoCommands {
             new IntakeCommand(),
             new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false),
             followChoreoTrajectory("S2_N6_S2.2")),
-    B2_S2(followChoreoTrajectory("B2_S2"), new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+    B2_S2(
+            followChoreoTrajectory("B2_S2"),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
     S2_N1_S2(
             followChoreoTrajectory("S2_N1_S2.1"),
             new IntakeCommand(),
@@ -61,7 +62,9 @@ public enum AutoCommands {
             new IntakeCommand(),
             followChoreoTrajectory("S2_N4_S2.2"),
             new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
-    B3_S4(followChoreoTrajectory("B3_S4"), new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+    B3_S4(
+            followChoreoTrajectory("B3_S4"),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
     S4_N3_S4(
             followChoreoTrajectory("S4_N3_S4.1"),
             new IntakeCommand(),

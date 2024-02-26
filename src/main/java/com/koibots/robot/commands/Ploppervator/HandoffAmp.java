@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.SetpointConstants;
-
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -29,10 +28,13 @@ public class HandoffAmp extends SequentialCommandGroup {
                                                         == ElevatorConstants.LOAD_POSITION)
                                         && (PlopperPivot.get().atSetpoint()
                                                 && PlopperPivot.get().getSetpoint()
-                                                        == SetpointConstants.PLOPPPER_PIVOT_LOAD_POSITION))),
+                                                        == SetpointConstants
+                                                                .PLOPPPER_PIVOT_LOAD_POSITION))),
                 new ParallelRaceGroup(
                         new StartEndCommand(
-                                () -> Indexer.get().setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
+                                () ->
+                                        Indexer.get()
+                                                .setVelocity(SetpointConstants.INDEXER_SHOOT_SPEED),
                                 () -> Indexer.get().setVelocity(RPM.of(0))),
                         new RunPlopper(true)));
 

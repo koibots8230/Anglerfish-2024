@@ -8,7 +8,6 @@ import static com.koibots.robot.subsystems.Subsystems.*;
 import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.SetpointConstants;
-
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -39,7 +38,8 @@ public class SetPloppervatorPosition extends ParallelCommandGroup {
                                                             .PLOPPPER_PIVOT_LOAD_POSITION;
                                                     case Shooting -> SetpointConstants
                                                             .PLOPPER_PIVOT_AMP_POSITION;
-                                                    case Amp -> SetpointConstants.PLOPPER_PIVOT_AMP_POSITION;
+                                                    case Amp -> SetpointConstants
+                                                            .PLOPPER_PIVOT_AMP_POSITION;
                                                     case Climbing -> SetpointConstants
                                                             .PLOPPPER_PIVOT_LOAD_POSITION;
                                                 })),
