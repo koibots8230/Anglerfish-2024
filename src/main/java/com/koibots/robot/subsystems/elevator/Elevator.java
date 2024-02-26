@@ -133,4 +133,8 @@ public class Elevator extends SubsystemBase {
     public Measure<Distance> getSetpoint() {
         return setpoint;
     }
+
+    public boolean atCurrentCap() {
+        return inputs.leftCurrent.in(Amps) > 50;
+    }
 }

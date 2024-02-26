@@ -10,16 +10,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class SpinUpShooter extends Command {
 
-    Measure<Velocity<Angle>> speed;
+    Measure<Voltage> volts;
 
-    public SpinUpShooter(Measure<Velocity<Angle>> speed) {
-        this.speed = speed;
+    public SpinUpShooter(Measure<Voltage> volts) {
+        this.volts = volts;
         addRequirements(Shooter.get());
     }
 
     @Override
     public void initialize() {
-        Shooter.get().setVelocity(speed);
+        Shooter.get().setVoltage(volts);
     }
 
     @Override

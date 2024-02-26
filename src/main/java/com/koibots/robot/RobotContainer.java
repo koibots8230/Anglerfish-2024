@@ -10,14 +10,18 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.sysid.SysIDMechanism;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.autos.SysID;
+import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.ArrayList;
@@ -48,74 +52,54 @@ public class RobotContainer {
         Swerve.get()
                 .setDefaultCommand(
                         new FieldOrientedDrive(
-                                () -> -controller.getRawAxis(1),
-                                () -> -controller.getRawAxis(0),
                                 () -> -controller.getRawAxis(4),
+                                () -> -controller.getRawAxis(5),
+                                () -> -controller.getRawAxis(0),
                                 () -> controller.getPOV(),
                                 () -> controller.getRawButton(1)));
 
-        Trigger intake = new Trigger(() -> controller.getRawButton(5));
+        Trigger intake = new Trigger(() -> controller.getRawAxis(3) > 0.15);
         intake.onTrue(
+            new ParallelCommandGroup(
                 new InstantCommand(
                         () -> Intake.get().setVelocity(SetpointConstants.INTAKE_TARGET_VELOCITY),
-                        Intake.get()));
-        // intake.onTrue(new IntakeCommand());
-        intake.onFalse(new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()));
-
-        Trigger indexer = new Trigger(() -> controller.getRawButton(6));
-        indexer.onTrue(
-                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get()));
-        indexer.onFalse(
-                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()));
-
-        // Trigger elevator = new Trigger(() -> controller.getRawButton(2));
-        // elevator.onTrue(
-        //         new InstantCommand(
-        //                 () -> Elevator.get().setPostion(ElevatorConstants.AMP_POSITION),
-        //                 Elevator.get()));
-        // // elevator.onTrue(new Climb(false));
-
-        // Elevator.get()
-        //         .setDefaultCommand(
-        //                 new InstantCommand(
-        //                         () -> Elevator.get().setPostion(ElevatorConstants.LOAD_POSITION),
-        //                         Elevator.get()));
-
-        Trigger pivot = new Trigger(() -> controller.getRawAxis(2) > 0.15);
-        pivot.onTrue(
+                        Intake.get()),
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())
+            )
+        );
+        intake.onFalse(
+            new ParallelCommandGroup(
                 new InstantCommand(
-                        () -> PlopperPivot.get().setPosition(SetpointConstants.PLOPPER_PIVOT_AMP_POSITION),
-                        PlopperPivot.get()));
-        // pivot.onTrue(new ScoreAmp(false));
-        
+                        () -> Intake.get().setVelocity(RPM.of(0)),
+                        Intake.get()),
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())
+            )
+        );
 
-        // Trigger loadPlopper = new Trigger(() -> controller.getRawButton(3));
-        // loadPlopper.onTrue(new RunPlopper(true));
-
-        // Trigger unloadPlopper = new Trigger(() -> controller.getRawButton(4));
-        // unloadPlopper.onTrue(new RunPlopper(false));
-
-        // Plopper.get()
-        //         .setDefaultCommand(
-        //                 new InstantCommand(
-        //                         () -> Plopper.get().setVelocity(RPM.of(0)), Plopper.get()));
-
-        // Trigger shoot = new Trigger(() -> controller.getRawAxis(3) > 0.15);
-        // shoot.onTrue(
-        //                 new InstantCommand(
-        //                         () -> Shooter.get().setVelocity(RPM.of(10)), Shooter.get()));
-        // shoot.onFalse(
-        //                 new InstantCommand(
-        //                         () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()));
-
-        // Trigger elevator = new Trigger(() -> controller.getRawAxis(2) > 0.15);
-        // elevator.onTrue(new InstantCommand(() -> Elevator.get().setVoltage(Volts.of(-9)), Elevator.get()));
-        // elevator.onFalse(new InstantCommand(() -> Elevator.get().setVoltage(Volts.of(0)), Elevator.get()));
+        Trigger shoot = new Trigger(() -> controller.getRawAxis(2) > 0.15);
+        shoot.onTrue(
+            new SequentialCommandGroup(
+                new InstantCommand(
+                        () -> Shooter.get().setVoltage(Volts.of(11)),
+                        Shooter.get()),
+                new WaitCommand(1),
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())
+            )
+        );
+        shoot.onFalse(
+            new ParallelCommandGroup(
+                new InstantCommand(
+                        () -> Shooter.get().setVoltage(Volts.of(0)),
+                        Shooter.get()),
+                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())
+            )
+        );
     }
 
     public Command getAutonomousRoutine() {
         return autos.get(Integer.parseInt(SmartDashboard.getString("Auto Routine", "0")));
     }
+
 
     public static void rumbleController(double strength) {
         controller.setRumble(RumbleType.kBothRumble, strength);

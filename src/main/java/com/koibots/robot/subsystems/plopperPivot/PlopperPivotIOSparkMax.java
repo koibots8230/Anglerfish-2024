@@ -24,6 +24,9 @@ public class PlopperPivotIOSparkMax implements PlopperPivotIO {
         plopperPivotMotor.setIdleMode(IdleMode.kBrake);
         plopperPivotMotor.setSmartCurrentLimit(30, 60, 5670);
 
+        plopperPivotMotor.restoreFactoryDefaults();
+        plopperPivotMotor.burnFlash();
+
         plopperPivotEncoder = new DutyCycleEncoder(4);
         plopperPivotEncoder.setDistancePerRotation(
                 RobotConstants.PLOPPER_PIVOT_ENCODER_POSITION_FACTOR);

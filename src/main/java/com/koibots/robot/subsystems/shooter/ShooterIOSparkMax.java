@@ -19,40 +19,41 @@ public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
     CANSparkMax rightMotor;
 
-    Encoder rightEncoder;
-    Encoder leftEncoder;
+    RelativeEncoder rightEncoder;
+    RelativeEncoder leftEncoder;
 
     protected ShooterIOSparkMax() {
-        leftMotor =
-                new CANSparkMax(
-                        DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        leftMotor = new CANSparkMax(
+                 DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
 
-        rightMotor =
-                new CANSparkMax(
-                        DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        rightMotor = new CANSparkMax(
+                DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftMotor.setSmartCurrentLimit(30, 60, 5676);
-        rightMotor.setSmartCurrentLimit(30, 60, 5676);
+        leftMotor.restoreFactoryDefaults();
+        rightMotor.restoreFactoryDefaults();
 
-        rightEncoder = new Encoder(0, 1, false, EncodingType.k2X);
-        leftEncoder = new Encoder(2, 3, false, EncodingType.k2X); // TODO: Encoders need smoothening??
+        leftMotor.setSmartCurrentLimit(40, 60, 5676);
+        rightMotor.setSmartCurrentLimit(40, 60, 5676);
 
-        // rightEncoder.setDistancePerPulse(1/2048);
-        // leftEncoder.setDistancePerPulse(1/2048);
+        rightEncoder = rightMotor.getEncoder();
+        leftEncoder = leftMotor.getEncoder();
+
+        leftMotor.clearFaults();
+        rightMotor.clearFaults();
+        leftMotor.burnFlash();
+        rightMotor.burnFlash();
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RotationsPerSecond.of(-leftEncoder.getRate());
-        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getRate());
+        inputs.leftVelocity = leftEncoder.getVelocity();
+        inputs.rightVelocity = rightEncoder.getVelocity();
 
         inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
         inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
 
-        inputs.leftVoltage =
-                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage =
-                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        inputs.leftVoltage = Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        inputs.rightVoltage = Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
     }
 
     @Override

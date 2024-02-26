@@ -50,7 +50,7 @@ public class Shooter extends SubsystemBase {
                 Volts.of(
                         Math.max(Math.min(
                                 (leftFeedback.calculate(
-                                                inputs.leftVelocity.in(RPM) * (1/2048),
+                                                inputs.leftVelocity,
                                                 setpoint.in(RPM))
                                 + leftFeedforward.calculate(
                                                 setpoint.in(RPM)))
@@ -58,7 +58,7 @@ public class Shooter extends SubsystemBase {
                 Volts.of(
                         Math.max(Math.min(
                                 (rightFeedback.calculate(
-                                                inputs.rightVelocity.in(RPM) * (1/2048),
+                                                inputs.rightVelocity,
                                                 setpoint.in(RPM))
                                 + rightFeedforward.calculate(
                                                 setpoint.in(RPM)))
@@ -78,13 +78,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public boolean atSetpoint() {
-        return inputs.leftVelocity.in(RPM)
+        return inputs.leftVelocity
                         >= setpoint.minus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.leftVelocity.in(RPM)
+                && inputs.leftVelocity
                         <= setpoint.plus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.rightVelocity.in(RPM)
+                && inputs.rightVelocity
                         >= setpoint.minus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.rightVelocity.in(RPM)
+                && inputs.rightVelocity
                         <= setpoint.plus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM);
     }
 
