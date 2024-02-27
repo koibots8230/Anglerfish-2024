@@ -23,79 +23,75 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-        GenericHID controller;
-        GenericHID oppController;
+    GenericHID controller;
+    GenericHID oppController;
 
-        /**
-         * The container for the robot. Contains subsystems, OI devices, and commands.
-         */
-        public RobotContainer() {
-                controller = new GenericHID(0);
-                oppController = new GenericHID(1);
-        }
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        controller = new GenericHID(0);
+        oppController = new GenericHID(1);
+    }
 
-        /**
-         * Use this method to define your button->command mappings. Buttons can be
-         * created by
-         * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-         * subclasses ({@link
-         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-         * passing it to a
-         * {@link JoystickButton}.
-         */
-        public void configureButtonBindings() {
-                Swerve.get()
-                                .setDefaultCommand(
-                                                new FieldOrientedDrive(
-                                                                () -> -controller.getRawAxis(1),
-                                                                () -> -controller.getRawAxis(0),
-                                                                () -> -controller.getRawAxis(4),
-                                                                () -> controller.getPOV(),
-                                                                () -> controller.getRawButton(1)));
+    /**
+     * Use this method to define your button->command mappings. Buttons can be
+     * created by
+     * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
+     * subclasses ({@link
+     * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
+     * passing it to a
+     * {@link JoystickButton}.
+     */
+    public void configureButtonBindings() {
+        Swerve.get()
+                .setDefaultCommand(
+                        new FieldOrientedDrive(
+                                () -> -controller.getRawAxis(1),
+                                () -> -controller.getRawAxis(0),
+                                () -> -controller.getRawAxis(4),
+                                () -> controller.getPOV(),
+                                () -> controller.getRawButton(1)));
 
-                Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
+        Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
 
-                Intake.get()
-                                .setDefaultCommand(
+        Intake.get()
+                .setDefaultCommand(
+                        new ConditionalCommand(
+                                new InstantCommand(
+                                        () -> Intake.get()
+                                                .setIntakeVoltsWithTargetRPM(
+                                                        3000),
+                                        Intake.get()),
+                                new InstantCommand(
+                                        () -> Intake.get()
+                                                .setIntakeVoltsWithTargetRPM(
+                                                        0),
+                                        Intake.get()),
+                                () -> controller.getRawButton(5)));
+
+        LEDs.get()
+                .setDefaultCommand(
+                        new ConditionalCommand(
+                                new InstantCommand(
+                                        () -> LEDs.get().send_to_rp2040(1), LEDs.get()),
+                                new ConditionalCommand(
+                                        new InstantCommand(
+                                                () -> LEDs.get().send_to_rp2040(2), LEDs.get()),
+                                        new ConditionalCommand(
+                                                new InstantCommand(
+                                                        () -> LEDs.get().send_to_rp2040(3), LEDs.get()),
+
                                                 new ConditionalCommand(
-                                                                new InstantCommand(
-                                                                                () -> Intake.get()
-                                                                                                .setIntakeVoltsWithTargetRPM(
-                                                                                                                3000),
-                                                                                Intake.get()),
-                                                                new InstantCommand(
-                                                                                () -> Intake.get()
-                                                                                                .setIntakeVoltsWithTargetRPM(
-                                                                                                                0),
-                                                                                Intake.get()),
-                                                                () -> controller.getRawButton(5)));
+                                                        new InstantCommand(
+                                                                () -> LEDs.get().send_to_rp2040(4), LEDs.get()),
+                                                        new InstantCommand(),
+                                                        () -> oppController.getRawButton(
+                                                                3)),
+                                                () -> oppController.getRawButton(
+                                                        2)),
+                                        () -> oppController.getRawButton(1)),
+                                () -> oppController.getRawButton(0)));
 
-                LEDs.get()
-                                .setDefaultCommand(
-                                                new ConditionalCommand(
-                                                                new InstantCommand(
-                                                                                () -> LEDs.get().writeSPI(
-                                                                                                new byte[] { 0x00 }), LEDs.get()),
-                                                                new ConditionalCommand(
-                                                                                new InstantCommand(
-                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                new byte[] { 0x01 }), LEDs.get()),
-                                                                                new ConditionalCommand(
-                                                                                                new InstantCommand(
-                                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                                new byte[] { 0x10 }), LEDs.get()),
-                                                                                                                                
-                                                                                                new ConditionalCommand(
-                                                                                                                new InstantCommand(
-                                                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                                                new byte[] { 0x11 }), LEDs.get()),
-                                                                                                                new InstantCommand(),
-                                                                                                                () -> oppController.getRawButton(
-                                                                                                                                3)),
-                                                                                                () -> oppController.getRawButton(
-                                                                                                                2)),
-                                                                                () -> oppController.getRawButton(1)),
-                                                                () -> oppController.getRawButton(0)));
-
-        }
+    }
 }
