@@ -18,7 +18,7 @@ public class LEDs extends SubsystemBase {
         p1 = new DigitalOutput(9);
         p2 = new DigitalOutput(8);
         p3 = new DigitalOutput(7);
-
+    }
     public void send_to_rp2040(int sendMe){
         p1.set((sendMe & 1) != 0);
         p2.set((sendMe & 2) != 0 );
