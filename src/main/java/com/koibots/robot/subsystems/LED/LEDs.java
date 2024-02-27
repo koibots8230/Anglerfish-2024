@@ -3,13 +3,10 @@ package com.koibots.robot.subsystems.LED;
 import java.lang.reflect.Array;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDs extends SubsystemBase {
-    private static LEDs m_LEDs = new LEDs();
     private DigitalOutput digitalOutput;
-    private SPI spi;
     private DigitalOutput p1;
     private DigitalOutput p2;
     private DigitalOutput p3;

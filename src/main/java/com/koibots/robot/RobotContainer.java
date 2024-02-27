@@ -87,11 +87,11 @@ public class RobotContainer {
                                                                 () -> LEDs.get().send_to_rp2040(4), LEDs.get()),
                                                         new InstantCommand(),
                                                         () -> oppController.getRawButton(
-                                                                3)),
+                                                                4)),
                                                 () -> oppController.getRawButton(
-                                                        2)),
-                                        () -> oppController.getRawButton(1)),
-                                () -> oppController.getRawButton(0)));
+                                                        3)),
+                                        () -> oppController.getRawButton(2)),
+                                () -> oppController.getRawButton(1)));
 
     }
 }
