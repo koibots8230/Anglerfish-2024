@@ -3,17 +3,12 @@
 
 package com.koibots.robot.subsystems;
 
-import com.koibots.robot.subsystems.Indexer.Indexer;
 import com.koibots.robot.subsystems.LED.LEDs;
-import com.koibots.robot.subsystems.elevator.Elevator;
-import com.koibots.robot.subsystems.intake.Intake;
-import com.koibots.robot.subsystems.plopper.Plopper;
-import com.koibots.robot.subsystems.shooter.Shooter;
-import com.koibots.robot.subsystems.swerve.Swerve;
-import com.koibots.robot.subsystems.vision.Vision;
 import java.util.function.Supplier;
 
+
 public class Subsystems {
+    /* 
     private static Swerve swerveInstance;
     public static Supplier<Swerve> Swerve =
             () -> {
@@ -69,7 +64,7 @@ public class Subsystems {
                 Plopper = () -> plopperInstance;
                 return plopperInstance;
             };
-
+*/
     private static LEDs ledsInstance;
     public static Supplier<LEDs> LEDs =
             () -> {

@@ -3,9 +3,9 @@
 
 package com.koibots.lib.util;
 
-import com.koibots.robot.Robot;
-import edu.wpi.first.wpilibj.RobotBase;
-
+//import com.koibots.robot.Robot;
+//import edu.wpi.first.wpilibj.RobotBase;
+/* 
 public class FeedforwardConstantsIO {
     public double ks = 0;
     public double kv = 0;
@@ -13,7 +13,7 @@ public class FeedforwardConstantsIO {
     public double kg = 0;
 
     public FeedforwardConstantsIO() {}
-
+/* 
     public FeedforwardConstantsIO(double realKs, double realKv, double simKs, double simKv) {
         if (RobotBase.isReal()) {
             this.ks = realKs;
@@ -23,7 +23,7 @@ public class FeedforwardConstantsIO {
             this.kv = simKv;
         }
     }
-
+/* 
     public FeedforwardConstantsIO(
             double realKs,
             double realKv,
@@ -33,7 +33,7 @@ public class FeedforwardConstantsIO {
             double simKv,
             double simKa,
             double simKg) {
-        if (Robot.isReal()) {
+       // if (Robot.isReal()) {
             this.ks = realKs;
             this.kv = realKv;
             this.ka = realKa;
@@ -46,3 +46,4 @@ public class FeedforwardConstantsIO {
         }
     }
 }
+*/

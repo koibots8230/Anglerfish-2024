@@ -22,7 +22,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
+/* 
 public class Robot extends LoggedRobot {
     private enum AutoMode {
         TextGenerated,
@@ -42,11 +42,12 @@ public class Robot extends LoggedRobot {
             new Alert("No SysId Mechanism Selected", Alert.AlertType.WARNING);
     private final Alert sysIdRoutineAlert =
             new Alert("No SysId Routine Selected", Alert.AlertType.WARNING);
-
+*/
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
      */
+    /* 
     @Override
     public void robotInit() {
         Logger.recordMetadata("RobotName", "Swerve Chassis");
@@ -97,14 +98,15 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
         SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
         SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
-        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
-
+       // SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+        */
+/* 
         Elevator.get().reset();
         Plopper.get();
         Shooter.get();
         Indexer.get();
     }
-
+*/
     /**
      * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
      * that you want ran during disabled, autonomous, teleoperated and test.
@@ -112,8 +114,8 @@ public class Robot extends LoggedRobot {
      * <p>This runs after the mode-specific periodic functions, but before LiveWindow and
      * SmartDashboard integrated updating.
      */
-    @Override
-    public void robotPeriodic() {
+  //  @Override
+   // public void robotPeriodic() {
         // Runs the Scheduler.
         // This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or
@@ -121,12 +123,13 @@ public class Robot extends LoggedRobot {
         // and running subsystem periodic() methods.
         // This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
-        CommandScheduler.getInstance().run();
-    }
+       // CommandScheduler.getInstance().run();
+   // }
 
     /**
      * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
      */
+    /* 
     @Override
     public void autonomousInit() {
         switch (AutoMode.SysId) {
@@ -152,60 +155,62 @@ public class Robot extends LoggedRobot {
                                             new SysIdRoutine.Config(), mechanism)
                                     .quasistatic(SysIdRoutine.Direction.kReverse);
                         };
+*/
+              //  DriverStation.reportWarning("Set autonomous command", false);
 
-                DriverStation.reportWarning("Set autonomous command", false);
-
-                if (mechanism.m_name.equals("Swerve")) {
-                    autonomousCommand.beforeStarting(
-                            () ->
-                                    Swerve.get()
-                                            .setModuleStates(
-                                                    new SwerveModuleState[] {
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d())
-                                                    }));
-                }
-        }
+              //  if (mechanism.m_name.equals("Swerve")) {
+                 //   autonomousCommand.beforeStarting(
+                          //  () ->
+              //                      Swerve.get()
+                 //                           .setModuleStates(
+                                   //                 new SwerveModuleState[] {
+                                 //                       new SwerveModuleState(0, new Rotation2d()),
+                               //                         new SwerveModuleState(0, new Rotation2d()),
+                                     //                   new SwerveModuleState(0, new Rotation2d()),
+                               //                         new SwerveModuleState(0, new Rotation2d())
+                 //                                   }));
+                //}
+        //}
 
         // Swerve.get().setBrake(true); // TODO: Add swerve set brake method
 
-        if (autoModeChooser.getSelected() == AutoMode.SysId) {
-            Logger.registerURCL(URCL.startExternal());
-        }
+        // if (autoModeChooser.getSelected() == AutoMode.SysId) {
+        //     Logger.registerURCL(URCL.startExternal());
+        // }
 
         // schedule the autonomous command (example)
+        /* 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         } else {
             DriverStation.reportWarning("Autonomous command is null", false);
         }
     }
+*/
+    //@Override
+    //public void autonomousPeriodic() {}
 
-    @Override
-    public void autonomousPeriodic() {}
-
-    @Override
-    public void teleopInit() {
+   // @Override
+   // public void teleopInit() {
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
-        }
+        //if (autonomousCommand != null) {
+          //  autonomousCommand.cancel();
+      //  }
 
         // Swerve.get().setBrake(true);
 
-        robotContainer.configureButtonBindings();
-    }
-
+    //    robotContainer.configureButtonBindings();
+  //  }
+/* 
     @Override
     public void disabledInit() {
-        Swerve.get().stop();
+   //     Swerve.get().stop();
     }
 
     @Override
     public void disabledPeriodic() {}
 }
+*/

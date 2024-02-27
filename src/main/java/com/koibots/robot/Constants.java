@@ -7,7 +7,7 @@ import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
 import com.koibots.lib.geometry.Wheel;
-import com.koibots.lib.util.FeedforwardConstantsIO;
+//import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.VecBuilder;
@@ -28,7 +28,7 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Mass;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
-
+/* 
 public class Constants {
     public static class PlopperConstants {
         public static final int MOTOR = 10;
@@ -81,7 +81,7 @@ public class Constants {
         public static int BACK_LEFT_TURN_ID = 1;
         public static int BACK_RIGHT_DRIVE_ID = 4;
         public static int BACK_RIGHT_TURN_ID = 5;
-
+/* 
         public static double DRIVE_GEAR_RATIO =
                 (45.0 * 22) / (kDrivingMotorPinionTeeth * 15); // 5.07692307692
         public static double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
@@ -205,8 +205,8 @@ public class Constants {
         };
 
         public static final Pose2d[] CAMERA_POSITIONS = null;
-    }
-
+ //   }
+/* 
     public static class IntakeConstants {
         public static final int MOTOR_PORT = 13;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -216,7 +216,7 @@ public class Constants {
         public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
         public static final int MINIMUM_VOLTAGE = 0;
     }
-
+/* 
     public static class IndexerConstants {
         public static final int MOTOR = 14;
         public static final PIDConstantsIO FEEDBACK_CONSTANTS =
@@ -225,3 +225,4 @@ public class Constants {
                 new FeedforwardConstantsIO(0, 0, 0, 0);
     }
 }
+*/
