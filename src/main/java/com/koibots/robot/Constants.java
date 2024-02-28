@@ -30,6 +30,8 @@ import edu.wpi.first.units.*;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.text.Position;
+
 public class Constants {
     public static final double DEADBAND = 0.025;
 
@@ -137,12 +139,6 @@ public class Constants {
     }
 
     public static final class SetpointConstants {
-        public static final Measure<Angle> PLOPPER_PIVOT_AMP_POSITION = Degrees.of(100);
-        public static final Measure<Angle> PLOPPPER_PIVOT_LOAD_POSITION = Degrees.of(0);
-
-        public static final Measure<Velocity<Angle>> PLOPPER_LOAD_SPEED = RPM.of(600).times(10);
-        public static final Measure<Velocity<Angle>> PLOPPER_PLOP_SPEED = RPM.of(400).times(10);
-
         public static final Measure<Velocity<Angle>> INTAKE_TARGET_VELOCITY = RPM.of(500);
 
         public static final Measure<Velocity<Angle>> INDEXER_LOAD_SPEED = RPM.of(100).times(10);
@@ -151,6 +147,9 @@ public class Constants {
         public static final List<Measure<Velocity<Angle>>> SHOOTER_SPEEDS =
                 Arrays.asList(RPM.of(5000));
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
+
+        public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(10);
+        public static final Measure<Distance> ELEVATOR_BOTTOM_HEIGHT = Inches.of(0);
     }
 
     public static final class RobotConstants {

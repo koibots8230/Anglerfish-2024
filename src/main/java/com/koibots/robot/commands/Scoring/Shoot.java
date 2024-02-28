@@ -6,10 +6,9 @@ package com.koibots.robot.commands.Scoring;
 import static com.koibots.robot.subsystems.Subsystems.*;
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.*;
 import com.koibots.robot.RobotContainer;
-import com.koibots.robot.commands.Ploppervator.SetPloppervatorPosition;
+import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.AutoAlign;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -79,8 +78,7 @@ public class Shoot extends SequentialCommandGroup {
 
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
-                    new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                    // new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
+                    new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
                     new ParallelRaceGroup(
                             new InstantCommand(
                                     () ->
@@ -107,8 +105,7 @@ public class Shoot extends SequentialCommandGroup {
             addCommands(new Shoot());
         } else {
             addCommands(
-                    new SetPloppervatorPosition(PloppervatorPosition.Shooting),
-                    // new SpinUpShooter(velocity),
+                    new SpinUpShooter(velocity),
                     new ParallelRaceGroup(
                             new InstantCommand(
                                     () ->
