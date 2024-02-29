@@ -39,14 +39,14 @@ public class Constants {
         // ---------------------------| DIO Ports |------------------------------\\
         public static final int PLOPPER_LIMIT_SWITCH = 0;
         // ---------------------------| CAN IDs |--------------------------------\\
-        public static final int BACK_LEFT_TURN = 1;
-        public static final int FRONT_RIGHT_DRIVE = 2;
-        public static final int FRONT_RIGHT_TURN = 3;
-        public static final int BACK_RIGHT_DRIVE = 4;
-        public static final int BACK_RIGHT_TURN = 5;
-        public static final int BACK_LEFT_DRIVE = 6;
-        public static final int FRONT_LEFT_DRIVE = 7;
-        public static final int FRONT_LEFT_TURN = 8;
+        public static final int BACK_LEFT_TURN = 5;
+        public static final int BACK_LEFT_DRIVE = 4;
+        public static final int FRONT_RIGHT_DRIVE = 7;
+        public static final int FRONT_RIGHT_TURN = 8;
+        public static final int BACK_RIGHT_DRIVE = 2;
+        public static final int BACK_RIGHT_TURN = 3;
+        public static final int FRONT_LEFT_DRIVE = 6;
+        public static final int FRONT_LEFT_TURN = 1;
         public static final int INDEXER = 9;
         public static final int PLOPPER_PIVOT = 11;
         public static final int RIGHT_ELEVATOR = 16;
@@ -70,7 +70,7 @@ public class Constants {
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
                 new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
-                new PIDConstantsIO(1.9, 0, 0, 35, 0, 0);
+                new PIDConstantsIO(0, 0, 0, 35, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2, 0, 2.75);
 
@@ -145,7 +145,7 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(110).times(10);
 
         public static final List<Measure<Velocity<Angle>>> SHOOTER_SPEEDS =
-                Arrays.asList(RPM.of(5000));
+                Arrays.asList(RPM.of(5000).times(2048));
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
 
         public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(10);

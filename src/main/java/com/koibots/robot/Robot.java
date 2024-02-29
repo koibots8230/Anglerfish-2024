@@ -5,6 +5,7 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.*;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -26,6 +27,8 @@ public class Robot extends LoggedRobot {
     public void robotInit() {
         Logger.recordMetadata("RobotName", "Swerve Chassis");
         Logger.addDataReceiver(new WPILOGWriter());
+
+        CameraServer.startAutomaticCapture();
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
