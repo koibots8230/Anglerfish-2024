@@ -10,8 +10,12 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+=======
+import edu.wpi.first.wpilibj.Encoder3;
+>>>>>>> Stashed changes
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
