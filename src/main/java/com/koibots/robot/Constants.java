@@ -54,8 +54,9 @@ public class Constants {
     }
 
     public static class ControlConstants {
+        public static final double DRIVE_TURN_KS = 0.175;
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                   new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 35, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
@@ -155,7 +156,7 @@ public class Constants {
         public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
                 RadiansPerSecond.of(4 * Math.PI).per(Second);
 
-        private static final int DRIVING_PINION_TEETH = 13; 
+        private static final int DRIVING_PINION_TEETH = 13;
         public static final double DRIVE_GEAR_RATIO =
                 (45.0 * 22) / (DRIVING_PINION_TEETH * 15); // 5.07692307692
         public static final double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429

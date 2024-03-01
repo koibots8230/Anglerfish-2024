@@ -7,9 +7,7 @@ import static com.koibots.robot.subsystems.Subsystems.Elevator;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
 
-import com.koibots.lib.geometry.PloppervatorPosition;
 import com.koibots.robot.Constants.DriveConstants;
-import com.koibots.robot.Constants.ElevatorConstants;
 import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Swerve.AutoAlign;
@@ -25,9 +23,12 @@ public class Climb extends SequentialCommandGroup {
                     new AutoAlign(
                             Swerve.get().getEstimatedPose().nearest(DriveConstants.CLIMB_POSITIONS),
                             Meters.of(0)),
-                    new InstantCommand(() -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_TOP_HEIGHT)),
-                    new InstantCommand(() -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_BOTTOM_HEIGHT))
-            );
+                    new InstantCommand(
+                            () -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_TOP_HEIGHT)),
+                    new InstantCommand(
+                            () ->
+                                    Elevator.get()
+                                            .setPostion(SetpointConstants.ELEVATOR_BOTTOM_HEIGHT)));
         } else {
             addCommands(
                     new InstantCommand(() -> RobotContainer.rumbleController(0.4)),
@@ -41,8 +42,12 @@ public class Climb extends SequentialCommandGroup {
             addCommands(new Climb());
         } else {
             addCommands(
-                    new InstantCommand(() -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_TOP_HEIGHT)),
-                    new InstantCommand(() -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_BOTTOM_HEIGHT)));
+                    new InstantCommand(
+                            () -> Elevator.get().setPostion(SetpointConstants.ELEVATOR_TOP_HEIGHT)),
+                    new InstantCommand(
+                            () ->
+                                    Elevator.get()
+                                            .setPostion(SetpointConstants.ELEVATOR_BOTTOM_HEIGHT)));
         }
     }
 }

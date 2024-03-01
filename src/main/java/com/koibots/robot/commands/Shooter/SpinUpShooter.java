@@ -19,7 +19,8 @@ public class SpinUpShooter extends Command {
 
     @Override
     public void initialize() {
-        Shooter.get().setVelocity(speed);;
+        Shooter.get().setVelocity(speed);
+        ;
     }
 
     @Override

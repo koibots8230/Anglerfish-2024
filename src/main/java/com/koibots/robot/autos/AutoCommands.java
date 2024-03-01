@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 public enum AutoCommands {
     B1_A_N1_S1(
             followChoreoTrajectory("B1_A_N1_S1.1"),
-            //new ScoreAmp(),
+            // new ScoreAmp(),
             new ParallelCommandGroup(followChoreoTrajectory("B1_A_N1_S1.2"), new IntakeCommand()),
             new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
     S1_N4_S2(
@@ -81,7 +81,7 @@ public enum AutoCommands {
             new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
     B1_A_N4_S1(
             followChoreoTrajectory("B1_A_N4_S1.1"),
-            //new ScoreAmp(),
+            // new ScoreAmp(),
             followChoreoTrajectory("B1_A_N4_S1.2"),
             new IntakeCommand(),
             followChoreoTrajectory("B1_A_N4_S1.3"),

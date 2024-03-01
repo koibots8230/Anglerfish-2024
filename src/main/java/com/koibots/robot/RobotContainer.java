@@ -74,7 +74,8 @@ public class RobotContainer {
         shoot.onTrue(
                 new SequentialCommandGroup(
                         new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(5000).times(2048)), Shooter.get()),
+                                () -> Shooter.get().setVelocity(RPM.of(5000).times(2048)),
+                                Shooter.get()),
                         new WaitCommand(1),
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));

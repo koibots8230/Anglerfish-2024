@@ -6,17 +6,14 @@ package com.koibots.robot.subsystems.swerve;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ControlConstants;
-import com.koibots.robot.Constants.RobotConstants;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,7 +25,6 @@ public class SwerveModule {
     private final SimpleMotorFeedforward driveFeedforward;
     private final PIDController driveFeedback;
     private final PIDController turnFeedback;
-    private final SimpleMotorFeedforward turnFeedforward;
     private Rotation2d angleSetpoint =
             new Rotation2d(); // Setpoint for closed loop control, null for open loop
     private Double speedSetpoint = 0.0; // Setpoint for closed loop control, null for open loop
@@ -45,17 +41,13 @@ public class SwerveModule {
                 new PIDController(
                         ControlConstants.DRIVE_PID_CONSTANTS.kP,
                         ControlConstants.DRIVE_PID_CONSTANTS.kI,
-                        ControlConstants.DRIVE_PID_CONSTANTS.kD
-                        );
+                        ControlConstants.DRIVE_PID_CONSTANTS.kD);
         turnFeedback =
                 new PIDController(
                         ControlConstants.TURN_PID_CONSTANTS.kP,
                         ControlConstants.TURN_PID_CONSTANTS.kI,
                         ControlConstants.TURN_PID_CONSTANTS.kD);
-        turnFeedforward = new SimpleMotorFeedforward(0.175, 0.0025);
-        //turnFeedforward = new SimpleMotorFeedforward(0.0, 0.5)
 
-        //turnFeedforward.            
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 
         driveFeedback.disableContinuousInput();
@@ -73,11 +65,15 @@ public class SwerveModule {
 
         // Run closed loop turn control
         if (Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) > 0.0001) {
+            var turnPID =
+                    turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
+
             io.setTurnVoltage(
                     Volts.of(
-                        turnFeedforward.calculate(angleSetpoint.getRadians()) +
-                            turnFeedback.calculate(
-                                    getAngle().getRadians(), angleSetpoint.getRadians())));
+                            turnPID
+                                    + (Math.signum(turnPID)
+                                            * ControlConstants.DRIVE_TURN_KS
+                                            / RobotController.getBatteryVoltage())));
         } else {
             io.setTurnVoltage(Volts.of(0));
         }
