@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax leftMotor;
@@ -28,11 +29,11 @@ public class ShooterIOSparkMax implements ShooterIO {
         leftMotor.restoreFactoryDefaults();
         rightMotor.restoreFactoryDefaults();
 
-        leftMotor.setSmartCurrentLimit(40, 60, 5676);
-        rightMotor.setSmartCurrentLimit(40, 60, 5676);
+        leftMotor.setSmartCurrentLimit(50, 60, 5676);
+        rightMotor.setSmartCurrentLimit(50, 60, 5676);
 
-        rightEncoder = new Encoder(0, 1, false);
-        leftEncoder = new Encoder(2, 3, false);
+        rightEncoder = new Encoder(1, 2, false, EncodingType.k1X);
+        leftEncoder = new Encoder(22, 21, true, EncodingType.k1X);
 
         leftMotor.clearFaults();
         rightMotor.clearFaults();

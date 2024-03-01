@@ -30,8 +30,6 @@ import edu.wpi.first.units.*;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.text.Position;
-
 public class Constants {
     public static final double DEADBAND = 0.025;
 
@@ -47,41 +45,30 @@ public class Constants {
         public static final int BACK_RIGHT_TURN = 3;
         public static final int FRONT_LEFT_DRIVE = 6;
         public static final int FRONT_LEFT_TURN = 1;
-        public static final int INDEXER = 9;
-        public static final int PLOPPER_PIVOT = 11;
-        public static final int RIGHT_ELEVATOR = 16;
+        public static final int INDEXER = 13;
+        public static final int RIGHT_ELEVATOR = 11;
         public static final int LEFT_ELEVATOR = 10;
         public static final int SHOOTER_LEFT = 14;
         public static final int SHOOTER_RIGHT = 12;
-        public static final int INTAKE = 15;
-        public static final int PLOPPER = 13;
+        public static final int INTAKE = 16;
     }
 
     public static class ControlConstants {
-        public static final PIDConstantsIO PLOPPER_PIVOT_FEEDBACK =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO PLOPPER_PIVOT_FEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0, 0, 0, 0, 0, 0, 0);
-
-        public static final PIDConstantsIO PLOPPER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO PLOPPER_FEEDFORWARD =
-                new FeedforwardConstantsIO(0, 5, 0, 0);
-
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
+                   new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(0, 0, 0, 35, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 2, 0, 2.75);
+                new FeedforwardConstantsIO(0, 2.6, 0, 2.75);
 
         public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 11, 0, 0);
+                new FeedforwardConstantsIO(0, 0.0275, 0, 0);
 
         public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO INTAKE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 11, 0, 0);
+                new FeedforwardConstantsIO(0, 10.25, 0, 0);
 
         public static final PIDConstantsIO INDEXER_FEEDBACK_CONSTANTS =
                 new PIDConstantsIO(0.009, 0, 0, 0, 0, 0);
@@ -162,13 +149,13 @@ public class Constants {
 
         public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
-                RadiansPerSecond.of(2 * PI);
+                RadiansPerSecond.of(4 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
                 MetersPerSecondPerSecond.of(4);
         public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
-                RadiansPerSecond.of(Math.PI).per(Second);
+                RadiansPerSecond.of(4 * Math.PI).per(Second);
 
-        private static final int DRIVING_PINION_TEETH = 13;
+        private static final int DRIVING_PINION_TEETH = 13; 
         public static final double DRIVE_GEAR_RATIO =
                 (45.0 * 22) / (DRIVING_PINION_TEETH * 15); // 5.07692307692
         public static final double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429

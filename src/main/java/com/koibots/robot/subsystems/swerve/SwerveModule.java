@@ -7,6 +7,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,8 +26,9 @@ public class SwerveModule {
     private final int index;
 
     private final SimpleMotorFeedforward driveFeedforward;
-    private final ProfiledPIDController driveFeedback;
-    private final ProfiledPIDController turnFeedback;
+    private final PIDController driveFeedback;
+    private final PIDController turnFeedback;
+    private final SimpleMotorFeedforward turnFeedforward;
     private Rotation2d angleSetpoint =
             new Rotation2d(); // Setpoint for closed loop control, null for open loop
     private Double speedSetpoint = 0.0; // Setpoint for closed loop control, null for open loop
@@ -39,23 +42,20 @@ public class SwerveModule {
                         ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
                         ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
         driveFeedback =
-                new ProfiledPIDController(
+                new PIDController(
                         ControlConstants.DRIVE_PID_CONSTANTS.kP,
                         ControlConstants.DRIVE_PID_CONSTANTS.kI,
-                        ControlConstants.DRIVE_PID_CONSTANTS.kD,
-                        new TrapezoidProfile.Constraints(
-                                RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-                                RobotConstants.MAX_LINEAR_ACCELERATION.in(
-                                        MetersPerSecondPerSecond)));
+                        ControlConstants.DRIVE_PID_CONSTANTS.kD
+                        );
         turnFeedback =
-                new ProfiledPIDController(
+                new PIDController(
                         ControlConstants.TURN_PID_CONSTANTS.kP,
                         ControlConstants.TURN_PID_CONSTANTS.kI,
-                        ControlConstants.TURN_PID_CONSTANTS.kD,
-                        new TrapezoidProfile.Constraints(
-                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                RobotConstants.MAX_ANGULAR_ACCELERATION.in(
-                                        RadiansPerSecond.per(Second))));
+                        ControlConstants.TURN_PID_CONSTANTS.kD);
+        turnFeedforward = new SimpleMotorFeedforward(0.175, 0.0025);
+        //turnFeedforward = new SimpleMotorFeedforward(0.0, 0.5)
+
+        //turnFeedforward.            
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 
         driveFeedback.disableContinuousInput();
@@ -68,12 +68,14 @@ public class SwerveModule {
 
     public void periodic() {
         io.updateInputs(inputs);
+        inputs.setpoint = angleSetpoint.getRadians();
         Logger.processInputs("Subsystems/Drive/Module" + index, inputs);
 
         // Run closed loop turn control
-        if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 0.0001) {
+        if (Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) > 0.0001) {
             io.setTurnVoltage(
                     Volts.of(
+                        turnFeedforward.calculate(angleSetpoint.getRadians()) +
                             turnFeedback.calculate(
                                     getAngle().getRadians(), angleSetpoint.getRadians())));
         } else {
@@ -82,10 +84,10 @@ public class SwerveModule {
 
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {
-            io.setDriveVoltage(
-                    Volts.of(
-                            driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
-                                    + driveFeedforward.calculate(speedSetpoint)));
+            // io.setDriveVoltage(
+            //         Volts.of(
+            //                 driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
+            //                         + driveFeedforward.calculate(speedSetpoint)));
         } else {
             // System.out.println("Zeroing voltage");
             io.setDriveVoltage(Volts.of(0));

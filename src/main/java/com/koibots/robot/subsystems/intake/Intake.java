@@ -60,6 +60,7 @@ public class Intake extends SubsystemBase {
                 RPM.of(
                         trueDistancePerMinute
                                 / Constants.RobotConstants.WHEELS.circumfrence.in(Meters));
+        System.out.println("Setpoint: " + setpoint);
     }
 
     public void setVoltage(Measure<Voltage> voltage) {

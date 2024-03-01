@@ -18,6 +18,8 @@ public interface ShooterIO {
         public Measure<Current> rightCurrent = Amps.of(0);
         public Measure<Voltage> leftVoltage = Volts.of(0);
         public Measure<Voltage> rightVoltage = Volts.of(0);
+
+        public Measure<Velocity<Angle>> setpoint = RPM.of(0);
     }
 
     void updateInputs(ShooterIOInputs inputs);

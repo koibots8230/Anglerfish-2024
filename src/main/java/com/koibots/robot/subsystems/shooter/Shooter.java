@@ -44,6 +44,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        inputs.setpoint = setpoint;
         Logger.processInputs("Subsystems/Shooter", inputs);
 
         io.setVoltages(
@@ -51,17 +52,17 @@ public class Shooter extends SubsystemBase {
                         Math.max(Math.min(
                                 (leftFeedback.calculate(
                                                 inputs.leftVelocity,
-                                                setpoint.in(RPM))
+                                                setpoint.in(RotationsPerSecond))
                                 + leftFeedforward.calculate(
-                                                setpoint.in(RPM)))
+                                                setpoint.in(RotationsPerSecond)))
                                 * (12.0 / 5676.0), 12.0), -12.0)),
                 Volts.of(
                         Math.max(Math.min(
                                 (rightFeedback.calculate(
                                                 inputs.rightVelocity,
-                                                setpoint.in(RPM))
+                                                setpoint.in(RotationsPerSecond))
                                 + rightFeedforward.calculate(
-                                                setpoint.in(RPM)))
+                                                setpoint.in(RotationsPerSecond)))
                                 * (12.0 / 5676.0), 12.0), -12.0))
         );
 
