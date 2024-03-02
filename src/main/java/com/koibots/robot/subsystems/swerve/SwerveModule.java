@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
@@ -68,13 +67,12 @@ public class SwerveModule {
             var turnPID =
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
 
-            var angleOutput = Volts.of(   
+            var angleOutput =
+                    Volts.of(
                             turnPID
-                                    + (0
-                                            ));
+                                    + (Math.signum(
+                                            getAngle().getRadians() - angleSetpoint.getRadians())));
 
-            System.out.println(Math.signum(turnPID));
-            
             io.setTurnVoltage(angleOutput);
         } else {
             io.setTurnVoltage(Volts.of(0));
