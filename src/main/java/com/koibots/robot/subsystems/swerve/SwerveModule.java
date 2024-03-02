@@ -68,12 +68,14 @@ public class SwerveModule {
             var turnPID =
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
 
-            io.setTurnVoltage(
-                    Volts.of(
+            var angleOutput = Volts.of(   
                             turnPID
-                                    + (Math.signum(turnPID)
-                                            * ControlConstants.DRIVE_TURN_KS
-                                            / RobotController.getBatteryVoltage())));
+                                    + (0
+                                            ));
+
+            System.out.println(Math.signum(turnPID));
+            
+            io.setTurnVoltage(angleOutput);
         } else {
             io.setTurnVoltage(Volts.of(0));
         }
