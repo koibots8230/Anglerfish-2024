@@ -58,11 +58,11 @@ public class EightBitDo {
     }
 
     public double getLeftY() {
-        return controller.getRawAxis(0);
+        return controller.getRawAxis(1);
     }
 
     public double getLeftX() {
-        return controller.getRawAxis(1);
+        return controller.getRawAxis(0);
     }
 
     public double getRightY() {

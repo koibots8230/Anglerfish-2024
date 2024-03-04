@@ -28,7 +28,7 @@ public class ElevatorIOSparkMax implements ElevatorIO {
         leftMotor.setIdleMode(IdleMode.kBrake);
         rightMotor.setIdleMode(IdleMode.kBrake);
 
-        encoder = leftMotor.getAlternateEncoder(8192);
+        encoder = rightMotor.getAlternateEncoder(8192);
 
         encoder.setPositionConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));
         encoder.setVelocityConversionFactor(ElevatorConstants.DISTANCE_PER_REVOLUTION.in(Meters));

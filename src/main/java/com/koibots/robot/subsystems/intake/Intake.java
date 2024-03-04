@@ -21,6 +21,8 @@ public class Intake extends SubsystemBase {
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
     private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
+    private int inverted = 1;
+
     public Intake() {
         io = Robot.isReal() ? new IntakeIOSparkMax() : new IntakeIOSim();
         feedback = new PIDController(Constants.ControlConstants.INTAKE_FEEDBACK_CONSTANTS.kP, 0, 0);
@@ -60,7 +62,11 @@ public class Intake extends SubsystemBase {
                 RPM.of(
                         trueDistancePerMinute
                                 / Constants.RobotConstants.WHEELS.circumfrence.in(Meters));
-        System.out.println("Setpoint: " + setpoint);
+        setpoint.times(inverted);
+    }
+
+    public void invert() {
+        inverted *= -1;
     }
 
     public void setVoltage(Measure<Voltage> voltage) {

@@ -8,7 +8,6 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import com.choreo.lib.ChoreoTrajectory;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.littletonrobotics.junction.Logger;
 
@@ -16,10 +15,8 @@ public class AutoFollower extends Command {
     private final ChoreoTrajectory trajectory;
     private double initialTime;
 
-    public AutoFollower(ChoreoTrajectory trajectory) {
-        if (DriverStation.getAlliance()
-                .filter(value -> value == DriverStation.Alliance.Red)
-                .isPresent()) {
+    public AutoFollower(ChoreoTrajectory trajectory, boolean isRed) {
+        if (isRed) {
             this.trajectory = trajectory.flipped();
         } else {
             this.trajectory = trajectory;

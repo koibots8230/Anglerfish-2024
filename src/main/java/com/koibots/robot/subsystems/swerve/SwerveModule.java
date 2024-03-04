@@ -67,11 +67,9 @@ public class SwerveModule {
             var turnPID =
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
 
-            var angleOutput =
-                    Volts.of(
-                            turnPID
-                                    + (Math.signum(
-                                            getAngle().getRadians() - angleSetpoint.getRadians())));
+            var angleOutput = Volts.of(turnPID);
+            //                         + (angleSetpoint.getRadians() -
+            // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
 
             io.setTurnVoltage(angleOutput);
         } else {
@@ -80,10 +78,10 @@ public class SwerveModule {
 
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {
-            // io.setDriveVoltage(
-            //         Volts.of(
-            //                 driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
-            //                         + driveFeedforward.calculate(speedSetpoint)));
+            io.setDriveVoltage(
+                    Volts.of(
+                            driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
+                                    + driveFeedforward.calculate(speedSetpoint)));
         } else {
             // System.out.println("Zeroing voltage");
             io.setDriveVoltage(Volts.of(0));

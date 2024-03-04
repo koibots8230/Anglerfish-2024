@@ -11,6 +11,7 @@ import com.koibots.robot.Constants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -28,6 +29,10 @@ public class FieldOrientedDrive extends Command {
     BooleanSupplier crossSupplier;
 
     ProfiledPIDController angleAlignmentController;
+
+    SlewRateLimiter vxLimiter;
+    SlewRateLimiter vyLimiter;
+    SlewRateLimiter vThetaLimiter;
 
     public FieldOrientedDrive(
             DoubleSupplier vxSupplier,
@@ -55,20 +60,26 @@ public class FieldOrientedDrive extends Command {
 
         SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
+        // vxLimiter = new SlewRateLimiter(0.3);
+        // vyLimiter = new SlewRateLimiter(0.3);
+        // vThetaLimiter = new SlewRateLimiter(0.3);
+
         addRequirements(Swerve.get());
     }
 
     @Override
     public void execute() {
-        if (!this.crossSupplier.getAsBoolean()) { // Normal Field Oriented Drive
-            double linearMagnitude =
-                    MathUtil.applyDeadband(
-                            Math.hypot(vxSupplier.getAsDouble(), vySupplier.getAsDouble()),
-                            Constants.DEADBAND,
-                            1);
 
-            Rotation2d linearDirection =
-                    new Rotation2d(vxSupplier.getAsDouble(), vySupplier.getAsDouble());
+        if (!this.crossSupplier.getAsBoolean()) { // Normal Field Oriented Drive
+            // double vxInput = vxLimiter.calculate(vxSupplier.getAsDouble());
+            // double vyInput = vyLimiter.calculate(vySupplier.getAsDouble());
+            double vxInput = -vxSupplier.getAsDouble();
+            double vyInput = -vySupplier.getAsDouble();
+
+            double linearMagnitude =
+                    MathUtil.applyDeadband(Math.hypot(vxInput, vyInput), Constants.DEADBAND, 1);
+
+            Rotation2d linearDirection = new Rotation2d(vxInput, vyInput);
 
             double angularVelocity;
 
@@ -79,11 +90,12 @@ public class FieldOrientedDrive extends Command {
                                 Math.toRadians(angleSupplier.getAsDouble()) - Math.PI);
 
                 Logger.recordOutput(
-                        "Angle Alignement Setpoint",
+                        "Angle Alignment Setpoint",
                         Math.toRadians(angleSupplier.getAsDouble()) - Math.PI);
                 Logger.recordOutput("Angle Alignement Output", angularVelocity);
             } else {
                 angularVelocity =
+                        // MathUtil.applyDeadband(vThetaLimiter.calculate(vThetaSupplier.getAsDouble()), Constants.DEADBAND);
                         MathUtil.applyDeadband(vThetaSupplier.getAsDouble(), Constants.DEADBAND);
             }
 

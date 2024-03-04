@@ -23,6 +23,8 @@ public class Indexer extends SubsystemBase {
 
     private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
+    private int inverted = 1;
+
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
         feedforward =
@@ -57,7 +59,11 @@ public class Indexer extends SubsystemBase {
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
-        setpoint = velocity;
+        setpoint = velocity.times(inverted);
+    }
+
+    public void invert() {
+        inverted *= -1;
     }
 
     public void setVoltage(Measure<Voltage> volts) {

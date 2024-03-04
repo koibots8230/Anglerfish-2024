@@ -29,6 +29,8 @@ public class Shooter extends SubsystemBase {
     SimpleMotorFeedforward leftFeedforward;
     SimpleMotorFeedforward rightFeedforward;
 
+    private int inverted = 1;
+
     public Shooter() {
         io = Robot.isReal() ? new ShooterIOSparkMax() : new ShooterIOSim();
 
@@ -71,11 +73,11 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setVelocity(Measure<Velocity<Angle>> speed) {
-        setpoint = speed;
+        setpoint = speed.times(inverted);
     }
 
     public void setVoltage(Measure<Voltage> volts) {
-        io.setVoltages(volts, volts);
+        //io.setVoltages(volts, volts);
     }
 
     public boolean atSetpoint() {
@@ -91,5 +93,9 @@ public class Shooter extends SubsystemBase {
 
     public List<Measure<Current>> getCurrent() {
         return Arrays.asList(inputs.leftCurrent, inputs.rightCurrent);
+    }
+
+    public void invert() {
+        inverted *= -1;
     }
 }

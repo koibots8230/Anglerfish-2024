@@ -114,6 +114,10 @@ public class Elevator extends SubsystemBase {
                         <= setpoint.plus(ElevatorConstants.ALLOWED_ERROR).in(Meters);
     }
 
+    public Measure<Distance> getPosition() {
+        return io.getPosition();
+    }
+
     public Measure<Distance> getSetpoint() {
         return setpoint;
     }

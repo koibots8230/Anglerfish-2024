@@ -46,19 +46,19 @@ public class Constants {
         public static final int FRONT_LEFT_DRIVE = 6;
         public static final int FRONT_LEFT_TURN = 1;
         public static final int INDEXER = 13;
-        public static final int RIGHT_ELEVATOR = 11;
-        public static final int LEFT_ELEVATOR = 10;
+        public static final int RIGHT_ELEVATOR = 16;
+        public static final int LEFT_ELEVATOR = 11;
         public static final int SHOOTER_LEFT = 14;
         public static final int SHOOTER_RIGHT = 12;
-        public static final int INTAKE = 16;
+        public static final int INTAKE = 10;
     }
 
     public static class ControlConstants {
-        public static final double DRIVE_TURN_KS = 4;
+        public static final double DRIVE_TURN_KS = 0.15;
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.00, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 35, 0, 0);
+                new PIDConstantsIO(1.7, 0, 0, 35, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2.6, 0, 2.75);
 
@@ -136,7 +136,7 @@ public class Constants {
                 Arrays.asList(RPM.of(5000).times(2048));
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
 
-        public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(10);
+        public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(6.75);
         public static final Measure<Distance> ELEVATOR_BOTTOM_HEIGHT = Inches.of(0);
     }
 
@@ -148,9 +148,9 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4);
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4.125);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
-                RadiansPerSecond.of(4 * PI);
+                RadiansPerSecond.of(3 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
                 MetersPerSecondPerSecond.of(4);
         public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
@@ -195,7 +195,7 @@ public class Constants {
 
         // ===================================Motors/Encoders===================================
 
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
+        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.432 * Math.PI);
 
         // ===================================Linear System===================================
 

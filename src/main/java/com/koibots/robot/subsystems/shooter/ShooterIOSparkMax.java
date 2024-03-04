@@ -14,50 +14,50 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
-    CANSparkMax leftMotor;
-    CANSparkMax rightMotor;
+    // CANSparkMax leftMotor;
+    // CANSparkMax rightMotor;
 
-    Encoder rightEncoder;
-    Encoder leftEncoder;
+    // Encoder rightEncoder;
+    // Encoder leftEncoder;
 
     protected ShooterIOSparkMax() {
-        leftMotor = new CANSparkMax(DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        // leftMotor = new CANSparkMax(DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
 
-        rightMotor =
-                new CANSparkMax(DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        // rightMotor =
+        //         new CANSparkMax(DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftMotor.restoreFactoryDefaults();
-        rightMotor.restoreFactoryDefaults();
+        // leftMotor.restoreFactoryDefaults();
+        // rightMotor.restoreFactoryDefaults();
 
-        leftMotor.setSmartCurrentLimit(50, 60, 5676);
-        rightMotor.setSmartCurrentLimit(50, 60, 5676);
+        // leftMotor.setSmartCurrentLimit(50, 60, 5676);
+        // rightMotor.setSmartCurrentLimit(50, 60, 5676);
 
-        rightEncoder = new Encoder(1, 2, false, EncodingType.k1X);
-        leftEncoder = new Encoder(22, 21, true, EncodingType.k1X);
+        // rightEncoder = new Encoder(1, 2, false, EncodingType.k1X);
+        // leftEncoder = new Encoder(22, 21, true, EncodingType.k1X);
 
-        leftMotor.clearFaults();
-        rightMotor.clearFaults();
-        leftMotor.burnFlash();
-        rightMotor.burnFlash();
+        // leftMotor.clearFaults();
+        // rightMotor.clearFaults();
+        // leftMotor.burnFlash();
+        // rightMotor.burnFlash();
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = leftEncoder.getRate();
-        inputs.rightVelocity = rightEncoder.getRate();
+        // inputs.leftVelocity = leftEncoder.getRate();
+        // inputs.rightVelocity = rightEncoder.getRate();
 
-        inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
-        inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
+        // inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
+        // inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
 
-        inputs.leftVoltage =
-                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage =
-                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        // inputs.leftVoltage =
+        //         Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
+        // inputs.rightVoltage =
+        //         Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
     }
 
     @Override
     public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
-        leftMotor.setVoltage(-left.in(Volts));
-        rightMotor.setVoltage(right.in(Volts));
+        // leftMotor.setVoltage(-left.in(Volts));
+        // rightMotor.setVoltage(right.in(Volts));
     }
 }

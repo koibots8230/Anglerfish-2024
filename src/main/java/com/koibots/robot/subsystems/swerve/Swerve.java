@@ -127,6 +127,10 @@ public class Swerve extends SubsystemBase {
         odometry.addVisionMeasurement(measurement, timestamp);
     }
 
+    public void zeroGyro() {
+        gyro.zeroYaw();
+    }
+
     public void driveRobotRelative(ChassisSpeeds speeds) {
         ChassisSpeeds.discretize(speeds, 0.02);
 
