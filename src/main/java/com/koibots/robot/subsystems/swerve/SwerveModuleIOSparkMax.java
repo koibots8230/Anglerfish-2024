@@ -28,8 +28,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final AbsoluteEncoder turnEncoder;
     private Rotation2d chassisAngularOffset;
 
-    private Measure<Voltage> setpointVoltage;
-
     public SwerveModuleIOSparkMax(int driveId, int turnId) {
 
         driveSparkMax = new CANSparkMax(driveId, MotorType.kBrushless);
@@ -107,7 +105,6 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
     @Override
     public void setTurnVoltage(Measure<Voltage> voltage) {
-        setpointVoltage = voltage;
         turnSparkMax.setVoltage(voltage.in(Volts));
     }
 

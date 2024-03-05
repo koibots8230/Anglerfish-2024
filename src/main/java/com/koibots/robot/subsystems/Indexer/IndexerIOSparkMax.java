@@ -17,52 +17,49 @@ import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DigitalInput;
 
 public class IndexerIOSparkMax implements IndexerIO {
-    // private final CANSparkMax motor;
-    // private final RelativeEncoder encoder;
+    private final CANSparkMax motor;
+    private final RelativeEncoder encoder;
 
-    //private final DigitalInput proximititySwitch;
+    private final DigitalInput proximititySwitch;
 
     public IndexerIOSparkMax() {
-        // motor = new CANSparkMax(Constants.DeviceIDs.INDEXER, MotorType.kBrushless);
+        motor = new CANSparkMax(Constants.DeviceIDs.INDEXER, MotorType.kBrushless);
 
-        // motor.setIdleMode(IdleMode.kBrake);
-        // motor.setSmartCurrentLimit(20, 40, 11000);
+        motor.setIdleMode(IdleMode.kBrake);
+        motor.setSmartCurrentLimit(20, 40, 11000);
 
-        // encoder = motor.getEncoder();
+        encoder = motor.getEncoder();
 
-        //proximititySwitch = new DigitalInput(5);
+        proximititySwitch = new DigitalInput(5);
     }
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
-        // inputs.velocity = RPM.of(encoder.getVelocity());
-        // inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
-        // inputs.current = Amps.of(motor.getOutputCurrent());
+        inputs.velocity = RPM.of(encoder.getVelocity());
+        inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
+        inputs.current = Amps.of(motor.getOutputCurrent());
     }
 
     public void setVoltage(Measure<Voltage> volts) {
-        // motor.setVoltage(volts.in(Volts));
+        motor.setVoltage(volts.in(Volts));
     }
 
     @Override
     public void setIdle(boolean isBrake) {
-        //motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
+        motor.setIdleMode(isBrake ? IdleMode.kBrake : IdleMode.kCoast);
     }
 
     public Measure<Velocity<Angle>> getVelocity() {
-        //return RotationsPerSecond.of(encoder.getVelocity());
-        return RPM.of(0);
+        return RotationsPerSecond.of(encoder.getVelocity());
     }
 
     @Override
     public Measure<Voltage> getVoltage() {
-        //return Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
-        return Volts.of(0);
+        return Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
     }
 
     @Override
     public boolean sensorTriggered() {
-        //return !proximititySwitch.get();
-        return false;
+        return !proximititySwitch.get();
     }
 }

@@ -54,7 +54,6 @@ public class Constants {
     }
 
     public static class ControlConstants {
-        public static final double DRIVE_TURN_KS = 0.15;
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
                 new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
@@ -62,6 +61,7 @@ public class Constants {
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 2.6, 0, 2.75);
 
+        public static final int ENCODER_SAMPLES_PER_AVERAGE = 40;
         public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
                 new FeedforwardConstantsIO(0, 0.0275, 0, 0);

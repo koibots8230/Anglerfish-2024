@@ -13,29 +13,29 @@ import edu.wpi.first.units.*;
 
 public class IntakeIOSparkMax implements IntakeIO {
 
-    // private final CANSparkMax intakeMotor;
-    // private final RelativeEncoder intakeEncoder;
+    private final CANSparkMax intakeMotor;
+    private final RelativeEncoder intakeEncoder;
 
     public IntakeIOSparkMax() {
 
-        // intakeMotor = new CANSparkMax(Constants.DeviceIDs.INTAKE, MotorType.kBrushless);
+        intakeMotor = new CANSparkMax(Constants.DeviceIDs.INTAKE, MotorType.kBrushless);
 
-        // intakeMotor.setSmartCurrentLimit(40, 60, 5670);
+        intakeMotor.setSmartCurrentLimit(40, 60, 5676);
 
-        // intakeEncoder = intakeMotor.getEncoder();
+        intakeEncoder = intakeMotor.getEncoder();
     }
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        // inputs.velocity = RPM.of(intakeEncoder.getVelocity());
+        inputs.velocity = RPM.of(intakeEncoder.getVelocity());
 
-        // inputs.current = Amps.of(intakeMotor.getOutputCurrent());
-        // inputs.voltage =
-        //         Volts.of(intakeMotor.getBusVoltage()).times(intakeMotor.getAppliedOutput());
+        inputs.current = Amps.of(intakeMotor.getOutputCurrent());
+        inputs.voltage =
+                Volts.of(intakeMotor.getBusVoltage()).times(intakeMotor.getAppliedOutput());
     }
 
     @Override
     public void setVoltage(Measure<Voltage> volts) {
-        //intakeMotor.setVoltage(volts.in(Volts));
+        intakeMotor.setVoltage(volts.in(Volts));
     }
 }
