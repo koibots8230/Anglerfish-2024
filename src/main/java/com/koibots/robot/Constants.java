@@ -9,17 +9,25 @@ import static java.lang.StrictMath.PI;
 import com.koibots.lib.util.PIDConstantsIO;
 import com.koibots.lib.util.SimpleMotorFeedforwardConstantsIO;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.XboxController;
 
 public class Constants {
 
     public static final double DEADBAND = 0.025;
+
+    public static final double kWheelDiameterMeters = 0;
+    private static final int kDrivingMotorReduction = 0;
+    private static final Measure<Distance> WHEEL_RADIUS =
+            null; // these three constants were quick fixes, need to double-check!
 
     public static class DriveConstants {
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
@@ -76,11 +84,26 @@ public class Constants {
                 (2 * Math.PI) / 60.0; // radians per second
 
         public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
+                (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
         public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
+                ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction)
                         / 60.0; // meters per second
     }
+
+    public static class ShooterConstants {
+        public static final int shooterMotor1 = 0;
+        public static final int shooterMotor2 = 1;
+        public static final double kP = 0;
+    }
+
+    public static final double TURNING_ENCODER_VELOCITY_FACTOR =
+            (2 * Math.PI) / 60.0; // radians per second
+
+    public static final double DRIVING_ENCODER_POSITION_FACTOR =
+            (WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction; // meters
+    public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
+            ((WHEEL_RADIUS.in(Meters) * 2 * Math.PI) / kDrivingMotorReduction)
+                    / 60.0; // meters per second
 
     public static class VisionConstants {
         public static final Pose2d[] CAMERA_DISTANCES_TO_CENTER_METERS = {
@@ -101,7 +124,6 @@ public class Constants {
 
         public static final Measure<Distance> FIELD_WIDTH = Inches.of(323.25);
         public static final Measure<Distance> FIELD_LENGTH = Inches.of(651.25);
-
         public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
 
         public static final Pose2d[] TAG_POSES_METERS = {
@@ -109,5 +131,9 @@ public class Constants {
         };
 
         public static final Pose2d[] CAMERA_POSITIONS = null;
+
+        public static final  Pose3d NOTE_CAMERA_POSE = new Pose3d(0.25, .5, 1, new Rotation3d());
+        public static final double NOTE_CAMERA_DISTANCE_TO_CENTER = Math.sqrt(Math.pow(NOTE_CAMERA_POSE.getX(), 2) + Math.pow(NOTE_CAMERA_POSE.getY(), 2));
+        public static final int XboxControllerport = 0;
     }
 }

@@ -92,7 +92,7 @@ public class Vision extends SubsystemBase {
         hypangle =
                 VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians()
                         + Swerve.get().getGyroAngle().getRadians()
-                        + 90;
+                        + (Math.PI / 2);
 
         return new Pose2d(
                 camPose.getX() + (hypotenuse * Math.cos(hypangle)),

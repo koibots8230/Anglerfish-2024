@@ -11,6 +11,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
       "/SmartDashboard/Auto Mode Chooser": "String Chooser",
+      "/SmartDashboard/Command Scheduler": "Scheduler",
       "/SmartDashboard/Controller Chooser": "String Chooser",
       "/SmartDashboard/Drive PID 0": "PIDController",
       "/SmartDashboard/Drive PID 1": "PIDController",

@@ -4,6 +4,7 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.swerve.Swerve;
+import com.koibots.robot.subsystems.vision.NoteDetection;
 import com.koibots.robot.subsystems.vision.Vision;
 import java.util.function.Supplier;
 
@@ -22,5 +23,13 @@ public class Subsystems {
                 visionInstance = new Vision();
                 Vision = () -> visionInstance;
                 return visionInstance;
+            };
+    
+    private static NoteDetection noteInstance;
+    public static Supplier<NoteDetection> Note =
+            () -> {
+                noteInstance = new NoteDetection();
+                Note = () -> noteInstance;
+                return noteInstance;
             };
 }
