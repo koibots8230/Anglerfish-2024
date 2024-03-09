@@ -18,7 +18,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -44,7 +43,7 @@ public class TestDrive extends Command {
             DoubleSupplier vySupplier,
             DoubleSupplier vThetaSupplier,
             DoubleSupplier angleSupplier,
-            BooleanSupplier crossSupplier, 
+            BooleanSupplier crossSupplier,
             List<SendableChooser<Boolean>> modules) {
         this.vxSupplier = vxSupplier;
         this.vySupplier = vySupplier;

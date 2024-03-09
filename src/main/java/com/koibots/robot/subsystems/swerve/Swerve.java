@@ -102,7 +102,7 @@ public class Swerve extends SubsystemBase {
         swerveModules[0].periodic();
         swerveModules[1].periodic();
         swerveModules[2].periodic();
-        swerveModules[3].periodic();        
+        swerveModules[3].periodic();
 
         double[] statesDegrees = new double[8];
         double[] statesRadians = new double[8];
@@ -129,7 +129,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        speeds = ChassisSpeeds.discretize(speeds, 0.02); //TODO: Wasn't using this, made it use it
+        speeds = ChassisSpeeds.discretize(speeds, 0.02);
 
         SwerveModuleState[] targetModuleStates =
                 ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
@@ -148,8 +148,6 @@ public class Swerve extends SubsystemBase {
         }
 
         this.setModuleStates(targetModuleStates);
-
-        //this.setModuleStates(ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds)); //TODO: Why both??
     }
 
     public void driveRobotRelativeByModule(ChassisSpeeds speeds, boolean[] whichModules) {
@@ -172,7 +170,8 @@ public class Swerve extends SubsystemBase {
         }
 
         for (int a = 0; a < 4; a++) {
-            targetModuleStates[a] = whichModules[a] ? targetModuleStates[a] : new SwerveModuleState();
+            targetModuleStates[a] =
+                    whichModules[a] ? targetModuleStates[a] : new SwerveModuleState();
         }
 
         this.setModuleStates(targetModuleStates);

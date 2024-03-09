@@ -65,14 +65,14 @@ public class SwerveModule {
         Logger.processInputs("Subsystems/Drive/Module" + index, inputs);
 
         // Run closed loop turn control
-            var turnPID =
-                    turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
+        var turnPID = turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
 
-            var angleOutput = Volts.of(turnPID + (Math.signum(turnPID) * ControlConstants.DRIVE_TURN_KS));
-            //                         + (angleSetpoint.getRadians() -
-            // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
+        var angleOutput =
+                Volts.of(turnPID + (Math.signum(turnPID) * ControlConstants.DRIVE_TURN_KS));
+        //                         + (angleSetpoint.getRadians() -
+        // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
 
-            io.setTurnVoltage(angleOutput);
+        io.setTurnVoltage(angleOutput);
 
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {

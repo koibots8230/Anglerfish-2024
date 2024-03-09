@@ -134,9 +134,7 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(110).times(10);
 
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
-                Arrays.asList(
-                    Arrays.asList(RPM.of(5000), RPM.of(5000))
-                );
+                Arrays.asList(Arrays.asList(RPM.of(5000), RPM.of(5000)));
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
 
         public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(6.75);
@@ -151,7 +149,8 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4.125);
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED =
+                MetersPerSecond.of(4.125);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
                 RadiansPerSecond.of(3 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =

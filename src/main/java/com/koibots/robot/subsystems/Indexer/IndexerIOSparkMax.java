@@ -26,7 +26,7 @@ public class IndexerIOSparkMax implements IndexerIO {
         motor = new CANSparkMax(Constants.DeviceIDs.INDEXER, MotorType.kBrushless);
 
         motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(20, 40, 11000);
+        motor.setSmartCurrentLimit(40, 60, 5676);
 
         encoder = motor.getEncoder();
 

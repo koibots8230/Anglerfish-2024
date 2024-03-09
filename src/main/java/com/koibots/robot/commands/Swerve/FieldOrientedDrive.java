@@ -60,9 +60,9 @@ public class FieldOrientedDrive extends Command {
 
         SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
-        // vxLimiter = new SlewRateLimiter(0.3);
-        // vyLimiter = new SlewRateLimiter(0.3);
-        // vThetaLimiter = new SlewRateLimiter(0.3);
+        vxLimiter = new SlewRateLimiter(3.5);
+        vyLimiter = new SlewRateLimiter(3.5);
+        vThetaLimiter = new SlewRateLimiter(3);
 
         addRequirements(Swerve.get());
     }
@@ -71,10 +71,8 @@ public class FieldOrientedDrive extends Command {
     public void execute() {
 
         if (!this.crossSupplier.getAsBoolean()) { // Normal Field Oriented Drive
-            // double vxInput = vxLimiter.calculate(vxSupplier.getAsDouble());
-            // double vyInput = vyLimiter.calculate(vySupplier.getAsDouble());
-            double vxInput = -vxSupplier.getAsDouble();
-            double vyInput = -vySupplier.getAsDouble();
+            double vxInput = vxLimiter.calculate(vxSupplier.getAsDouble());
+            double vyInput = vyLimiter.calculate(vySupplier.getAsDouble());
 
             double linearMagnitude =
                     MathUtil.applyDeadband(Math.hypot(vxInput, vyInput), Constants.DEADBAND, 1);
@@ -95,8 +93,9 @@ public class FieldOrientedDrive extends Command {
                 Logger.recordOutput("Angle Alignement Output", angularVelocity);
             } else {
                 angularVelocity =
-                        // MathUtil.applyDeadband(vThetaLimiter.calculate(vThetaSupplier.getAsDouble()), Constants.DEADBAND);
-                        MathUtil.applyDeadband(vThetaSupplier.getAsDouble(), Constants.DEADBAND);
+                        MathUtil.applyDeadband(
+                                vThetaLimiter.calculate(vThetaSupplier.getAsDouble()),
+                                Constants.DEADBAND);
             }
 
             // Apply Scaling

@@ -4,7 +4,6 @@
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.Indexer.Indexer;
-import com.koibots.robot.subsystems.elevator.Elevator;
 import com.koibots.robot.subsystems.intake.Intake;
 import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
@@ -44,14 +43,6 @@ public class Subsystems {
                 shooterInstance = new Shooter();
                 Shooter = () -> shooterInstance;
                 return shooterInstance;
-            };
-
-    private static Elevator elevatorInstance;
-    public static Supplier<Elevator> Elevator =
-            () -> {
-                elevatorInstance = new Elevator();
-                Elevator = () -> elevatorInstance;
-                return elevatorInstance;
             };
 
     private static Vision visionInstance;

@@ -5,36 +5,31 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import java.util.ArrayList;
+import java.util.List;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-import com.koibots.robot.commands.Swerve.TestDrive;
-
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;
 
-    List<SendableChooser<Boolean>> modules = new ArrayList<SendableChooser<Boolean>>();
-    /**
-     * This function is run when the robot is first started up and should be used for any
-     * initialization code.
-     */
+    List<SendableChooser<Boolean>> modulesEnabled = new ArrayList<SendableChooser<Boolean>>();
+
     @Override
     public void robotInit() {
         Logger.recordMetadata("RobotName", "Swerve Chassis");
         Logger.addDataReceiver(new WPILOGWriter());
 
-        // CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture();
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
@@ -47,22 +42,8 @@ public class Robot extends LoggedRobot {
 
         Logger.start();
 
-        // Instantiate our RobotContainer.
-        // and put our autonomous
-        // chooser on the dashboard.
         robotContainer = new RobotContainer();
         robotContainer.registerAutos();
-
-        for (int a = 0; a < 4; a++) {
-            SendableChooser<Boolean> module = new SendableChooser<>();
-            
-            module.setDefaultOption("Enabled", true);
-            module.addOption("Disabled", false);
-
-            SmartDashboard.putData("Module " + a, module);
-
-            modules.add(a, module);
-        }
     }
 
     @Override
@@ -71,8 +52,7 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void autonomousInit() {
-    }
+    public void autonomousInit() {}
 
     @Override
     public void autonomousPeriodic() {}
@@ -92,7 +72,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void testInit() {
-        SmartDashboard.putData(Swerve.get());
-        robotContainer.configureTestBinds(modules);
+        robotContainer.configureTestBinds();
     }
 }
