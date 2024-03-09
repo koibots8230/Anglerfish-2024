@@ -86,7 +86,7 @@ public class RobotContainer {
         shoot.onTrue(
                 new SequentialCommandGroup(
                         new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(3750).times(2048)),
+                                () -> Shooter.get().setVelocity(RPM.of(3750).times(2048), RPM.of(3750).times(2048)),
                                 Shooter.get()),
                         new WaitCommand(1),
                         new InstantCommand(
@@ -94,7 +94,7 @@ public class RobotContainer {
         shoot.onFalse(
                 new ParallelCommandGroup(
                         new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get()),
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
@@ -106,14 +106,16 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new InstantCommand(() -> Intake.get().invert()),
                 new InstantCommand(() -> Indexer.get().invert()),
-                new InstantCommand(() -> Shooter.get().invert())
+                new InstantCommand(() -> Shooter.get().invertTop()),
+                new InstantCommand(() -> Shooter.get().invertBottom())
             )
         );
         reverseEverything.onFalse(
             new ParallelCommandGroup(
                 new InstantCommand(() -> Intake.get().invert()),
                 new InstantCommand(() -> Indexer.get().invert()),
-                new InstantCommand(() -> Shooter.get().invert())
+                new InstantCommand(() -> Shooter.get().invertTop()),
+                new InstantCommand(() -> Shooter.get().invertBottom())
             )
         );
 

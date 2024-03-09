@@ -48,8 +48,8 @@ public class Constants {
         public static final int INDEXER = 13;
         public static final int RIGHT_ELEVATOR = 16;
         public static final int LEFT_ELEVATOR = 11;
-        public static final int SHOOTER_LEFT = 14;
-        public static final int SHOOTER_RIGHT = 12;
+        public static final int SHOOTER_TOP = 14;
+        public static final int SHOOTER_BOTTOM = 12;
         public static final int INTAKE = 10;
     }
 
