@@ -34,9 +34,6 @@ public class Constants {
     public static final double DEADBAND = 0.025;
 
     public static class DeviceIDs {
-        // ---------------------------| DIO Ports |------------------------------\\
-        public static final int PLOPPER_LIMIT_SWITCH = 0;
-        // ---------------------------| CAN IDs |--------------------------------\\
         public static final int BACK_LEFT_TURN = 5;
         public static final int BACK_LEFT_DRIVE = 4;
         public static final int FRONT_RIGHT_DRIVE = 7;
@@ -46,8 +43,6 @@ public class Constants {
         public static final int FRONT_LEFT_DRIVE = 6;
         public static final int FRONT_LEFT_TURN = 1;
         public static final int INDEXER = 13;
-        public static final int RIGHT_ELEVATOR = 16;
-        public static final int LEFT_ELEVATOR = 11;
         public static final int SHOOTER_TOP = 14;
         public static final int SHOOTER_BOTTOM = 12;
         public static final int INTAKE = 10;
@@ -76,11 +71,6 @@ public class Constants {
                 new PIDConstantsIO(0.009, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO INDEXER_FEEDFORWARD_CONSTANTS =
                 new FeedforwardConstantsIO(0, 10, 0, 0);
-
-        public static final PIDConstantsIO ELEVATOR_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO ELEVATOR_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0, 0, 0, 0, 0);
 
         public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
@@ -136,15 +126,9 @@ public class Constants {
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
                 Arrays.asList(Arrays.asList(RPM.of(5000), RPM.of(5000)));
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
-
-        public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(6.75);
-        public static final Measure<Distance> ELEVATOR_BOTTOM_HEIGHT = Inches.of(0);
     }
 
     public static final class RobotConstants {
-        public static final double PLOPPER_PIVOT_ENCODER_POSITION_FACTOR = (2 * Math.PI);
-        public static final Measure<Angle> PLOPPER_PIVOT_ALLOWED_ERROR = Degrees.of(5);
-
         public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
@@ -177,9 +161,6 @@ public class Constants {
     }
 
     public static class DriveConstants {
-        public static final List<Pose2d> CLIMB_POSITIONS =
-                Arrays.asList(new Pose2d(), new Pose2d(), new Pose2d());
-
         public static final Pose2d AMP_POSITION = new Pose2d();
 
         public static final Translation2d ALLOWED_DISTANCE_FROM_AMP = new Translation2d(2, 2);
@@ -191,71 +172,6 @@ public class Constants {
         public static final Translation2d ALLOWED_DISTANCE_FROM_SHOOT = new Translation2d(2, 2);
 
         public static final Translation2d ALLOWED_DISTANCE_FROM_NOTE = new Translation2d(2, 2);
-    }
-
-    public static class ElevatorConstants {
-
-        // ===================================Motors/Encoders===================================
-
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.432 * Math.PI);
-
-        // ===================================Linear System===================================
-
-        public static final double GEAR_RATIO = 25;
-        public static final Measure<Mass> MASS = Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.8755);
-
-        public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
-                LinearSystemId.createElevatorSystem(
-                        DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
-
-        // ===================================Profile===================================
-
-        public static final Measure<Velocity<Distance>> MAX_SPEED = InchesPerSecond.of(18);
-        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-                MetersPerSecondPerSecond.of(Units.inchesToMeters(1));
-
-        // ===================================Kalman Filter===================================
-
-        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(5); // TODO: Get
-        public static final Measure<Velocity<Distance>> STDEV_VELOCITY =
-                InchesPerSecond.of(10); // TODO: Get
-        public static final double ENCODER_STDEV = 0.01; // TODO: Get
-
-        public static final KalmanFilter<N2, N1, N1> KALMAN_FILTER =
-                new KalmanFilter<>(
-                        Nat.N2(),
-                        Nat.N1(),
-                        LINEAR_SYS,
-                        VecBuilder.fill(
-                                STDEV_DISTANCE.in(Meters), STDEV_VELOCITY.in(MetersPerSecond)),
-                        VecBuilder.fill(ENCODER_STDEV),
-                        0.020);
-
-        // ===================================LQR===================================
-
-        public static final Measure<Distance> POSITION_ERROR_TOLERANCE =
-                Inches.of(0.01); // TODO: Get
-        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE =
-                InchesPerSecond.of(.1); // TODO: Get
-        public static final double VOLTAGE_TOLERANCE = 12;
-
-        public static final LinearQuadraticRegulator<N2, N1, N1> LQR =
-                new LinearQuadraticRegulator<>(
-                        LINEAR_SYS,
-                        VecBuilder.fill(
-                                POSITION_ERROR_TOLERANCE.in(Meters),
-                                VELOCITY_ERROR_TOLERANCE.in(MetersPerSecond)),
-                        VecBuilder.fill(VOLTAGE_TOLERANCE),
-                        0.020);
-
-        // =================================== Positions ===================================
-
-        public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> LOAD_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> SHOOT_POSITION = Inches.of(0); // TODO: Get
-
-        public static final Measure<Distance> ALLOWED_ERROR = Meters.of(0.005);
     }
 
     public static class VisionConstants {
