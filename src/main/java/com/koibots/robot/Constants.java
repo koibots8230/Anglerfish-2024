@@ -54,6 +54,7 @@ public class Constants {
     }
 
     public static class ControlConstants {
+        public static final double DRIVE_TURN_KS = 0.125;
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
                 new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
         public static final PIDConstantsIO TURN_PID_CONSTANTS =

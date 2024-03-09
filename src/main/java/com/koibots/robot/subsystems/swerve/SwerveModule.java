@@ -54,6 +54,8 @@ public class SwerveModule {
         SmartDashboard.putData("Swerve/Drive PID " + index, driveFeedback);
         SmartDashboard.putData("Swerve/Turn PID " + index, turnFeedback);
 
+        turnFeedback.setTolerance(0.00001);
+
         setBrakeMode(true);
     }
 
@@ -63,18 +65,14 @@ public class SwerveModule {
         Logger.processInputs("Subsystems/Drive/Module" + index, inputs);
 
         // Run closed loop turn control
-        if (Math.abs(angleSetpoint.getRadians() - inputs.turnPosition.getRadians()) > 0.0001) {
             var turnPID =
                     turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
 
-            var angleOutput = Volts.of(turnPID);
+            var angleOutput = Volts.of(turnPID + (Math.signum(turnPID) * ControlConstants.DRIVE_TURN_KS));
             //                         + (angleSetpoint.getRadians() -
             // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
 
             io.setTurnVoltage(angleOutput);
-        } else {
-            io.setTurnVoltage(Volts.of(0));
-        }
 
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {

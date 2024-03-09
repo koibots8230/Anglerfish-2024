@@ -13,6 +13,8 @@ import com.koibots.robot.Constants.*;
 import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Scoring.SortaJankClimb;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
+import com.koibots.robot.commands.Swerve.TestDrive;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -63,63 +65,73 @@ public class RobotContainer {
                                 () -> driveController.getPOV(),
                                 () -> driveController.getB()));
 
-        Trigger intake = new Trigger(() -> driveController.getRightTrigger() > 0.15);
-        intake.onTrue(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () ->
-                                        Intake.get()
-                                                .setVelocity(
+        // Trigger intake = new Trigger(() -> driveController.getRightTrigger() > 0.15);
+        // intake.onTrue(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(
+        //                         () ->
+        //                                 Intake.get()
+        //                                         .setVelocity(
         
-        SetpointConstants.INTAKE_TARGET_VELOCITY),
-                                Intake.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
-        intake.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)),
-        Intake.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        // SetpointConstants.INTAKE_TARGET_VELOCITY),
+        //                         Intake.get()),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
+        // intake.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)),
+        // Intake.get()),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
-        Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
-        shoot.onTrue(
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(3750).times(2048)),
-                                Shooter.get()),
-                        new WaitCommand(1),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
-        shoot.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        // Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
+        // shoot.onTrue(
+        //         new SequentialCommandGroup(
+        //                 new InstantCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(3750).times(2048)),
+        //                         Shooter.get()),
+        //                 new WaitCommand(1),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
+        // shoot.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
         Trigger zero = new Trigger(() -> driveController.getA());
         zero.onTrue(new InstantCommand(() -> Swerve.get().zeroGyro()));
 
-        Trigger reverseEverything = new Trigger(() -> driveController.getRightBumper());
-        reverseEverything.onTrue(
-            new ParallelCommandGroup(
-                new InstantCommand(() -> Intake.get().invert()),
-                new InstantCommand(() -> Indexer.get().invert()),
-                new InstantCommand(() -> Shooter.get().invert())
-            )
-        );
-        reverseEverything.onFalse(
-            new ParallelCommandGroup(
-                new InstantCommand(() -> Intake.get().invert()),
-                new InstantCommand(() -> Indexer.get().invert()),
-                new InstantCommand(() -> Shooter.get().invert())
-            )
-        );
+        // Trigger reverseEverything = new Trigger(() -> driveController.getRightBumper());
+        // reverseEverything.onTrue(
+        //     new ParallelCommandGroup(
+        //         new InstantCommand(() -> Intake.get().invert()),
+        //         new InstantCommand(() -> Indexer.get().invert()),
+        //         new InstantCommand(() -> Shooter.get().invert())
+        //     )
+        // );
+        // reverseEverything.onFalse(
+        //     new ParallelCommandGroup(
+        //         new InstantCommand(() -> Intake.get().invert()),
+        //         new InstantCommand(() -> Indexer.get().invert()),
+        //         new InstantCommand(() -> Shooter.get().invert())
+        //     )
+        // );
 
-        Trigger climb = new Trigger(() -> driveController.getLeftBumper());
-        climb.onTrue(new SortaJankClimb(true));
-        climb.onFalse(new SortaJankClimb(false));
+        // Trigger climb = new Trigger(() -> driveController.getLeftBumper());
+        // climb.onTrue(new SortaJankClimb(true));
+        // climb.onFalse(new SortaJankClimb(false));
+    }
+
+    public void configureTestBinds(List<SendableChooser<Boolean>> modules) {
+        Swerve.get().setDefaultCommand(
+            new TestDrive(() -> -driveController.getRightX(),
+                                () -> -driveController.getRightY(),
+                                () -> -driveController.getLeftX(),
+                                () -> driveController.getPOV(),
+                                () -> driveController.getB(), 
+                                modules));
     }
 
     public Command getAutonomousRoutine() {

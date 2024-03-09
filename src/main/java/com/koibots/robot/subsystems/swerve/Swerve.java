@@ -102,10 +102,7 @@ public class Swerve extends SubsystemBase {
         swerveModules[0].periodic();
         swerveModules[1].periodic();
         swerveModules[2].periodic();
-        swerveModules[3].periodic();
-
-        // Log measured states
-        Logger.recordOutput("SwerveStates/Measured", getModuleStates());
+        swerveModules[3].periodic();        
 
         double[] statesDegrees = new double[8];
         double[] statesRadians = new double[8];
@@ -132,7 +129,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        ChassisSpeeds.discretize(speeds, 0.02);
+        speeds = ChassisSpeeds.discretize(speeds, 0.02); //TODO: Wasn't using this, made it use it
 
         SwerveModuleState[] targetModuleStates =
                 ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
@@ -152,7 +149,33 @@ public class Swerve extends SubsystemBase {
 
         this.setModuleStates(targetModuleStates);
 
-        this.setModuleStates(ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds));
+        //this.setModuleStates(ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds)); //TODO: Why both??
+    }
+
+    public void driveRobotRelativeByModule(ChassisSpeeds speeds, boolean[] whichModules) {
+        speeds = ChassisSpeeds.discretize(speeds, 0.02);
+
+        SwerveModuleState[] targetModuleStates =
+                ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+                targetModuleStates, RobotConstants.MAX_LINEAR_SPEED);
+
+        if (speeds.vxMetersPerSecond == 0.0
+                && speeds.vyMetersPerSecond == 0.0
+                && speeds.omegaRadiansPerSecond == 0) {
+            var currentStates = this.getModuleStates();
+            targetModuleStates[0] = new SwerveModuleState(0, currentStates[0].angle);
+            targetModuleStates[1] = new SwerveModuleState(0, currentStates[1].angle);
+            targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
+            targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
+        }
+
+        for (int a = 0; a < 4; a++) {
+            targetModuleStates[a] = whichModules[a] ? targetModuleStates[a] : new SwerveModuleState();
+        }
+
+        this.setModuleStates(targetModuleStates);
     }
 
     public Rotation2d getGyroAngle() {
