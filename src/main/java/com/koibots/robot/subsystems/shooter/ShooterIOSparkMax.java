@@ -15,53 +15,53 @@ import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
-    CANSparkMax leftMotor;
-    CANSparkMax rightMotor;
+    CANSparkMax topMotor;
+    CANSparkMax bottomMotor;
 
-    Encoder rightEncoder;
-    Encoder leftEncoder;
+    Encoder topEncoder;
+    Encoder bottomEncoder;
 
     protected ShooterIOSparkMax() {
-        leftMotor = new CANSparkMax(DeviceIDs.SHOOTER_LEFT, CANSparkLowLevel.MotorType.kBrushless);
+        topMotor = new CANSparkMax(DeviceIDs.SHOOTER_TOP, CANSparkLowLevel.MotorType.kBrushless);
 
-        rightMotor =
-                new CANSparkMax(DeviceIDs.SHOOTER_RIGHT, CANSparkLowLevel.MotorType.kBrushless);
+        bottomMotor =
+                new CANSparkMax(DeviceIDs.SHOOTER_BOTTOM, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftMotor.restoreFactoryDefaults();
-        rightMotor.restoreFactoryDefaults();
+        topMotor.restoreFactoryDefaults();
+        bottomMotor.restoreFactoryDefaults();
 
-        leftMotor.setSmartCurrentLimit(50, 60, 5676);
-        rightMotor.setSmartCurrentLimit(50, 60, 5676);
+        topMotor.setSmartCurrentLimit(50, 60, 5676);
+        bottomMotor.setSmartCurrentLimit(50, 60, 5676);
 
-        rightEncoder = new Encoder(1, 2, false, EncodingType.k1X);
-        leftEncoder = new Encoder(22, 21, true, EncodingType.k1X);
+        topEncoder = new Encoder(1, 2, false, EncodingType.k1X);
+        bottomEncoder = new Encoder(22, 21, true, EncodingType.k1X);
 
-        rightEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
-        leftEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
+        topEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
+        bottomEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
 
-        leftMotor.clearFaults();
-        rightMotor.clearFaults();
-        leftMotor.burnFlash();
-        rightMotor.burnFlash();
+        topMotor.clearFaults();
+        bottomMotor.clearFaults();
+        topMotor.burnFlash();
+        bottomMotor.burnFlash();
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = leftEncoder.getRate();
-        inputs.rightVelocity = rightEncoder.getRate();
+        inputs.topVelocity = topEncoder.getRate();
+        inputs.bottomVelocity = bottomEncoder.getRate();
 
-        inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
-        inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
+        inputs.topCurrent = Amps.of(topMotor.getOutputCurrent());
+        inputs.topCurrent = Amps.of(bottomMotor.getOutputCurrent());
 
-        inputs.leftVoltage =
-                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage =
-                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        inputs.topVoltage =
+                Volts.of(topMotor.getBusVoltage()).times(topMotor.getAppliedOutput());
+        inputs.bottomVoltage =
+                Volts.of(bottomMotor.getBusVoltage()).times(bottomMotor.getAppliedOutput());
     }
 
     @Override
-    public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
-        leftMotor.setVoltage(-left.in(Volts));
-        rightMotor.setVoltage(right.in(Volts));
+    public void setVoltages(Measure<Voltage> top, Measure<Voltage> bottom) {
+        topMotor.setVoltage(-top.in(Volts));
+        bottomMotor.setVoltage(bottom.in(Volts));
     }
 }

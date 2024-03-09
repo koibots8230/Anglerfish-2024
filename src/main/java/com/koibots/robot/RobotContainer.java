@@ -84,40 +84,42 @@ public class RobotContainer {
         //                 new InstantCommand(
         //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
-        // Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
-        // shoot.onTrue(
-        //         new SequentialCommandGroup(
-        //                 new InstantCommand(
-        //                         () -> Shooter.get().setVelocity(RPM.of(3750).times(2048)),
-        //                         Shooter.get()),
-        //                 new WaitCommand(1),
-        //                 new InstantCommand(
-        //                         () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
-        // shoot.onFalse(
-        //         new ParallelCommandGroup(
-        //                 new InstantCommand(
-        //                         () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
-        //                 new InstantCommand(
-        //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
+        shoot.onTrue(
+                new SequentialCommandGroup(
+                        new InstantCommand(
+                                () -> Shooter.get().setVelocity(RPM.of(3750).times(2048), RPM.of(3750).times(2048)),
+                                Shooter.get()),
+                        new WaitCommand(1),
+                        new InstantCommand(
+                                () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
+        shoot.onFalse(
+                new ParallelCommandGroup(
+                        new InstantCommand(
+                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get()),
+                        new InstantCommand(
+                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
         Trigger zero = new Trigger(() -> driveController.getA());
         zero.onTrue(new InstantCommand(() -> Swerve.get().zeroGyro()));
 
-        // Trigger reverseEverything = new Trigger(() -> driveController.getRightBumper());
-        // reverseEverything.onTrue(
-        //     new ParallelCommandGroup(
-        //         new InstantCommand(() -> Intake.get().invert()),
-        //         new InstantCommand(() -> Indexer.get().invert()),
-        //         new InstantCommand(() -> Shooter.get().invert())
-        //     )
-        // );
-        // reverseEverything.onFalse(
-        //     new ParallelCommandGroup(
-        //         new InstantCommand(() -> Intake.get().invert()),
-        //         new InstantCommand(() -> Indexer.get().invert()),
-        //         new InstantCommand(() -> Shooter.get().invert())
-        //     )
-        // );
+        Trigger reverseEverything = new Trigger(() -> driveController.getRightBumper());
+        reverseEverything.onTrue(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> Intake.get().invert()),
+                new InstantCommand(() -> Indexer.get().invert()),
+                new InstantCommand(() -> Shooter.get().invertTop()),
+                new InstantCommand(() -> Shooter.get().invertBottom())
+            )
+        );
+        reverseEverything.onFalse(
+            new ParallelCommandGroup(
+                new InstantCommand(() -> Intake.get().invert()),
+                new InstantCommand(() -> Indexer.get().invert()),
+                new InstantCommand(() -> Shooter.get().invertTop()),
+                new InstantCommand(() -> Shooter.get().invertBottom())
+            )
+        );
 
         // Trigger climb = new Trigger(() -> driveController.getLeftBumper());
         // climb.onTrue(new SortaJankClimb(true));
