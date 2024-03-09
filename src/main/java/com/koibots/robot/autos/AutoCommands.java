@@ -22,70 +22,70 @@ public enum AutoCommands {
             followChoreoTrajectory("B1_A_N1_S1.1"),
             // new ScoreAmp(),
             new ParallelCommandGroup(followChoreoTrajectory("B1_A_N1_S1.2"), new IntakeCommand()),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S1_N4_S2(
             followChoreoTrajectory("S1_N4_S2.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S1_N4_S2.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N5_S2(
             followChoreoTrajectory("S2_N5_S2.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S2_N5_S2.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N6_S2(
             followChoreoTrajectory("S2_N6_S2.1"),
             new IntakeCommand(),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false),
             followChoreoTrajectory("S2_N6_S2.2")),
     B2_S2(
             followChoreoTrajectory("B2_S2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N1_S2(
             followChoreoTrajectory("S2_N1_S2.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S2_N1_S2.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N2_S3(
             followChoreoTrajectory("S2_N2_S3.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S2_N2_S3.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N1_S3(
             followChoreoTrajectory("S2_N1_S3.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S2_N1_S3.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S2_N4_S2(
             followChoreoTrajectory("S2_N4_S2.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S2_N4_S2.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     B3_S4(
             followChoreoTrajectory("B3_S4"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S4_N3_S4(
             followChoreoTrajectory("S4_N3_S4.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S4_N3_S4.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S4_N7_S4(
             followChoreoTrajectory("S4_N7_S4.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S4_N7_S4.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     S4_N6_S4(
             followChoreoTrajectory("S4_N6_S4.1"),
             new IntakeCommand(),
             followChoreoTrajectory("S4_N6_S4.2"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false)),
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false)),
     B1_A_N4_S1(
             followChoreoTrajectory("B1_A_N4_S1.1"),
             // new ScoreAmp(),
             followChoreoTrajectory("B1_A_N4_S1.2"),
             new IntakeCommand(),
             followChoreoTrajectory("B1_A_N4_S1.3"),
-            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0), false));
+            new Shoot(SetpointConstants.SHOOTER_SPEEDS.get(0).get(0), SetpointConstants.SHOOTER_SPEEDS.get(0).get(1), false));
 
     public final Supplier<Command> command;
 

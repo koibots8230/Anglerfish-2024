@@ -10,17 +10,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class SpinUpShooter extends Command {
 
-    Measure<Velocity<Angle>> speed;
+    Measure<Velocity<Angle>> topSpeed;
+    Measure<Velocity<Angle>> bottomSpeed;
 
-    public SpinUpShooter(Measure<Velocity<Angle>> speed) {
-        this.speed = speed;
+    public SpinUpShooter(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed) {
+        this.topSpeed = topSpeed;
+        this.bottomSpeed = bottomSpeed;
         addRequirements(Shooter.get());
     }
 
     @Override
     public void initialize() {
-        Shooter.get().setVelocity(speed);
-        ;
+        Shooter.get().setVelocity(topSpeed, bottomSpeed);
     }
 
     @Override

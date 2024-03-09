@@ -133,8 +133,10 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INDEXER_LOAD_SPEED = RPM.of(100).times(10);
         public static final Measure<Velocity<Angle>> INDEXER_SHOOT_SPEED = RPM.of(110).times(10);
 
-        public static final List<Measure<Velocity<Angle>>> SHOOTER_SPEEDS =
-                Arrays.asList(RPM.of(5000).times(2048));
+        public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
+                Arrays.asList(
+                    Arrays.asList(RPM.of(5000), RPM.of(5000))
+                );
         public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
 
         public static final Measure<Distance> ELEVATOR_TOP_HEIGHT = Inches.of(6.75);

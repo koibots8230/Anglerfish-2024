@@ -78,7 +78,7 @@ public class Shoot extends SequentialCommandGroup {
 
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
-                    new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance)),
+                    new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(0), SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(1)),
                     new ParallelRaceGroup(
                             new InstantCommand(
                                     () ->
@@ -89,7 +89,7 @@ public class Shoot extends SequentialCommandGroup {
                             new WaitCommand(2)),
                     new ParallelCommandGroup(
                             new InstantCommand(
-                                    () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+                                    () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get()),
                             new InstantCommand(
                                     () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
         } else {
@@ -100,12 +100,12 @@ public class Shoot extends SequentialCommandGroup {
         }
     }
 
-    public Shoot(Measure<Velocity<Angle>> velocity, boolean doPathing) {
+    public Shoot(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed, boolean doPathing) {
         if (doPathing) {
             addCommands(new Shoot());
         } else {
             addCommands(
-                    new SpinUpShooter(velocity),
+                    new SpinUpShooter(topSpeed, bottomSpeed),
                     new ParallelRaceGroup(
                             new InstantCommand(
                                     () ->
@@ -116,7 +116,7 @@ public class Shoot extends SequentialCommandGroup {
                             new WaitCommand(1)),
                     new ParallelCommandGroup(
                             new InstantCommand(
-                                    () -> Shooter.get().setVelocity(RPM.of(0)), Shooter.get()),
+                                    () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get()),
                             new InstantCommand(
                                     () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
         }
