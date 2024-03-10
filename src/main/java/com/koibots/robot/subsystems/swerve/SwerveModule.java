@@ -55,8 +55,6 @@ public class SwerveModule {
         SmartDashboard.putData("Swerve/Turn PID " + index, turnFeedback);
 
         turnFeedback.setTolerance(0.00001);
-
-        setBrakeMode(true);
     }
 
     public void periodic() {
@@ -111,12 +109,6 @@ public class SwerveModule {
         // Disable closed loop control for turn and drive
         angleSetpoint = getAngle();
         speedSetpoint = 0.0;
-    }
-
-    /** Sets whether brake mode is enabled. */
-    public void setBrakeMode(boolean enabled) {
-        io.setDriveBrakeMode(enabled);
-        io.setTurnBrakeMode(enabled);
     }
 
     /** Returns the current turn angle of the module. */

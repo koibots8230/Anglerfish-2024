@@ -22,8 +22,8 @@ public class Shooter extends SubsystemBase {
     private final ShooterIO io;
     private final ShooterIOInputsAutoLogged inputs = new ShooterIOInputsAutoLogged();
     
-    private Measure<Velocity<Angle>> topSetpoint = RotationsPerSecond.of(0);
-    private Measure<Velocity<Angle>> bottomSetpoint = RotationsPerSecond.of(0);
+    private Measure<Velocity<Angle>> topSetpoint = RPM.of(0);
+    private Measure<Velocity<Angle>> bottomSetpoint = RPM.of(0);
 
     PIDController topFeedback;
     PIDController bottomFeedback;

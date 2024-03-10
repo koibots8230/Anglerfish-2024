@@ -7,7 +7,7 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
-import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -83,7 +83,8 @@ public class TestDrive extends Command {
             double vyInput = -vySupplier.getAsDouble();
 
             double linearMagnitude =
-                    MathUtil.applyDeadband(Math.hypot(vxInput, vyInput), Constants.DEADBAND, 1);
+                    MathUtil.applyDeadband(
+                            Math.hypot(vxInput, vyInput), ControlConstants.DEADBAND, 1);
 
             Rotation2d linearDirection = new Rotation2d(vxInput, vyInput);
 
@@ -101,8 +102,9 @@ public class TestDrive extends Command {
                 Logger.recordOutput("Angle Alignement Output", angularVelocity);
             } else {
                 angularVelocity =
-                        // MathUtil.applyDeadband(vThetaLimiter.calculate(vThetaSupplier.getAsDouble()), Constants.DEADBAND);
-                        MathUtil.applyDeadband(vThetaSupplier.getAsDouble(), Constants.DEADBAND);
+                        // MathUtil.applyDeadband(vThetaLimiter.calculate(vThetaSupplier.getAsDouble()), ControlConstants.DEADBAND);
+                        MathUtil.applyDeadband(
+                                vThetaSupplier.getAsDouble(), ControlConstants.DEADBAND);
             }
 
             // Apply Scaling

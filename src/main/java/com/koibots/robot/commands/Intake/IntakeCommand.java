@@ -8,7 +8,7 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.AlignConstants;
 import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Swerve.AutoAlign;
@@ -29,9 +29,9 @@ public class IntakeCommand extends SequentialCommandGroup {
                         .nearest(Arrays.asList(new Pose2d())); // TODO: Insert note pose getter here
 
         if (Math.abs(Swerve.get().getEstimatedPose().getX() - nearestNote.getX())
-                        < DriveConstants.ALLOWED_DISTANCE_FROM_NOTE.getX()
+                        < AlignConstants.ALLOWED_DISTANCE_FROM_NOTE.getX()
                 && Math.abs(Swerve.get().getEstimatedPose().getY() - nearestNote.getY())
-                        < DriveConstants.ALLOWED_DISTANCE_FROM_NOTE.getY()) {
+                        < AlignConstants.ALLOWED_DISTANCE_FROM_NOTE.getY()) {
             addCommands(
                     new AutoAlign(nearestNote, Meters.of(0)),
                     new ParallelRaceGroup(
@@ -58,11 +58,7 @@ public class IntakeCommand extends SequentialCommandGroup {
             addCommands(
                     new ParallelRaceGroup(
                             new StartEndCommand(
-                                    () ->
-                                            Intake.get()
-                                                    .setVelocity(
-                                                            SetpointConstants
-                                                                    .INTAKE_TARGET_VELOCITY),
+                                    () -> Intake.get().setVelocity(SetpointConstants.INTAKE_SPEED),
                                     () -> Intake.get().setVelocity(RPM.of(0)),
                                     Intake.get()),
                             new RunIndexer()));

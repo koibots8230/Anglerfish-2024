@@ -9,6 +9,8 @@ import static edu.wpi.first.units.Units.*;
 
 import com.koibots.lib.controls.EightBitDo;
 import com.koibots.robot.Constants.*;
+import com.koibots.robot.commands.Intake.IntakeCommand;
+import com.koibots.robot.commands.Scoring.Shoot;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import com.koibots.robot.commands.Swerve.TestDrive;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -19,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,16 +68,7 @@ public class RobotContainer {
                                 () -> driveController.getB()));
 
         Trigger intake = new Trigger(() -> driveController.getRightTrigger() > 0.15);
-        intake.onTrue(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () ->
-                                        Intake.get()
-                                                .setVelocity(
-                                                        SetpointConstants.INTAKE_TARGET_VELOCITY),
-                                Intake.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
+        intake.onTrue(new IntakeCommand(false));
         intake.onFalse(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
@@ -85,17 +77,10 @@ public class RobotContainer {
 
         Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
         shoot.onTrue(
-                new SequentialCommandGroup(
-                        new InstantCommand(
-                                () ->
-                                        Shooter.get()
-                                                .setVelocity(
-                                                        RPM.of(3750).times(2048),
-                                                        RPM.of(3750).times(2048)),
-                                Shooter.get()),
-                        new WaitCommand(1),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(1000)), Indexer.get())));
+                new Shoot(
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        false));
         shoot.onFalse(
                 new ParallelCommandGroup(
                         new InstantCommand(

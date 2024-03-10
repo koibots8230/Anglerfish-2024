@@ -7,7 +7,7 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 
-import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -75,7 +75,8 @@ public class FieldOrientedDrive extends Command {
             double vyInput = vyLimiter.calculate(vySupplier.getAsDouble());
 
             double linearMagnitude =
-                    MathUtil.applyDeadband(Math.hypot(vxInput, vyInput), Constants.DEADBAND, 1);
+                    MathUtil.applyDeadband(
+                            Math.hypot(vxInput, vyInput), ControlConstants.DEADBAND, 1);
 
             Rotation2d linearDirection = new Rotation2d(vxInput, vyInput);
 
@@ -95,7 +96,7 @@ public class FieldOrientedDrive extends Command {
                 angularVelocity =
                         MathUtil.applyDeadband(
                                 vThetaLimiter.calculate(vThetaSupplier.getAsDouble()),
-                                Constants.DEADBAND);
+                                ControlConstants.DEADBAND);
             }
 
             // Apply Scaling

@@ -5,8 +5,10 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
+import com.koibots.robot.Constants.MotorConstants;
+import com.koibots.robot.Constants.RobotConstants;
+import com.koibots.robot.Constants.SensorConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.units.Measure;
@@ -30,14 +32,36 @@ public class ShooterIOSparkMax implements ShooterIO {
         topMotor.restoreFactoryDefaults();
         bottomMotor.restoreFactoryDefaults();
 
-        topMotor.setSmartCurrentLimit(50, 60, 5676);
-        bottomMotor.setSmartCurrentLimit(50, 60, 5676);
+        topMotor.setSmartCurrentLimit(MotorConstants.TOP_SHOOTER.currentLimit);
+        bottomMotor.setSmartCurrentLimit(MotorConstants.BOTTOM_SHOOTER.currentLimit);
 
-        topEncoder = new Encoder(1, 2, false, EncodingType.k1X);
-        bottomEncoder = new Encoder(22, 21, true, EncodingType.k1X);
+        topMotor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
+        bottomMotor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
 
-        topEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
-        bottomEncoder.setSamplesToAverage(ControlConstants.ENCODER_SAMPLES_PER_AVERAGE);
+        topMotor.setInverted(MotorConstants.TOP_SHOOTER.inverted);
+        bottomMotor.setInverted(MotorConstants.BOTTOM_SHOOTER.inverted);
+
+        topMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
+        bottomMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
+
+        topEncoder =
+                new Encoder(
+                        DeviceIDs.TOP_SHOOTER_ENCODER[0],
+                        DeviceIDs.TOP_SHOOTER_ENCODER[1],
+                        false,
+                        EncodingType.k1X);
+        bottomEncoder =
+                new Encoder(
+                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[0],
+                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[1],
+                        true,
+                        EncodingType.k1X);
+
+        topEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
+        bottomEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
+
+        topEncoder.setDistancePerPulse(1 / 2048);
+        bottomEncoder.setDistancePerPulse(1 / 2048);
 
         topMotor.clearFaults();
         bottomMotor.clearFaults();
@@ -59,8 +83,8 @@ public class ShooterIOSparkMax implements ShooterIO {
     }
 
     @Override
-    public void setVoltages(Measure<Voltage> top, Measure<Voltage> bottom) {
-        topMotor.setVoltage(-top.in(Volts));
-        bottomMotor.setVoltage(bottom.in(Volts));
+    public void setVoltages(Measure<Voltage> topVoltage, Measure<Voltage> bottomVoltage) {
+        topMotor.setVoltage(topVoltage.in(Volts));
+        bottomMotor.setVoltage(bottomVoltage.in(Volts));
     }
 }

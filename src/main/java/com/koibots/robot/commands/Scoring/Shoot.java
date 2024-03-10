@@ -26,31 +26,31 @@ public class Shoot extends SequentialCommandGroup {
         Pose2d nearestPoint = new Pose2d(1000, 1000, new Rotation2d());
         int whichDistance = 0;
 
-        for (int a = 0; a < DriveConstants.SHOOT_DISTANCES_METERS.size(); a++) {
+        for (int a = 0; a < AlignConstants.SHOOT_DISTANCES_METERS.size(); a++) {
             Pose2d nearestPointOnCircle = // Looks complicated, but is just this https://math.stackexchange.com/a/127615
                     new Pose2d(
-                            DriveConstants.SPEAKER_POSITION.getX()
-                                    + (DriveConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
+                            AlignConstants.SPEAKER_POSITION.getX()
+                                    + (AlignConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
                                             * ((Swerve.get().getEstimatedPose().getX()
-                                                            - DriveConstants.SPEAKER_POSITION.getX())
+                                                            - AlignConstants.SPEAKER_POSITION.getX())
                                                     / Math.sqrt(
                                                             Math.pow(
                                                                     Swerve.get().getEstimatedPose().getX()
-                                                                            - DriveConstants.SPEAKER_POSITION.getX(), 2)
+                                                                            - AlignConstants.SPEAKER_POSITION.getX(), 2)
                                                             + Math.pow(
                                                                     Swerve.get().getEstimatedPose().getY()
-                                                                            - DriveConstants.SPEAKER_POSITION.getY(), 2)))),
-                            DriveConstants.SPEAKER_POSITION.getY()
-                                    + (DriveConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
+                                                                            - AlignConstants.SPEAKER_POSITION.getY(), 2)))),
+                            AlignConstants.SPEAKER_POSITION.getY()
+                                    + (AlignConstants.SHOOT_DISTANCES_METERS.get(a).in(Meters)
                                             * ((Swerve.get().getEstimatedPose().getY()
-                                                            - DriveConstants.SPEAKER_POSITION.getY())
+                                                            - AlignConstants.SPEAKER_POSITION.getY())
                                                     / Math.sqrt(
                                                             Math.pow(
                                                                     Swerve.get().getEstimatedPose().getX()
-                                                                            - DriveConstants.SPEAKER_POSITION.getX(), 2)
+                                                                            - AlignConstants.SPEAKER_POSITION.getX(), 2)
                                                             + Math.pow(
                                                                     Swerve.get().getEstimatedPose().getY()
-                                                                            - DriveConstants.SPEAKER_POSITION.getY(), 2)))),
+                                                                            - AlignConstants.SPEAKER_POSITION.getY(), 2)))),
                             new Rotation2d());
 
             nearestPoint =
@@ -61,9 +61,9 @@ public class Shoot extends SequentialCommandGroup {
         }
 
         if (Math.abs(Swerve.get().getEstimatedPose().getX() - nearestPoint.getX())
-                        < DriveConstants.ALLOWED_DISTANCE_FROM_SHOOT.getX()
+                        < AlignConstants.ALLOWED_DISTANCE_FROM_SHOOT.getX()
                 && Math.abs(Swerve.get().getEstimatedPose().getY() - nearestPoint.getY())
-                        < DriveConstants.ALLOWED_DISTANCE_FROM_SHOOT.getY()) {
+                        < AlignConstants.ALLOWED_DISTANCE_FROM_SHOOT.getY()) {
             nearestPoint =
                     new Pose2d(
                             nearestPoint.getX(),
@@ -71,9 +71,9 @@ public class Shoot extends SequentialCommandGroup {
                             new Rotation2d( // Finds the right angle to point at
                                     Math.atan(
                                             (nearestPoint.getX()
-                                                - DriveConstants.SPEAKER_POSITION.getX())
+                                                - AlignConstants.SPEAKER_POSITION.getX())
                                         / (nearestPoint.getY()
-                                                - DriveConstants.SPEAKER_POSITION.getY())
+                                                - AlignConstants.SPEAKER_POSITION.getY())
                                     - (1.5 * Math.PI)))); // Transforms the angle to be in gyro units
 
             addCommands(
@@ -84,7 +84,7 @@ public class Shoot extends SequentialCommandGroup {
                                     () ->
                                             Indexer.get()
                                                     .setVelocity(
-                                                            SetpointConstants.INDEXER_SHOOT_SPEED),
+                                                            SetpointConstants.INDEXER_SPEED),
                                     Indexer.get()),
                             new WaitCommand(2)),
                     new ParallelCommandGroup(
@@ -111,7 +111,7 @@ public class Shoot extends SequentialCommandGroup {
                                     () ->
                                             Indexer.get()
                                                     .setVelocity(
-                                                            SetpointConstants.INDEXER_SHOOT_SPEED),
+                                                            SetpointConstants.INDEXER_SPEED),
                                     Indexer.get()),
                             new WaitCommand(1)),
                     new ParallelCommandGroup(

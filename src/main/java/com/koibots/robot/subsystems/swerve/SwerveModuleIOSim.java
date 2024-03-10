@@ -29,9 +29,11 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         driveSim.update(LOOP_PERIOD_SECS);
         turnSim.update(LOOP_PERIOD_SECS);
 
-        inputs.drivePosition = RobotConstants.WHEEL_RADIUS.times(driveSim.getAngularPositionRad());
+        inputs.drivePosition =
+                RobotConstants.DRIVE_WHEELS.radius.times(driveSim.getAngularPositionRad());
         inputs.driveVelocity =
-                RobotConstants.WHEEL_RADIUS
+                RobotConstants.DRIVE_WHEELS
+                        .radius
                         .times(driveSim.getAngularVelocityRadPerSec())
                         .per(Second);
         inputs.driveAppliedVoltage = driveAppliedVolts;

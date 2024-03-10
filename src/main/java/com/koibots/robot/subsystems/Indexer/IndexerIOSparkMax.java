@@ -6,6 +6,9 @@ package com.koibots.robot.subsystems.Indexer;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.DeviceIDs;
+import com.koibots.robot.Constants.MotorConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
@@ -25,12 +28,20 @@ public class IndexerIOSparkMax implements IndexerIO {
     public IndexerIOSparkMax() {
         motor = new CANSparkMax(Constants.DeviceIDs.INDEXER, MotorType.kBrushless);
 
-        motor.setIdleMode(IdleMode.kBrake);
-        motor.setSmartCurrentLimit(40, 60, 5676);
+        motor.restoreFactoryDefaults();
+
+        motor.setSmartCurrentLimit(MotorConstants.INDEXER.currentLimit);
+        motor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
+
+        motor.setInverted(MotorConstants.INDEXER.inverted);
+
+        motor.setIdleMode(MotorConstants.INDEXER.idleMode);
+
+        motor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
 
         encoder = motor.getEncoder();
 
-        proximititySwitch = new DigitalInput(5);
+        proximititySwitch = new DigitalInput(DeviceIDs.INDEXER_SENSOR);
     }
 
     @Override

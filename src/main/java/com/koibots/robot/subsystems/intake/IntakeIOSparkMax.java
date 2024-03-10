@@ -6,6 +6,8 @@ package com.koibots.robot.subsystems.intake;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants;
+import com.koibots.robot.Constants.MotorConstants;
+import com.koibots.robot.Constants.RobotConstants;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -13,29 +15,37 @@ import edu.wpi.first.units.*;
 
 public class IntakeIOSparkMax implements IntakeIO {
 
-    private final CANSparkMax intakeMotor;
-    private final RelativeEncoder intakeEncoder;
+    private final CANSparkMax motor;
+    private final RelativeEncoder encoder;
 
     public IntakeIOSparkMax() {
 
-        intakeMotor = new CANSparkMax(Constants.DeviceIDs.INTAKE, MotorType.kBrushless);
+        motor = new CANSparkMax(Constants.DeviceIDs.INTAKE, MotorType.kBrushless);
 
-        intakeMotor.setSmartCurrentLimit(40, 60, 5676);
+        motor.restoreFactoryDefaults();
 
-        intakeEncoder = intakeMotor.getEncoder();
+        motor.setSmartCurrentLimit(MotorConstants.INTAKE.currentLimit);
+        motor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
+
+        motor.setInverted(MotorConstants.INTAKE.inverted);
+
+        motor.setIdleMode(MotorConstants.INTAKE.idleMode);
+
+        motor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
+
+        encoder = motor.getEncoder();
     }
 
     @Override
     public void updateInputs(IntakeIOInputs inputs) {
-        inputs.velocity = RPM.of(intakeEncoder.getVelocity());
+        inputs.velocity = RPM.of(encoder.getVelocity());
 
-        inputs.current = Amps.of(intakeMotor.getOutputCurrent());
-        inputs.voltage =
-                Volts.of(intakeMotor.getBusVoltage()).times(intakeMotor.getAppliedOutput());
+        inputs.current = Amps.of(motor.getOutputCurrent());
+        inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
     }
 
     @Override
     public void setVoltage(Measure<Voltage> volts) {
-        intakeMotor.setVoltage(volts.in(Volts));
+        motor.setVoltage(volts.in(Volts));
     }
 }

@@ -41,10 +41,4 @@ public interface SwerveModuleIO {
 
     /** Run the turn motor at the specified voltage. */
     default void setTurnVoltage(Measure<Voltage> volts) {}
-
-    /** Enable or disable brake mode on the drive motor. */
-    default void setDriveBrakeMode(boolean enable) {}
-
-    /** Enable or disable brake mode on the turn motor. */
-    default void setTurnBrakeMode(boolean enable) {}
 }
