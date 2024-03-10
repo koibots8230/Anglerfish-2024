@@ -40,7 +40,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                                             Intake.get()
                                                     .setVelocity(
                                                             SetpointConstants
-                                                                    .INTAKE_TARGET_VELOCITY),
+                                                                    .INTAKE_SPEED),
                                     () -> Intake.get().setVelocity(RPM.of(0))),
                             new RunIndexer()));
         } else {
