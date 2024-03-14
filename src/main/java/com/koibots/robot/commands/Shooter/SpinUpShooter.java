@@ -16,6 +16,7 @@ public class SpinUpShooter extends Command {
     public SpinUpShooter(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed) {
         this.topSpeed = topSpeed;
         this.bottomSpeed = bottomSpeed;
+        System.out.println(bottomSpeed);
         addRequirements(Shooter.get());
     }
 

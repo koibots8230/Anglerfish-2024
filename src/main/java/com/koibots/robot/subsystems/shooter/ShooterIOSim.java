@@ -24,8 +24,8 @@ public class ShooterIOSim implements ShooterIO {
         simTop.update(LOOP_PERIOD_SECS);
         simBottom.update(LOOP_PERIOD_SECS);
 
-        inputs.topVelocity = simTop.getAngularVelocityRadPerSec() * (60 / (2 * Math.PI));
-        inputs.bottomVelocity = simBottom.getAngularVelocityRadPerSec() * (60 / (2 * Math.PI));
+        inputs.topVelocity = RotationsPerSecond.of(simTop.getAngularVelocityRadPerSec() * (1.0 / (2 * Math.PI)));
+        inputs.bottomVelocity = RotationsPerSecond.of(simBottom.getAngularVelocityRadPerSec() * (1.0 / (2 * Math.PI)));
 
         inputs.topVoltage = topAppliedVolts;
         inputs.bottomVoltage = bottomAppliedVolts;

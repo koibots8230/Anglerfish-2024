@@ -32,18 +32,18 @@ public class Constants {
         public static final int BACK_RIGHT_TURN = 3;
         public static final int FRONT_LEFT_DRIVE = 6;
         public static final int FRONT_LEFT_TURN = 1;
-        public static final int INDEXER = 13;
-        public static final int SHOOTER_TOP = 14;
-        public static final int SHOOTER_BOTTOM = 12;
-        public static final int INTAKE = 10;
+        public static final int INDEXER = 9;
+        public static final int SHOOTER_TOP = 11;
+        public static final int SHOOTER_BOTTOM = 13;
+        public static final int INTAKE = 14;
 
         public static final int INDEXER_SENSOR = 0;
-        public static final int[] TOP_SHOOTER_ENCODER = {1, 2};
-        public static final int[] BOTTOM_SHOOTER_ENCODER = {2, 3};
+        public static final int[] TOP_SHOOTER_ENCODER = {3, 4};
+        public static final int[] BOTTOM_SHOOTER_ENCODER = {1, 2};
     }
 
     public static class SensorConstants {
-        public static final int ENCODER_SAMPLES_PER_AVERAGE = 40;
+        public static final int ENCODER_SAMPLES_PER_AVERAGE = 60;
 
         public static final Measure<Angle> TURNING_ENCODER_POSITION_FACTOR =
                 Radians.of(2 * Math.PI);
@@ -61,6 +61,8 @@ public class Constants {
                                 / 60.0);
 
         public static final int DRIVE_ENCODER_SAMPLING_DEPTH = 2;
+
+        public static final double SHOOTER_ALLOWED_ERROR = 0.05;
     }
 
     public static class MotorConstants {
@@ -73,7 +75,7 @@ public class Constants {
                 new MotorConstantsIO(false, 60, IdleMode.kCoast);
 
         public static final MotorConstantsIO INDEXER =
-                new MotorConstantsIO(false, 60, IdleMode.kBrake);
+                new MotorConstantsIO(true, 60, IdleMode.kBrake);
 
         public static final MotorConstantsIO TOP_SHOOTER =
                 new MotorConstantsIO(false, 60, IdleMode.kCoast);
@@ -132,9 +134,9 @@ public class Constants {
         // =====================Indexer=====================
 
         public static final PIDConstantsIO INDEXER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0.009, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO INDEXER_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 10, 0, 0);
+                new FeedforwardConstantsIO(0, 22.25, 0, 0);
 
         // =====================Autos=====================
 
@@ -172,11 +174,10 @@ public class Constants {
     public static final class SetpointConstants {
         public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(500);
 
-        public static final Measure<Velocity<Angle>> INDEXER_SPEED = RPM.of(1000);
+        public static final Measure<Velocity<Angle>> INDEXER_SPEED = RPM.of(100);
 
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
                 Arrays.asList(Arrays.asList(RPM.of(5000), RPM.of(5000)));
-        public static final Measure<Velocity<Angle>> SHOOTER_ALLOWED_ERROR = RPM.of(10);
     }
 
     public static final class RobotConstants {

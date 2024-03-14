@@ -78,8 +78,8 @@ public class RobotContainer {
         Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
         shoot.onTrue(
                 new Shoot(
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        RPM.of(5000),
+                        RPM.of(5000),
                         false));
         shoot.onFalse(
                 new ParallelCommandGroup(

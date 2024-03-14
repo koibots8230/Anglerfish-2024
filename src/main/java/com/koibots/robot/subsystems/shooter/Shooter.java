@@ -8,13 +8,11 @@ import static edu.wpi.first.units.Units.*;
 import java.util.Arrays;
 import java.util.List;
 
-import com.koibots.robot.Constants.ControlConstants;
-import com.koibots.robot.Constants.SetpointConstants;
+import com.koibots.robot.Constants.SensorConstants;
 import com.koibots.robot.Robot;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -25,10 +23,8 @@ public class Shooter extends SubsystemBase {
     private Measure<Velocity<Angle>> topSetpoint = RPM.of(0);
     private Measure<Velocity<Angle>> bottomSetpoint = RPM.of(0);
 
-    PIDController topFeedback;
-    PIDController bottomFeedback;
-    SimpleMotorFeedforward topFeedforward;
-    SimpleMotorFeedforward bottomFeedforward;
+    private BangBangController topController;
+    private BangBangController bottomController;
 
     private int topInverted = 1;
     private int bottomInverted = 0;
@@ -36,13 +32,8 @@ public class Shooter extends SubsystemBase {
     public Shooter() {
         io = Robot.isReal() ? new ShooterIOSparkMax() : new ShooterIOSim();
 
-        topFeedback = new PIDController(ControlConstants.SHOOTER_FEEDBACK.kP, 0, 0);
-        bottomFeedback = new PIDController(ControlConstants.SHOOTER_FEEDBACK.kP, 0, 0);
-
-        topFeedforward =
-                new SimpleMotorFeedforward(ControlConstants.SHOOTER_FEEEDFORWARD.ks, ControlConstants.SHOOTER_FEEEDFORWARD.kv);
-        bottomFeedforward =
-                new SimpleMotorFeedforward(ControlConstants.SHOOTER_FEEEDFORWARD.ks, ControlConstants.SHOOTER_FEEEDFORWARD.kv);
+        topController = new BangBangController(10);
+        bottomController = new BangBangController(10);
     }
 
     @Override
@@ -53,26 +44,8 @@ public class Shooter extends SubsystemBase {
         Logger.processInputs("Subsystems/Shooter", inputs);
 
         io.setVoltages(
-                Volts.of(
-                        Math.max(Math.min(
-                                (topFeedback.calculate(
-                                                inputs.topVelocity,
-                                                topSetpoint.in(RotationsPerSecond))
-                                + topFeedforward.calculate(
-                                                topSetpoint.in(RotationsPerSecond)))
-                                * (12.0 / 5676.0), 12.0), -12.0)),
-                Volts.of(
-                        Math.max(Math.min(
-                                (bottomFeedback.calculate(
-                                                inputs.bottomVelocity,
-                                                bottomSetpoint.in(RotationsPerSecond))
-                                + bottomFeedforward.calculate(
-                                                bottomSetpoint.in(RotationsPerSecond)))
-                                * (12.0 / 5676.0), 12.0), -12.0))
-        );
-
-        SmartDashboard.putData("Shooter/Left PID", topFeedback);
-        SmartDashboard.putData("Shooter/Right PID", bottomFeedback);
+            Volts.of(-11 * topController.calculate(inputs.topVelocity.in(RPM), topSetpoint.in(RPM))),
+            Volts.of(-11 * bottomController.calculate(inputs.bottomVelocity.in(RPM), bottomSetpoint.in(RPM))));
     }
 
     public void setVelocity(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed) {
@@ -81,18 +54,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setVoltage(Measure<Voltage> volts) {
-        //io.setVoltages(volts, volts);
+        io.setVoltages(volts, volts);
     }
 
     public boolean atSetpoint() {
-        return inputs.topVelocity
-                        >= topSetpoint.minus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.topVelocity
-                        <= topSetpoint.plus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.bottomVelocity
-                        >= bottomSetpoint.minus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM)
-                && inputs.bottomVelocity
-                        <= bottomSetpoint.plus(SetpointConstants.SHOOTER_ALLOWED_ERROR).in(RPM);
+        return inputs.topVelocity.isNear(topSetpoint, SensorConstants.SHOOTER_ALLOWED_ERROR)
+                && inputs.bottomVelocity.isNear(bottomSetpoint, SensorConstants.SHOOTER_ALLOWED_ERROR);
     }
 
     public List<Measure<Current>> getCurrent() {

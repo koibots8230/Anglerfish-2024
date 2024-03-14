@@ -101,6 +101,7 @@ public class Shoot extends SequentialCommandGroup {
     }
 
     public Shoot(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed, boolean doPathing) {
+        System.out.println("Bottom speed " + bottomSpeed.in(RPM));
         if (doPathing) {
             addCommands(new Shoot());
         } else {

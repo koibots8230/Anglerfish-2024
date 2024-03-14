@@ -29,7 +29,7 @@ public class Robot extends LoggedRobot {
         Logger.recordMetadata("RobotName", "Swerve Chassis");
         Logger.addDataReceiver(new WPILOGWriter());
 
-        CameraServer.startAutomaticCapture();
+        //CameraServer.startAutomaticCapture();
 
         if (!DriverStation.isFMSAttached()) {
             Logger.addDataReceiver(new NT4Publisher());
@@ -44,6 +44,10 @@ public class Robot extends LoggedRobot {
 
         robotContainer = new RobotContainer();
         robotContainer.registerAutos();
+
+        SmartDashboard.putData(Intake.get());
+        SmartDashboard.putData(Indexer.get());
+        SmartDashboard.putData(Shooter.get());
     }
 
     @Override
