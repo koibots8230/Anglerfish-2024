@@ -4,6 +4,7 @@
 package com.koibots.robot.commands.Shooter;
 
 import static com.koibots.robot.subsystems.Subsystems.Shooter;
+import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -16,7 +17,6 @@ public class SpinUpShooter extends Command {
     public SpinUpShooter(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed) {
         this.topSpeed = topSpeed;
         this.bottomSpeed = bottomSpeed;
-        System.out.println(bottomSpeed);
         addRequirements(Shooter.get());
     }
 

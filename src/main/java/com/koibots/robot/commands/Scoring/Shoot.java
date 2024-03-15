@@ -84,7 +84,7 @@ public class Shoot extends SequentialCommandGroup {
                                     () ->
                                             Indexer.get()
                                                     .setVelocity(
-                                                            SetpointConstants.INDEXER_SPEED),
+                                                            SetpointConstants.SHOOTER_INDEXER_SPEED),
                                     Indexer.get()),
                             new WaitCommand(2)),
                     new ParallelCommandGroup(
@@ -101,20 +101,19 @@ public class Shoot extends SequentialCommandGroup {
     }
 
     public Shoot(Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed, boolean doPathing) {
-        System.out.println("Bottom speed " + bottomSpeed.in(RPM));
         if (doPathing) {
             addCommands(new Shoot());
         } else {
             addCommands(
                     new SpinUpShooter(topSpeed, bottomSpeed),
-                    new ParallelRaceGroup(
-                            new InstantCommand(
-                                    () ->
-                                            Indexer.get()
-                                                    .setVelocity(
-                                                            SetpointConstants.INDEXER_SPEED),
-                                    Indexer.get()),
-                            new WaitCommand(1)),
+                    new WaitCommand(0.125),
+                    new InstantCommand(
+                            () ->
+                                    Indexer.get()
+                                            .setVelocity(
+                                                    SetpointConstants.SHOOTER_INDEXER_SPEED),
+                            Indexer.get()),
+                    new WaitCommand(1),
                     new ParallelCommandGroup(
                             new InstantCommand(
                                     () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get()),

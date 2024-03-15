@@ -38,12 +38,12 @@ public class Constants {
         public static final int INTAKE = 14;
 
         public static final int INDEXER_SENSOR = 0;
-        public static final int[] TOP_SHOOTER_ENCODER = {3, 4};
-        public static final int[] BOTTOM_SHOOTER_ENCODER = {1, 2};
+        public static final int[] TOP_SHOOTER_ENCODER = {1, 2};
+        public static final int[] BOTTOM_SHOOTER_ENCODER = {3, 4};
     }
 
     public static class SensorConstants {
-        public static final int ENCODER_SAMPLES_PER_AVERAGE = 60;
+        public static final int ENCODER_SAMPLES_PER_AVERAGE = 100;
 
         public static final Measure<Angle> TURNING_ENCODER_POSITION_FACTOR =
                 Radians.of(2 * Math.PI);
@@ -62,7 +62,7 @@ public class Constants {
 
         public static final int DRIVE_ENCODER_SAMPLING_DEPTH = 2;
 
-        public static final double SHOOTER_ALLOWED_ERROR = 0.05;
+        public static final double SHOOTER_ALLOWED_ERROR = 0.1;
     }
 
     public static class MotorConstants {
@@ -120,9 +120,8 @@ public class Constants {
 
         // =====================Shooter=====================
 
-        public static final PIDConstantsIO SHOOTER_FEEDBACK = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0275, 0, 0);
+                new FeedforwardConstantsIO(0, 0.0023, 0, 0);
 
         // =====================Intake=====================
 
@@ -174,10 +173,12 @@ public class Constants {
     public static final class SetpointConstants {
         public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(500);
 
-        public static final Measure<Velocity<Angle>> INDEXER_SPEED = RPM.of(100);
+        public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(400);
+        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(75);
 
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
-                Arrays.asList(Arrays.asList(RPM.of(5000), RPM.of(5000)));
+                Arrays.asList(Arrays.asList(RPM.of(5600), RPM.of(4600)),
+                Arrays.asList(RPM.of(410), RPM.of(1230)));
     }
 
     public static final class RobotConstants {

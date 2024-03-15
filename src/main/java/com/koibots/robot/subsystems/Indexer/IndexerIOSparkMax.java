@@ -46,7 +46,7 @@ public class IndexerIOSparkMax implements IndexerIO {
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
-        inputs.velocity = RPM.of(encoder.getVelocity());
+        inputs.velocity = encoder.getVelocity();
         inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
         inputs.current = Amps.of(motor.getOutputCurrent());
     }

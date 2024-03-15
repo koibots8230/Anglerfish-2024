@@ -60,9 +60,9 @@ public class FieldOrientedDrive extends Command {
 
         SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
-        vxLimiter = new SlewRateLimiter(3.5);
-        vyLimiter = new SlewRateLimiter(3.5);
-        vThetaLimiter = new SlewRateLimiter(3);
+        vxLimiter = new SlewRateLimiter(3.75);
+        vyLimiter = new SlewRateLimiter(3.75);
+        vThetaLimiter = new SlewRateLimiter(3.75);
 
         addRequirements(Swerve.get());
     }

@@ -13,8 +13,8 @@ public class ShooterIOSim implements ShooterIO {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    private FlywheelSim simTop = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
-    private FlywheelSim simBottom = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
+    private FlywheelSim simTop = new FlywheelSim(DCMotor.getNEO(1), 1, .001);
+    private FlywheelSim simBottom = new FlywheelSim(DCMotor.getNEO(1), 1, .001);
 
     private Measure<Voltage> topAppliedVolts = Volts.of(0);
     private Measure<Voltage> bottomAppliedVolts = Volts.of(0);
@@ -24,8 +24,8 @@ public class ShooterIOSim implements ShooterIO {
         simTop.update(LOOP_PERIOD_SECS);
         simBottom.update(LOOP_PERIOD_SECS);
 
-        inputs.topVelocity = RotationsPerSecond.of(simTop.getAngularVelocityRadPerSec() * (1.0 / (2 * Math.PI)));
-        inputs.bottomVelocity = RotationsPerSecond.of(simBottom.getAngularVelocityRadPerSec() * (1.0 / (2 * Math.PI)));
+        inputs.topVelocity = simTop.getAngularVelocityRadPerSec() * (60.0 / (2 * Math.PI));
+        inputs.bottomVelocity = simBottom.getAngularVelocityRadPerSec() * (60.0 / (2 * Math.PI));
 
         inputs.topVoltage = topAppliedVolts;
         inputs.bottomVoltage = bottomAppliedVolts;

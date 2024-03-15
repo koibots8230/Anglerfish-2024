@@ -35,15 +35,14 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        inputs.setpoint = setpoint.in(RPM);
         Logger.processInputs("Subsystems/Intake", inputs);
 
         io.setVoltage(
                 Volts.of(
                         Math.max(
                                 Math.min(
-                                        (feedback.calculate(
-                                                                inputs.velocity.in(RPM),
-                                                                setpoint.in(RPM))
+                                        (feedback.calculate(inputs.velocity, setpoint.in(RPM))
                                                         + feedforward.calculate(setpoint.in(RPM)))
                                                 * (12.0 / 5676.0),
                                         12.0),
@@ -58,9 +57,8 @@ public class Intake extends SubsystemBase {
 
         setpoint =
                 RPM.of(
-                        trueDistancePerMinute
-                                / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters));
-        setpoint.times(inverted);
+                        (trueDistancePerMinute
+                                / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters)) * inverted) ;
     }
 
     public void invert() {

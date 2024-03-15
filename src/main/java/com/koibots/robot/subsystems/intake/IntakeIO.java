@@ -12,7 +12,8 @@ public interface IntakeIO {
 
     @AutoLog
     class IntakeIOInputs {
-        public Measure<Velocity<Angle>> velocity = RotationsPerSecond.of(0);
+        public double setpoint = 0;
+        public double velocity = 0;
 
         public Measure<Current> current = Amps.of(0);
         public Measure<Voltage> voltage = Volts.of(0);

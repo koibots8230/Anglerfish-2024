@@ -24,6 +24,7 @@ public class Indexer extends SubsystemBase {
     private Measure<Velocity<Angle>> setpoint = RPM.of(0);
 
     private int inverted = 1;
+    private boolean sensorEnabled = true;
 
     public Indexer() {
         io = (Robot.isReal()) ? new IndexerIOSparkMax() : new IndexerIOSim();
@@ -43,15 +44,14 @@ public class Indexer extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        inputs.setpoint = setpoint.in(RPM);
         Logger.processInputs("Subsystems/Indexer", inputs);
 
         io.setVoltage(
                 Volts.of(
                         Math.max(
                                 Math.min(
-                                        (feedback.calculate(
-                                                                inputs.velocity.in(RPM),
-                                                                setpoint.in(RPM))
+                                        (feedback.calculate(inputs.velocity, setpoint.in(RPM))
                                                         + feedforward.calculate(setpoint.in(RPM)))
                                                 * (12.0 / 11000.0),
                                         12.0),
@@ -59,11 +59,13 @@ public class Indexer extends SubsystemBase {
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
+        System.out.println("Indexer: " + velocity.in(RPM));
         setpoint = velocity.times(inverted);
     }
 
     public void invert() {
         inverted *= -1;
+        sensorEnabled = !sensorEnabled;
     }
 
     public void setVoltage(Measure<Voltage> volts) {
@@ -75,6 +77,6 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean sensorTriggered() {
-        return io.sensorTriggered();
+        return io.sensorTriggered() && sensorEnabled;
     }
 }

@@ -60,8 +60,8 @@ public class ShooterIOSparkMax implements ShooterIO {
         topEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
         bottomEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
 
-        topEncoder.setDistancePerPulse(1.0 / 2048.0); // TODO: I did a stupid, this was ints :(
-        bottomEncoder.setDistancePerPulse(1.0 / 2048.0);
+        topEncoder.setDistancePerPulse(-60.0 / 2048.0); // TODO: I did a stupid, this was ints :(
+        bottomEncoder.setDistancePerPulse(60.0 / 2048.0);
 
         topMotor.clearFaults();
         bottomMotor.clearFaults();
@@ -71,8 +71,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.topVelocity = RotationsPerSecond.of(topEncoder.getRate());
-        inputs.bottomVelocity = RotationsPerSecond.of(bottomEncoder.getRate());
+        inputs.topVelocity = topEncoder.getRate();
+        inputs.bottomVelocity = bottomEncoder.getRate();
 
         inputs.topCurrent = Amps.of(topMotor.getOutputCurrent());
         inputs.topCurrent = Amps.of(bottomMotor.getOutputCurrent());
@@ -84,8 +84,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void setVoltages(Measure<Voltage> topVoltage, Measure<Voltage> bottomVoltage) {
-        //System.out.println(topVoltage.in(Volts) + ", " + bottomVoltage.in(Volts));
-        topMotor.setVoltage(topVoltage.in(Volts));
-        bottomMotor.setVoltage(bottomVoltage.in(Volts));
+        // System.out.println(topVoltage.in(Volts) + ", " + bottomVoltage.in(Volts));
+        topMotor.setVoltage(-topVoltage.in(Volts));
+        bottomMotor.setVoltage(-bottomVoltage.in(Volts));
     }
 }

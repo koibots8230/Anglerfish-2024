@@ -11,9 +11,8 @@ import org.littletonrobotics.junction.AutoLog;
 public interface IndexerIO {
     @AutoLog
     class IndexerIOInputs {
-        public Measure<Velocity<Angle>> velocity = RotationsPerSecond.of(0);
-
-        public boolean isBrake = true;
+        public double setpoint = 0;
+        public double velocity = 0;
 
         public Measure<Current> current = Amps.of(0);
         public Measure<Voltage> voltage = Volts.of(0);

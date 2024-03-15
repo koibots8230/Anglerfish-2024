@@ -61,9 +61,9 @@ public class RobotContainer {
         Swerve.get()
                 .setDefaultCommand(
                         new FieldOrientedDrive(
-                                () -> -driveController.getRightX(),
-                                () -> -driveController.getRightY(),
+                                () -> -driveController.getLeftY(),
                                 () -> -driveController.getLeftX(),
+                                () -> -driveController.getRightX(),
                                 () -> driveController.getPOV(),
                                 () -> driveController.getB()));
 
@@ -78,16 +78,26 @@ public class RobotContainer {
         Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
         shoot.onTrue(
                 new Shoot(
-                        RPM.of(5000),
-                        RPM.of(5000),
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
                         false));
         shoot.onFalse(
                 new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
-                                Shooter.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+                    new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                    new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get())
+                ));
+
+        Trigger shootAmp = new Trigger(() -> driveController.getLeftBumper());
+        shootAmp.onTrue(new Shoot(
+            SetpointConstants.SHOOTER_SPEEDS.get(1).get(0),
+            SetpointConstants.SHOOTER_SPEEDS.get(1).get(1),
+            false
+        ));
+        shootAmp.onFalse(
+                new ParallelCommandGroup(
+                    new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                    new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get())
+                ));
 
         Trigger zero = new Trigger(() -> driveController.getA());
         zero.onTrue(new InstantCommand(() -> Swerve.get().zeroGyro()));
@@ -97,14 +107,12 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                         new InstantCommand(() -> Intake.get().invert()),
                         new InstantCommand(() -> Indexer.get().invert()),
-                        new InstantCommand(() -> Shooter.get().invertTop()),
-                        new InstantCommand(() -> Shooter.get().invertBottom())));
+                        new InstantCommand(() -> Shooter.get().invert())));
         reverseEverything.onFalse(
                 new ParallelCommandGroup(
                         new InstantCommand(() -> Intake.get().invert()),
                         new InstantCommand(() -> Indexer.get().invert()),
-                        new InstantCommand(() -> Shooter.get().invertTop()),
-                        new InstantCommand(() -> Shooter.get().invertBottom())));
+                        new InstantCommand(() -> Shooter.get().invert())));
     }
 
     public void configureTestBinds() {

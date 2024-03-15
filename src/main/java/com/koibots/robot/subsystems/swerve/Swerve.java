@@ -20,8 +20,6 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -31,7 +29,7 @@ public class Swerve extends SubsystemBase {
     GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     SwerveDrivePoseEstimator odometry;
 
-    private Field2d field = new Field2d();
+    // private Field2d field = new Field2d();
 
     public Swerve() {
         if (Robot.isReal()) {
@@ -116,8 +114,8 @@ public class Swerve extends SubsystemBase {
         Logger.recordOutput("SwerveStates/Measured", statesDegrees);
         Logger.recordOutput("SwerveStates/Measured", statesRadians);
 
-        field.setRobotPose(getEstimatedPose());
-        SmartDashboard.putData(field);
+        // field.setRobotPose(getEstimatedPose());
+        // SmartDashboard.putData(field);
     }
 
     public void addVisionMeasurement(Pose2d measurement, double timestamp) {

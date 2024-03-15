@@ -17,7 +17,7 @@ public class RunIndexer extends Command {
 
     @Override
     public void initialize() {
-        Indexer.get().setVelocity(SetpointConstants.INDEXER_SPEED);
+        Indexer.get().setVelocity(SetpointConstants.INTAKE_INDEXER_SPEED);
     }
 
     @Override

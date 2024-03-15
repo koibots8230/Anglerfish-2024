@@ -36,11 +36,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                     new AutoAlign(nearestNote, Meters.of(0)),
                     new ParallelRaceGroup(
                             new StartEndCommand(
-                                    () ->
-                                            Intake.get()
-                                                    .setVelocity(
-                                                            SetpointConstants
-                                                                    .INTAKE_SPEED),
+                                    () -> Intake.get().setVelocity(SetpointConstants.INTAKE_SPEED),
                                     () -> Intake.get().setVelocity(RPM.of(0))),
                             new RunIndexer()));
         } else {
