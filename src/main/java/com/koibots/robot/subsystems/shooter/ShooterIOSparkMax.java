@@ -3,52 +3,89 @@
 
 package com.koibots.robot.subsystems.shooter;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.ShooterConstants;
+import com.koibots.robot.Constants.DeviceIDs;
+import com.koibots.robot.Constants.MotorConstants;
+import com.koibots.robot.Constants.RobotConstants;
+import com.koibots.robot.Constants.SensorConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.CounterBase.EncodingType;
+import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
-    CANSparkMax leftMotor;
-    CANSparkMax rightMotor;
-    RelativeEncoder leftEncoder;
-    RelativeEncoder rightEncoder;
+    CANSparkMax topMotor;
+    CANSparkMax bottomMotor;
+
+    Encoder topEncoder;
+    Encoder bottomEncoder;
 
     protected ShooterIOSparkMax() {
-        leftMotor =
-                new CANSparkMax(
-                        ShooterConstants.shooterMotor1, CANSparkLowLevel.MotorType.kBrushless);
-        rightMotor =
-                new CANSparkMax(
-                        ShooterConstants.shooterMotor2, CANSparkLowLevel.MotorType.kBrushless);
+        topMotor = new CANSparkMax(DeviceIDs.SHOOTER_TOP, CANSparkLowLevel.MotorType.kBrushless);
 
-        leftEncoder = leftMotor.getEncoder();
-        rightEncoder = rightMotor.getEncoder();
+        bottomMotor =
+                new CANSparkMax(DeviceIDs.SHOOTER_BOTTOM, CANSparkLowLevel.MotorType.kBrushless);
+
+        topMotor.restoreFactoryDefaults();
+        bottomMotor.restoreFactoryDefaults();
+
+        topMotor.setSmartCurrentLimit(MotorConstants.TOP_SHOOTER.currentLimit);
+        bottomMotor.setSmartCurrentLimit(MotorConstants.BOTTOM_SHOOTER.currentLimit);
+
+        topMotor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
+        bottomMotor.enableVoltageCompensation(RobotConstants.NOMINAL_VOLTAGE.in(Volts));
+
+        topMotor.setInverted(MotorConstants.TOP_SHOOTER.inverted);
+        bottomMotor.setInverted(MotorConstants.BOTTOM_SHOOTER.inverted);
+
+        topMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
+        bottomMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
+
+        topEncoder =
+                new Encoder(
+                        DeviceIDs.TOP_SHOOTER_ENCODER[0],
+                        DeviceIDs.TOP_SHOOTER_ENCODER[1],
+                        false,
+                        EncodingType.k1X);
+        bottomEncoder =
+                new Encoder(
+                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[0],
+                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[1],
+                        true,
+                        EncodingType.k1X);
+
+        topEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
+        bottomEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
+
+        topEncoder.setDistancePerPulse(-60.0 / 2048.0); // TODO: I did a stupid, this was ints :(
+        bottomEncoder.setDistancePerPulse(60.0 / 2048.0);
+
+        topMotor.clearFaults();
+        bottomMotor.clearFaults();
+        topMotor.burnFlash();
+        bottomMotor.burnFlash();
     }
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.leftVelocity = RotationsPerSecond.of(leftEncoder.getVelocity() * 60);
-        inputs.rightVelocity = RotationsPerSecond.of(rightEncoder.getVelocity() * 60);
+        inputs.topVelocity = topEncoder.getRate();
+        inputs.bottomVelocity = bottomEncoder.getRate();
 
-        inputs.leftCurrent = Amps.of(leftMotor.getOutputCurrent());
-        inputs.rightCurrent = Amps.of(rightMotor.getOutputCurrent());
+        inputs.topCurrent = Amps.of(topMotor.getOutputCurrent());
+        inputs.topCurrent = Amps.of(bottomMotor.getOutputCurrent());
 
-        inputs.leftVoltage =
-                Volts.of(leftMotor.getBusVoltage()).times(leftMotor.getAppliedOutput());
-        inputs.rightVoltage =
-                Volts.of(rightMotor.getBusVoltage()).times(rightMotor.getAppliedOutput());
+        inputs.topVoltage = Volts.of(topMotor.getBusVoltage()).times(topMotor.getAppliedOutput());
+        inputs.bottomVoltage =
+                Volts.of(bottomMotor.getBusVoltage()).times(bottomMotor.getAppliedOutput());
     }
 
     @Override
-    public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
-        leftMotor.setVoltage(left.in(Volts));
-        rightMotor.setVoltage(right.in(Volts));
+    public void setVoltages(Measure<Voltage> topVoltage, Measure<Voltage> bottomVoltage) {
+        // System.out.println(topVoltage.in(Volts) + ", " + bottomVoltage.in(Volts));
+        topMotor.setVoltage(-topVoltage.in(Volts));
+        bottomMotor.setVoltage(-bottomVoltage.in(Volts));
     }
 }

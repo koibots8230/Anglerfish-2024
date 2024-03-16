@@ -3,99 +3,169 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.autos.AutoCommands.*;
 import static com.koibots.robot.subsystems.Subsystems.*;
+import static edu.wpi.first.units.Units.*;
 
-import java.util.function.BooleanSupplier;
-import com.koibots.robot.commands.ElevatorControl;
-import com.koibots.robot.commands.FieldOrientedDrive;
+import com.koibots.lib.controls.EightBitDo;
+import com.koibots.robot.Constants.*;
+import com.koibots.robot.commands.Intake.IntakeCommand;
+import com.koibots.robot.commands.Scoring.Shoot;
+import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
+import com.koibots.robot.commands.Swerve.TestDrive;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-/*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import java.util.ArrayList;
+import java.util.List;
+
 public class RobotContainer {
-        GenericHID controller;
-        GenericHID oppController;
+    static EightBitDo driveController = new EightBitDo(0);
+    static GenericHID operatorPad = new GenericHID(1);
+    List<Command> autos = new ArrayList<>();
 
-        /**
-         * The container for the robot. Contains subsystems, OI devices, and commands.
-         */
-        public RobotContainer() {
-                controller = new GenericHID(0);
-                oppController = new GenericHID(1);
+    List<SendableChooser<Boolean>> modulesEnabled = new ArrayList<>();
+
+    public RobotContainer() {
+        for (int a = 0; a < 4; a++) {
+            SendableChooser<Boolean> module = new SendableChooser<>();
+
+            module.setDefaultOption("Enabled", true);
+            module.addOption("Disabled", false);
+
+            SmartDashboard.putData("Module " + a, module);
+
+            modulesEnabled.add(a, module);
         }
+    }
 
-        /**
-         * Use this method to define your button->command mappings. Buttons can be
-         * created by
-         * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its
-         * subclasses ({@link
-         * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling
-         * passing it to a
-         * {@link JoystickButton}.
-         */
-        public void configureButtonBindings() {
-                Swerve.get()
-                                .setDefaultCommand(
-                                                new FieldOrientedDrive(
-                                                                () -> -controller.getRawAxis(1),
-                                                                () -> -controller.getRawAxis(0),
-                                                                () -> -controller.getRawAxis(4),
-                                                                () -> controller.getPOV(),
-                                                                () -> controller.getRawButton(1)));
+    public void registerAutos() {
+        autos.add(new InstantCommand());
+        autos.add(
+                new SequentialCommandGroup(
+                        B1_A_N1_S1.command.get(),
+                        S1_N4_S2.command.get(),
+                        S2_N5_S2.command.get(),
+                        S2_N6_S2.command.get()));
 
-                Elevator.get().setDefaultCommand(new ElevatorControl(() -> controller.getRawAxis(3)));
+        SmartDashboard.putString("Auto Routine", "0");
+    }
 
-                Intake.get()
-                                .setDefaultCommand(
+    public void configureButtonBindings() {
+        Swerve.get()
+                .setDefaultCommand(
+                        new FieldOrientedDrive(
+                                () -> -driveController.getLeftY(),
+                                () -> -driveController.getLeftX(),
+                                () -> -driveController.getRightX(),
+                                () -> driveController.getPOV(),
+                                () -> driveController.getB()));
+
+        Trigger intake = new Trigger(() -> driveController.getRightTrigger() > 0.15);
+        intake.onTrue(new IntakeCommand(false));
+        intake.onFalse(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+                        new InstantCommand(
+                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+
+        Trigger shoot = new Trigger(() -> driveController.getLeftTrigger() > 0.3);
+        shoot.onTrue(
+                new Shoot(
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        false));
+        shoot.onFalse(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                        new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get())));
+
+        Trigger shootAmp = new Trigger(() -> driveController.getLeftBumper());
+        shootAmp.onTrue(new Shoot(
+                SetpointConstants.SHOOTER_SPEEDS.get(1).get(0),
+                SetpointConstants.SHOOTER_SPEEDS.get(1).get(1),
+                false));
+        shootAmp.onFalse(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                        new InstantCommand(() -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)), Shooter.get())));
+
+        Trigger zero = new Trigger(() -> driveController.getA());
+        zero.onTrue(new InstantCommand(() -> Swerve.get().zeroGyro()));
+
+        Trigger reverseEverything = new Trigger(() -> driveController.getRightBumper());
+        reverseEverything.onTrue(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Intake.get().invert()),
+                        new InstantCommand(() -> Indexer.get().invert()),
+                        new InstantCommand(() -> Shooter.get().invert())));
+        reverseEverything.onFalse(
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Intake.get().invert()),
+                        new InstantCommand(() -> Indexer.get().invert()),
+                        new InstantCommand(() -> Shooter.get().invert())));
+
+        LEDs.get()
+                .setDefaultCommand(
+                        new ConditionalCommand(
+                                new InstantCommand(
+                                        () -> LEDs.get().writeSPI(
+                                                new byte[] { 0x00 }),
+                                        LEDs.get()),
+                                new ConditionalCommand(
+                                        new InstantCommand(
+                                                () -> LEDs.get().writeSPI(
+                                                        new byte[] { 0x01 }),
+                                                LEDs.get()),
+                                        new ConditionalCommand(
+                                                new InstantCommand(
+                                                        () -> LEDs.get().writeSPI(
+                                                                new byte[] { 0x10 }),
+                                                        LEDs.get()),
+
                                                 new ConditionalCommand(
-                                                                new InstantCommand(
-                                                                                () -> Intake.get()
-                                                                                                .setIntakeVoltsWithTargetRPM(
-                                                                                                                3000),
-                                                                                Intake.get()),
-                                                                new InstantCommand(
-                                                                                () -> Intake.get()
-                                                                                                .setIntakeVoltsWithTargetRPM(
-                                                                                                                0),
-                                                                                Intake.get()),
-                                                                () -> controller.getRawButton(5)));
+                                                        new InstantCommand(
+                                                                () -> LEDs.get().writeSPI(
+                                                                        new byte[] { 0x11 }),
+                                                                LEDs.get()),
+                                                        new InstantCommand(),
+                                                        () -> operatorPad.getRawButton(
+                                                                3)),
+                                                () -> operatorPad.getRawButton(
+                                                        2)),
+                                        () -> operatorPad.getRawButton(1)),
+                                () -> operatorPad.getRawButton(0)));
 
-                LEDs.get()
-                                .setDefaultCommand(
-                                                new ConditionalCommand(
-                                                                new InstantCommand(
-                                                                                () -> LEDs.get().writeSPI(
-                                                                                                new byte[] { 0x00 }), LEDs.get()),
-                                                                new ConditionalCommand(
-                                                                                new InstantCommand(
-                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                new byte[] { 0x01 }), LEDs.get()),
-                                                                                new ConditionalCommand(
-                                                                                                new InstantCommand(
-                                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                                new byte[] { 0x10 }), LEDs.get()),
-                                                                                                                                
-                                                                                                new ConditionalCommand(
-                                                                                                                new InstantCommand(
-                                                                                                                                () -> LEDs.get().writeSPI(
-                                                                                                                                                new byte[] { 0x11 }), LEDs.get()),
-                                                                                                                new InstantCommand(),
-                                                                                                                () -> oppController.getRawButton(
-                                                                                                                                3)),
-                                                                                                () -> oppController.getRawButton(
-                                                                                                                2)),
-                                                                                () -> oppController.getRawButton(1)),
-                                                                () -> oppController.getRawButton(0)));
+    }
 
-        }
+    public void configureTestBinds() {
+        Swerve.get()
+                .setDefaultCommand(
+                        new TestDrive(
+                                () -> -driveController.getRightX(),
+                                () -> -driveController.getRightY(),
+                                () -> -driveController.getLeftX(),
+                                () -> driveController.getPOV(),
+                                () -> driveController.getB(),
+                                modulesEnabled));
+    }
+
+    public Command getAutonomousRoutine() {
+        return null;
+    }
+
+    public static void rumbleController(double strength) {
+        driveController.setRumble(RumbleType.kBothRumble, strength);
+    }
 }

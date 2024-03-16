@@ -5,11 +5,15 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.Volts;
 
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.ControlConstants;
+import com.koibots.robot.Constants.DeviceIDs;
+import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.units.Measure;
@@ -25,29 +29,27 @@ public class Swerve extends SubsystemBase {
     GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     SwerveDrivePoseEstimator odometry;
 
+    // private Field2d field = new Field2d();
+
     public Swerve() {
         if (Robot.isReal()) {
             swerveModules =
                     new SwerveModule[] { // FL-FR-BL-BR
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_LEFT_DRIVE_ID,
-                                        DriveConstants.FRONT_LEFT_TURN_ID),
+                                        DeviceIDs.FRONT_LEFT_DRIVE, DeviceIDs.FRONT_LEFT_TURN),
                                 0),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.FRONT_RIGHT_DRIVE_ID,
-                                        DriveConstants.FRONT_RIGHT_TURN_ID),
+                                        DeviceIDs.FRONT_RIGHT_DRIVE, DeviceIDs.FRONT_RIGHT_TURN),
                                 1),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_LEFT_DRIVE_ID,
-                                        DriveConstants.BACK_LEFT_TURN_ID),
+                                        DeviceIDs.BACK_LEFT_DRIVE, DeviceIDs.BACK_LEFT_TURN),
                                 2),
                         new SwerveModule(
                                 new SwerveModuleIOSparkMax(
-                                        DriveConstants.BACK_RIGHT_DRIVE_ID,
-                                        DriveConstants.BACK_RIGHT_TURN_ID),
+                                        DeviceIDs.BACK_RIGHT_DRIVE, DeviceIDs.BACK_RIGHT_TURN),
                                 3),
                     };
 
@@ -67,7 +69,7 @@ public class Swerve extends SubsystemBase {
 
         odometry =
                 new SwerveDrivePoseEstimator(
-                        DriveConstants.SWERVE_KINEMATICS,
+                        ControlConstants.SWERVE_KINEMATICS,
                         new Rotation2d(),
                         getModulePositions(),
                         new Pose2d());
@@ -100,9 +102,6 @@ public class Swerve extends SubsystemBase {
         swerveModules[2].periodic();
         swerveModules[3].periodic();
 
-        // Log measured states
-        Logger.recordOutput("SwerveStates/Measured", getModuleStates());
-
         double[] statesDegrees = new double[8];
         double[] statesRadians = new double[8];
         for (int i = 0; i < 4; i++) {
@@ -114,10 +113,66 @@ public class Swerve extends SubsystemBase {
 
         Logger.recordOutput("SwerveStates/Measured", statesDegrees);
         Logger.recordOutput("SwerveStates/Measured", statesRadians);
+
+        // field.setRobotPose(getEstimatedPose());
+        // SmartDashboard.putData(field);
     }
 
     public void addVisionMeasurement(Pose2d measurement, double timestamp) {
         odometry.addVisionMeasurement(measurement, timestamp);
+    }
+
+    public void zeroGyro() {
+        gyro.zeroYaw();
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds) {
+        speeds = ChassisSpeeds.discretize(speeds, 0.02);
+
+        SwerveModuleState[] targetModuleStates =
+                ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+                targetModuleStates, RobotConstants.MAX_LINEAR_SPEED);
+
+        if (speeds.vxMetersPerSecond == 0.0
+                && speeds.vyMetersPerSecond == 0.0
+                && speeds.omegaRadiansPerSecond == 0) {
+            var currentStates = this.getModuleStates();
+            targetModuleStates[0] = new SwerveModuleState(0, currentStates[0].angle);
+            targetModuleStates[1] = new SwerveModuleState(0, currentStates[1].angle);
+            targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
+            targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
+        }
+
+        this.setModuleStates(targetModuleStates);
+    }
+
+    public void driveRobotRelativeByModule(ChassisSpeeds speeds, boolean[] whichModules) {
+        speeds = ChassisSpeeds.discretize(speeds, 0.02);
+
+        SwerveModuleState[] targetModuleStates =
+                ControlConstants.SWERVE_KINEMATICS.toSwerveModuleStates(speeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(
+                targetModuleStates, RobotConstants.MAX_LINEAR_SPEED);
+
+        if (speeds.vxMetersPerSecond == 0.0
+                && speeds.vyMetersPerSecond == 0.0
+                && speeds.omegaRadiansPerSecond == 0) {
+            var currentStates = this.getModuleStates();
+            targetModuleStates[0] = new SwerveModuleState(0, currentStates[0].angle);
+            targetModuleStates[1] = new SwerveModuleState(0, currentStates[1].angle);
+            targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
+            targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
+        }
+
+        for (int a = 0; a < 4; a++) {
+            targetModuleStates[a] =
+                    whichModules[a] ? targetModuleStates[a] : new SwerveModuleState();
+        }
+
+        this.setModuleStates(targetModuleStates);
     }
 
     public Rotation2d getGyroAngle() {
@@ -140,6 +195,14 @@ public class Swerve extends SubsystemBase {
             swerveModules[2].getPosition(),
             swerveModules[3].getPosition()
         };
+    }
+
+    public ChassisSpeeds getRelativeSpeeds() {
+        return ControlConstants.SWERVE_KINEMATICS.toChassisSpeeds(this.getModuleStates());
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        odometry.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
     }
 
     public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
@@ -194,8 +257,7 @@ public class Swerve extends SubsystemBase {
 
         SwerveModuleState[] measuredStates = getModuleStates();
 
-        builder.addDoubleProperty(
-                "Front Left Angle", () -> measuredStates[0].angle.getDegrees(), null);
+        builder.addDoubleProperty("Front Left Angle", measuredStates[0].angle::getDegrees, null);
         builder.addDoubleProperty(
                 "Front Left Velocity", () -> measuredStates[0].speedMetersPerSecond, null);
 

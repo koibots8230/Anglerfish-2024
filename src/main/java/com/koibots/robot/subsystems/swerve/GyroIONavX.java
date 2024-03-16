@@ -11,16 +11,14 @@ public class GyroIONavX implements GyroIO {
     AHRS gyro;
 
     protected GyroIONavX() {
-        gyro = new AHRS(SPI.Port.kMXP, (byte) 200);
+        gyro = new AHRS(SPI.Port.kMXP);
         gyro.zeroYaw();
     }
 
     @Override
     public void updateInputs(GyroIOInputs inputs) {
         Rotation2d previousYaw = inputs.yawPosition;
-
         inputs.yawPosition = Rotation2d.fromDegrees(gyro.getYaw() * -1);
-
         inputs.yawVelocityRadPerSec = inputs.yawPosition.minus(previousYaw).getRadians() / 0.02;
     }
 

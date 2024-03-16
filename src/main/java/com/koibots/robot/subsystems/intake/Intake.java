@@ -4,57 +4,68 @@
 package com.koibots.robot.subsystems.intake;
 
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.IntakeConstants;
+import com.koibots.robot.Constants;
 import com.koibots.robot.Robot;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
 public class Intake extends SubsystemBase {
-    private final PIDController intakeFeedback;
-    private final SimpleMotorFeedforward intakeFeedForward;
+    private final PIDController feedback;
+    private final SimpleMotorFeedforward feedforward;
     private final IntakeIO io;
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
-    private double intakeVoltsSetPoint = 0.0;
+    private Measure<Velocity<Angle>> setpoint = RPM.of(0);
+
+    private int inverted = 1;
 
     public Intake() {
         io = Robot.isReal() ? new IntakeIOSparkMax() : new IntakeIOSim();
-        intakeFeedback = new PIDController(IntakeConstants.FEEDBACK_CONSTANTS.kP, 0, 0);
-        intakeFeedForward =
+        feedback = new PIDController(Constants.ControlConstants.INTAKE_FEEDBACK_CONSTANTS.kP, 0, 0);
+        feedforward =
                 new SimpleMotorFeedforward(
-                        IntakeConstants.FEEDFORWARD_CONSTANTS.ks,
-                        IntakeConstants.FEEDFORWARD_CONSTANTS.kv);
+                        Constants.ControlConstants.INTAKE_FEEDFORWARD_CONSTANTS.ks,
+                        Constants.ControlConstants.INTAKE_FEEDFORWARD_CONSTANTS.kv);
     }
 
     @Override
     public void periodic() {
         io.updateInputs(inputs);
+        inputs.setpoint = setpoint.in(RPM);
         Logger.processInputs("Subsystems/Intake", inputs);
 
         io.setVoltage(
                 Volts.of(
-                        intakeFeedback.calculate(
-                                        inputs.voltage.in(Volts),
-                                        Math.max(
-                                                intakeVoltsSetPoint,
-                                                IntakeConstants.MINIMUM_VOLTAGE) // wonky?
-                                        )
-                                + intakeFeedForward.calculate(
-                                        Math.max(
-                                                intakeVoltsSetPoint,
-                                                IntakeConstants.MINIMUM_VOLTAGE))));
+                        Math.max(
+                                Math.min(
+                                        (feedback.calculate(inputs.velocity, setpoint.in(RPM))
+                                                        + feedforward.calculate(setpoint.in(RPM)))
+                                                * (12.0 / 5676.0),
+                                        12.0),
+                                -12.0)));
     }
 
-    public void setIntakeVoltsWithTargetRPM(double targetRPM) {
+    public void setVelocity(Measure<Velocity<Angle>> velocity) {
         double robotSpeed = Swerve.get().getModuleStates()[0].speedMetersPerSecond * 60;
-        double targetDistancePerMinute = targetRPM * IntakeConstants.WHEELS.circumfrence.in(Meters);
+        double targetDistancePerMinute =
+                velocity.in(RPM) * Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters);
         double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
 
-        double trueRPM = trueDistancePerMinute / IntakeConstants.WHEELS.circumfrence.in(Meters);
-        intakeVoltsSetPoint = Math.max(Math.min(trueRPM * (12.0 / 5676.0), 12.0), -12.0);
+        setpoint =
+                RPM.of(
+                        (trueDistancePerMinute
+                                / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters)) * inverted) ;
+    }
+
+    public void invert() {
+        inverted *= -1;
+    }
+
+    public void setVoltage(Measure<Voltage> voltage) {
+        io.setVoltage(voltage);
     }
 }

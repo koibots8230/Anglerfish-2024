@@ -7,10 +7,12 @@ import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.Meters;
 
 import com.koibots.robot.Constants.VisionConstants;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.*;
 import edu.wpi.first.networktables.DoubleArraySubscriber;
 import edu.wpi.first.networktables.IntegerSubscriber;
@@ -19,11 +21,14 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.networktables.TimestampedInteger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.io.IOException;
 
 public class Vision extends SubsystemBase {
 
     private final DoubleArraySubscriber[][] vecSubscribers;
     private final IntegerSubscriber[] idSubscribers;
+
+    private AprilTagFieldLayout layout;
 
     public Vision() {
         vecSubscribers = new DoubleArraySubscriber[4][2];
@@ -39,6 +44,12 @@ public class Vision extends SubsystemBase {
                                 .subscribe(VisionConstants.VECTOR_DEFAULT_VALUE);
             }
         }
+
+        try {
+            layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
+        } catch (IOException e) {
+            System.err.println("Could not find field layout!");
+        }
     }
 
     private Pose2d translateToFieldPose(
@@ -47,22 +58,20 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N3> rotMatrix = new Matrix<>(Nat.N3(), Nat.N3());
         for (int a = 0; a < 3; a++) {
             for (int b = 0; b < 3; b++) {
-                rotMatrix.set(b, a, rotation[count]);
+                rotMatrix.set(b, a, -rotation[count]);
                 count++;
             }
         }
-        rotMatrix.times(-1);
 
         Matrix<N3, N1> transVec = new Matrix<>(Nat.N3(), Nat.N1());
         transVec.set(0, 0, translation[0]);
         transVec.set(1, 0, translation[1]);
         transVec.set(2, 0, translation[2]);
         Matrix<N3, N1> tagToCamTrans = rotMatrix.times(transVec);
-
         tagToCamTrans.set(
                 0,
                 0,
-                (VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians() < Math.PI)
+                (layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians() < Math.PI)
                         ? tagToCamTrans.get(0, 0)
                         : tagToCamTrans.get(0, 0) * -1);
 
@@ -71,15 +80,14 @@ public class Vision extends SubsystemBase {
                         Math.pow(tagToCamTrans.get(0, 0), 2)
                                 + Math.pow(tagToCamTrans.get(0, 2), 2));
         double hypangle =
-                VisionConstants.TAG_POSES_METERS[tagId].getRotation().getRadians()
+                layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians()
                         - Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
 
         Pose2d camPose =
                 new Pose2d(
-                        VisionConstants.TAG_POSES_METERS[tagId].getX()
+                        layout.getTagPose(tagId).get().getRotation().getX()
                                 + (hypotenuse * Math.cos(hypangle)),
-                        VisionConstants.TAG_POSES_METERS[tagId].getY()
-                                + (hypotenuse * Math.sin(hypangle)),
+                        layout.getTagPose(tagId).get().getY() + (hypotenuse * Math.sin(hypangle)),
                         new Rotation2d());
 
         hypotenuse =
@@ -92,10 +100,12 @@ public class Vision extends SubsystemBase {
                         + Swerve.get().getGyroAngle().getRadians()
                         + 90;
 
+        Rotation3d rot = new Rotation3d(rotMatrix.transpose().times(-1));
+
         return new Pose2d(
                 camPose.getX() + (hypotenuse * Math.cos(hypangle)),
                 camPose.getY() + (hypotenuse * Math.sin(hypangle)),
-                Swerve.get().getGyroAngle());
+                new Rotation2d(rot.getY())); // TODO: Double check where 0 is on this vs gyro
     }
 
     @Override
@@ -111,9 +121,9 @@ public class Vision extends SubsystemBase {
                             translateToFieldPose(
                                     tvec[b].value, rvec[b].value, (int) ids[a].value, a);
                     if (pose.getX() > 0
-                            && pose.getX() < VisionConstants.FIELD_WIDTH.in(Meters)
+                            && pose.getX() < layout.getFieldWidth()
                             && pose.getY() > 0
-                            && pose.getY() < VisionConstants.FIELD_LENGTH.in(Meters)
+                            && pose.getY() < layout.getFieldLength()
                             && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
                                     < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
                             && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())

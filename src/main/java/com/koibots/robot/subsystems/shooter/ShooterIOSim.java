@@ -7,39 +7,39 @@ import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.*;
-import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 
 public class ShooterIOSim implements ShooterIO {
 
     public static final double LOOP_PERIOD_SECS = 0.02;
 
-    private final DCMotorSim simLeft = new DCMotorSim(DCMotor.getNEO(1), 1, 0.025);
-    private final DCMotorSim simRight = new DCMotorSim(DCMotor.getNEO(1), 1, 0.025);
+    private FlywheelSim simTop = new FlywheelSim(DCMotor.getNEO(1), 1, .001);
+    private FlywheelSim simBottom = new FlywheelSim(DCMotor.getNEO(1), 1, .001);
 
-    private Measure<Voltage> leftAppliedVolts = Volts.of(0);
-    private Measure<Voltage> rightAppliedVolts = Volts.of(0);
+    private Measure<Voltage> topAppliedVolts = Volts.of(0);
+    private Measure<Voltage> bottomAppliedVolts = Volts.of(0);
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        simLeft.update(LOOP_PERIOD_SECS);
-        simLeft.update(LOOP_PERIOD_SECS);
+        simTop.update(LOOP_PERIOD_SECS);
+        simBottom.update(LOOP_PERIOD_SECS);
 
-        inputs.leftVelocity = RadiansPerSecond.of(simLeft.getAngularVelocityRadPerSec());
-        inputs.rightVelocity = RadiansPerSecond.of(simRight.getAngularVelocityRadPerSec());
+        inputs.topVelocity = simTop.getAngularVelocityRadPerSec() * (60.0 / (2 * Math.PI));
+        inputs.bottomVelocity = simBottom.getAngularVelocityRadPerSec() * (60.0 / (2 * Math.PI));
 
-        inputs.leftVoltage = leftAppliedVolts;
-        inputs.rightVoltage = rightAppliedVolts;
+        inputs.topVoltage = topAppliedVolts;
+        inputs.bottomVoltage = bottomAppliedVolts;
 
-        inputs.leftCurrent = Amps.of(simLeft.getCurrentDrawAmps());
-        inputs.rightCurrent = Amps.of(simRight.getCurrentDrawAmps());
+        inputs.topCurrent = Amps.of(simTop.getCurrentDrawAmps());
+        inputs.bottomCurrent = Amps.of(simBottom.getCurrentDrawAmps());
     }
 
     @Override
-    public void setVoltages(Measure<Voltage> left, Measure<Voltage> right) {
-        simLeft.setInputVoltage(left.in(Volts));
-        simRight.setInputVoltage(right.in(Volts));
+    public void setVoltages(Measure<Voltage> top, Measure<Voltage> bottom) {
+        simTop.setInputVoltage(top.in(Volts));
+        simBottom.setInputVoltage(bottom.in(Volts));
 
-        leftAppliedVolts = left;
-        rightAppliedVolts = right;
+        topAppliedVolts = top;
+        bottomAppliedVolts = bottom;
     }
 }

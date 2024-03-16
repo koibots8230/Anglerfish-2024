@@ -11,16 +11,19 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ShooterIO {
     @AutoLog
     public class ShooterIOInputs {
-        public Measure<Velocity<Angle>> leftVelocity = RotationsPerSecond.of(0);
-        public Measure<Velocity<Angle>> rightVelocity = RotationsPerSecond.of(0);
+        public double topVelocity = 0;
+        public double bottomVelocity = 0;
 
-        public Measure<Current> leftCurrent = Amps.of(0);
-        public Measure<Current> rightCurrent = Amps.of(0);
-        public Measure<Voltage> leftVoltage = Volts.of(0);
-        public Measure<Voltage> rightVoltage = Volts.of(0);
+        public Measure<Current> topCurrent = Amps.of(0);
+        public Measure<Current> bottomCurrent = Amps.of(0);
+        public Measure<Voltage> topVoltage = Volts.of(0);
+        public Measure<Voltage> bottomVoltage = Volts.of(0);
+
+        public double topSetpoint = 0;
+        public double bottomSetpoint = 0;
     }
 
     void updateInputs(ShooterIOInputs inputs);
 
-    void setVoltages(Measure<Voltage> left, Measure<Voltage> right);
+    void setVoltages(Measure<Voltage> top, Measure<Voltage> bottom);
 }

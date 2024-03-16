@@ -21,7 +21,7 @@ public class IntakeIOSim implements IntakeIO {
     public void updateInputs(IntakeIOInputs inputs) {
         sim.update(LOOP_PERIOD_SECS);
 
-        inputs.velocity = RotationsPerSecond.of(sim.getAngularVelocityRPM() * 60);
+        inputs.velocity = sim.getAngularVelocityRPM();
 
         inputs.current = Amps.of(sim.getCurrentDrawAmps());
         inputs.voltage = appliedVolts;
