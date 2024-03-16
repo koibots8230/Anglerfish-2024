@@ -6,6 +6,7 @@ package com.koibots.robot.subsystems.swerve;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants.ControlConstants;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -86,14 +87,22 @@ public class SwerveModule {
 
     /** Runs the module with the specified setpoint state. Returns the optimized state. */
     public SwerveModuleState setState(SwerveModuleState state) {
-        // Optimize state based on current angle
-        var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
 
-        // Update setpoints, controllers run in "periodic"
-        angleSetpoint = optimizedSetpoint.angle;
-        speedSetpoint = optimizedSetpoint.speedMetersPerSecond;
 
-        return optimizedSetpoint;
+        if (MathUtil.inputModulus(getAngle().minus(state.angle).getRadians(), -Math.PI, Math.PI) >= Math.toRadians(110)) { // True if error is greater than 110 degrees
+            // Optimize state based on current angle
+            var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
+
+            // Update setpoints, controllers run in "periodic"
+            angleSetpoint = optimizedSetpoint.angle;
+            speedSetpoint = optimizedSetpoint.speedMetersPerSecond;
+
+            return optimizedSetpoint;
+        } else {
+            angleSetpoint = state.angle;
+            speedSetpoint = state.speedMetersPerSecond;
+            return state;
+        }
     }
 
     public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
