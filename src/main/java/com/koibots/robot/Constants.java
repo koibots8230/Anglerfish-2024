@@ -96,9 +96,9 @@ public class Constants {
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(1.7, 0, 0, 35, 0, 0);
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(0.0, 0, 0, 28.5, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 2.6, 0, 2.75);
+                new FeedforwardConstantsIO(0, 25, 0, 2.75);
 
         public static final double DEADBAND = 0.025;
 
@@ -139,7 +139,7 @@ public class Constants {
 
         // =====================Autos=====================
 
-        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(1.5, 0, 0, 0, 0, 0);
         public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final PIDConstantsIO VTHETA_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
 
@@ -168,6 +168,8 @@ public class Constants {
                                 true,
                                 REPLANNING_ERROR_THRESHOLD.in(Meters),
                                 REPLANNING_ERROR_SPIKE_THRESHOLD.in(Meters)));
+
+        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(2);
     }
 
     public static final class SetpointConstants {

@@ -9,6 +9,8 @@ import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Robot;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +22,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.littletonrobotics.junction.Logger;
 
@@ -28,6 +31,10 @@ public class Swerve extends SubsystemBase {
     GyroIO gyro;
     GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
     SwerveDrivePoseEstimator odometry;
+
+    public PIDController xController;
+    public PIDController yController;
+    public PIDController thetaController;
 
     // private Field2d field = new Field2d();
 
@@ -85,6 +92,23 @@ public class Swerve extends SubsystemBase {
                         })) {
             odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
         }
+
+        xController = new PIDController(
+            ControlConstants.VX_CONTROLLER.kP,
+            ControlConstants.VX_CONTROLLER.kI,
+            ControlConstants.VX_CONTROLLER.kD);
+        yController = new PIDController(
+            ControlConstants.VY_CONTROLLER.kP,
+            ControlConstants.VY_CONTROLLER.kI,
+            ControlConstants.VY_CONTROLLER.kD);
+        thetaController = new PIDController(
+            ControlConstants.VTHETA_CONTROLLER.kP,
+            ControlConstants.VTHETA_CONTROLLER.kI,
+            ControlConstants.VTHETA_CONTROLLER.kD);
+
+        SmartDashboard.putData("X Controller", xController);
+        SmartDashboard.putData("Y Controller", yController);
+        SmartDashboard.putData("Theta Controller", thetaController);
     }
 
     @Override

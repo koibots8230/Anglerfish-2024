@@ -8,11 +8,16 @@ import static com.koibots.robot.subsystems.Subsystems.*;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.lib.controls.EightBitDo;
+import com.koibots.lib.sysid.SysIDMechanism;
 import com.koibots.robot.Constants.*;
+import com.koibots.robot.autos.DriveDistance;
+import com.koibots.robot.autos.SysID;
 import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Scoring.Shoot;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import com.koibots.robot.commands.Swerve.TestDrive;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -22,6 +27,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import static java.lang.StrictMath.PI;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,12 +56,89 @@ public class RobotContainer {
 
     public void registerAutos() {
         autos.add(new InstantCommand());
-        autos.add(
-                new SequentialCommandGroup(
-                        B1_A_N1_S1.command.get(),
-                        S1_N4_S2.command.get(),
-                        S2_N5_S2.command.get(),
-                        S2_N6_S2.command.get()));
+        autos.add(new SequentialCommandGroup(
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new DriveDistance(Inches.of(50), new Rotation2d(0))
+        ));
+        autos.add(new SequentialCommandGroup(
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(60), new Rotation2d(0)),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(60), new Rotation2d(-PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false)
+        ));
+        autos.add(new SequentialCommandGroup(
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(60), new Rotation2d(0)),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(60), new Rotation2d(-PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(57/41.875))),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(57/41.875) - PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false)
+        ));
+        autos.add(new SequentialCommandGroup(
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(60), new Rotation2d(0)),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(60), new Rotation2d(-PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(57.0/41.875))),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(57.0/41.875) - PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false),
+            new ParallelCommandGroup(
+                new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(-57.0/41.875))),
+                new IntakeCommand(false)
+            ),
+            new DriveDistance(Inches.of(Math.sqrt(5002.515625)), new Rotation2d(Math.atan(-57.0/41.875) - PI)),
+            new Shoot(
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                    SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                    false)
+        ));
+        autos.add(CalibX.command.get());
+        autos.add(CalibY.command.get());
+        autos.add(CalibTheta.command.get());
+        autos.add(new SysID(SysIDMechanism.Swerve, () -> driveController.getB()));
 
         SmartDashboard.putString("Auto Routine", "0");
     }
