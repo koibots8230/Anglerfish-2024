@@ -9,7 +9,6 @@ import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Robot;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -77,34 +76,37 @@ public class Swerve extends SubsystemBase {
         odometry =
                 new SwerveDrivePoseEstimator(
                         ControlConstants.SWERVE_KINEMATICS,
-                        new Rotation2d(),
+                        gyroInputs.yawPosition,
                         getModulePositions(),
                         new Pose2d());
 
-        try (Notifier odometryUpdater =
-                new Notifier(
-                        () -> {
-                            gyro.updateInputs(gyroInputs);
-                            odometry.updateWithTime(
-                                    Logger.getRealTimestamp(),
-                                    gyroInputs.yawPosition,
-                                    getModulePositions());
-                        })) {
-            odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
-        }
+        // try (Notifier odometryUpdater =
+        //         new Notifier(
+        //                 () -> {
+        //                     gyro.updateInputs(gyroInputs);
+        //                     odometry.updateWithTime(
+        //                             Logger.getRealTimestamp(),
+        //                             gyroInputs.yawPosition,
+        //                             getModulePositions());
+        //                 })) {
+        //     odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
+        // }
 
-        xController = new PIDController(
-            ControlConstants.VX_CONTROLLER.kP,
-            ControlConstants.VX_CONTROLLER.kI,
-            ControlConstants.VX_CONTROLLER.kD);
-        yController = new PIDController(
-            ControlConstants.VY_CONTROLLER.kP,
-            ControlConstants.VY_CONTROLLER.kI,
-            ControlConstants.VY_CONTROLLER.kD);
-        thetaController = new PIDController(
-            ControlConstants.VTHETA_CONTROLLER.kP,
-            ControlConstants.VTHETA_CONTROLLER.kI,
-            ControlConstants.VTHETA_CONTROLLER.kD);
+        xController =
+                new PIDController(
+                        ControlConstants.VX_CONTROLLER.kP,
+                        ControlConstants.VX_CONTROLLER.kI,
+                        ControlConstants.VX_CONTROLLER.kD);
+        yController =
+                new PIDController(
+                        ControlConstants.VY_CONTROLLER.kP,
+                        ControlConstants.VY_CONTROLLER.kI,
+                        ControlConstants.VY_CONTROLLER.kD);
+        thetaController =
+                new PIDController(
+                        ControlConstants.VTHETA_CONTROLLER.kP,
+                        ControlConstants.VTHETA_CONTROLLER.kI,
+                        ControlConstants.VTHETA_CONTROLLER.kD);
 
         SmartDashboard.putData("X Controller", xController);
         SmartDashboard.putData("Y Controller", yController);

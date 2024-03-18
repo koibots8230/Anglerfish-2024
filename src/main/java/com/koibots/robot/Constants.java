@@ -51,8 +51,8 @@ public class Constants {
                 RadiansPerSecond.of((2 * Math.PI) / 60.0);
 
         public static final Measure<Distance> DRIVING_ENCODER_POSITION_FACTOR =
-                Meters.of(
-                        (RobotConstants.DRIVE_WHEELS.radius.in(Meters) * 2 * Math.PI)
+                Inches.of(
+                        (1.5 * 2 * Math.PI)
                                 / RobotConstants.DRIVE_GEAR_RATIO);
         public static final Measure<Velocity<Distance>> DRIVING_ENCODER_VELOCITY_FACTOR =
                 MetersPerSecond.of(
@@ -96,9 +96,9 @@ public class Constants {
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(1.7, 0, 0, 35, 0, 0);
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.0, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(0, 0, 0, 28.5, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 25, 0, 2.75);
+                new FeedforwardConstantsIO(0, 2.55, 0, 2.75);
 
         public static final double DEADBAND = 0.025;
 
@@ -169,7 +169,7 @@ public class Constants {
                                 REPLANNING_ERROR_THRESHOLD.in(Meters),
                                 REPLANNING_ERROR_SPIKE_THRESHOLD.in(Meters)));
 
-        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(2);
+        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(5);
     }
 
     public static final class SetpointConstants {
@@ -179,8 +179,9 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(75);
 
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
-                Arrays.asList(Arrays.asList(RPM.of(5600), RPM.of(4600)),
-                Arrays.asList(RPM.of(410), RPM.of(1230)));
+                Arrays.asList(
+                        Arrays.asList(RPM.of(5600), RPM.of(4600)),
+                        Arrays.asList(RPM.of(390), RPM.of(1170)));
     }
 
     public static final class RobotConstants {
@@ -192,10 +193,9 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED =
-                MetersPerSecond.of(4.125);
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(2.5);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
-                RadiansPerSecond.of(3 * PI);
+                RadiansPerSecond.of(2 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
                 MetersPerSecondPerSecond.of(4);
         public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =

@@ -75,7 +75,7 @@ public class ShooterIOSparkMax implements ShooterIO {
         inputs.bottomVelocity = bottomEncoder.getRate();
 
         inputs.topCurrent = Amps.of(topMotor.getOutputCurrent());
-        inputs.topCurrent = Amps.of(bottomMotor.getOutputCurrent());
+        inputs.bottomCurrent = Amps.of(bottomMotor.getOutputCurrent());
 
         inputs.topVoltage = Volts.of(topMotor.getBusVoltage()).times(topMotor.getAppliedOutput());
         inputs.bottomVoltage =

@@ -6,11 +6,9 @@ package com.koibots.robot.autos;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.choreo.lib.Choreo;
-import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Scoring.Shoot;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -128,15 +126,9 @@ public enum AutoCommands {
                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
                     false)),
-    CalibX(
-        followChoreoTrajectory("x_calibration")
-    ),
-    CalibY(
-        followChoreoTrajectory("y_calibration")
-    ),
-    CalibTheta(
-        followChoreoTrajectory("theta_calibration")
-    );
+    CalibX(followChoreoTrajectory("x_calibration")),
+    CalibY(followChoreoTrajectory("y_calibration")),
+    CalibTheta(followChoreoTrajectory("theta_calibration"));
 
     public final Supplier<Command> command;
 
@@ -145,7 +137,7 @@ public enum AutoCommands {
     }
 
     private static Command followChoreoTrajectory(String trajectory) {
-                return Choreo.choreoSwerveCommand(
+        return Choreo.choreoSwerveCommand(
                 Choreo.getTrajectory(trajectory),
                 Swerve.get()::getEstimatedPose,
                 Swerve.get().xController,

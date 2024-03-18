@@ -24,6 +24,6 @@ public class GyroIONavX implements GyroIO {
 
     @Override
     public void zeroYaw() {
-        gyro.zeroYaw();
+        gyro.reset();
     }
 }
