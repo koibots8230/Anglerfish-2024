@@ -80,17 +80,17 @@ public class Swerve extends SubsystemBase {
                         getModulePositions(),
                         new Pose2d());
 
-        // try (Notifier odometryUpdater =
-        //         new Notifier(
-        //                 () -> {
-        //                     gyro.updateInputs(gyroInputs);
-        //                     odometry.updateWithTime(
-        //                             Logger.getRealTimestamp(),
-        //                             gyroInputs.yawPosition,
-        //                             getModulePositions());
-        //                 })) {
-        //     odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
-        // }
+        try (Notifier odometryUpdater =
+                new Notifier(
+                        () -> {
+                            gyro.updateInputs(gyroInputs);
+                            odometry.updateWithTime(
+                                    Logger.getRealTimestamp(),
+                                    gyroInputs.yawPosition,
+                                    getModulePositions());
+                        })) {
+            odometryUpdater.startPeriodic(1.0 / 200); // Run at 200hz
+        }
 
         xController =
                 new PIDController(
@@ -266,10 +266,10 @@ public class Swerve extends SubsystemBase {
     public void setCross() {
         setModuleStates(
                 new SwerveModuleState[] {
-                    new SwerveModuleState(0, new Rotation2d()), // Rotation2d.fromDegrees(45)),
-                    new SwerveModuleState(0, new Rotation2d()), // Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, new Rotation2d()), // Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, new Rotation2d()), // Rotation2d.fromDegrees(45))
+                    new SwerveModuleState(0, new Rotation2d(45)), // Rotation2d.fromDegrees(45)),
+                    new SwerveModuleState(0, new Rotation2d(-45)), // Rotation2d.fromDegrees(-45)),
+                    new SwerveModuleState(0, new Rotation2d(-45)), // Rotation2d.fromDegrees(-45)),
+                    new SwerveModuleState(0, new Rotation2d(45)), // Rotation2d.fromDegrees(45))
                 });
     }
 

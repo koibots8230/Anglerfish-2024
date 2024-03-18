@@ -88,13 +88,13 @@ public class SwerveModule {
     public SwerveModuleState setState(SwerveModuleState state) {
 
         // if (MathUtil.inputModulus(getAngle().minus(state.angle).getRadians(), -Math.PI, Math.PI)
-        // >= Math.toRadians(90)) { // True if error is greater than 110 degrees
+        // >= Math.toRadians(90)) { // True if error is greater than 110 degrees TODO: Didn't work
         // Optimize state based on current angle
         var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = optimizedSetpoint.angle;
-        speedSetpoint = optimizedSetpoint.speedMetersPerSecond;
+        speedSetpoint = optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
 
         return optimizedSetpoint;
         // } else {
