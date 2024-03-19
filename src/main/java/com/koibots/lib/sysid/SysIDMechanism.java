@@ -4,6 +4,6 @@
 package com.koibots.lib.sysid;
 
 public enum SysIDMechanism {
-    Elevator,
-    Swerve
+    Drive,
+    Turn
 }

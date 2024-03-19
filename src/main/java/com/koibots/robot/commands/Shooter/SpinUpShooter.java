@@ -4,7 +4,6 @@
 package com.koibots.robot.commands.Shooter;
 
 import static com.koibots.robot.subsystems.Subsystems.Shooter;
-import static edu.wpi.first.units.Units.RPM;
 
 import edu.wpi.first.units.*;
 import edu.wpi.first.wpilibj2.command.Command;

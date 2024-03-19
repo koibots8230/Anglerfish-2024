@@ -58,7 +58,9 @@ public class Intake extends SubsystemBase {
         setpoint =
                 RPM.of(
                         (trueDistancePerMinute
-                                / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters)) * inverted) ;
+                                        / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(
+                                                Meters))
+                                * inverted);
     }
 
     public void invert() {

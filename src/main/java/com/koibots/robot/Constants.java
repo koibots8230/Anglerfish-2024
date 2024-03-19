@@ -3,6 +3,7 @@
 
 package com.koibots.robot;
 
+import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.*;
 import static java.lang.StrictMath.PI;
 
@@ -10,6 +11,8 @@ import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.FeedforwardConstantsIO;
 import com.koibots.lib.util.MotorConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
+import com.koibots.robot.autos.DriveDistance;
+import com.koibots.robot.commands.Scoring.Shoot;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -19,7 +22,11 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.units.*;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 public class Constants {
@@ -51,9 +58,7 @@ public class Constants {
                 RadiansPerSecond.of((2 * Math.PI) / 60.0);
 
         public static final Measure<Distance> DRIVING_ENCODER_POSITION_FACTOR =
-                Meters.of(
-                        (RobotConstants.DRIVE_WHEELS.radius.in(Meters) * 2 * Math.PI)
-                                / RobotConstants.DRIVE_GEAR_RATIO);
+                Inches.of((1.5 * 2 * Math.PI) / RobotConstants.DRIVE_GEAR_RATIO);
         public static final Measure<Velocity<Distance>> DRIVING_ENCODER_VELOCITY_FACTOR =
                 MetersPerSecond.of(
                         ((RobotConstants.DRIVE_WHEELS.radius.in(Meters) * 2 * Math.PI)
@@ -92,13 +97,13 @@ public class Constants {
 
         // =====================Drive=====================
 
-        public static final double DRIVE_TURN_KS = 0.125;
+        public static final double DRIVE_TURN_KS = 0.36614;
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
-                new PIDConstantsIO(1.7, 0, 0, 35, 0, 0);
+                new PIDConstantsIO(7.3306, 0, 0.063896, 35, 0, 0);
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.0015, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(5.5986E-08, 0, 0, 28.5, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 2.6, 0, 2.75);
+                new FeedforwardConstantsIO(0.13276, 2.6706, 0.18994, 0, 0, 2.75);
 
         public static final double DEADBAND = 0.025;
 
@@ -139,7 +144,7 @@ public class Constants {
 
         // =====================Autos=====================
 
-        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(1.5, 0, 0, 0, 0, 0);
         public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
         public static final PIDConstantsIO VTHETA_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
 
@@ -168,6 +173,8 @@ public class Constants {
                                 true,
                                 REPLANNING_ERROR_THRESHOLD.in(Meters),
                                 REPLANNING_ERROR_SPIKE_THRESHOLD.in(Meters)));
+
+        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(5);
     }
 
     public static final class SetpointConstants {
@@ -177,8 +184,9 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(75);
 
         public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
-                Arrays.asList(Arrays.asList(RPM.of(5600), RPM.of(4600)),
-                Arrays.asList(RPM.of(410), RPM.of(1230)));
+                Arrays.asList(
+                        Arrays.asList(RPM.of(5600), RPM.of(4600)),
+                        Arrays.asList(RPM.of(390), RPM.of(1170)));
     }
 
     public static final class RobotConstants {
@@ -190,10 +198,9 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED =
-                MetersPerSecond.of(4.125);
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(2.5);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
-                RadiansPerSecond.of(3 * PI);
+                RadiansPerSecond.of(2 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
                 MetersPerSecondPerSecond.of(4);
         public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
@@ -236,5 +243,34 @@ public class Constants {
         public static final int ID_DEFAULT_VALUE = 0;
 
         public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
+    }
+
+    public static class AutoConstants {
+        public static final Hashtable<String, Translation2d> STARTING_POSITIONS = new Hashtable<>() {{
+            put("Subwoofer - Left", new Translation2d(0.588, 6.77));
+            put("Subwoofer - Front", new Translation2d(1.374775, 5.553456));
+            put("Subwoofer - Right", new Translation2d(0.588, 0.432));
+        }};
+
+        public static final Translation2d[] NOTE_POSITIONS = {
+            new Translation2d(2.8956, 7.001256),
+            new Translation2d(2.8956, 5.553456),
+            new Translation2d(2.8956, 4.105656)
+        };
+
+        public static final Hashtable<String, Command> AUTO_ACTIONS = new Hashtable<>() {{
+            put("Shoot Preload", new Shoot(
+                SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+                SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                false));
+            put("Leave Starting Zone", new DriveDistance(new Pose2d(Swerve.get().getEstimatedPose().getX() + 1.27, Swerve.get().getEstimatedPose().getY(), new Rotation2d())));
+            put("Pickup Left Piece", new DriveDistance(new Pose2d(NOTE_POSITIONS[0], new Rotation2d())));
+            put("Pickup Center Piece", new DriveDistance(new Pose2d(NOTE_POSITIONS[1], new Rotation2d())));
+            put("Pickup Right Piece", new DriveDistance(new Pose2d(NOTE_POSITIONS[2], new Rotation2d())));
+            // put("Score - Subwoofer-Left");
+            // put("Score - Subwoofer-Center");
+            // put("Score - Subwoofer-Right");
+            // put("Score - Amp");
+        }};
     }
 }

@@ -5,6 +5,7 @@ package com.koibots.robot;
 
 import static com.koibots.robot.subsystems.Subsystems.*;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -47,6 +48,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData(Intake.get());
         SmartDashboard.putData(Indexer.get());
         SmartDashboard.putData(Shooter.get());
+        SmartDashboard.putData("Swerve Subsystem", Swerve.get());
     }
 
     @Override
@@ -55,7 +57,11 @@ public class Robot extends LoggedRobot {
     }
 
     @Override
-    public void autonomousInit() {}
+    public void autonomousInit() {
+        if (robotContainer.getAutonomousRoutine() != null) {
+            robotContainer.getAutonomousRoutine().schedule();
+        }
+    }
 
     @Override
     public void autonomousPeriodic() {}

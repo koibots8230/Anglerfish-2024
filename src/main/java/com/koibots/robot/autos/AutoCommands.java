@@ -6,11 +6,9 @@ package com.koibots.robot.autos;
 import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
 import com.choreo.lib.Choreo;
-import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.SetpointConstants;
 import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Scoring.Shoot;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -127,7 +125,10 @@ public enum AutoCommands {
             new Shoot(
                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
-                    false));
+                    false)),
+    CalibX(followChoreoTrajectory("x_calibration")),
+    CalibY(followChoreoTrajectory("y_calibration")),
+    CalibTheta(followChoreoTrajectory("theta_calibration"));
 
     public final Supplier<Command> command;
 
@@ -139,18 +140,9 @@ public enum AutoCommands {
         return Choreo.choreoSwerveCommand(
                 Choreo.getTrajectory(trajectory),
                 Swerve.get()::getEstimatedPose,
-                new PIDController(
-                        ControlConstants.VX_CONTROLLER.kP,
-                        ControlConstants.VX_CONTROLLER.kI,
-                        ControlConstants.VX_CONTROLLER.kD),
-                new PIDController(
-                        ControlConstants.VY_CONTROLLER.kP,
-                        ControlConstants.VY_CONTROLLER.kI,
-                        ControlConstants.VY_CONTROLLER.kD),
-                new PIDController(
-                        ControlConstants.VTHETA_CONTROLLER.kP,
-                        ControlConstants.VTHETA_CONTROLLER.kI,
-                        ControlConstants.VTHETA_CONTROLLER.kD),
+                Swerve.get().xController,
+                Swerve.get().yController,
+                Swerve.get().thetaController,
                 Swerve.get()::driveRobotRelative,
                 () -> {
                     var alliance = DriverStation.getAlliance();

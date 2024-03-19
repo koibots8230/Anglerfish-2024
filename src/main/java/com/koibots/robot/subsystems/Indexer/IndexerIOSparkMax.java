@@ -49,6 +49,7 @@ public class IndexerIOSparkMax implements IndexerIO {
         inputs.velocity = encoder.getVelocity();
         inputs.voltage = Volts.of(motor.getBusVoltage()).times(motor.getAppliedOutput());
         inputs.current = Amps.of(motor.getOutputCurrent());
+        inputs.sensor = !proximititySwitch.get();
     }
 
     public void setVoltage(Measure<Voltage> volts) {

@@ -66,11 +66,11 @@ public class EightBitDo {
     }
 
     public double getRightY() {
-        return controller.getRawAxis(4);
+        return controller.getRawAxis(5);
     }
 
     public double getRightX() {
-        return controller.getRawAxis(5);
+        return controller.getRawAxis(4);
     }
 
     public double getLeftTrigger() {
