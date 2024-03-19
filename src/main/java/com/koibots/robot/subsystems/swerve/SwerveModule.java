@@ -35,7 +35,8 @@ public class SwerveModule {
         driveFeedforward =
                 new SimpleMotorFeedforward(
                         ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
-                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv,
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ka);
         driveFeedback =
                 new PIDController(
                         ControlConstants.DRIVE_PID_CONSTANTS.kP,
@@ -94,7 +95,9 @@ public class SwerveModule {
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = optimizedSetpoint.angle;
-        speedSetpoint = optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
+        speedSetpoint =
+                optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
+        // Cosine scaling makes it so it won't drive (much) while module is turning
 
         return optimizedSetpoint;
         // } else {

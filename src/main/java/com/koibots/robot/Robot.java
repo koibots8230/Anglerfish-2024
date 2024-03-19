@@ -48,6 +48,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData(Intake.get());
         SmartDashboard.putData(Indexer.get());
         SmartDashboard.putData(Shooter.get());
+        SmartDashboard.putData("Swerve Subsystem", Swerve.get());
     }
 
     @Override
@@ -57,7 +58,6 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void autonomousInit() {
-        Swerve.get().resetOdometry(new Pose2d());
         if (robotContainer.getAutonomousRoutine() != null) {
             robotContainer.getAutonomousRoutine().schedule();
         }

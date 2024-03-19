@@ -266,10 +266,10 @@ public class Swerve extends SubsystemBase {
     public void setCross() {
         setModuleStates(
                 new SwerveModuleState[] {
-                    new SwerveModuleState(0, new Rotation2d(45)), // Rotation2d.fromDegrees(45)),
-                    new SwerveModuleState(0, new Rotation2d(-45)), // Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, new Rotation2d(-45)), // Rotation2d.fromDegrees(-45)),
-                    new SwerveModuleState(0, new Rotation2d(45)), // Rotation2d.fromDegrees(45))
+                    new SwerveModuleState(0, new Rotation2d(0)), // Rotation2d.fromDegrees(45)),
+                    new SwerveModuleState(0, new Rotation2d(0)), // Rotation2d.fromDegrees(-45)),
+                    new SwerveModuleState(0, new Rotation2d(0)), // Rotation2d.fromDegrees(-45)),
+                    new SwerveModuleState(0, new Rotation2d(0)), // Rotation2d.fromDegrees(45))
                 });
     }
 

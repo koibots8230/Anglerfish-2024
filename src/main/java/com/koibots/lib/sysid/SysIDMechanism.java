@@ -4,5 +4,6 @@
 package com.koibots.lib.sysid;
 
 public enum SysIDMechanism {
-    Swerve
+    Drive,
+    Turn
 }
