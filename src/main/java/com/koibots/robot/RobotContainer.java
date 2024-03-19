@@ -159,36 +159,29 @@ public class RobotContainer {
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
+
         LEDs.get()
                 .setDefaultCommand(
                         new ConditionalCommand(
                                 new InstantCommand(
-                                        () -> LEDs.get().writeSPI(
-                                                new byte[] { 0x00 }),
-                                        LEDs.get()),
+                                        () -> LEDs.get().send_to_rp2040(1), LEDs.get()),
                                 new ConditionalCommand(
                                         new InstantCommand(
-                                                () -> LEDs.get().writeSPI(
-                                                        new byte[] { 0x01 }),
-                                                LEDs.get()),
+                                                () -> LEDs.get().send_to_rp2040(2), LEDs.get()),
                                         new ConditionalCommand(
                                                 new InstantCommand(
-                                                        () -> LEDs.get().writeSPI(
-                                                                new byte[] { 0x10 }),
-                                                        LEDs.get()),
+                                                        () -> LEDs.get().send_to_rp2040(3), LEDs.get()),
 
                                                 new ConditionalCommand(
                                                         new InstantCommand(
-                                                                () -> LEDs.get().writeSPI(
-                                                                        new byte[] { 0x11 }),
-                                                                LEDs.get()),
+                                                                () -> LEDs.get().send_to_rp2040(4), LEDs.get()),
                                                         new InstantCommand(),
                                                         () -> operatorPad.getRawButton(
-                                                                3)),
+                                                                4)),
                                                 () -> operatorPad.getRawButton(
-                                                        2)),
-                                        () -> operatorPad.getRawButton(1)),
-                                () -> operatorPad.getRawButton(0)));
+                                                        3)),
+                                        () -> operatorPad.getRawButton(2)),
+                                () -> operatorPad.getRawButton(1)));
 
     }
 
