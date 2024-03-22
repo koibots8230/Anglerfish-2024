@@ -59,7 +59,7 @@ public class Shooter extends SubsystemBase {
                 Volts.of(
                         Math.min(
                                 Math.max(
-                                        3 * topBangBang.calculate(
+                                        12 * topBangBang.calculate(
                                                     inputs.topVelocity,
                                                     topSetpoint.in(RPM))
                                         + (0.9 * topFeedforward.calculate(
@@ -68,7 +68,7 @@ public class Shooter extends SubsystemBase {
                 Volts.of(
                         Math.min(
                                 Math.max(
-                                        3 * bottomBangBang.calculate(
+                                        12 * bottomBangBang.calculate(
                                                     inputs.bottomVelocity,
                                                     bottomSetpoint.in(RPM))
                                                 + (0.9 * bottomFeedForward.calculate(

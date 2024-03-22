@@ -14,6 +14,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
       "/SmartDashboard/Auto Mode Chooser": "String Chooser",
+      "/SmartDashboard/Autos": "String Chooser",
       "/SmartDashboard/Command Scheduler": "Scheduler",
       "/SmartDashboard/Controller Chooser": "String Chooser",
       "/SmartDashboard/Drive PID 0": "ProfiledPIDController",
@@ -22,7 +23,9 @@
       "/SmartDashboard/Drive PID 3": "ProfiledPIDController",
       "/SmartDashboard/Elevator Sim": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Indexer": "Subsystem",
       "/SmartDashboard/Indexer/PID": "PIDController",
+      "/SmartDashboard/Intake": "Subsystem",
       "/SmartDashboard/Module 0": "String Chooser",
       "/SmartDashboard/Module 1": "String Chooser",
       "/SmartDashboard/Module 2": "String Chooser",
@@ -30,8 +33,10 @@
       "/SmartDashboard/Scaling Algorithm": "String Chooser",
       "/SmartDashboard/Scheduler": "Scheduler",
       "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/Shooter": "Subsystem",
       "/SmartDashboard/Shooter/Left PID": "PIDController",
       "/SmartDashboard/Shooter/Right PID": "PIDController",
+      "/SmartDashboard/Starting Pos": "String Chooser",
       "/SmartDashboard/Swerve/Drive PID 0": "PIDController",
       "/SmartDashboard/Swerve/Drive PID 1": "PIDController",
       "/SmartDashboard/Swerve/Drive PID 2": "PIDController",
@@ -42,10 +47,13 @@
       "/SmartDashboard/Swerve/Turn PID 3": "PIDController",
       "/SmartDashboard/SysId Mechanism Chooser": "String Chooser",
       "/SmartDashboard/SysId Routine Chooser": "String Chooser",
+      "/SmartDashboard/Theta Controller": "PIDController",
       "/SmartDashboard/Turn PID 0": "ProfiledPIDController",
       "/SmartDashboard/Turn PID 1": "ProfiledPIDController",
       "/SmartDashboard/Turn PID 2": "ProfiledPIDController",
-      "/SmartDashboard/Turn PID 3": "ProfiledPIDController"
+      "/SmartDashboard/Turn PID 3": "ProfiledPIDController",
+      "/SmartDashboard/X Controller": "PIDController",
+      "/SmartDashboard/Y Controller": "PIDController"
     }
   },
   "NetworkTables": {

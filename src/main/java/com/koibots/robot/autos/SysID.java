@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.lib.sysid.SysIDMechanism;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import java.util.function.BooleanSupplier;
 import org.littletonrobotics.junction.Logger;

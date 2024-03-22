@@ -25,12 +25,7 @@ public class FeedforwardConstantsIO {
     }
 
     public FeedforwardConstantsIO(
-            double realKs,
-            double realKv,
-            double realKa,
-            double simKs,
-            double simKv,
-            double simKa) {
+            double realKs, double realKv, double realKa, double simKs, double simKv, double simKa) {
         if (Robot.isReal()) {
             this.ks = realKs;
             this.kv = realKv;

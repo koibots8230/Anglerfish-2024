@@ -3,7 +3,6 @@
 
 package com.koibots.robot.subsystems.intake;
 
-import static com.koibots.robot.subsystems.Subsystems.Swerve;
 import static edu.wpi.first.units.Units.*;
 
 import com.koibots.robot.Constants;
@@ -50,17 +49,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
-        double robotSpeed = Swerve.get().getModuleStates()[0].speedMetersPerSecond * 60;
-        double targetDistancePerMinute =
-                velocity.in(RPM) * Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters);
-        double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
+        // double robotSpeed = Swerve.get().getModuleStates()[0].speedMetersPerSecond * 60;
+        // double targetDistancePerMinute =
+        //         velocity.in(RPM) *
+        // Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(Meters);
+        // double trueDistancePerMinute = targetDistancePerMinute - robotSpeed;
 
-        setpoint =
-                RPM.of(
-                        (trueDistancePerMinute
-                                        / Constants.RobotConstants.INTAKE_WHEELS.circumfrence.in(
-                                                Meters))
-                                * inverted);
+        setpoint = velocity;
     }
 
     public void invert() {
