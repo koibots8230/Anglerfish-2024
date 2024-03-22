@@ -111,6 +111,7 @@ public class DriveDistance extends Command {
                 angleAlignmentController.calculate(
                         Swerve.get().getGyroAngle().getRadians(),
                         endGoal.getRotation().getRadians());
+                    
         ChassisSpeeds speeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(
                         angle.getCos() * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),

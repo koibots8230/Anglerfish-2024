@@ -48,12 +48,12 @@ public class FieldOrientedDrive extends Command {
 
         angleAlignmentController =
                 new ProfiledPIDController(
-                        3.4,
+                        1.7,
                         0,
                         0,
                         new Constraints(
                                 RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                4 * Math.PI),
+                                3 * Math.PI),
                         0.02);
         angleAlignmentController.setTolerance(0.005);
 

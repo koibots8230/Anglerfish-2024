@@ -34,7 +34,7 @@ import java.util.List;
 
 public class RobotContainer {
     static EightBitDo driveController = new EightBitDo(0);
-    static GenericHID operatorPad = new GenericHID(1);
+    //static GenericHID operatorPad = new GenericHID(1);
 
     List<SendableChooser<Boolean>> modulesEnabled = new ArrayList<>();
 
@@ -103,56 +103,56 @@ public class RobotContainer {
         Trigger zero = new Trigger(() -> driveController.getA());
         zero.onTrue(new InstantCommand(() -> Swerve.get().zeroGyro()));
 
-        Trigger intake = new Trigger(() -> operatorPad.getRawButton(7));
-        intake.onTrue(new IntakeCommand(false));
-        intake.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        // Trigger intake = new Trigger(() -> operatorPad.getRawButton(7));
+        // intake.onTrue(new IntakeCommand(false));
+        // intake.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
 
-        Trigger shoot = new Trigger(() -> operatorPad.getRawButton(2));
-        shoot.onTrue(
-                new SpinUpShooter(
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1)));
-        shoot.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
-                                Shooter.get())));
+        // Trigger shoot = new Trigger(() -> operatorPad.getRawButton(2));
+        // shoot.onTrue(
+        //         new SpinUpShooter(
+        //                 SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
+        //                 SetpointConstants.SHOOTER_SPEEDS.get(0).get(1)));
+        // shoot.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
+        //                         Shooter.get())));
 
-        Trigger shootAmp = new Trigger(() -> operatorPad.getRawButton(3));
-        shootAmp.onTrue(
-                new SpinUpShooter(
-                        SetpointConstants.SHOOTER_SPEEDS.get(1).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(1).get(1)));
-        shootAmp.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
-                                Shooter.get())));
+        // Trigger shootAmp = new Trigger(() -> operatorPad.getRawButton(3));
+        // shootAmp.onTrue(
+        //         new SpinUpShooter(
+        //                 SetpointConstants.SHOOTER_SPEEDS.get(1).get(0),
+        //                 SetpointConstants.SHOOTER_SPEEDS.get(1).get(1)));
+        // shootAmp.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
+        //                         Shooter.get())));
 
-        Trigger feedNote = new Trigger(() -> operatorPad.getRawButton(5));
-        feedNote.onTrue(new FeedNote());
-        feedNote.onFalse(
-                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()));
+        // Trigger feedNote = new Trigger(() -> operatorPad.getRawButton(5));
+        // feedNote.onTrue(new FeedNote());
+        // feedNote.onFalse(
+        //         new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()));
 
-        Trigger intakeShooter = new Trigger(() -> operatorPad.getRawButton(11));
-        intakeShooter.onTrue(
-                new ParallelRaceGroup(
-                        new StartEndCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(-800), RPM.of(-602)),
-                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
-                                Shooter.get()),
-                        new IntakeShooter()));
-        intakeShooter.onFalse(
-                new ParallelCommandGroup(
-                        new InstantCommand(
-                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
-                                Shooter.get()),
-                        new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+        // Trigger intakeShooter = new Trigger(() -> operatorPad.getRawButton(11));
+        // intakeShooter.onTrue(
+        //         new ParallelRaceGroup(
+        //                 new StartEndCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(-800), RPM.of(-602)),
+        //                         () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
+        //                         Shooter.get()),
+        //                 new IntakeShooter()));
+        // intakeShooter.onFalse(
+        //         new ParallelCommandGroup(
+        //                 new InstantCommand(
+        //                         () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
+        //                         Shooter.get()),
+        //                 new InstantCommand(
+        //                         () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
     }
 
     public void configureTestBinds() {
