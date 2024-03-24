@@ -175,16 +175,16 @@ public class Constants {
     }
 
     public static final class SetpointConstants {
-        public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(500);
-        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-100);
+        public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(600);
+        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-200);
 
         public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(400);
-        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(75);
+        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(80);
 
         public enum SHOOTER_SPEEDS {
 
             SPEAKER(Arrays.asList(RPM.of(5600), RPM.of(4700))),
-            AMP(Arrays.asList(RPM.of(393), RPM.of(1179))),
+            AMP(Arrays.asList(RPM.of(388), RPM.of(1164))),
             INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
             REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400)));
 

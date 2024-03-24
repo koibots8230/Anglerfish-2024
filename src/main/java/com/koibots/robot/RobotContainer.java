@@ -8,7 +8,6 @@ import static edu.wpi.first.units.Units.*;
 
 import com.koibots.lib.controls.EightBitDo;
 import com.koibots.robot.Constants.*;
-import com.koibots.robot.autos.AutoActions;
 import com.koibots.robot.autos.JankAutos;
 import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Intake.IntakeShooter;
@@ -19,8 +18,6 @@ import com.koibots.robot.commands.Swerve.TestDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -49,8 +46,10 @@ public class RobotContainer {
     public RobotContainer() {
 
         if (AutoConstants.IS_RED) {
-            AutoConstants.STARTING_POSITIONS.replace("Subwoofer - Left", new Pose2d(0.668, 4.39, new Rotation2d(Math.PI / 3)));
-            AutoConstants.STARTING_POSITIONS.replace("Subwoofer - Right", new Pose2d(0.668, 6.72, new Rotation2d(-Math.PI / 3)));
+            AutoConstants.STARTING_POSITIONS.replace(
+                    "Subwoofer - Left", new Pose2d(0.668, 4.39, new Rotation2d(Math.PI / 3)));
+            AutoConstants.STARTING_POSITIONS.replace(
+                    "Subwoofer - Right", new Pose2d(0.668, 6.72, new Rotation2d(-Math.PI / 3)));
 
             Pose2d temp = AutoConstants.SCORING_POSITIONS[0];
             AutoConstants.SCORING_POSITIONS[0] = AutoConstants.SCORING_POSITIONS[2];
@@ -124,10 +123,10 @@ public class RobotContainer {
         intake.onTrue(new IntakeCommand(false));
         intake.onFalse(
                 new ParallelCommandGroup(
-                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)),
-        Intake.get()),
+                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
                         new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                        new InstantCommand(() -> RobotContainer.rumbleController(0))));
 
         Trigger spinUpSpeaker = new Trigger(() -> operatorPad.getRawButton(6));
         spinUpSpeaker.onTrue(
@@ -160,10 +159,15 @@ public class RobotContainer {
         intakeShooter.onTrue(
                 new ParallelRaceGroup(
                         new StartEndCommand(
-                                () -> Shooter.get().setVelocity(
-                                    SetpointConstants.SHOOTER_SPEEDS.INTAKE.topSpeed,
-                                    SetpointConstants.SHOOTER_SPEEDS.INTAKE.bottomSpeed
-                                ),
+                                () ->
+                                        Shooter.get()
+                                                .setVelocity(
+                                                        SetpointConstants.SHOOTER_SPEEDS
+                                                                .INTAKE
+                                                                .topSpeed,
+                                                        SetpointConstants.SHOOTER_SPEEDS
+                                                                .INTAKE
+                                                                .bottomSpeed),
                                 () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
                                 Shooter.get()),
                         new IntakeShooter()));
@@ -173,27 +177,44 @@ public class RobotContainer {
                                 () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
                                 Shooter.get()),
                         new InstantCommand(
-                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())));
+                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                                new InstantCommand(() -> RobotContainer.rumbleController(0))));
 
         Trigger reverse = new Trigger(() -> operatorPad.getRawButton(3));
         reverse.onTrue(
-            new ParallelCommandGroup(
-                new InstantCommand(() -> Intake.get().setVelocity(SetpointConstants.INTAKE_REVERSE_SPEED), Intake.get()),
-                new InstantCommand(() -> Indexer.get().setVelocity(SetpointConstants.INTAKE_INDEXER_SPEED.times(-1)), Indexer.get()),
-                new InstantCommand(() -> Shooter.get().setVelocity(
-                    SetpointConstants.SHOOTER_SPEEDS.REVERSE.topSpeed,
-                    SetpointConstants.SHOOTER_SPEEDS.REVERSE.topSpeed), Shooter.get())
-            )
-        );
+                new ParallelCommandGroup(
+                        new InstantCommand(
+                                () ->
+                                        Intake.get()
+                                                .setVelocity(
+                                                        SetpointConstants.INTAKE_REVERSE_SPEED),
+                                Intake.get()),
+                        new InstantCommand(
+                                () ->
+                                        Indexer.get()
+                                                .setVelocity(
+                                                        SetpointConstants.INTAKE_INDEXER_SPEED
+                                                                .times(-1)),
+                                Indexer.get()),
+                        new InstantCommand(
+                                () ->
+                                        Shooter.get()
+                                                .setVelocity(
+                                                        SetpointConstants.SHOOTER_SPEEDS
+                                                                .REVERSE
+                                                                .topSpeed,
+                                                        SetpointConstants.SHOOTER_SPEEDS
+                                                                .REVERSE
+                                                                .topSpeed),
+                                Shooter.get())));
         reverse.onFalse(
-            new ParallelCommandGroup(
-                new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
-                new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
-                new InstantCommand(() -> Shooter.get().setVelocity(
-                    RPM.of(0),
-                    RPM.of(0)), Shooter.get())
-            )
-        );
+                new ParallelCommandGroup(
+                        new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
+                        new InstantCommand(
+                                () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
+                        new InstantCommand(
+                                () -> Shooter.get().setVelocity(RPM.of(0), RPM.of(0)),
+                                Shooter.get())));
     }
 
     public void configureTestBinds() {

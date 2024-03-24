@@ -11,12 +11,9 @@ import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
@@ -83,7 +80,8 @@ public class FieldOrientedDrive extends Command {
                         angleAlignmentController.calculate(
                                 Swerve.get().getEstimatedPose().getRotation().getRadians(),
                                 Math.toRadians(angleSupplier.getAsDouble()));
-                System.out.println("Alignment Setpoint " + Math.toRadians(angleSupplier.getAsDouble()));
+                System.out.println(
+                        "Alignment Setpoint " + Math.toRadians(angleSupplier.getAsDouble()));
 
                 Logger.recordOutput(
                         "Angle Alignment Setpoint",

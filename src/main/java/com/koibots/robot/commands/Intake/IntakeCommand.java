@@ -62,8 +62,7 @@ public class IntakeCommand extends SequentialCommandGroup {
                             new InstantCommand(() -> System.out.println("Rumble Rumble")),
                             new InstantCommand(() -> RobotContainer.rumbleController(0.5)),
                             new WaitCommand(0.4),
-                            new InstantCommand(() -> RobotContainer.rumbleController(0))
-                    ));
+                            new InstantCommand(() -> RobotContainer.rumbleController(0))));
         }
     }
 }

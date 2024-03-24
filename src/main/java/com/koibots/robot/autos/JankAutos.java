@@ -9,8 +9,22 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class JankAutos {
 
+    public Command SP_GetTheHellOuttaThere() {
+        return new SequentialCommandGroup(
+            AutoActions.SP(),
+            new GetTheHellOutOfThere()
+        );
+    }
+
+    public Command SP() {
+        return AutoActions.SP();
+    }
     public Command SP_LS() {
         return new SequentialCommandGroup(AutoActions.SP(), AutoActions.LS());
+    }
+
+    public Command LS() {
+        return AutoActions.LS();
     }
 
     public Command SP_PC_SC() { // center
@@ -87,7 +101,16 @@ public class JankAutos {
                 AutoActions.SC());
     }
 
-    public Command SP_W_PL_SC_PC_SC() { //wait, left, center
+    public Command SP_PC_SC_PL_SC() { // left, center
+        return new SequentialCommandGroup(
+                AutoActions.SP(),
+                AutoActions.PL(),
+                AutoActions.SC(),
+                AutoActions.PC(),
+                AutoActions.SC());
+    }
+
+    public Command SP_W_PL_SC_PC_SC() { // wait, left, center
         return new SequentialCommandGroup(
                 AutoActions.SP(),
                 new WaitCommand(4),
@@ -145,7 +168,7 @@ public class JankAutos {
     // ================================== 4 Piece ==================================
 
     public Command
-            SP_PL_SC_PC_SC_PR_SR() { // get + shoot all of the ground notes from left to right
+            SP_PL_SC_PC_SC_PR_SC() { // get + shoot all of the ground notes from left to right
         return new SequentialCommandGroup(
                 AutoActions.SP(),
                 AutoActions.PL(),
@@ -153,11 +176,11 @@ public class JankAutos {
                 AutoActions.PC(),
                 AutoActions.SC(),
                 AutoActions.PR(),
-                AutoActions.SR());
+                AutoActions.SC());
     }
 
     public Command
-            SP_PR_SC_PC_SC_PL_SL() { // get + shoot all of the ground notes from right to left
+            SP_PR_SC_PC_SC_PL_SC() { // get + shoot all of the ground notes from right to left
         return new SequentialCommandGroup(
                 AutoActions.SP(),
                 AutoActions.PR(),
@@ -165,7 +188,7 @@ public class JankAutos {
                 AutoActions.PC(),
                 AutoActions.SC(),
                 AutoActions.PL(),
-                AutoActions.SL());
+                AutoActions.SC());
     }
 
     public Command SA_PL_SA_PC_SC_PR_SC() { // fully amp & score 2 speaker

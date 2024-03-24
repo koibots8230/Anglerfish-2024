@@ -6,16 +6,11 @@ package com.koibots.robot;
 import static com.koibots.robot.subsystems.Subsystems.*;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import org.littletonrobotics.junction.LoggedRobot;
@@ -23,8 +18,6 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
-
-import com.koibots.robot.Constants.AutoConstants;
 
 public class Robot extends LoggedRobot {
     private RobotContainer robotContainer;

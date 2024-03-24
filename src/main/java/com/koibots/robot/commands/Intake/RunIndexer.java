@@ -6,7 +6,6 @@ package com.koibots.robot.commands.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Indexer;
 import static edu.wpi.first.units.Units.RPM;
 
-import com.koibots.robot.RobotContainer;
 import com.koibots.robot.Constants.SetpointConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 
