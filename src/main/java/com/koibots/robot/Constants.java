@@ -68,7 +68,7 @@ public class Constants {
         public static final Measure<Time> CAN_TIMEOUT =
                 Milliseconds.of(
                         20); // Default value, but if CAN utilization gets too high, pop it to 0, or
-        // bump it up
+        // bump it up+
 
         public static final MotorConstantsIO INTAKE =
                 new MotorConstantsIO(false, 60, IdleMode.kCoast);
@@ -100,6 +100,9 @@ public class Constants {
                 new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 0, 2.75);
 
         public static final double DEADBAND = 0.025;
+
+        public static final PIDConstantsIO ANGLE_ALIGNMENT_PID_CONSTANTS =
+                new PIDConstantsIO(0.925, 0, 0, 3.5, 0, 0);
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS =
                 new SwerveDriveKinematics(
@@ -168,19 +171,31 @@ public class Constants {
                                 REPLANNING_ERROR_THRESHOLD.in(Meters),
                                 REPLANNING_ERROR_SPIKE_THRESHOLD.in(Meters)));
 
-        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(5);
+        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(10);
     }
 
     public static final class SetpointConstants {
         public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(500);
+        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-100);
 
         public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(400);
         public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(75);
 
-        public static final List<List<Measure<Velocity<Angle>>>> SHOOTER_SPEEDS =
-                Arrays.asList(
-                        Arrays.asList(RPM.of(5600), RPM.of(4600)),
-                        Arrays.asList(RPM.of(390), RPM.of(1170)));
+        public enum SHOOTER_SPEEDS {
+
+            SPEAKER(Arrays.asList(RPM.of(5600), RPM.of(4700))),
+            AMP(Arrays.asList(RPM.of(393), RPM.of(1179))),
+            INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
+            REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400)));
+
+            public final Measure<Velocity<Angle>> topSpeed;
+            public final Measure<Velocity<Angle>> bottomSpeed;
+
+            SHOOTER_SPEEDS(List<Measure<Velocity<Angle>>> speeds) {
+                this.topSpeed = speeds.get(0);
+                this.bottomSpeed = speeds.get(1);
+            }
+        }
     }
 
     public static final class RobotConstants {
@@ -192,7 +207,7 @@ public class Constants {
         private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(2.5);
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4.125);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
                 RadiansPerSecond.of(2 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
@@ -240,19 +255,29 @@ public class Constants {
     }
 
     public static class AutoConstants {
-        public static final Hashtable<String, Pose2d> STARTING_POSITIONS =
+        public static Hashtable<String, Pose2d> STARTING_POSITIONS =
                 new Hashtable<>() {
                     {
-                        put("Subwoofer - Left", new Pose2d(0.588, 6.77, new Rotation2d(PI / 3)));
+                        put("Subwoofer - Left", new Pose2d(0.668, 6.72, new Rotation2d(PI / 3)));
                         put("Subwoofer - Front", new Pose2d(1.374775, 5.553456, new Rotation2d()));
-                        put("Subwoofer - Right", new Pose2d(0.588, 4.32, new Rotation2d(-PI / 3)));
+                        put("Subwoofer - Right", new Pose2d(0.668, 4.39, new Rotation2d(-PI / 3)));
                     }
                 };
 
-        public static final Translation2d[] NOTE_POSITIONS = {
+        public static Pose2d[] SCORING_POSITIONS = {
+            new Pose2d(0.668, 6.72, new Rotation2d(PI / 3)),
+            new Pose2d(1.374775, 5.553456, new Rotation2d()),
+            new Pose2d(0.668, 4.39, new Rotation2d(-PI / 3))
+        };
+
+        public static Translation2d[] NOTE_POSITIONS = {
             new Translation2d(2.8956, 7.001256),
             new Translation2d(2.8956, 5.553456),
             new Translation2d(2.8956, 4.105656)
         };
+
+        public static final Measure<Distance> REPLANNING_THRESHOLD = Inches.of(6);
+
+        public static final boolean IS_RED = false;
     }
 }

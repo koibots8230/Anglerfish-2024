@@ -5,6 +5,7 @@ package com.koibots.robot.autos;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class JankAutos {
 
@@ -50,6 +51,15 @@ public class JankAutos {
                 AutoActions.SR());
     }
 
+    public Command SP_PC_SC_PR_SC() { // center, right
+        return new SequentialCommandGroup(
+                AutoActions.SP(),
+                AutoActions.PC(),
+                AutoActions.SC(),
+                AutoActions.PR(),
+                AutoActions.SC());
+    }
+
     public Command SP_PR_SC_PC_SC() { // right, center
         return new SequentialCommandGroup(
                 AutoActions.SP(),
@@ -71,6 +81,16 @@ public class JankAutos {
     public Command SP_PL_SC_PC_SC() { // left, center
         return new SequentialCommandGroup(
                 AutoActions.SP(),
+                AutoActions.PL(),
+                AutoActions.SC(),
+                AutoActions.PC(),
+                AutoActions.SC());
+    }
+
+    public Command SP_W_PL_SC_PC_SC() { //wait, left, center
+        return new SequentialCommandGroup(
+                AutoActions.SP(),
+                new WaitCommand(4),
                 AutoActions.PL(),
                 AutoActions.SC(),
                 AutoActions.PC(),

@@ -6,7 +6,14 @@ package com.koibots.robot.commands.Intake;
 import static com.koibots.robot.subsystems.Subsystems.Indexer;
 import static edu.wpi.first.units.Units.RPM;
 
+import javax.management.InstanceAlreadyExistsException;
+
+import com.koibots.robot.RobotContainer;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class IntakeShooter extends Command {
 
@@ -42,5 +49,14 @@ public class IntakeShooter extends Command {
     @Override
     public void end(boolean interrupted) {
         Indexer.get().setVelocity(RPM.of(0));
+
+        if (!interrupted) {
+            System.out.println("Rumble rumble");
+            new SequentialCommandGroup(
+                new InstantCommand(() -> RobotContainer.rumbleController(0.5)),
+                new WaitCommand(0.4),
+                new InstantCommand(() -> RobotContainer.rumbleController(0))
+            ).schedule();
+        }
     }
 }

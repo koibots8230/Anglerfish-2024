@@ -18,13 +18,13 @@ public class AutoActions {
 
     public static Command SP() {
         return new Shoot(
-                SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                SetpointConstants.SHOOTER_SPEEDS.SPEAKER.topSpeed,
+                SetpointConstants.SHOOTER_SPEEDS.SPEAKER.bottomSpeed,
                 false);
     }
 
     public static Command LS() {
-        return new DriveDistance(false);
+        return new DriveDistance(true);
     }
 
     public static Command PL() {
@@ -53,28 +53,28 @@ public class AutoActions {
 
     public static Command SL() {
         return new SequentialCommandGroup(
-                new DriveDistance(new Pose2d(0.588, 6.77, new Rotation2d(Math.PI / 3))),
+                new DriveDistance(AutoConstants.SCORING_POSITIONS[0]),
                 new Shoot(
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.topSpeed,
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.bottomSpeed,
                         false));
     }
 
     public static Command SC() {
         return new SequentialCommandGroup(
-                new DriveDistance(new Pose2d(1.374775, 5.553456, new Rotation2d())),
+                new DriveDistance(AutoConstants.SCORING_POSITIONS[1]),
                 new Shoot(
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.topSpeed,
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.bottomSpeed,
                         false));
     }
 
     public static Command SR() {
         return new SequentialCommandGroup(
-                new DriveDistance(AutoConstants.STARTING_POSITIONS.get("Subwoofer - Right")),
+                new DriveDistance(AutoConstants.SCORING_POSITIONS[2]),
                 new Shoot(
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.topSpeed,
+                        SetpointConstants.SHOOTER_SPEEDS.SPEAKER.bottomSpeed,
                         false));
     }
 
@@ -82,8 +82,8 @@ public class AutoActions {
         return new SequentialCommandGroup(
                 new DriveDistance(new Pose2d(1.8415, 7.7724, new Rotation2d(-Math.PI / 2))),
                 new Shoot(
-                        SetpointConstants.SHOOTER_SPEEDS.get(1).get(0),
-                        SetpointConstants.SHOOTER_SPEEDS.get(1).get(1),
+                        SetpointConstants.SHOOTER_SPEEDS.AMP.topSpeed,
+                        SetpointConstants.SHOOTER_SPEEDS.AMP.bottomSpeed,
                         false));
     }
 }

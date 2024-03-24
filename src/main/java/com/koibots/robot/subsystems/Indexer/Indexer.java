@@ -77,6 +77,7 @@ public class Indexer extends SubsystemBase {
     }
 
     public boolean sensorTriggered() {
-        return io.sensorTriggered() && sensorEnabled;
+        SmartDashboard.putBoolean("Note Detected", io.sensorTriggered());
+        return io.sensorTriggered();
     }
 }

@@ -9,12 +9,15 @@ import static edu.wpi.first.units.Units.*;
 import com.koibots.robot.Constants.AutoConstants;
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DriveDistance extends Command {
@@ -25,7 +28,7 @@ public class DriveDistance extends Command {
     private boolean leaving = false;
     private int note = 100;
 
-    private final ProfiledPIDController angleAlignmentController;
+    private final PIDController angleAlignmentController;
 
     public DriveDistance(Pose2d goal) {
         leaving = false;
@@ -36,14 +39,14 @@ public class DriveDistance extends Command {
         addRequirements(Swerve.get());
 
         angleAlignmentController =
-                new ProfiledPIDController(
-                        3.5,
-                        0,
-                        0,
-                        new Constraints(
-                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                4 * Math.PI),
-                        0.02);
+                new PIDController(
+                        .92,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kI,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kD);
+        SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
+
+        angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
+        angleAlignmentController.setTolerance(0.05);
     }
 
     public DriveDistance(boolean leaving) {
@@ -52,14 +55,15 @@ public class DriveDistance extends Command {
         angle = new Rotation2d();
 
         angleAlignmentController =
-                new ProfiledPIDController(
-                        3.5,
-                        0,
-                        0,
-                        new Constraints(
-                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                4 * Math.PI),
-                        0.02);
+                new PIDController(
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kP,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kI,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kD);
+
+        SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
+
+        angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
+        angleAlignmentController.setTolerance(0.05);
     }
 
     public DriveDistance(int note) {
@@ -68,14 +72,15 @@ public class DriveDistance extends Command {
         angle = new Rotation2d();
 
         angleAlignmentController =
-                new ProfiledPIDController(
-                        3,
-                        0,
-                        0,
-                        new Constraints(
-                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                4 * Math.PI),
-                        0.02);
+                new PIDController(
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kP,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kI,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kD);
+        
+        SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
+
+        angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
+        angleAlignmentController.setTolerance(0.05);
     }
 
     @Override
@@ -83,7 +88,7 @@ public class DriveDistance extends Command {
         if (leaving) {
             endGoal =
                     new Pose2d(
-                            Swerve.get().getEstimatedPose().getX() + 1.27,
+                            Swerve.get().getEstimatedPose().getX() + 1.4,
                             Swerve.get().getEstimatedPose().getY(),
                             new Rotation2d());
         } else if (note != 100) {
@@ -91,10 +96,17 @@ public class DriveDistance extends Command {
                     new Pose2d(
                             AutoConstants.NOTE_POSITIONS[note],
                             new Rotation2d(
-                                             Swerve.get().getEstimatedPose().getX()
-                                                     - AutoConstants.NOTE_POSITIONS[note].getX(),
-                                             Swerve.get().getEstimatedPose().getY()
-                                                    - AutoConstants.NOTE_POSITIONS[note].getY()).minus(new Rotation2d(Math.PI)));
+                                            Swerve.get().getEstimatedPose().getX()
+                                                    - AutoConstants.NOTE_POSITIONS[note].getX(),
+                                            Swerve.get().getEstimatedPose().getY()
+                                                    - AutoConstants.NOTE_POSITIONS[note].getY())
+                                    .minus(new Rotation2d(Math.PI)));
+            if (endGoal.getRotation().getRadians() < 0.005 && endGoal.getRotation().getRadians() > -0.005) {
+                endGoal = new Pose2d(
+                    endGoal.getTranslation(),
+                    new Rotation2d()
+                );
+            }
         }
 
         angle =
@@ -107,15 +119,37 @@ public class DriveDistance extends Command {
 
     @Override
     public void execute() {
+        // if (Math.abs( // Looks complicated, but is just distance calculation to an angle-point line https://en.wikipedia.org/wiki/Distance_from_a_point_to_a_line 
+        //                 (Math.cos(angle.getRadians() - Math.PI)
+        //                                 * (endGoal.getY() - Swerve.get().getEstimatedPose().getY()))
+        //                         - (Math.sin(angle.getRadians() - Math.PI)
+        //                                 * (endGoal.getX()
+        //                                         - Swerve.get().getEstimatedPose().getX())))
+        //         > AutoConstants.REPLANNING_THRESHOLD.in(Meters)) { 
+        //     angle =
+        //             new Rotation2d(
+        //                     endGoal.getX() - Swerve.get().getEstimatedPose().getX(),
+        //                     endGoal.getY() - Swerve.get().getEstimatedPose().getY());
+        // }
+
         double angularVelocity =
                 angleAlignmentController.calculate(
                         Swerve.get().getGyroAngle().getRadians(),
                         endGoal.getRotation().getRadians());
-                    
+
+        angularVelocity *= angularVelocity * angularVelocity;
+        
+        System.out.println("Angle Setpoint: " + endGoal.getRotation().getRadians());
+        System.out.println("Velocity Output: " + angularVelocity);
+
+        if (angularVelocity > -0.01 && angularVelocity < 0.01) {
+            angularVelocity = 0;
+        }
+
         ChassisSpeeds speeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(
-                        angle.getCos() * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
-                        angle.getSin() * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                        angle.getCos() * 3,
+                        angle.getSin() * 3,
                         angularVelocity * RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
                         Swerve.get().getEstimatedPose().getRotation());
 

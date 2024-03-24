@@ -10,6 +10,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,7 +29,7 @@ public class FieldOrientedDrive extends Command {
     DoubleSupplier angleSupplier;
     BooleanSupplier crossSupplier;
 
-    ProfiledPIDController angleAlignmentController;
+    PIDController angleAlignmentController;
 
     SlewRateLimiter vxLimiter;
     SlewRateLimiter vyLimiter;
@@ -47,19 +48,13 @@ public class FieldOrientedDrive extends Command {
         this.crossSupplier = crossSupplier;
 
         angleAlignmentController =
-                new ProfiledPIDController(
-                        1.7,
-                        0,
-                        0,
-                        new Constraints(
-                                RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
-                                3 * Math.PI),
-                        0.02);
+                new PIDController(
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kP,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kI,
+                        ControlConstants.ANGLE_ALIGNMENT_PID_CONSTANTS.kD);
         angleAlignmentController.setTolerance(0.005);
 
         angleAlignmentController.enableContinuousInput(0, 2 * Math.PI);
-
-        SmartDashboard.putData("Angle Alignment Controller", angleAlignmentController);
 
         vxLimiter = new SlewRateLimiter(1.75);
         vyLimiter = new SlewRateLimiter(1.75);
@@ -87,7 +82,8 @@ public class FieldOrientedDrive extends Command {
                 angularVelocity =
                         angleAlignmentController.calculate(
                                 Swerve.get().getEstimatedPose().getRotation().getRadians(),
-                                Math.toRadians(angleSupplier.getAsDouble()) - Math.PI);
+                                Math.toRadians(angleSupplier.getAsDouble()));
+                System.out.println("Alignment Setpoint " + Math.toRadians(angleSupplier.getAsDouble()));
 
                 Logger.recordOutput(
                         "Angle Alignment Setpoint",

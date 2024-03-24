@@ -1,7 +1,7 @@
-// // Copyright (c) 2024 FRC 8230 - The KoiBots
-// // https://github.com/koibots8230
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
 
-// package com.koibots.robot.autos;
+package com.koibots.robot.autos;
 
 // import static com.koibots.robot.subsystems.Subsystems.Swerve;
 
@@ -19,7 +19,8 @@
 //     B1_A_N1_S1(
 //             followChoreoTrajectory("B1_A_N1_S1.1"),
 //             // new ScoreAmp(),
-//             new ParallelCommandGroup(followChoreoTrajectory("B1_A_N1_S1.2"), new IntakeCommand()),
+//             new ParallelCommandGroup(followChoreoTrajectory("B1_A_N1_S1.2"), new
+// IntakeCommand()),
 //             new Shoot(
 //                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(0),
 //                     SetpointConstants.SHOOTER_SPEEDS.get(0).get(1),

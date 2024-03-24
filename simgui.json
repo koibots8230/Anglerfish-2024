@@ -12,7 +12,7 @@
       "/AdvantageKit/RealOutputs/Elevator/Mechanism": "Mechanism2d",
       "/AdvantageKit/RealOutputs/Elevator/SimMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
+      "/SmartDashboard/Angle Alignment Controller": "PIDController",
       "/SmartDashboard/Auto Mode Chooser": "String Chooser",
       "/SmartDashboard/Autos": "String Chooser",
       "/SmartDashboard/Command Scheduler": "Scheduler",

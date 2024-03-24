@@ -78,7 +78,7 @@ public class Shoot extends SequentialCommandGroup {
 
             addCommands(
                     new AutoAlign(nearestPoint, Meters.of(0)),
-                    new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(0), SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(1)),
+                    //new SpinUpShooter(SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(0), SetpointConstants.SHOOTER_SPEEDS.get(whichDistance).get(1)),
                     new ParallelRaceGroup(
                             new InstantCommand(
                                     () ->
