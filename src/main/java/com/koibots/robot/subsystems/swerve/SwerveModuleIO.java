@@ -30,6 +30,7 @@ public interface SwerveModuleIO {
         public Measure<Velocity<Angle>> turnVelocity = RadiansPerSecond.of(0);
         public Measure<Voltage> turnAppliedVoltage = Volts.of(0);
         public Measure<Current> turnCurrent = Amps.of(0);
+        public double setpoint = 0;
     }
 
     /** Updates the set of loggable inputs. */
@@ -40,10 +41,4 @@ public interface SwerveModuleIO {
 
     /** Run the turn motor at the specified voltage. */
     default void setTurnVoltage(Measure<Voltage> volts) {}
-
-    /** Enable or disable brake mode on the drive motor. */
-    default void setDriveBrakeMode(boolean enable) {}
-
-    /** Enable or disable brake mode on the turn motor. */
-    default void setTurnBrakeMode(boolean enable) {}
 }

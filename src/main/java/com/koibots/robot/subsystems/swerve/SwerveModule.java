@@ -3,11 +3,9 @@
 
 package com.koibots.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.*;
 
-import com.koibots.robot.Constants.DriveConstants;
+import com.koibots.robot.Constants.ControlConstants;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -36,41 +34,44 @@ public class SwerveModule {
 
         driveFeedforward =
                 new SimpleMotorFeedforward(
-                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
-                        DriveConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv,
+                        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ka);
         driveFeedback =
                 new PIDController(
-                        DriveConstants.DRIVE_PID_CONSTANTS.kP,
-                        DriveConstants.DRIVE_PID_CONSTANTS.kI,
-                        DriveConstants.DRIVE_PID_CONSTANTS.kD);
+                        ControlConstants.DRIVE_PID_CONSTANTS.kP,
+                        ControlConstants.DRIVE_PID_CONSTANTS.kI,
+                        ControlConstants.DRIVE_PID_CONSTANTS.kD);
         turnFeedback =
                 new PIDController(
-                        DriveConstants.TURN_PID_CONSTANTS.kP,
-                        DriveConstants.TURN_PID_CONSTANTS.kI,
-                        DriveConstants.TURN_PID_CONSTANTS.kD);
+                        ControlConstants.TURN_PID_CONSTANTS.kP,
+                        ControlConstants.TURN_PID_CONSTANTS.kI,
+                        ControlConstants.TURN_PID_CONSTANTS.kD);
+
         turnFeedback.enableContinuousInput(0, 2 * Math.PI);
 
         driveFeedback.disableContinuousInput();
 
-        SmartDashboard.putData("Drive PID " + index, driveFeedback);
-        SmartDashboard.putData("Turn PID " + index, turnFeedback);
+        SmartDashboard.putData("Swerve/Drive PID " + index, driveFeedback);
+        SmartDashboard.putData("Swerve/Turn PID " + index, turnFeedback);
 
-        setBrakeMode(true);
+        turnFeedback.setTolerance(0.00001);
     }
 
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("Drive/Module" + index, inputs);
+        inputs.setpoint = angleSetpoint.getRadians();
+        Logger.processInputs("Subsystems/Drive/Module" + index, inputs);
 
         // Run closed loop turn control
-        if (Math.abs(angleSetpoint.getDegrees() - inputs.turnPosition.getDegrees()) > 0.0001) {
-            io.setTurnVoltage(
-                    Volts.of(
-                            turnFeedback.calculate(
-                                    getAngle().getRadians(), angleSetpoint.getRadians())));
-        } else {
-            io.setTurnVoltage(Volts.of(0));
-        }
+        var turnPID = turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
+
+        var angleOutput =
+                Volts.of(turnPID + (Math.signum(turnPID) * ControlConstants.DRIVE_TURN_KS));
+        //                         + (angleSetpoint.getRadians() -
+        // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
+
+        io.setTurnVoltage(angleOutput);
 
         // Run closed loop drive control
         if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {
@@ -86,14 +87,24 @@ public class SwerveModule {
 
     /** Runs the module with the specified setpoint state. Returns the optimized state. */
     public SwerveModuleState setState(SwerveModuleState state) {
+
+        // if (MathUtil.inputModulus(getAngle().minus(state.angle).getRadians(), -Math.PI, Math.PI)
+        // >= Math.toRadians(90)) { // True if error is greater than 110 degrees TODO: Didn't work
         // Optimize state based on current angle
         var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = optimizedSetpoint.angle;
-        speedSetpoint = optimizedSetpoint.speedMetersPerSecond;
+        speedSetpoint =
+                optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
+        // Cosine scaling makes it so it won't drive (much) while module is turning
 
         return optimizedSetpoint;
+        // } else {
+        //     angleSetpoint = state.angle;
+        //     speedSetpoint = state.speedMetersPerSecond;
+        //     return state;
+        // }
     }
 
     public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
@@ -109,12 +120,6 @@ public class SwerveModule {
         // Disable closed loop control for turn and drive
         angleSetpoint = getAngle();
         speedSetpoint = 0.0;
-    }
-
-    /** Sets whether brake mode is enabled. */
-    public void setBrakeMode(boolean enabled) {
-        io.setDriveBrakeMode(enabled);
-        io.setTurnBrakeMode(enabled);
     }
 
     /** Returns the current turn angle of the module. */
