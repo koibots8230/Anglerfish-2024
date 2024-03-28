@@ -178,7 +178,7 @@ public class RobotContainer {
                                 Shooter.get()),
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
-                                new InstantCommand(() -> RobotContainer.rumbleController(0))));
+                        new InstantCommand(() -> RobotContainer.rumbleController(0))));
 
         Trigger reverse = new Trigger(() -> operatorPad.getRawButton(3));
         reverse.onTrue(

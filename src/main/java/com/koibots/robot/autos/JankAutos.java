@@ -10,15 +10,13 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 public class JankAutos {
 
     public Command SP_GetTheHellOuttaThere() {
-        return new SequentialCommandGroup(
-            AutoActions.SP(),
-            new GetTheHellOutOfThere()
-        );
+        return new SequentialCommandGroup(AutoActions.SP(), new GetTheHellOutOfThere());
     }
 
     public Command SP() {
         return AutoActions.SP();
     }
+
     public Command SP_LS() {
         return new SequentialCommandGroup(AutoActions.SP(), AutoActions.LS());
     }

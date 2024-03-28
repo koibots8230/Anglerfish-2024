@@ -11,6 +11,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.numbers.*;
@@ -20,6 +21,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.networktables.TimestampedInteger;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.IOException;
 
@@ -48,7 +51,16 @@ public class Vision extends SubsystemBase {
         try {
             layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
         } catch (IOException e) {
-            System.err.println("Could not find field layout!");
+            System.err.println("ERROR: Could not find apriltag field layout!");
+        }
+
+        if (DriverStation.getAlliance().isPresent()) {
+            if (DriverStation.getAlliance().get() == Alliance.Red) {
+                layout.setOrigin(
+                        new Pose3d(layout.getFieldLength(), 0, 0, new Rotation3d(0, 0, Math.PI)));
+            }
+        } else {
+            System.err.println("ERROR: Could not determine alliance!");
         }
     }
 
@@ -75,10 +87,8 @@ public class Vision extends SubsystemBase {
                         ? tagToCamTrans.get(0, 0)
                         : tagToCamTrans.get(0, 0) * -1);
 
-        double hypotenuse =
-                Math.sqrt(
-                        Math.pow(tagToCamTrans.get(0, 0), 2)
-                                + Math.pow(tagToCamTrans.get(0, 2), 2));
+        double hypotenuse = Math.hypot(tagToCamTrans.get(0, 0), tagToCamTrans.get(0, 2));
+
         double hypangle =
                 layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians()
                         - Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
@@ -91,9 +101,9 @@ public class Vision extends SubsystemBase {
                         new Rotation2d());
 
         hypotenuse =
-                Math.sqrt(
-                        Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getX(), 2)
-                                + Math.pow(VisionConstants.CAMERA_POSITIONS[camera].getY(), 2));
+                Math.hypot(
+                        VisionConstants.CAMERA_POSITIONS[camera].getX(),
+                        VisionConstants.CAMERA_POSITIONS[camera].getY());
 
         hypangle =
                 VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians()
