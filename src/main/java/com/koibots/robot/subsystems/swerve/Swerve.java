@@ -231,21 +231,6 @@ public class Swerve extends SubsystemBase {
         odometry.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
     }
 
-    public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
-        swerveModules[0].setVoltages(driveVolts, turnVolts);
-        swerveModules[1].setVoltages(driveVolts, turnVolts);
-        swerveModules[2].setVoltages(driveVolts, turnVolts);
-        swerveModules[3].setVoltages(driveVolts, turnVolts);
-    }
-
-    public void setDriveVoltages(Measure<Voltage> volts) {
-        setVoltages(volts, Volts.of(0));
-    }
-
-    public void setTurnVoltages(Measure<Voltage> volts) {
-        setVoltages(Volts.of(0), volts);
-    }
-
     public void setModuleStates(SwerveModuleState[] states) {
         Logger.recordOutput(
                 "SwerveStates/Setpoints",

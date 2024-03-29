@@ -120,7 +120,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     }
 
     @Override
-    public void setTurnPosition(Measure<Angle> position) {
-        turnController.setReference(position.in(Rotations), ControlType.kPosition);
+    public void setTurnPosition(Rotation2d position) {
+        turnController.setReference(position.getRadians(), ControlType.kPosition);
     }
 }

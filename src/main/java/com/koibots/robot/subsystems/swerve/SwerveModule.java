@@ -62,27 +62,6 @@ public class SwerveModule {
         io.updateInputs(inputs);
         inputs.setpoint = angleSetpoint.getRadians();
         Logger.processInputs("Subsystems/Drive/Module" + index, inputs);
-
-        // Run closed loop turn control
-        var turnPID = turnFeedback.calculate(getAngle().getRadians(), angleSetpoint.getRadians());
-
-        var angleOutput =
-                Volts.of(turnPID + (Math.signum(turnPID) * ControlConstants.DRIVE_TURN_KS));
-        //                         + (angleSetpoint.getRadians() -
-        // Math.signum(getAngle().getRadians())) * ControlConstants.DRIVE_TURN_KS);
-
-        io.setTurnVoltage(angleOutput);
-
-        // Run closed loop drive control
-        if (speedSetpoint > 0.1 || speedSetpoint < -0.1) {
-            io.setDriveVoltage(
-                    Volts.of(
-                            driveFeedback.calculate(getVelocityMetersPerSec(), speedSetpoint)
-                                    + driveFeedforward.calculate(speedSetpoint)));
-        } else {
-            // System.out.println("Zeroing voltage");
-            io.setDriveVoltage(Volts.of(0));
-        }
     }
 
     /** Runs the module with the specified setpoint state. Returns the optimized state. */
@@ -94,7 +73,7 @@ public class SwerveModule {
         var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
 
         // Update setpoints, controllers run in "periodic"
-        angleSetpoint = optimizedSetpoint.angle;
+        io.setTurnPosition(optimizedSetpoint.angle);
         speedSetpoint =
                 optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
         // Cosine scaling makes it so it won't drive (much) while module is turning
@@ -107,16 +86,9 @@ public class SwerveModule {
         // }
     }
 
-    public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
-        io.setDriveVoltage(driveVolts);
-        io.setTurnVoltage(turnVolts);
-    }
 
     /** Disables all outputs to motors. */
     public void stop() {
-        io.setTurnVoltage(Volts.of(0));
-        io.setDriveVoltage(Volts.of(0));
-
         // Disable closed loop control for turn and drive
         angleSetpoint = getAngle();
         speedSetpoint = 0.0;

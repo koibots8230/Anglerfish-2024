@@ -40,5 +40,5 @@ public interface SwerveModuleIO {
     default void setDriveVelocity(Measure<Velocity<Angle>> velocity) {}
 
     /** Run the turn motor at the specified voltage. */
-    default void setTurnPosition(Measure<Angle> position) {}
+    default void setTurnPosition(Rotation2d position) {}
 }

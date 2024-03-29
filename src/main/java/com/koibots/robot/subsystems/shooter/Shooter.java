@@ -54,41 +54,16 @@ public class Shooter extends SubsystemBase {
         inputs.topSetpoint = topSetpoint.in(RPM);
         inputs.bottomSetpoint = bottomSetpoint.in(RPM);
         Logger.processInputs("Subsystems/Shooter", inputs);
-
-        io.setVoltages(
-                Volts.of(
-                        Math.min(
-                                Math.max(
-                                        12 * topBangBang.calculate(
-                                                    inputs.topVelocity,
-                                                    topSetpoint.in(RPM))
-                                        + (0.9 * topFeedforward.calculate(
-                                                    topSetpoint.in(RPM))),
-                                        -12.0), 12)),
-                Volts.of(
-                        Math.min(
-                                Math.max(
-                                        12 * bottomBangBang.calculate(
-                                                    inputs.bottomVelocity,
-                                                    bottomSetpoint.in(RPM))
-                                                + (0.9 * bottomFeedForward.calculate(
-                                                    bottomSetpoint.in(RPM))),
-                                        -12.0), 12)));
     }
 
     public void setVelocity(
             Measure<Velocity<Angle>> topSpeed, Measure<Velocity<Angle>> bottomSpeed) {
-        topSetpoint = topSpeed.times(topInverted);
-        bottomSetpoint = bottomSpeed.times(bottomInverted);
-
+        io.setVelocity(topSpeed, bottomSpeed);
+        
         System.out.println("Top Speed - " + topSpeed.in(RPM));
         System.out.println("Bottom Speed - " + bottomSpeed.in(RPM));
         System.out.println("Top Setpoint - " + topSetpoint.in(RPM));
         System.out.println("Bottom Setpoint - " + bottomSetpoint.in(RPM));
-    }
-
-    public void setVoltage(Measure<Voltage> volts) {
-        io.setVoltages(volts, volts);
     }
 
     public boolean atSetpoint() {

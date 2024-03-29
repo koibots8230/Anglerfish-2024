@@ -85,8 +85,8 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     }
     
     @Override
-    public void setTurnPosition(Measure<Angle> position) {
-        turnSetpoint = position;
+    public void setTurnPosition(Rotation2d position) {
+        turnSetpoint = Radians.of(position.getRadians());
 
     }
 }
