@@ -5,20 +5,27 @@ package com.koibots.robot.subsystems.shooter;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.MotorConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Constants.SensorConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
+
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.CounterBase.EncodingType;
 import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
     CANSparkMax topMotor;
     CANSparkMax bottomMotor;
+    private final SparkPIDController topContoller;
+    private final SparkPIDController bottomContoller;
 
     Encoder topEncoder;
     Encoder bottomEncoder;
@@ -67,6 +74,14 @@ public class ShooterIOSparkMax implements ShooterIO {
         bottomMotor.clearFaults();
         topMotor.burnFlash();
         bottomMotor.burnFlash();
+
+        topContoller = topMotor.getPIDController();
+        bottomContoller = bottomMotor.getPIDController();
+        topContoller.setFF(ControlConstants.SHOOTER_FEEEDFORWARD.kv);
+        bottomContoller.setFF(ControlConstants.SHOOTER_FEEEDFORWARD.kv);
+        topContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
+        bottomContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
+
     }
 
     @Override
@@ -82,10 +97,8 @@ public class ShooterIOSparkMax implements ShooterIO {
                 Volts.of(bottomMotor.getBusVoltage()).times(bottomMotor.getAppliedOutput());
     }
 
-    @Override
-    public void setVoltages(Measure<Voltage> topVoltage, Measure<Voltage> bottomVoltage) {
-        // System.out.println(topVoltage.in(Volts) + ", " + bottomVoltage.in(Volts));
-        topMotor.setVoltage(-topVoltage.in(Volts));
-        bottomMotor.setVoltage(-bottomVoltage.in(Volts));
+    public void setVelocity(Measure<Velocity<Angle>> top, Measure<Velocity<Angle>> bottom) {
+        topContoller.setReference(top.in(RPM), ControlType.kVelocity);
+        bottomContoller.setReference(bottom.in(RPM),ControlType.kVelocity);
     }
 }

@@ -47,29 +47,16 @@ public class Indexer extends SubsystemBase {
         inputs.setpoint = setpoint.in(RPM);
         Logger.processInputs("Subsystems/Indexer", inputs);
 
-        io.setVoltage(
-                Volts.of(
-                        Math.max(
-                                Math.min(
-                                        (feedback.calculate(inputs.velocity, setpoint.in(RPM))
-                                                        + feedforward.calculate(setpoint.in(RPM)))
-                                                * (12.0 / 11000.0),
-                                        12.0),
-                                -12.0)));
+      
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {
-        System.out.println("Indexer: " + velocity.in(RPM));
-        setpoint = velocity.times(inverted);
+        io.setVelocity(velocity);
     }
 
     public void invert() {
         inverted *= -1;
         sensorEnabled = !sensorEnabled;
-    }
-
-    public void setVoltage(Measure<Voltage> volts) {
-        io.setVoltage(volts);
     }
 
     public void setIdleMode(boolean doBrake) {

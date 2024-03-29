@@ -5,6 +5,7 @@ package com.koibots.robot.subsystems.swerve;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.MotorConstants;
 import com.koibots.robot.Constants.RobotConstants;
@@ -13,9 +14,13 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
@@ -24,6 +29,8 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final RelativeEncoder driveEncoder;
     private final AbsoluteEncoder turnEncoder;
     private Rotation2d chassisAngularOffset;
+    private final SparkPIDController driveController;
+    private final SparkPIDController turnController;
 
     public SwerveModuleIOSparkMax(int driveId, int turnId) {
 
@@ -77,6 +84,15 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
         driveEncoder.setPosition(0.0);
         driveEncoder.setAverageDepth(SensorConstants.DRIVE_ENCODER_SAMPLING_DEPTH);
+
+        driveController = driveMotor.getPIDController();
+        turnController = turnMotor.getPIDController();
+
+        driveController.setFF(ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv);
+        driveController.setP(ControlConstants.DRIVE_PID_CONSTANTS.kP);
+        turnController.setP(ControlConstants.DRIVE_PID_CONSTANTS.kP);
+
+        turnController.setPositionPIDWrappingEnabled(true);
     }
 
     @Override
@@ -99,12 +115,12 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     }
 
     @Override
-    public void setDriveVoltage(Measure<Voltage> voltage) {
-        driveMotor.setVoltage(voltage.in(Volts));
+    public void setDriveVelocity(Measure<Velocity<Angle>> Velocity) {
+        driveController.setReference(Velocity.in(RPM), ControlType.kVelocity);
     }
 
     @Override
-    public void setTurnVoltage(Measure<Voltage> voltage) {
-        turnMotor.setVoltage(voltage.in(Volts));
+    public void setTurnPosition(Measure<Angle> position) {
+        turnController.setReference(position.in(Rotations), ControlType.kPosition);
     }
 }

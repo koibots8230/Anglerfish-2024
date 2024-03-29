@@ -10,7 +10,7 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface ShooterIO {
     @AutoLog
-    public class ShooterIOInputs {
+    class ShooterIOInputs {
         public double topVelocity = 0;
         public double bottomVelocity = 0;
 
@@ -25,5 +25,5 @@ public interface ShooterIO {
 
     void updateInputs(ShooterIOInputs inputs);
 
-    void setVoltages(Measure<Voltage> top, Measure<Voltage> bottom);
+    void setVelocity(Measure<Velocity<Angle>> top, Measure<Velocity<Angle>> bottom);
 }
