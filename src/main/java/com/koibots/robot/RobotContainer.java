@@ -80,11 +80,11 @@ public class RobotContainer {
                                                 () -> LEDs.get().send_to_rp2040(2), LEDs.get()),
                                         new ConditionalCommand(
                                                 new InstantCommand(
-                                                        () -> LEDs.get().send_to_rp2040(3), LEDs.get()),
+                                                        () -> LEDs.get().send_to_rp2040(4), LEDs.get()),
 
                                                 new ConditionalCommand(
                                                         new InstantCommand(
-                                                                () -> LEDs.get().send_to_rp2040(4), LEDs.get()),
+                                                                () -> LEDs.get().send_to_rp2040(8), LEDs.get()),
                                                         new InstantCommand(),
                                                         () -> oppController.getRawButton(
                                                                 4)),
