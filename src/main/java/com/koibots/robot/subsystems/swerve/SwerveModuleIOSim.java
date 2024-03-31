@@ -30,18 +30,22 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
     );
 
     private final PIDController turnFeedback = new PIDController(
-        ControlConstants.DRIVE_PID_CONSTANTS.kP,
-        ControlConstants.DRIVE_PID_CONSTANTS.kI,
-        ControlConstants.DRIVE_PID_CONSTANTS.kD
+        ControlConstants.TURN_PID_CONSTANTS.kP,
+        ControlConstants.TURN_PID_CONSTANTS.kI,
+        ControlConstants.TURN_PID_CONSTANTS.kD
     );
 
     private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(
-        ControlConstants.SHOOTER_FEEEDFORWARD.ks,
-        ControlConstants.SHOOTER_FEEEDFORWARD.kv
+        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.ks,
+        ControlConstants.DRIVE_FEEDFORWARD_CONSTANTS.kv
     );
     
-    private Measure<Velocity<Angle>> driveSetpoint = RPM.of(0);
+    private Measure<Velocity<Distance>> driveSetpoint = MetersPerSecond.of(0);
     private Measure<Angle> turnSetpoint = Radians.of(0);
+
+    public SwerveModuleIOSim() {
+        turnFeedback.enableContinuousInput(0, 2 * Math.PI);
+    }
 
     @Override
     public void updateInputs(SwerveModuleInputs inputs) {
@@ -58,14 +62,13 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         inputs.driveCurrent = Amps.of(driveSim.getCurrentDrawAmps());
 
         inputs.turnPosition =
-                new Rotation2d(turnSim.getAngularPositionRad() % (2 * Math.PI))
-                        .minus(Rotation2d.fromRadians(Math.PI));
+                new Rotation2d(turnSim.getAngularPositionRad());
         inputs.turnVelocity = RadiansPerSecond.of(turnSim.getAngularVelocityRadPerSec());
         inputs.turnCurrent = Amps.of(turnSim.getCurrentDrawAmps());
 
 
-        inputs.driveAppliedVoltage = Volts.of(driveFeedback.calculate(driveSim.getAngularVelocityRPM(), driveSetpoint.in(RPM)) + driveFeedforward.calculate(driveSetpoint.in(RPM)));
-        inputs.turnAppliedVoltage = Volts.of(turnFeedback.calculate(turnSim.getAngularPositionRad(), turnSetpoint.in(Radians))); 
+        inputs.driveAppliedVoltage = Volts.of(MathUtil.clamp(driveFeedback.calculate(RobotConstants.DRIVE_WHEELS.radius.in(Meters) * driveSim.getAngularVelocityRadPerSec(), driveSetpoint.in(MetersPerSecond)) + driveFeedforward.calculate(driveSetpoint.in(MetersPerSecond)), -12, 12));
+        inputs.turnAppliedVoltage = Volts.of(MathUtil.clamp(turnFeedback.calculate(turnSim.getAngularPositionRad(), turnSetpoint.in(Radians)), -12, 12)); 
 
         driveSim.setInputVoltage(
                 inputs.driveAppliedVoltage.in(Volts)
@@ -74,13 +77,11 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
         turnSim.setInputVoltage(
                 inputs.turnAppliedVoltage.in(Volts)
         );
-
-
-
     }
 
     @Override
-    public void setDriveVelocity(Measure<Velocity<Angle>> velocity) {
+    public void setDriveVelocity(Measure<Velocity<Distance>> velocity) {
+        System.out.println(velocity);
         driveSetpoint = velocity;
     }
     

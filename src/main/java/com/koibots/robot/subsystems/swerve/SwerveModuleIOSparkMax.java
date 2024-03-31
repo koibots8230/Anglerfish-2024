@@ -19,6 +19,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.units.Voltage;
@@ -93,6 +94,9 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
         turnController.setP(ControlConstants.DRIVE_PID_CONSTANTS.kP);
 
         turnController.setPositionPIDWrappingEnabled(true);
+        
+        driveController.setFeedbackDevice(driveEncoder);
+        turnController.setFeedbackDevice(turnEncoder);
     }
 
     @Override
@@ -115,8 +119,8 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     }
 
     @Override
-    public void setDriveVelocity(Measure<Velocity<Angle>> Velocity) {
-        driveController.setReference(Velocity.in(RPM), ControlType.kVelocity);
+    public void setDriveVelocity(Measure<Velocity<Distance>> Velocity) {
+        driveController.setReference(Velocity.in(MetersPerSecond), ControlType.kVelocity);
     }
 
     @Override

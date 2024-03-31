@@ -95,9 +95,9 @@ public class Constants {
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(2.078, 0, 0, 35, 0, 0);
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(5.5208e-10, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(5.5208e-10, 0, 0, 40, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 0, 2.75);
+                new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 2.65, 0);
 
         public static final double DEADBAND = 0.025;
 

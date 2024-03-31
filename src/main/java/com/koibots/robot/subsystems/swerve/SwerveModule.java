@@ -73,9 +73,11 @@ public class SwerveModule {
         var optimizedSetpoint = SwerveModuleState.optimize(state, getAngle());
 
         // Update setpoints, controllers run in "periodic"
+        angleSetpoint = optimizedSetpoint.angle;
         io.setTurnPosition(optimizedSetpoint.angle);
         speedSetpoint =
                 optimizedSetpoint.speedMetersPerSecond * Math.cos(turnFeedback.getPositionError());
+        io.setDriveVelocity(MetersPerSecond.of(speedSetpoint));
         // Cosine scaling makes it so it won't drive (much) while module is turning
 
         return optimizedSetpoint;
