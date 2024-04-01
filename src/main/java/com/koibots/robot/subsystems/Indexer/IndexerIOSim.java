@@ -13,24 +13,24 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage; 
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
+import edu.wpi.first.units.Voltage;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class IndexerIOSim implements IndexerIO {
 
-    private final FlywheelSim sim = new FlywheelSim(DCMotor.getNEO(1), 1, 1);
+    private final DCMotorSim sim = new DCMotorSim(DCMotor.getNEO(1), 1, 0.015);
 
     private Measure<Voltage> volts = Volts.of(0);
 
     private final PIDController feedback = new PIDController(
-        ControlConstants.INTAKE_FEEDBACK_CONSTANTS.kP,
-        ControlConstants.INTAKE_FEEDBACK_CONSTANTS.kI,
-        ControlConstants.INTAKE_FEEDBACK_CONSTANTS.kD
+        ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kP,
+        ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kI,
+        ControlConstants.INDEXER_FEEDBACK_CONSTANTS.kD
     );
 
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
-        ControlConstants.INTAKE_FEEDFORWARD_CONSTANTS.ks,
-        ControlConstants.INTAKE_FEEDFORWARD_CONSTANTS.kv
+        ControlConstants.INDEXER_FEEDFORWARD_CONSTANTS.ks,
+        ControlConstants.INDEXER_FEEDFORWARD_CONSTANTS.kv
     );
 
    private Measure<Velocity<Angle>> setpoint = RPM.of(0);
@@ -38,11 +38,15 @@ public class IndexerIOSim implements IndexerIO {
 
     @Override
     public void updateInputs(IndexerIOInputs inputs) {
+        sim.update(0.02);
+
         inputs.velocity = sim.getAngularVelocityRPM();
 
 
         inputs.current = Amps.of(sim.getCurrentDrawAmps());
         inputs.voltage = Volts.of(feedback.calculate(sim.getAngularVelocityRPM(), setpoint.in(RPM)) + feedforward.calculate(setpoint.in(RPM)));
+
+        inputs.setpoint = setpoint.in(RPM);
 
         sim.setInputVoltage(
             inputs.voltage.in(Volts)
@@ -56,7 +60,7 @@ public class IndexerIOSim implements IndexerIO {
     }
 
     public Measure<Velocity<Angle>> getVelocity() {
-        return RotationsPerSecond.of(sim.getAngularVelocityRPM());
+        return RPM.of(sim.getAngularVelocityRPM());
     }
 
     public Measure<Voltage> getVoltage() {

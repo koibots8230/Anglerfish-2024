@@ -69,7 +69,7 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
         inputs.driveAppliedVoltage = Volts.of(MathUtil.clamp(driveFeedback.calculate(RobotConstants.DRIVE_WHEELS.radius.in(Meters) * driveSim.getAngularVelocityRadPerSec(), driveSetpoint.in(MetersPerSecond)) + driveFeedforward.calculate(driveSetpoint.in(MetersPerSecond)), -12, 12));
         inputs.turnAppliedVoltage = Volts.of(MathUtil.clamp(turnFeedback.calculate(turnSim.getAngularPositionRad(), turnSetpoint.in(Radians)), -12, 12)); 
-
+        
         driveSim.setInputVoltage(
                 inputs.driveAppliedVoltage.in(Volts)
         );
@@ -81,7 +81,6 @@ public class SwerveModuleIOSim implements SwerveModuleIO {
 
     @Override
     public void setDriveVelocity(Measure<Velocity<Distance>> velocity) {
-        System.out.println(velocity);
         driveSetpoint = velocity;
     }
     

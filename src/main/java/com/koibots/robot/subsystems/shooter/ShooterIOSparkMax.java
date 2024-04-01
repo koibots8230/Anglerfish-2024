@@ -10,11 +10,14 @@ import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.MotorConstants;
 import com.koibots.robot.Constants.RobotConstants;
 import com.koibots.robot.Constants.SensorConstants;
+import com.koibots.robot.Constants.SetpointConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
+import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
@@ -81,7 +84,6 @@ public class ShooterIOSparkMax implements ShooterIO {
         bottomContoller.setFF(ControlConstants.SHOOTER_FEEEDFORWARD.kv);
         topContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
         bottomContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
-
     }
 
     @Override
@@ -99,6 +101,6 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     public void setVelocity(Measure<Velocity<Angle>> top, Measure<Velocity<Angle>> bottom) {
         topContoller.setReference(top.in(RPM), ControlType.kVelocity);
-        bottomContoller.setReference(bottom.in(RPM),ControlType.kVelocity);
+        bottomContoller.setReference(bottom.in(RPM), ControlType.kVelocity);
     }
 }

@@ -123,23 +123,23 @@ public class Constants {
         // =====================Shooter=====================
 
         public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0023, 0, 0);
+                new FeedforwardConstantsIO(0, 0.0023, 0, .0021);
         public static final PIDConstantsIO SHOOTER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0, 0, 0, .023, 0, 0);
 
         // =====================Intake=====================
 
         public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.01, 0, 0, .6, 0, 0);
         public static final FeedforwardConstantsIO INTAKE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 10.25, 0, 0);
+                new FeedforwardConstantsIO(0, 10.25, 0, .0022);
 
         // =====================Indexer=====================
 
         public static final PIDConstantsIO INDEXER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0, 0, 0, .36, 0, 0);
         public static final FeedforwardConstantsIO INDEXER_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 22.25, 0, 0);
+                new FeedforwardConstantsIO(0, 22.25, 0, .0021);
 
         // =====================Autos=====================
 

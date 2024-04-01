@@ -58,6 +58,9 @@ public class ShooterIOSim implements ShooterIO {
         inputs.topVoltage = Volts.of(topFeedback.calculate(simTop.getAngularVelocityRPM(), topSetpoint.in(RPM)) + topFeedforward.calculate(topSetpoint.in(RPM)));
         inputs.bottomVoltage = Volts.of(bottomFeedback.calculate(simBottom.getAngularVelocityRPM(), bottomSetpoint.in(RPM)) + bottomFeedforward.calculate(bottomSetpoint.in(RPM)));
 
+        inputs.bottomSetpoint = bottomSetpoint.in(RPM);
+        inputs.topSetpoint = topSetpoint.in(RPM);
+
         simTop.setInputVoltage(
             inputs.topVoltage.in(Volts)
         );
