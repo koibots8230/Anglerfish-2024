@@ -23,8 +23,9 @@ public interface IndexerIO {
     void updateInputs(IndexerIOInputs inputs);
 
     default void setIdle(boolean isBrake) {}
+    ;
 
-    void setVelocity(Measure<Velocity<Angle>> velocity);
+    void setVoltage(Measure<Voltage> volts);
 
     Measure<Velocity<Angle>> getVelocity();
 
@@ -33,4 +34,5 @@ public interface IndexerIO {
     default boolean sensorTriggered() {
         return false;
     }
+    ;
 }
