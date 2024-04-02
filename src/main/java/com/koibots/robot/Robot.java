@@ -22,6 +22,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.inputs.LoggedPowerDistribution;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.urcl.URCL;
 
 public class Robot extends LoggedRobot {
     private enum AutoMode {
@@ -70,39 +71,39 @@ public class Robot extends LoggedRobot {
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
 
-        autoModeChooser.addOption("Text Input", AutoMode.TextGenerated);
-        autoModeChooser.addOption("Legacy Selector", AutoMode.TextGenerated);
-        autoModeChooser.setDefaultOption("SysId", AutoMode.TextGenerated);
+        // autoModeChooser.addOption("Text Input", AutoMode.TextGenerated);
+        // autoModeChooser.addOption("Legacy Selector", AutoMode.TextGenerated);
+        // autoModeChooser.setDefaultOption("SysId", AutoMode.TextGenerated);
 
-        sysidMechanismChooser.addOption(
-                "Swerve Drive",
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> Swerve.get().setDriveVoltages(voltage),
-                        null,
-                        Swerve.get(),
-                        "Swerve Drive"));
-        sysidMechanismChooser.addOption(
-                "Elevator",
-                new SysIdRoutine.Mechanism(
-                        (voltage) -> Elevator.get().setVoltage(voltage),
-                        null,
-                        Swerve.get(),
-                        "Elevator"));
+        // sysidMechanismChooser.addOption(
+        //         "Swerve Drive",
+        //         new SysIdRoutine.Mechanism(
+        //                 (voltage) -> Swerve.get().setDriveVoltages(voltage),
+        //                 null,
+        //                 Swerve.get(),
+        //                 "Swerve Drive"));
+        // sysidMechanismChooser.addOption(
+        //         "Elevator",
+        //         new SysIdRoutine.Mechanism(
+        //                 (voltage) -> Elevator.get().setVoltage(voltage),
+        //                 null,
+        //                 Swerve.get(),
+        //                 "Elevator"));
 
-        sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
-        sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
-        sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
-        sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
+        // sysidRoutineChooser.addOption("Forward Dynamic", SysIdTest.ForwardDynamic);
+        // sysidRoutineChooser.addOption("Reverse Dynamic", SysIdTest.ReverseDynamic);
+        // sysidRoutineChooser.addOption("Forward Quasistatic", SysIdTest.ForwardQuasistatic);
+        // sysidRoutineChooser.addOption("Reverse Quasistatic", SysIdTest.ReverseQuasistatic);
 
-        SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
-        SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
-        SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
-        SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
+        // SmartDashboard.putData("Auto Mode Chooser", autoModeChooser);
+        // SmartDashboard.putData("SysId Mechanism Chooser", sysidMechanismChooser);
+        // SmartDashboard.putData("SysId Routine Chooser", sysidRoutineChooser);
+        // SmartDashboard.putData("Command Scheduler", CommandScheduler.getInstance());
 
-        Elevator.get().reset();
-        Plopper.get();
-        Shooter.get();
-        Indexer.get();
+        // Elevator.get().reset();
+        // Plopper.get();
+        // Shooter.get();
+        // Indexer.get();
     }
 
     /**
@@ -129,45 +130,45 @@ public class Robot extends LoggedRobot {
      */
     @Override
     public void autonomousInit() {
-        switch (AutoMode.SysId) {
-            case TextGenerated:
-            case Chooser:
-                break;
-            case SysId:
-                final var mechanism = sysidMechanismChooser.getSelected();
-                final var routine = sysidRoutineChooser.getSelected();
+        // switch (AutoMode.SysId) {
+        //     case TextGenerated:
+        //     case Chooser:
+        //         break;
+        //     case SysId:
+        //         final var mechanism = sysidMechanismChooser.getSelected();
+        //         final var routine = sysidRoutineChooser.getSelected();
 
-                autonomousCommand =
-                        switch (routine) {
-                            case ForwardDynamic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
-                                    .dynamic(SysIdRoutine.Direction.kForward);
-                            case ReverseDynamic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
-                                    .dynamic(SysIdRoutine.Direction.kReverse);
-                            case ForwardQuasistatic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
-                                    .quasistatic(SysIdRoutine.Direction.kForward);
-                            case ReverseQuasistatic -> new SysIdRoutine(
-                                            new SysIdRoutine.Config(), mechanism)
-                                    .quasistatic(SysIdRoutine.Direction.kReverse);
-                        };
+        //         autonomousCommand =
+        //                 switch (routine) {
+        //                     case ForwardDynamic -> new SysIdRoutine(
+        //                                     new SysIdRoutine.Config(), mechanism)
+        //                             .dynamic(SysIdRoutine.Direction.kForward);
+        //                     case ReverseDynamic -> new SysIdRoutine(
+        //                                     new SysIdRoutine.Config(), mechanism)
+        //                             .dynamic(SysIdRoutine.Direction.kReverse);
+        //                     case ForwardQuasistatic -> new SysIdRoutine(
+        //                                     new SysIdRoutine.Config(), mechanism)
+        //                             .quasistatic(SysIdRoutine.Direction.kForward);
+        //                     case ReverseQuasistatic -> new SysIdRoutine(
+        //                                     new SysIdRoutine.Config(), mechanism)
+        //                             .quasistatic(SysIdRoutine.Direction.kReverse);
+        //                 };
 
-                DriverStation.reportWarning("Set autonomous command", false);
+        //         DriverStation.reportWarning("Set autonomous command", false);
 
-                if (mechanism.m_name.equals("Swerve")) {
-                    autonomousCommand.beforeStarting(
-                            () ->
-                                    Swerve.get()
-                                            .setModuleStates(
-                                                    new SwerveModuleState[] {
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d()),
-                                                        new SwerveModuleState(0, new Rotation2d())
-                                                    }));
-                }
-        }
+                // if (mechanism.m_name.equals("Swerve")) {
+                //     autonomousCommand.beforeStarting(
+                //             () ->
+                //                     Swerve.get()
+                //                             .setModuleStates(
+                //                                     new SwerveModuleState[] {
+                //                                         new SwerveModuleState(0, new Rotation2d()),
+                //                                         new SwerveModuleState(0, new Rotation2d()),
+                //                                         new SwerveModuleState(0, new Rotation2d()),
+                //                                         new SwerveModuleState(0, new Rotation2d())
+                //                                     }));
+                // }
+        //}
 
         // Swerve.get().setBrake(true); // TODO: Add swerve set brake method
 
@@ -203,7 +204,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        Swerve.get().stop();
+        //Swerve.get().stop();
     }
 
     @Override
