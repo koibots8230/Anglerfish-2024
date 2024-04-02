@@ -18,11 +18,9 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.units.Voltage;
 
 public class SwerveModuleIOSparkMax implements SwerveModuleIO {
     private final CANSparkMax driveMotor;
@@ -85,6 +83,7 @@ public class SwerveModuleIOSparkMax implements SwerveModuleIO {
 
         driveEncoder.setPosition(0.0);
         driveEncoder.setAverageDepth(SensorConstants.DRIVE_ENCODER_SAMPLING_DEPTH);
+        driveEncoder.setMeasurementPeriod(16);
 
         driveController = driveMotor.getPIDController();
         turnController = turnMotor.getPIDController();

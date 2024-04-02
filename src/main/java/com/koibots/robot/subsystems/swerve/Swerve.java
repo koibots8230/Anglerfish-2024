@@ -3,8 +3,6 @@
 
 package com.koibots.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.RobotConstants;
@@ -17,8 +15,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

@@ -9,29 +9,24 @@ import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.MotorConstants;
 import com.koibots.robot.Constants.RobotConstants;
-import com.koibots.robot.Constants.SensorConstants;
-import com.koibots.robot.Constants.SetpointConstants;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 
-import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
-import edu.wpi.first.wpilibj.CounterBase.EncodingType;
-import edu.wpi.first.wpilibj.Encoder;
 
 public class ShooterIOSparkMax implements ShooterIO {
-    CANSparkMax topMotor;
-    CANSparkMax bottomMotor;
+    private final CANSparkMax topMotor;
+    private final CANSparkMax bottomMotor;
     private final SparkPIDController topContoller;
     private final SparkPIDController bottomContoller;
 
-    Encoder topEncoder;
-    Encoder bottomEncoder;
+    private final RelativeEncoder topEncoder;
+    private final RelativeEncoder bottomEncoder;
 
     protected ShooterIOSparkMax() {
         topMotor = new CANSparkMax(DeviceIDs.SHOOTER_TOP, CANSparkLowLevel.MotorType.kBrushless);
@@ -54,24 +49,11 @@ public class ShooterIOSparkMax implements ShooterIO {
         topMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
         bottomMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
 
-        topEncoder =
-                new Encoder(
-                        DeviceIDs.TOP_SHOOTER_ENCODER[0],
-                        DeviceIDs.TOP_SHOOTER_ENCODER[1],
-                        false,
-                        EncodingType.k1X);
-        bottomEncoder =
-                new Encoder(
-                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[0],
-                        DeviceIDs.BOTTOM_SHOOTER_ENCODER[1],
-                        true,
-                        EncodingType.k1X);
+        topEncoder = topMotor.getAlternateEncoder(8192);
+        bottomEncoder = bottomMotor.getAlternateEncoder(8192);
 
-        topEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
-        bottomEncoder.setSamplesToAverage(SensorConstants.ENCODER_SAMPLES_PER_AVERAGE);
-
-        topEncoder.setDistancePerPulse(-60.0 / 2048.0); // TODO: I did a stupid, this was ints :(
-        bottomEncoder.setDistancePerPulse(60.0 / 2048.0);
+        topEncoder.setAverageDepth(32);
+        bottomEncoder.setAverageDepth(32);
 
         topMotor.clearFaults();
         bottomMotor.clearFaults();
@@ -88,8 +70,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
     @Override
     public void updateInputs(ShooterIOInputs inputs) {
-        inputs.topVelocity = topEncoder.getRate();
-        inputs.bottomVelocity = bottomEncoder.getRate();
+        inputs.topVelocity = topEncoder.getVelocity();
+        inputs.bottomVelocity = bottomEncoder.getVelocity();
 
         inputs.topCurrent = Amps.of(topMotor.getOutputCurrent());
         inputs.bottomCurrent = Amps.of(bottomMotor.getOutputCurrent());
