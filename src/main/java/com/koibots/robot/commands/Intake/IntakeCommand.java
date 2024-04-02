@@ -3,8 +3,7 @@
 
 package com.koibots.robot.commands.Intake;
 
-import static com.koibots.robot.subsystems.Subsystems.Intake;
-import static com.koibots.robot.subsystems.Subsystems.Swerve;
+import static com.koibots.robot.subsystems.Subsystems.*;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
 
