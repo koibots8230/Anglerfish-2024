@@ -13,6 +13,7 @@ import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Intake.IntakeShooter;
 import com.koibots.robot.commands.Scoring.FeedNote;
 import com.koibots.robot.commands.Shooter.SpinUpShooter;
+import com.koibots.robot.commands.Swerve.AutoAlign;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
 import com.koibots.robot.commands.Swerve.TestDrive;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -127,6 +128,12 @@ public class RobotContainer {
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
                         new InstantCommand(() -> RobotContainer.rumbleController(0))));
+
+        Trigger autoAlignToAmp = new Trigger (() -> driveController.getLeftBumper());
+        autoAlignToAmp.onTrue(new AutoAlign(Constants.AlignConstants.AMP_POSITION, Meters.of(0))); //is this okay as a target pose?
+
+        Trigger autoAlignToSpeaker = new Trigger (() -> driveController.getLeftTrigger() > 0.3);
+        autoAlignToSpeaker.onTrue(new AutoAlign(Constants.AlignConstants.SPEAKER_POSITION, Meters.of(10))); //too many meters?
 
         Trigger spinUpSpeaker = new Trigger(() -> operatorPad.getRawButton(6));
         spinUpSpeaker.onTrue(
