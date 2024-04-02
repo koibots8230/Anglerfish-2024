@@ -8,179 +8,234 @@ import static java.lang.StrictMath.PI;
 
 import com.koibots.lib.geometry.Wheel;
 import com.koibots.lib.util.FeedforwardConstantsIO;
+import com.koibots.lib.util.MotorConstantsIO;
 import com.koibots.lib.util.PIDConstantsIO;
-import edu.wpi.first.math.Nat;
-import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.LinearQuadraticRegulator;
-import edu.wpi.first.math.estimator.KalmanFilter;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.ReplanningConfig;
+import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N2;
-import edu.wpi.first.math.system.LinearSystem;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Angle;
-import edu.wpi.first.units.Distance;
-import edu.wpi.first.units.Mass;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.*;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
 
 public class Constants {
-    public static class PlopperConstants {
-        public static final int MOTOR = 10;
-        public static final double ENCODER_POSITION_FACTOR = (2 * Math.PI);
-        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
-        public static final double AMP_SHOOTER_RADIANS = Math.PI / 2;
-        public static final double LOAD_SHOOTER_RADIANS = 0;
+    public static class DeviceIDs {
+        public static final int BACK_LEFT_TURN = 5;
+        public static final int BACK_LEFT_DRIVE = 4;
+        public static final int FRONT_RIGHT_DRIVE = 7;
+        public static final int FRONT_RIGHT_TURN = 8;
+        public static final int BACK_RIGHT_DRIVE = 2;
+        public static final int BACK_RIGHT_TURN = 3;
+        public static final int FRONT_LEFT_DRIVE = 6;
+        public static final int FRONT_LEFT_TURN = 1;
+        public static final int INDEXER = 9;
+        public static final int SHOOTER_TOP = 11;
+        public static final int SHOOTER_BOTTOM = 13;
+        public static final int INTAKE = 14;
+
+        public static final int INDEXER_SENSOR = 0;
+        public static final int[] TOP_SHOOTER_ENCODER = {1, 2};
+        public static final int[] BOTTOM_SHOOTER_ENCODER = {3, 4};
     }
 
-    public static final double DEADBAND = 0.025;
+    public static class SensorConstants {
+        public static final int ENCODER_SAMPLES_PER_AVERAGE = 100;
 
-    public static class DriveConstants {
-        public static final Measure<Distance> WHEEL_RADIUS = Inches.of(1.5);
-        private static final Measure<Distance> ROBOT_WIDTH_METERS = Inches.of(21.375);
-        private static final Measure<Distance> ROBOT_LENGTH_METERS = Inches.of(21.375);
+        public static final Measure<Angle> TURNING_ENCODER_POSITION_FACTOR =
+                Radians.of(2 * Math.PI);
+        public static final Measure<Velocity<Angle>> TURNING_ENCODER_VELOCITY_FACTOR =
+                RadiansPerSecond.of((2 * Math.PI) / 60.0);
 
-        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED = MetersPerSecond.of(4);
-        public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
-                RadiansPerSecond.of(2 * PI);
+        public static final Measure<Distance> DRIVING_ENCODER_POSITION_FACTOR =
+                Inches.of((1.5 * 2 * Math.PI) / RobotConstants.DRIVE_GEAR_RATIO);
+        public static final Measure<Velocity<Distance>> DRIVING_ENCODER_VELOCITY_FACTOR =
+                MetersPerSecond.of(
+                        ((RobotConstants.DRIVE_WHEELS.radius.in(Meters) * 2 * Math.PI)
+                                        / RobotConstants.DRIVE_GEAR_RATIO)
+                                / 60.0);
+
+        public static final int DRIVE_ENCODER_SAMPLING_DEPTH = 2;
+
+        public static final double SHOOTER_ALLOWED_ERROR = 0.1;
+    }
+
+    public static class MotorConstants {
+        public static final Measure<Time> CAN_TIMEOUT =
+                Milliseconds.of(
+                        20); // Default value, but if CAN utilization gets too high, pop it to 0, or
+        // bump it up+
+
+        public static final MotorConstantsIO INTAKE =
+                new MotorConstantsIO(false, 60, IdleMode.kCoast);
+
+        public static final MotorConstantsIO INDEXER =
+                new MotorConstantsIO(true, 60, IdleMode.kBrake);
+
+        public static final MotorConstantsIO TOP_SHOOTER =
+                new MotorConstantsIO(false, 60, IdleMode.kCoast);
+        public static final MotorConstantsIO BOTTOM_SHOOTER =
+                new MotorConstantsIO(false, 60, IdleMode.kCoast);
+
+        public static final MotorConstantsIO DRIVE =
+                new MotorConstantsIO(false, 60, IdleMode.kBrake);
+        public static final MotorConstantsIO TURN =
+                new MotorConstantsIO(false, 30, IdleMode.kBrake);
+    }
+
+    public static class ControlConstants {
+
+        // =====================Drive=====================
+
+        public static final double DRIVE_TURN_KS = 0.0;
+        public static final PIDConstantsIO TURN_PID_CONSTANTS =
+                new PIDConstantsIO(2.078, 0, 0, 35, 0, 0);
+        public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
+                new PIDConstantsIO(5.5208e-10, 0, 0, 28.5, 0, 0);
+        public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 0, 2.75);
+
+        public static final double DEADBAND = 0.025;
+
+        public static final PIDConstantsIO ANGLE_ALIGNMENT_PID_CONSTANTS =
+                new PIDConstantsIO(0.925, 0, 0, 3.5, 0, 0);
 
         public static final SwerveDriveKinematics SWERVE_KINEMATICS =
                 new SwerveDriveKinematics(
                         new Translation2d(
-                                ROBOT_LENGTH_METERS.divide(2),
-                                ROBOT_WIDTH_METERS.divide(2)), // Front Left
+                                RobotConstants.ROBOT_LENGTH.divide(2),
+                                RobotConstants.ROBOT_WIDTH.divide(2)), // Front Left
                         new Translation2d(
-                                ROBOT_LENGTH_METERS.divide(2),
-                                ROBOT_WIDTH_METERS.divide(-2)), // Front Right
+                                RobotConstants.ROBOT_LENGTH.divide(2),
+                                RobotConstants.ROBOT_WIDTH.divide(-2)), // Front Right
                         new Translation2d(
-                                ROBOT_LENGTH_METERS.divide(-2),
-                                ROBOT_WIDTH_METERS.divide(2)), // Back Left
+                                RobotConstants.ROBOT_LENGTH.divide(-2),
+                                RobotConstants.ROBOT_WIDTH.divide(2)), // Back Left
                         new Translation2d(
-                                ROBOT_LENGTH_METERS.divide(-2),
-                                ROBOT_WIDTH_METERS.divide(-2)) // Back Right
+                                RobotConstants.ROBOT_LENGTH.divide(-2),
+                                RobotConstants.ROBOT_WIDTH.divide(-2)) // Back Right
                         );
 
-        // TODO: make sure this correct for competition bot
-        private static final int kDrivingMotorPinionTeeth = 13;
-        private static final double kWheelDiameterMeters = Units.inchesToMeters(3);
-        public static final double kDrivingMotorReduction =
-                (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
-        public static int FRONT_LEFT_DRIVE_ID = 7;
-        public static int FRONT_LEFT_TURN_ID = 8;
-        public static int FRONT_RIGHT_DRIVE_ID = 2;
-        public static int FRONT_RIGHT_TURN_ID = 3;
-        public static int BACK_LEFT_DRIVE_ID = 6;
-        public static int BACK_LEFT_TURN_ID = 1;
-        public static int BACK_RIGHT_DRIVE_ID = 4;
-        public static int BACK_RIGHT_TURN_ID = 5;
+        // =====================Shooter=====================
 
-        public static double DRIVE_GEAR_RATIO =
-                (45.0 * 22) / (kDrivingMotorPinionTeeth * 15); // 5.07692307692
-        public static double TURN_GEAR_RATIO = (62.0 / 14) * 12; // 53.1428571429
+        public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
+                new FeedforwardConstantsIO(0, 0.0023, 0, 0);
 
-        public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(0.4, 0, 0, 28.5, 0, 0);
-        public static final PIDConstantsIO TURN_PID_CONSTANTS =
-                new PIDConstantsIO(1.9, 0, 0, 35, 0, 0);
-        public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 2, 0, 2.75);
+        // =====================Intake=====================
 
-        public static final double TURNING_ENCODER_POSITION_FACTOR = (2 * Math.PI); // radians
-        public static final double TURNING_ENCODER_VELOCITY_FACTOR =
-                (2 * Math.PI) / 60.0; // radians per second
+        public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO INTAKE_FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 10.25, 0, 0);
 
-        public static final double DRIVING_ENCODER_POSITION_FACTOR =
-                (kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction; // meters
-        public static final double DRIVING_ENCODER_VELOCITY_FACTOR =
-                ((kWheelDiameterMeters * Math.PI) / kDrivingMotorReduction)
-                        / 60.0; // meters per second
+        // =====================Indexer=====================
+
+        public static final PIDConstantsIO INDEXER_FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final FeedforwardConstantsIO INDEXER_FEEDFORWARD_CONSTANTS =
+                new FeedforwardConstantsIO(0, 22.25, 0, 0);
+
+        // =====================Autos=====================
+
+        public static final PIDConstantsIO VX_CONTROLLER = new PIDConstantsIO(1.5, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VY_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+        public static final PIDConstantsIO VTHETA_CONTROLLER = new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+
+        // =====================Auto Align=====================
+
+        public static final Measure<Distance> REPLANNING_ERROR_THRESHOLD = Meters.of(1);
+        public static final Measure<Distance> REPLANNING_ERROR_SPIKE_THRESHOLD = Meters.of(1);
+
+        public static final PathConstraints PATH_CONSTRAINTS =
+                new PathConstraints(
+                        RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                        RobotConstants.MAX_LINEAR_ACCELERATION.in(MetersPerSecondPerSecond),
+                        RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond),
+                        RobotConstants.MAX_ANGULAR_ACCELERATION.in(RadiansPerSecond.per(Second)));
+
+        public static final HolonomicPathFollowerConfig HOLONOMIC_CONFIG =
+                new HolonomicPathFollowerConfig(
+                        DRIVE_PID_CONSTANTS,
+                        TURN_PID_CONSTANTS,
+                        RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
+                        Math.sqrt(
+                                Math.pow(RobotConstants.ROBOT_LENGTH.in(Meters), 2)
+                                        + Math.pow(RobotConstants.ROBOT_WIDTH.in(Meters), 2)),
+                        new ReplanningConfig(
+                                false,
+                                true,
+                                REPLANNING_ERROR_THRESHOLD.in(Meters),
+                                REPLANNING_ERROR_SPIKE_THRESHOLD.in(Meters)));
+
+        public static final Measure<Distance> ALLOWED_AUTO_ERROR = Inches.of(10);
     }
 
-    public static class ShooterConstants {
-        public static final int shooterMotor1 = 0;
-        public static final int shooterMotor2 = 1;
+    public static final class SetpointConstants {
+        public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(600);
+        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-200);
 
-        public static final double kP = 0;
+        public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(400);
+        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(80);
 
-        public static final double kS = 0;
-        public static final double kV = 0;
+        public enum SHOOTER_SPEEDS {
+            SPEAKER(Arrays.asList(RPM.of(5600), RPM.of(4700))),
+            AMP(Arrays.asList(RPM.of(388), RPM.of(1164))),
+            INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
+            REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400)));
+
+            public final Measure<Velocity<Angle>> topSpeed;
+            public final Measure<Velocity<Angle>> bottomSpeed;
+
+            SHOOTER_SPEEDS(List<Measure<Velocity<Angle>>> speeds) {
+                this.topSpeed = speeds.get(0);
+                this.bottomSpeed = speeds.get(1);
+            }
+        }
     }
 
-    public static class ElevatorConstants {
+    public static final class RobotConstants {
+        public static final Measure<Voltage> NOMINAL_VOLTAGE = Volts.of(12);
 
-        // ===================================Motors/Encoders===================================
-        public static final int LEFT_MOTOR_PORT = 11;
-        public static final int RIGHT_MOTOR_PORT = 12;
+        public static final Wheel INTAKE_WHEELS = new Wheel(Inches.of(1.5));
 
-        public static final Measure<Distance> DISTANCE_PER_REVOLUTION = Inches.of(1.751 * Math.PI);
+        public static final Wheel DRIVE_WHEELS = new Wheel(Inches.of(1.5));
+        private static final Measure<Distance> ROBOT_WIDTH = Inches.of(21.375);
+        private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
-        // ===================================Linear System===================================
+        public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED =
+                MetersPerSecond.of(4.125);
+        public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
+                RadiansPerSecond.of(2 * PI);
+        public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =
+                MetersPerSecondPerSecond.of(4);
+        public static final Measure<Velocity<Velocity<Angle>>> MAX_ANGULAR_ACCELERATION =
+                RadiansPerSecond.of(4 * Math.PI).per(Second);
 
-        public static final double GEAR_RATIO = 25;
-        public static final Measure<Mass> MASS = Pounds.of(9.006);
-        public static final Measure<Distance> DRUM_RADIUS = Inches.of(0.8755); // TODO: Ask cad
+        private static final int DRIVING_PINION_TEETH = 13;
+        public static final double DRIVE_GEAR_RATIO = (45.0 * 22) / (DRIVING_PINION_TEETH * 15);
+        public static final double TURN_GEAR_RATIO = (62.0 / 14) * 12;
+    }
 
-        public static final LinearSystem<N2, N1, N1> LINEAR_SYS =
-                LinearSystemId.createElevatorSystem(
-                        DCMotor.getNEO(2), MASS.in(Kilograms), DRUM_RADIUS.in(Meters), GEAR_RATIO);
+    public static class AlignConstants {
+        public static final Pose2d AMP_POSITION = new Pose2d();
 
-        // ===================================Profile===================================
+        public static final Translation2d ALLOWED_DISTANCE_FROM_AMP = new Translation2d(2, 2);
 
-        public static final Measure<Velocity<Distance>> MAX_SPEED = InchesPerSecond.of(18);
-        public static final Measure<Velocity<Velocity<Distance>>> MAX_ACCELERATION =
-                MetersPerSecondPerSecond.of(Units.inchesToMeters(1));
+        public static final List<Measure<Distance>> SHOOT_DISTANCES_METERS =
+                Arrays.asList(Meters.of(4.5));
+        public static final Pose2d SPEAKER_POSITION = new Pose2d();
 
-        // ===================================Kalman Filter===================================
+        public static final Translation2d ALLOWED_DISTANCE_FROM_SHOOT = new Translation2d(2, 2);
 
-        public static final Measure<Distance> STDEV_DISTANCE = Inches.of(5); // TODO: Get
-        public static final Measure<Velocity<Distance>> STDEV_VELOCITY =
-                InchesPerSecond.of(10); // TODO: Get
-        public static final double ENCODER_STDEV = 0.0001; // TODO: Get
-
-        public static final KalmanFilter<N2, N1, N1> KALMAN_FILTER =
-                new KalmanFilter<>(
-                        Nat.N2(),
-                        Nat.N1(),
-                        LINEAR_SYS,
-                        VecBuilder.fill(
-                                STDEV_DISTANCE.in(Meters), STDEV_VELOCITY.in(MetersPerSecond)),
-                        VecBuilder.fill(ENCODER_STDEV),
-                        0.020);
-
-        // ===================================LQR===================================
-
-        public static final Measure<Distance> POSITION_ERROR_TOLERANCE =
-                Inches.of(0.0001); // TODO: Get
-        public static final Measure<Velocity<Distance>> VELOCITY_ERROR_TOLERANCE =
-                InchesPerSecond.of(.01); // TODO: Get
-        public static final double VOLTAGE_TOLERANCE = 12;
-
-        public static final LinearQuadraticRegulator<N2, N1, N1> LQR =
-                new LinearQuadraticRegulator<>(
-                        LINEAR_SYS,
-                        VecBuilder.fill(
-                                POSITION_ERROR_TOLERANCE.in(Meters),
-                                VELOCITY_ERROR_TOLERANCE.in(MetersPerSecond)),
-                        VecBuilder.fill(VOLTAGE_TOLERANCE),
-                        0.020);
-
-        // =================================== Positions ===================================
-
-        public static final Measure<Distance> AMP_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> HANDOFF_POSITION = Inches.of(0); // TODO: Get
-        public static final Measure<Distance> RESTING_POSITION = Inches.of(0); // TODO: Get
+        public static final Translation2d ALLOWED_DISTANCE_FROM_NOTE = new Translation2d(2, 2);
     }
 
     public static class VisionConstants {
-        public static final Pose2d[] CAMERA_DISTANCES_TO_CENTER_METERS = {
+        public static final Pose2d[] CAMERA_POSITIONS = {
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(0))),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(90))),
             new Pose2d(0, 0, new Rotation2d(Math.toRadians(180))),
@@ -196,32 +251,33 @@ public class Constants {
         public static final double[] VECTOR_DEFAULT_VALUE = {0, 0, 0};
         public static final int ID_DEFAULT_VALUE = 0;
 
-        public static final Measure<Distance> FIELD_WIDTH = Inches.of(323.25);
-        public static final Measure<Distance> FIELD_LENGTH = Inches.of(651.25);
         public static final Measure<Distance> MAX_MEASUREMENT_DIFFERENCE = Meters.of(1);
+    }
 
-        public static final Pose2d[] TAG_POSES_METERS = {
-            new Pose2d(1.5, .5, new Rotation2d()), new Pose2d(2, .5, new Rotation2d())
+    public static class AutoConstants {
+        public static Hashtable<String, Pose2d> STARTING_POSITIONS =
+                new Hashtable<>() {
+                    {
+                        put("Subwoofer - Left", new Pose2d(0.668, 6.72, new Rotation2d(PI / 3)));
+                        put("Subwoofer - Front", new Pose2d(1.374775, 5.553456, new Rotation2d()));
+                        put("Subwoofer - Right", new Pose2d(0.668, 4.39, new Rotation2d(-PI / 3)));
+                    }
+                };
+
+        public static Pose2d[] SCORING_POSITIONS = {
+            new Pose2d(0.668, 6.72, new Rotation2d(PI / 3)),
+            new Pose2d(1.374775, 5.553456, new Rotation2d()),
+            new Pose2d(0.668, 4.39, new Rotation2d(-PI / 3))
         };
 
-        public static final Pose2d[] CAMERA_POSITIONS = null;
-    }
+        public static Translation2d[] NOTE_POSITIONS = {
+            new Translation2d(2.8956, 7.001256),
+            new Translation2d(2.8956, 5.553456),
+            new Translation2d(2.8956, 4.105656)
+        };
 
-    public static class IntakeConstants {
-        public static final int MOTOR_PORT = 13;
-        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
-        public static final Wheel WHEELS = new Wheel(Inches.of(1.5));
-        public static final int MINIMUM_VOLTAGE = 0;
-    }
+        public static final Measure<Distance> REPLANNING_THRESHOLD = Inches.of(6);
 
-    public static class IndexerConstants {
-        public static final int MOTOR = 14;
-        public static final PIDConstantsIO FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
-        public static final FeedforwardConstantsIO FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 0, 0, 0);
+        public static final boolean IS_RED = false;
     }
 }
