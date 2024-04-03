@@ -27,12 +27,12 @@ public class ShooterIOSim implements ShooterIO {
     );
 
     private final SimpleMotorFeedforward topFeedforward = new SimpleMotorFeedforward(
-        ControlConstants.SHOOTER_FEEEDFORWARD.ks,
-        ControlConstants.SHOOTER_FEEEDFORWARD.kv
+        ControlConstants.TOP_SHOOTER_FEEEDFORWARD.ks,
+        ControlConstants.TOP_SHOOTER_FEEEDFORWARD.kv
     );
     private final SimpleMotorFeedforward bottomFeedforward = new SimpleMotorFeedforward(
-        ControlConstants.SHOOTER_FEEEDFORWARD.ks,
-        ControlConstants.SHOOTER_FEEEDFORWARD.kv
+        ControlConstants.BOTTOM_SHOOTER_FEEDFORWARD.ks,
+        ControlConstants.BOTTOM_SHOOTER_FEEDFORWARD.kv
     );
 
 

@@ -122,10 +122,12 @@ public class Constants {
 
         // =====================Shooter=====================
 
-        public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0023, 0, .0021);
+        public static final FeedforwardConstantsIO TOP_SHOOTER_FEEEDFORWARD =
+                new FeedforwardConstantsIO(0, 0.0006, 0, .0021);
+        public static final FeedforwardConstantsIO BOTTOM_SHOOTER_FEEDFORWARD =
+                new FeedforwardConstantsIO(0, 0.000048, 0, .0021);
         public static final PIDConstantsIO SHOOTER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, .023, 0, 0);
+                new PIDConstantsIO(0.00003, 0, 0, .023, 0, 0);
 
         // =====================Intake=====================
 

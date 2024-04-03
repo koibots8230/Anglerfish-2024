@@ -49,11 +49,11 @@ public class ShooterIOSparkMax implements ShooterIO {
         topMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
         bottomMotor.setCANTimeout((int) MotorConstants.CAN_TIMEOUT.in(Milliseconds));
 
-        topEncoder = topMotor.getAlternateEncoder(8192);
-        bottomEncoder = bottomMotor.getAlternateEncoder(8192);
+        topEncoder = topMotor.getEncoder();
+        bottomEncoder = bottomMotor.getEncoder();
 
-        topEncoder.setAverageDepth(32);
-        bottomEncoder.setAverageDepth(32);
+        topEncoder.setMeasurementPeriod(16);
+        bottomEncoder.setMeasurementPeriod(16);
 
         topMotor.clearFaults();
         bottomMotor.clearFaults();
@@ -62,8 +62,8 @@ public class ShooterIOSparkMax implements ShooterIO {
 
         topContoller = topMotor.getPIDController();
         bottomContoller = bottomMotor.getPIDController();
-        topContoller.setFF(ControlConstants.SHOOTER_FEEEDFORWARD.kv);
-        bottomContoller.setFF(ControlConstants.SHOOTER_FEEEDFORWARD.kv);
+        topContoller.setFF(ControlConstants.TOP_SHOOTER_FEEEDFORWARD.kv);
+        bottomContoller.setFF(ControlConstants.BOTTOM_SHOOTER_FEEDFORWARD.kv);
         topContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
         bottomContoller.setP(ControlConstants.SHOOTER_FEEDBACK_CONSTANTS.kP);
     }
