@@ -186,7 +186,7 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(600);
 
         public enum SHOOTER_SPEEDS {
-            SPEAKER(Arrays.asList(RPM.of(5000), RPM.of(5700))),
+            SPEAKER(Arrays.asList(RPM.of(2725), RPM.of(5700))),
             AMP(Arrays.asList(RPM.of(525), RPM.of(1575))),
             INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
             REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400))),

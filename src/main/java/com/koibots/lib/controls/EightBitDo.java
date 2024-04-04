@@ -14,11 +14,11 @@ public class EightBitDo {
     }
 
     public boolean getA() {
-        return controller.getRawButton(2);
+        return controller.getRawButton(1);
     }
 
     public boolean getB() {
-        return controller.getRawButton(1);
+        return controller.getRawButton(2);
     }
 
     public boolean getX() {
