@@ -57,11 +57,23 @@ public class IntakeCommand extends SequentialCommandGroup {
                                     () -> Intake.get().setVelocity(RPM.of(0)),
                                     Intake.get()),
                             new RunIndexer()),
-                    new SequentialCommandGroup(
-                            new InstantCommand(() -> System.out.println("Rumble Rumble")),
-                            new InstantCommand(() -> RobotContainer.rumbleController(0.5)),
-                            new WaitCommand(0.4),
-                            new InstantCommand(() -> RobotContainer.rumbleController(0))));
+                    new InstantCommand(
+                            () ->
+                                    new SequentialCommandGroup(
+                                                    new InstantCommand(
+                                                            () -> LEDs.get().send_to_rp2040(2)),
+                                                    new InstantCommand(
+                                                            () ->
+                                                                    RobotContainer.rumbleController(
+                                                                            0.5)),
+                                                    new WaitCommand(0.4),
+                                                    new InstantCommand(
+                                                            () ->
+                                                                    RobotContainer.rumbleController(
+                                                                            0)),
+                                                    new InstantCommand(
+                                                            () -> LEDs.get().send_to_rp2040(1)))
+                                            .schedule()));
         }
     }
 }

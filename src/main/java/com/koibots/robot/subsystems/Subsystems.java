@@ -1,16 +1,15 @@
-// // Copyright (c) 2024 FRC 8230 - The KoiBots
-// // https://github.com/koibots8230
+// Copyright (c) 2024 FRC 8230 - The KoiBots
+// https://github.com/koibots8230
 
 package com.koibots.robot.subsystems;
 
 import com.koibots.robot.subsystems.Indexer.Indexer;
+import com.koibots.robot.subsystems.LED.LEDs;
 import com.koibots.robot.subsystems.intake.Intake;
 import com.koibots.robot.subsystems.shooter.Shooter;
 import com.koibots.robot.subsystems.swerve.Swerve;
 import com.koibots.robot.subsystems.vision.Vision;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import com.koibots.robot.subsystems.LED.LEDs;
 import java.util.function.Supplier;
 
 public class Subsystems {

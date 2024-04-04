@@ -4,11 +4,15 @@
 package com.koibots.robot.commands.Scoring;
 
 import static com.koibots.robot.subsystems.Subsystems.Indexer;
+import static com.koibots.robot.subsystems.Subsystems.LEDs;
 import static com.koibots.robot.subsystems.Subsystems.Shooter;
 import static edu.wpi.first.units.Units.RPM;
 
 import com.koibots.robot.Constants.SetpointConstants;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class FeedNote extends Command {
 
@@ -29,6 +33,13 @@ public class FeedNote extends Command {
             shooterAtSpeed = Shooter.get().atSetpoint();
         } else {
             Indexer.get().setVelocity(SetpointConstants.SHOOTER_INDEXER_SPEED);
+        }
+        if (!Indexer.get().sensorTriggered()) {
+            new SequentialCommandGroup(
+                            new InstantCommand(() -> LEDs.get().send_to_rp2040(4)),
+                            new WaitCommand(.4),
+                            new InstantCommand(() -> LEDs.get().send_to_rp2040(1)))
+                    .schedule();
         }
     }
 

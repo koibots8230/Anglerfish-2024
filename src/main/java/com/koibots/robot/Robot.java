@@ -49,6 +49,8 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData(Indexer.get());
         SmartDashboard.putData(Shooter.get());
         SmartDashboard.putData("Swerve Subsystem", Swerve.get());
+
+        LEDs.get().send_to_rp2040(1);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        //Swerve.get().stop();
+        Swerve.get().stop();
     }
 
     @Override
