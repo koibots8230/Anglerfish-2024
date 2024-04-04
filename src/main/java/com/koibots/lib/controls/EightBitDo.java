@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class EightBitDo {
-    private GenericHID controller;
+    private final GenericHID controller;
 
     public EightBitDo(int port) {
         controller = new GenericHID(port);

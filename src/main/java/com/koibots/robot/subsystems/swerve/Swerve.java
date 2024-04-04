@@ -3,8 +3,6 @@
 
 package com.koibots.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.Units.Volts;
-
 import com.koibots.robot.Constants.ControlConstants;
 import com.koibots.robot.Constants.DeviceIDs;
 import com.koibots.robot.Constants.RobotConstants;
@@ -17,8 +15,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -170,7 +166,7 @@ public class Swerve extends SubsystemBase {
             targetModuleStates[2] = new SwerveModuleState(0, currentStates[2].angle);
             targetModuleStates[3] = new SwerveModuleState(0, currentStates[3].angle);
         }
-
+        
         this.setModuleStates(targetModuleStates);
     }
 
@@ -229,21 +225,6 @@ public class Swerve extends SubsystemBase {
 
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(gyroInputs.yawPosition, getModulePositions(), pose);
-    }
-
-    public void setVoltages(Measure<Voltage> driveVolts, Measure<Voltage> turnVolts) {
-        swerveModules[0].setVoltages(driveVolts, turnVolts);
-        swerveModules[1].setVoltages(driveVolts, turnVolts);
-        swerveModules[2].setVoltages(driveVolts, turnVolts);
-        swerveModules[3].setVoltages(driveVolts, turnVolts);
-    }
-
-    public void setDriveVoltages(Measure<Voltage> volts) {
-        setVoltages(volts, Volts.of(0));
-    }
-
-    public void setTurnVoltages(Measure<Voltage> volts) {
-        setVoltages(Volts.of(0), volts);
     }
 
     public void setModuleStates(SwerveModuleState[] states) {

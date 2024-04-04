@@ -77,9 +77,9 @@ public class Constants {
                 new MotorConstantsIO(true, 60, IdleMode.kBrake);
 
         public static final MotorConstantsIO TOP_SHOOTER =
-                new MotorConstantsIO(false, 60, IdleMode.kCoast);
+                new MotorConstantsIO(true, 60, IdleMode.kCoast);
         public static final MotorConstantsIO BOTTOM_SHOOTER =
-                new MotorConstantsIO(false, 60, IdleMode.kCoast);
+                new MotorConstantsIO(true, 60, IdleMode.kCoast);
 
         public static final MotorConstantsIO DRIVE =
                 new MotorConstantsIO(false, 60, IdleMode.kBrake);
@@ -95,9 +95,9 @@ public class Constants {
         public static final PIDConstantsIO TURN_PID_CONSTANTS =
                 new PIDConstantsIO(2.078, 0, 0, 35, 0, 0);
         public static final PIDConstantsIO DRIVE_PID_CONSTANTS =
-                new PIDConstantsIO(5.5208e-10, 0, 0, 28.5, 0, 0);
+                new PIDConstantsIO(5.5208e-10, 0, 0, 40, 0, 0);
         public static final FeedforwardConstantsIO DRIVE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 0, 2.75);
+                new FeedforwardConstantsIO(0.11386, 2.6819, 0.16507, 0, 2.65, 0);
 
         public static final double DEADBAND = 0.025;
 
@@ -122,22 +122,26 @@ public class Constants {
 
         // =====================Shooter=====================
 
-        public static final FeedforwardConstantsIO SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0023, 0, 0);
+        public static final FeedforwardConstantsIO TOP_SHOOTER_FEEEDFORWARD =
+                new FeedforwardConstantsIO(0, 0.0001765, 0, .0021);
+        public static final FeedforwardConstantsIO BOTTOM_SHOOTER_FEEDFORWARD =
+                new FeedforwardConstantsIO(0, 0.0001765, 0, .0021);
+        public static final PIDConstantsIO SHOOTER_FEEDBACK_CONSTANTS =
+                new PIDConstantsIO(0.00027, 0, 0, .023, 0, 0);
 
         // =====================Intake=====================
 
         public static final PIDConstantsIO INTAKE_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0.01, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.01, 0, 0, .6, 0, 0);
         public static final FeedforwardConstantsIO INTAKE_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 10.25, 0, 0);
+                new FeedforwardConstantsIO(0, 10.25, 0, .0022);
 
         // =====================Indexer=====================
 
         public static final PIDConstantsIO INDEXER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0, 0, 0, 0, 0, 0);
+                new PIDConstantsIO(0.05, 0, 0, .36, 0, 0);
         public static final FeedforwardConstantsIO INDEXER_FEEDFORWARD_CONSTANTS =
-                new FeedforwardConstantsIO(0, 22.25, 0, 0);
+                new FeedforwardConstantsIO(0, 2.4, 0, .0021);
 
         // =====================Autos=====================
 
@@ -178,14 +182,15 @@ public class Constants {
         public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(600);
         public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-200);
 
-        public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(400);
-        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(80);
+        public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(3000);
+        public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(600);
 
         public enum SHOOTER_SPEEDS {
-            SPEAKER(Arrays.asList(RPM.of(5600), RPM.of(4700))),
-            AMP(Arrays.asList(RPM.of(388), RPM.of(1164))),
+            SPEAKER(Arrays.asList(RPM.of(5000), RPM.of(5700))),
+            AMP(Arrays.asList(RPM.of(525), RPM.of(1575))),
             INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
-            REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400)));
+            REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400))),
+            IDLE(Arrays.asList(RPM.of(500), RPM.of(500)));
 
             public final Measure<Velocity<Angle>> topSpeed;
             public final Measure<Velocity<Angle>> bottomSpeed;
