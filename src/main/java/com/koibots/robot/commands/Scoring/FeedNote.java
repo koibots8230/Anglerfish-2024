@@ -20,7 +20,7 @@ public class FeedNote extends Command {
 
     @Override
     public void initialize() {
-        shooterAtSpeed = false;
+        shooterAtSpeed = true;
     }
 
     @Override
