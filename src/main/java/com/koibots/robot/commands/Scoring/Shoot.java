@@ -106,7 +106,7 @@ public class Shoot extends SequentialCommandGroup {
         } else {
             addCommands(
                     new SpinUpShooter(topSpeed, bottomSpeed),
-                    new WaitCommand(0.125),
+                    new WaitCommand(0.5),
                     new InstantCommand(
                             () ->
                                     Indexer.get()
