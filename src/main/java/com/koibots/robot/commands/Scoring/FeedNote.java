@@ -24,7 +24,7 @@ public class FeedNote extends Command {
 
     @Override
     public void initialize() {
-        shooterAtSpeed = true;
+        shooterAtSpeed = false;
     }
 
     @Override
@@ -36,8 +36,8 @@ public class FeedNote extends Command {
         }
         if (!Indexer.get().sensorTriggered()) {
             new SequentialCommandGroup(
-                            new InstantCommand(() -> LEDs.get().send_to_rp2040(4)),
-                            new WaitCommand(.4),
+                            new InstantCommand(() -> LEDs.get().send_to_rp2040(2)),
+                            new WaitCommand(1),
                             new InstantCommand(() -> LEDs.get().send_to_rp2040(1)))
                     .schedule();
         }

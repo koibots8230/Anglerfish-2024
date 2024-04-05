@@ -13,6 +13,7 @@ import com.koibots.robot.RobotContainer;
 import com.koibots.robot.commands.Swerve.AutoAlign;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -59,21 +60,26 @@ public class IntakeCommand extends SequentialCommandGroup {
                             new RunIndexer()),
                     new InstantCommand(
                             () ->
+                                new ParallelCommandGroup(
                                     new SequentialCommandGroup(
                                                     new InstantCommand(
                                                             () -> LEDs.get().send_to_rp2040(2)),
-                                                    new InstantCommand(
-                                                            () ->
-                                                                    RobotContainer.rumbleController(
-                                                                            0.5)),
-                                                    new WaitCommand(0.4),
+                                                    new WaitCommand(1),
                                                     new InstantCommand(
                                                             () ->
                                                                     RobotContainer.rumbleController(
                                                                             0)),
                                                     new InstantCommand(
-                                                            () -> LEDs.get().send_to_rp2040(1)))
-                                            .schedule()));
+                                                            () -> LEDs.get().send_to_rp2040(1))),
+                                    new SequentialCommandGroup(
+                                        new InstantCommand(
+                                                            () ->
+                                                                    RobotContainer.rumbleController(
+                                                                            0.5)),
+                                        new WaitCommand(.4),
+                                        new InstantCommand(() -> RobotContainer.rumbleController(0))))
+                                    
+                            .schedule()));
         }
     }
 }

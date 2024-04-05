@@ -71,6 +71,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         robotContainer.configureButtonBindings();
+        LEDs.get().send_to_rp2040(1);
     }
 
     @Override

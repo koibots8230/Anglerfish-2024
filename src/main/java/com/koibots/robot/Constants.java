@@ -123,11 +123,11 @@ public class Constants {
         // =====================Shooter=====================
 
         public static final FeedforwardConstantsIO TOP_SHOOTER_FEEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0001765, 0, .0021);
+                new FeedforwardConstantsIO(0, 0.000178, 0, .0021);
         public static final FeedforwardConstantsIO BOTTOM_SHOOTER_FEEDFORWARD =
-                new FeedforwardConstantsIO(0, 0.0001765, 0, .0021);
+                new FeedforwardConstantsIO(0, 0.000182, 0, .0021);
         public static final PIDConstantsIO SHOOTER_FEEDBACK_CONSTANTS =
-                new PIDConstantsIO(0.00027, 0, 0, .023, 0, 0);
+                new PIDConstantsIO(0.000245, 0, 0, .023, 0, 0);
 
         // =====================Intake=====================
 
