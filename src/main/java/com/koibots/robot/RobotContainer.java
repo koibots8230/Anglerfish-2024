@@ -11,7 +11,6 @@ import com.koibots.robot.Constants.*;
 import com.koibots.robot.autos.JankAutos;
 import com.koibots.robot.commands.Intake.IntakeCommand;
 import com.koibots.robot.commands.Intake.IntakeShooter;
-import com.koibots.robot.commands.Intake.RunIndexer;
 import com.koibots.robot.commands.Scoring.FeedNote;
 import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
@@ -27,9 +26,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -185,33 +182,6 @@ public class RobotContainer {
                         new InstantCommand(
                                 () -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get()),
                         new InstantCommand(() -> RobotContainer.rumbleController(0))));
-
-        Trigger trostintake =
-                new Trigger(() -> operatorPad.getRawButton(2));
-        boolean breakTrostintake = true;
-        trostintake.onTrue(
-            new SequentialCommandGroup(
-                new InstantCommand(() -> breakTrostintake = false)
-                new ParallelRaceGroup(
-                        new StartEndCommand(
-                                () -> Intake.get().setVelocity(SetpointConstants.INTAKE_SPEED.times(-1)),
-                                () -> Intake.get().setVelocity(RPM.of(0)),
-                                Intake.get()),
-                        new RunIndexer()
-                ),
-                new InstantCommand(() -> Indexer.get().setVelocity(SetpointConstants.INTAKE_INDEXER_SPEED.times(3)), Indexer.get()),
-                new WaitCommand(0.25),
-                new InstantCommand(() -> Indexer.get().setVelocity(SetpointConstants.INTAKE_INDEXER_SPEED.times(-3)), Indexer.get()),
-                new WaitCommand(0.25),
-                new IntakeCommand()
-            )
-        );
-        trostintake.onFalse(
-                new ParallelCommandGroup(
-                    new InstantCommand(() -> Intake.get().setVelocity(RPM.of(0)), Intake.get()),
-                    new InstantCommand(() -> Indexer.get().setVelocity(RPM.of(0)), Indexer.get())
-                )
-        );
 
         Trigger reverse = new Trigger(() -> operatorPad.getRawButton(3));
         reverse.onTrue(
