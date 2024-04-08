@@ -63,6 +63,7 @@ public class Robot extends LoggedRobot {
         if (robotContainer.getAutonomousRoutine() != null) {
             robotContainer.getAutonomousRoutine().schedule();
         }
+        LEDs.get().send_to_rp2040(4);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void teleopInit() {
         robotContainer.configureButtonBindings();
-        LEDs.get().send_to_rp2040(1);
+        LEDs.get().send_to_rp2040(4);
     }
 
     @Override

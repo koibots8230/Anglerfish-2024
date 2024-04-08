@@ -38,7 +38,7 @@ public class FeedNote extends Command {
             new SequentialCommandGroup(
                             new InstantCommand(() -> LEDs.get().send_to_rp2040(2)),
                             new WaitCommand(1),
-                            new InstantCommand(() -> LEDs.get().send_to_rp2040(1)))
+                            new InstantCommand(() -> LEDs.get().send_to_rp2040(4)))
                     .schedule();
         }
     }

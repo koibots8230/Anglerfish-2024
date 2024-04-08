@@ -60,26 +60,37 @@ public class IntakeCommand extends SequentialCommandGroup {
                             new RunIndexer()),
                     new InstantCommand(
                             () ->
-                                new ParallelCommandGroup(
-                                    new SequentialCommandGroup(
-                                                    new InstantCommand(
-                                                            () -> LEDs.get().send_to_rp2040(2)),
-                                                    new WaitCommand(1),
-                                                    new InstantCommand(
-                                                            () ->
-                                                                    RobotContainer.rumbleController(
-                                                                            0)),
-                                                    new InstantCommand(
-                                                            () -> LEDs.get().send_to_rp2040(1))),
-                                    new SequentialCommandGroup(
-                                        new InstantCommand(
-                                                            () ->
-                                                                    RobotContainer.rumbleController(
-                                                                            0.5)),
-                                        new WaitCommand(.4),
-                                        new InstantCommand(() -> RobotContainer.rumbleController(0))))
-                                    
-                            .schedule()));
+                                    new ParallelCommandGroup(
+                                                    new SequentialCommandGroup(
+                                                            new InstantCommand(
+                                                                    () ->
+                                                                            LEDs.get()
+                                                                                    .send_to_rp2040(
+                                                                                            2)),
+                                                            new WaitCommand(1),
+                                                            new InstantCommand(
+                                                                    () ->
+                                                                            RobotContainer
+                                                                                    .rumbleController(
+                                                                                            0)),
+                                                            new InstantCommand(
+                                                                    () ->
+                                                                            LEDs.get()
+                                                                                    .send_to_rp2040(
+                                                                                            4))),
+                                                    new SequentialCommandGroup(
+                                                            new InstantCommand(
+                                                                    () ->
+                                                                            RobotContainer
+                                                                                    .rumbleController(
+                                                                                            0.5)),
+                                                            new WaitCommand(.4),
+                                                            new InstantCommand(
+                                                                    () ->
+                                                                            RobotContainer
+                                                                                    .rumbleController(
+                                                                                            0))))
+                                            .schedule()));
         }
     }
 }

@@ -180,14 +180,14 @@ public class Constants {
 
     public static final class SetpointConstants {
         public static final Measure<Velocity<Angle>> INTAKE_SPEED = RPM.of(600);
-        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-200);
+        public static final Measure<Velocity<Angle>> INTAKE_REVERSE_SPEED = RPM.of(-600);
 
         public static final Measure<Velocity<Angle>> SHOOTER_INDEXER_SPEED = RPM.of(3000);
         public static final Measure<Velocity<Angle>> INTAKE_INDEXER_SPEED = RPM.of(600);
 
         public enum SHOOTER_SPEEDS {
-            SPEAKER(Arrays.asList(RPM.of(2725), RPM.of(5700))),
-            AMP(Arrays.asList(RPM.of(525), RPM.of(1575))),
+            SPEAKER(Arrays.asList(RPM.of(3850), RPM.of(3850))),
+            AMP(Arrays.asList(RPM.of(500), RPM.of(2000))),
             INTAKE(Arrays.asList(RPM.of(-800), RPM.of(-602))),
             REVERSE(Arrays.asList(RPM.of(-400), RPM.of(-400))),
             IDLE(Arrays.asList(RPM.of(500), RPM.of(500)));
@@ -212,7 +212,7 @@ public class Constants {
         private static final Measure<Distance> ROBOT_LENGTH = Inches.of(21.375);
 
         public static final Measure<Velocity<Distance>> MAX_LINEAR_SPEED =
-                MetersPerSecond.of(4);
+                MetersPerSecond.of(4.125);
         public static final Measure<Velocity<Angle>> MAX_ANGULAR_VELOCITY =
                 RadiansPerSecond.of(2 * PI);
         public static final Measure<Velocity<Velocity<Distance>>> MAX_LINEAR_ACCELERATION =

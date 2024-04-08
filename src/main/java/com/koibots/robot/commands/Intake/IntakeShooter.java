@@ -25,7 +25,7 @@ public class IntakeShooter extends Command {
     public void initialize() {
         hasSeen = false;
         reversed = false;
-        Indexer.get().setVelocity(RPM.of(-200));
+        Indexer.get().setVelocity(RPM.of(-600));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class IntakeShooter extends Command {
             hasSeen = true;
         } else if (!Indexer.get().sensorTriggered() && hasSeen) {
             reversed = true;
-            Indexer.get().setVelocity((RPM.of(60)));
+            Indexer.get().setVelocity((RPM.of(600)));
         }
     }
 

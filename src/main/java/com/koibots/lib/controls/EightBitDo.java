@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 public class EightBitDo {
     private final GenericHID controller;
+    private int invertLeftX = 1;
 
     public EightBitDo(int port) {
         controller = new GenericHID(port);
@@ -62,7 +63,7 @@ public class EightBitDo {
     }
 
     public double getLeftX() {
-        return controller.getRawAxis(0);
+        return controller.getRawAxis(0) * invertLeftX;
     }
 
     public double getRightY() {
@@ -83,5 +84,13 @@ public class EightBitDo {
 
     public void setRumble(RumbleType type, double strength) {
         controller.setRumble(type, strength);
+    }
+
+    public void setInvertLeftX() {
+        invertLeftX = invertLeftX * -1;
+    }
+
+    public void setInvertLeftX(boolean inverted) {
+        invertLeftX = (inverted) ? -1 : 1;
     }
 }
