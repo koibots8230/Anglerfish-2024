@@ -6,19 +6,20 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PIDConstants;
+import monologue.Annotations.*;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Indexer extends SubsystemBase {
 
-    private final DigitalInput indexerDigitalInput;
-    private final CANSparkMax indexerMotor;
-    private final SparkPIDController indexerPID;
+    @Log private final DigitalInput indexerDigitalInput;
+    @Log private final CANSparkMax indexerMotor;
+    @Log private final SparkPIDController indexerPID;
 
     public Indexer(){
-        indexerDigitalInput = new DigitalInput(0); // TODO: Constants
-        indexerMotor = new CANSparkMax(2, MotorType.kBrushless); // TODO: Constants
+        indexerDigitalInput = new DigitalInput(0); 
+        indexerMotor = new CANSparkMax(2, MotorType.kBrushless); 
         indexerPID = indexerMotor.getPIDController();
 
         indexerPID.setP(PIDConstants.INDEXER_PID_KP);
@@ -28,11 +29,11 @@ public class Indexer extends SubsystemBase {
         indexerPID.setFF(PIDConstants.INDEXER_FEEDFORWARD_FF);
     }
 
-    public void setIndexerVelocity(double IndexerVelocity){ // Whoops, unused function input
+    public void setIndexerVelocity(double IndexerVelocity){ 
         indexerPID.setReference(IndexerVelocity, CANSparkBase.ControlType.kVelocity);
     }
 
-    public boolean indexerNoteDetected(){
+    @Log public boolean indexerNoteDetected(){
         return indexerDigitalInput.get();
     }
     

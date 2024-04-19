@@ -6,7 +6,7 @@ import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 
-public class IntakeCommand extends Command { // Nit: Consider renaming, as this includes indexer ?
+public class IntakeCommand extends Command { 
     private final Indexer indexersubsystem;
     private final Intake intakesubststem;
 
@@ -17,8 +17,8 @@ public class IntakeCommand extends Command { // Nit: Consider renaming, as this 
 
     @Override
     public void initialize(){
-        intakesubststem.setIntakeVelocity(PIDConstants.INTAKE_SETPOINT); // TODO: Set to non-zero
-        indexersubsystem.setIndexerVelocity(PIDConstants.INTAKE_SETPOINT); // TODO: Nonzero
+        intakesubststem.setIntakeVelocity(PIDConstants.INTAKE_SETPOINT); 
+        indexersubsystem.setIndexerVelocity(PIDConstants.INTAKE_SETPOINT); 
     }
 
     @Override

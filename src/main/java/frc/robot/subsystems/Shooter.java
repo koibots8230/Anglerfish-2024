@@ -9,19 +9,19 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PIDConstants;
+import monologue.Logged;
+import monologue.Annotations.*;
 
-public class Shooter extends SubsystemBase {
-    private final CANSparkMax topMotor;
-    private final CANSparkMax bottomMotor;
-    private final SparkPIDController topShoterPID;
-    private final SparkPIDController bottomShoterPID;
-    private final RelativeEncoder topShooterEncoder;
-    private final RelativeEncoder bottomShooterEncoder;
+public class Shooter extends SubsystemBase implements Logged{
+    @Log private final CANSparkMax topMotor;
+    @Log private final CANSparkMax bottomMotor;
+    @Log private final SparkPIDController topShoterPID;
+    @Log private final SparkPIDController bottomShoterPID;
+    @Log private final RelativeEncoder topShooterEncoder;
+    @Log private final RelativeEncoder bottomShooterEncoder;
 
 
     public Shooter(){
-            
-
         topMotor = new CANSparkMax(3, MotorType.kBrushless);
         bottomMotor = new CANSparkMax(4, MotorType.kBrushless);
 
@@ -51,7 +51,7 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public void setBottomShooterVelocity(double bottomShooterVelovity){
+    public void setBottomShooterVelocity(double bottomShooterVelovity) {
         bottomShoterPID.setReference(PIDConstants.BOTTOM_SHOOTER_SETPOINT, CANSparkBase.ControlType.kVelocity);
     }
 

@@ -17,11 +17,13 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.PIDConstants;
 
+import monologue.Annotations.*;
+
 public class Intake extends SubsystemBase {
-  private CANSparkMax IntakeMotor;
-  private SparkPIDController pidController;
-  private RelativeEncoder encoder;
-  private final DigitalInput intakeDigitalInput;
+  @Log private CANSparkMax IntakeMotor;
+  @Log private SparkPIDController pidController;
+  @Log private RelativeEncoder encoder;
+  @Log private final DigitalInput intakeDigitalInput;
 
 
 
