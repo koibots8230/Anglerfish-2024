@@ -1,4 +1,3 @@
-
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2024.3.2"
@@ -75,7 +74,7 @@ dependencies {
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
 }
 
-test{
+test {
     useJUnitPlatform()
     systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
 }
@@ -114,6 +113,6 @@ idea {
         downloadJavadoc = true
         downloadSources = true
         // Exclude the .vscode directory from indexing and search
-        excludeDirs+=file(".vscode" )
+        excludeDirs += file(".vscode")
     }
 }
