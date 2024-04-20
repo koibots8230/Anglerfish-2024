@@ -12,16 +12,21 @@ import frc.robot.Constants.PIDConstants;
 import monologue.Logged;
 import monologue.Annotations.*;
 
-public class Shooter extends SubsystemBase implements Logged{
-    @Log private final CANSparkMax topMotor;
-    @Log private final CANSparkMax bottomMotor;
-    @Log private final SparkPIDController topShoterPID;
-    @Log private final SparkPIDController bottomShoterPID;
-    @Log private final RelativeEncoder topShooterEncoder;
-    @Log private final RelativeEncoder bottomShooterEncoder;
+public class Shooter extends SubsystemBase implements Logged {
+    @Log
+    private final CANSparkMax topMotor;
+    @Log
+    private final CANSparkMax bottomMotor;
+    @Log
+    private final SparkPIDController topShoterPID;
+    @Log
+    private final SparkPIDController bottomShoterPID;
+    @Log
+    private final RelativeEncoder topShooterEncoder;
+    @Log
+    private final RelativeEncoder bottomShooterEncoder;
 
-
-    public Shooter(){
+    public Shooter() {
         topMotor = new CANSparkMax(3, MotorType.kBrushless);
         bottomMotor = new CANSparkMax(4, MotorType.kBrushless);
 
@@ -44,10 +49,9 @@ public class Shooter extends SubsystemBase implements Logged{
 
         bottomShoterPID.setFF(PIDConstants.TOP_SHOOTER_FEEDFORWARD_FF);
     }
-    
-    public void setTopShooterVelocity(double topShooterVelocity){
+
+    public void setTopShooterVelocity(double topShooterVelocity) {
         topShoterPID.setReference(PIDConstants.TOP_SHOOTER_SETPOINT, CANSparkBase.ControlType.kVelocity);
-        
 
     }
 
@@ -55,17 +59,22 @@ public class Shooter extends SubsystemBase implements Logged{
         bottomShoterPID.setReference(PIDConstants.BOTTOM_SHOOTER_SETPOINT, CANSparkBase.ControlType.kVelocity);
     }
 
-    public boolean shooterAtSpeedAmp(){
-        return 
-        Math.abs(topShooterEncoder.getVelocity() - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_AMP && 
-        Math.abs(bottomShooterEncoder.getVelocity() - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_AMP;
+    public boolean shooterAtSpeedAmp() {
+        return Math
+                .abs(topShooterEncoder.getVelocity()
+                        - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_AMP
+                &&
+                Math.abs(bottomShooterEncoder.getVelocity()
+                        - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_AMP;
     }
 
-        public boolean shooterAtSpeedSpeaker(){
-        return 
-        Math.abs(topShooterEncoder.getVelocity() - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_SPEAKER && 
-        Math.abs(bottomShooterEncoder.getVelocity() - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_SPEAKER;
+    public boolean shooterAtSpeedSpeaker() {
+        return Math
+                .abs(topShooterEncoder.getVelocity()
+                        - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_SPEAKER
+                &&
+                Math.abs(bottomShooterEncoder.getVelocity()
+                        - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_SPEAKER;
     }
-
 
 }

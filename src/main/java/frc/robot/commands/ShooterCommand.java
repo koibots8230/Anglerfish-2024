@@ -10,20 +10,18 @@ import frc.robot.Constants.PIDConstants;
 
 public class ShooterCommand extends Command {
     private final ShooterCommand shooterSubsystem;
-    
 
-    public ShooterCommand(ShooterCommand shooterSubsystem){
+    public ShooterCommand(ShooterCommand shooterSubsystem) {
         this.shooterSubsystem = shooterSubsystem;
     }
 
     @Override
-    public void execute(){
+    public void execute() {
 
     }
 
-
     @Override
-    public boolean isFinished(){
+    public boolean isFinished() {
         return false;
     }
 

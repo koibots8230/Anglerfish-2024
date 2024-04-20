@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -20,20 +19,19 @@ import frc.robot.Constants.PIDConstants;
 import monologue.Annotations.*;
 
 public class Intake extends SubsystemBase {
-  @Log private CANSparkMax IntakeMotor;
-  @Log private SparkPIDController pidController;
-  @Log private RelativeEncoder encoder;
-  @Log private final DigitalInput intakeDigitalInput;
-
-
+  @Log
+  private CANSparkMax IntakeMotor;
+  @Log
+  private SparkPIDController pidController;
+  @Log
+  private RelativeEncoder encoder;
+  @Log
+  private final DigitalInput intakeDigitalInput;
 
   public Intake() {
 
     IntakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
     intakeDigitalInput = new DigitalInput(0);
-
-
-
 
     pidController = IntakeMotor.getPIDController();
 
@@ -43,15 +41,15 @@ public class Intake extends SubsystemBase {
     pidController.setFF(PIDConstants.INTAKE_FEEDFORWARD_FF);
   }
 
-  public void setIntakeVelocity(double intakeMotorRPM){
-      pidController.setReference(intakeMotorRPM, CANSparkBase.ControlType.kVelocity);
+  public void setIntakeVelocity(double intakeMotorRPM) {
+    pidController.setReference(intakeMotorRPM, CANSparkBase.ControlType.kVelocity);
   }
 
-  public boolean intakeNoteDetected(){
+  public boolean intakeNoteDetected() {
     return intakeDigitalInput.get();
-}
+  }
 
   @Override
   public void periodic() {
-}
+  }
 }

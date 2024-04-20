@@ -8,16 +8,13 @@ import frc.robot.Constants.controller;
 public class DriveController {
     BooleanSupplier pressedRightTrigger = () -> controller.CONTROLLER.getRightTriggerAxis() >= .15;
 
-
-    public DriveController(){
+    public DriveController() {
         checkRightTrigger();
 
     }
 
-    public BooleanSupplier checkRightTrigger(){
+    public BooleanSupplier checkRightTrigger() {
         return pressedRightTrigger;
     }
-
-
 
 }
