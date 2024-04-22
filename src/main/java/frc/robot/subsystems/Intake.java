@@ -6,7 +6,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.IO.Motor;
+import frc.robot.devices.Motor;
 
 public class Intake extends SubsystemBase {
     private final static Intake INSTANCE = new Intake();
