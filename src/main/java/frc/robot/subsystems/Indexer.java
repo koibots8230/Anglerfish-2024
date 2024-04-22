@@ -10,15 +10,14 @@ import frc.robot.devices.Motor;
 
 public class Indexer extends SubsystemBase {
     private final static Indexer INSTANCE = new Indexer();
-
-    public static Indexer getInstance() {
-        return INSTANCE;
-    }
-
     private final Motor intakeMotor;
 
     private Indexer() {
         intakeMotor = new Motor(Constants.Motors.Intake);
+    }
+
+    public static Indexer getInstance() {
+        return INSTANCE;
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocity) {

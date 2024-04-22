@@ -10,17 +10,15 @@ import frc.robot.devices.Motor;
 
 public class Shooter extends SubsystemBase {
     private final static Shooter INSTANCE = new Shooter();
-
-    public static Shooter getInstance() {
-        return INSTANCE;
-    }
-
     private final Motor shooterMotorTop;
     private final Motor shooterMotorBottom;
-
     private Shooter() {
         shooterMotorTop = new Motor(Constants.Motors.ShooterTop);
         shooterMotorBottom = new Motor(Constants.Motors.ShooterBottom);
+    }
+
+    public static Shooter getInstance() {
+        return INSTANCE;
     }
 
     public void setVelocity(Measure<Velocity<Angle>> velocityTop, Measure<Velocity<Angle>> velocityBottom) {
