@@ -14,6 +14,7 @@ import com.koibots.robot.commands.Intake.IntakeShooter;
 import com.koibots.robot.commands.Scoring.FeedNote;
 import com.koibots.robot.commands.Shooter.SpinUpShooter;
 import com.koibots.robot.commands.Swerve.FieldOrientedDrive;
+import com.koibots.robot.commands.Swerve.RobotOrientedDrive;
 import com.koibots.robot.commands.Swerve.TestDrive;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -109,7 +110,7 @@ public class RobotContainer {
     public void configureButtonBindings() {
         Swerve.get()
                 .setDefaultCommand(
-                        new FieldOrientedDrive(
+                        new RobotOrientedDrive(
                                 () -> -driveController.getLeftY(),
                                 () -> -driveController.getLeftX(),
                                 () -> -driveController.getRightX(),
