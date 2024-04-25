@@ -92,6 +92,7 @@ public class RobotOrientedDrive extends Command {
                 vyInput * RobotConstants.MAX_LINEAR_SPEED.in(MetersPerSecond),
                 angularVelocity * RobotConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond)
             );
+            Swerve.get().driveRobotRelative(speeds);
         }
     }
 }
