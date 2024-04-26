@@ -8,29 +8,55 @@
   },
   "NTProvider": {
     "types": {
+      "/AdvantageKit/RealOutputs/Elevator Mechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Elevator/Mechanism": "Mechanism2d",
+      "/AdvantageKit/RealOutputs/Elevator/SimMechanism": "Mechanism2d",
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Angle Alignment Controller": "ProfiledPIDController",
+      "/SmartDashboard/Angle Alignment Controller": "PIDController",
       "/SmartDashboard/Auto Mode Chooser": "String Chooser",
+      "/SmartDashboard/Autos": "String Chooser",
+      "/SmartDashboard/Command Scheduler": "Scheduler",
       "/SmartDashboard/Controller Chooser": "String Chooser",
-      "/SmartDashboard/Drive PID 0": "PIDController",
-      "/SmartDashboard/Drive PID 1": "PIDController",
-      "/SmartDashboard/Drive PID 2": "PIDController",
-      "/SmartDashboard/Drive PID 3": "PIDController",
+      "/SmartDashboard/Drive PID 0": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 1": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 2": "ProfiledPIDController",
+      "/SmartDashboard/Drive PID 3": "ProfiledPIDController",
+      "/SmartDashboard/Elevator Sim": "Mechanism2d",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Indexer": "Subsystem",
+      "/SmartDashboard/Indexer/PID": "PIDController",
+      "/SmartDashboard/Intake": "Subsystem",
+      "/SmartDashboard/Module 0": "String Chooser",
+      "/SmartDashboard/Module 1": "String Chooser",
+      "/SmartDashboard/Module 2": "String Chooser",
+      "/SmartDashboard/Module 3": "String Chooser",
       "/SmartDashboard/Scaling Algorithm": "String Chooser",
       "/SmartDashboard/Scheduler": "Scheduler",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/Shooter": "Subsystem",
+      "/SmartDashboard/Shooter/Left PID": "PIDController",
+      "/SmartDashboard/Shooter/Right PID": "PIDController",
+      "/SmartDashboard/Starting Pos": "String Chooser",
+      "/SmartDashboard/Swerve/Drive PID 0": "PIDController",
+      "/SmartDashboard/Swerve/Drive PID 1": "PIDController",
+      "/SmartDashboard/Swerve/Drive PID 2": "PIDController",
+      "/SmartDashboard/Swerve/Drive PID 3": "PIDController",
+      "/SmartDashboard/Swerve/Turn PID 0": "PIDController",
+      "/SmartDashboard/Swerve/Turn PID 1": "PIDController",
+      "/SmartDashboard/Swerve/Turn PID 2": "PIDController",
+      "/SmartDashboard/Swerve/Turn PID 3": "PIDController",
       "/SmartDashboard/SysId Mechanism Chooser": "String Chooser",
       "/SmartDashboard/SysId Routine Chooser": "String Chooser",
-      "/SmartDashboard/Turn PID 0": "PIDController",
-      "/SmartDashboard/Turn PID 1": "PIDController",
-      "/SmartDashboard/Turn PID 2": "PIDController",
-      "/SmartDashboard/Turn PID 3": "PIDController"
+      "/SmartDashboard/Theta Controller": "PIDController",
+      "/SmartDashboard/Turn PID 0": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 1": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 2": "ProfiledPIDController",
+      "/SmartDashboard/Turn PID 3": "ProfiledPIDController",
+      "/SmartDashboard/X Controller": "PIDController",
+      "/SmartDashboard/Y Controller": "PIDController"
     }
   },
   "NetworkTables": {
-    "Retained Values": {
-      "open": false
-    },
     "transitory": {
       "AdvantageKit": {
         ".schema": {
@@ -51,8 +77,7 @@
             "open": true
           },
           "open": true
-        },
-        "open": true
+        }
       },
       "LiveWindow": {
         ".status": {
@@ -67,8 +92,7 @@
       "SmartDashboard": {
         "Angle Alignment Controller": {
           "open": true
-        },
-        "open": true
+        }
       }
     }
   },
@@ -80,6 +104,15 @@
       "open": true
     },
     "Server": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
+    "shuffleboard@1": {
       "open": true
     },
     "visible": true
