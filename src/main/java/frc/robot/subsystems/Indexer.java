@@ -1,26 +1,24 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PIDConstants;
-import monologue.Annotations.*;
-
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import monologue.Annotations.Log;
 
 public class Indexer extends SubsystemBase {
 
     @Log
     private final DigitalInput indexerDigitalInput;
-    @Log
+
     private final CANSparkMax indexerMotor;
     @Log
     private final SparkPIDController indexerPID;
 
-    public Indexer() {
+    public Indexer(boolean isReal) {
         indexerDigitalInput = new DigitalInput(0);
         indexerMotor = new CANSparkMax(2, MotorType.kBrushless);
         indexerPID = indexerMotor.getPIDController();

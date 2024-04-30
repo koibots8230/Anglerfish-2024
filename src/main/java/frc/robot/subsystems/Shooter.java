@@ -1,80 +1,146 @@
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
-import com.revrobotics.CANSparkBase;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.*;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.PIDConstants;
+import frc.robot.Robot;
 import monologue.Logged;
-import monologue.Annotations.*;
+import monologue.Annotations.Log;
 
 public class Shooter extends SubsystemBase implements Logged {
+
+    private CANSparkMax topMotor;
+    private CANSparkMax bottomMotor;
+
+    private DCMotorSim topSimMotor;
+    private DCMotorSim bottomSimMotor;
     @Log
-    private final CANSparkMax topMotor;
+    private RelativeEncoder topEncoder;
     @Log
-    private final CANSparkMax bottomMotor;
+    private RelativeEncoder bottomEncoder;
     @Log
-    private final SparkPIDController topShoterPID;
+    private SparkPIDController topShoterPID;
     @Log
-    private final SparkPIDController bottomShoterPID;
+    private SparkPIDController bottomShoterPID;
     @Log
-    private final RelativeEncoder topShooterEncoder;
+    private SimpleMotorFeedforward topSimFF;
     @Log
-    private final RelativeEncoder bottomShooterEncoder;
+    private SimpleMotorFeedforward bottomSimFF;
+    @Log
+    private PIDController topSimPID;
+    @Log
+    private PIDController bottomSimPID;
 
-    public Shooter() {
-        topMotor = new CANSparkMax(3, MotorType.kBrushless);
-        bottomMotor = new CANSparkMax(4, MotorType.kBrushless);
+    private final boolean isReal;
 
-        topShooterEncoder = topMotor.getEncoder();
-        bottomShooterEncoder = bottomMotor.getEncoder();
+    @Log
+    private double topShoterVelocity;
+    @Log
+    private double bottomShoterVelocity;
 
-        topShoterPID = topMotor.getPIDController();
+    @Log
+    private double  bottomShoterCurrent;
+    @Log
+    private double  topshoterCurrent;
+    @Log
+    private double  topAppliedVoltage;
+    @Log
+    private double bottomAppliedVoltage;
+    @Log
+    private double topShoterSetpoint;
+    @Log
+    private double bottomShoterSetpoint;
 
-        topShoterPID.setP(PIDConstants.TOP_SHOOTER_PID_KP);
-        topShoterPID.setI(PIDConstants.TOP_SHOOTER_PID_KI);
-        topShoterPID.setD(PIDConstants.TOP_SHOOTER_PID_KD);
 
-        topShoterPID.setFF(PIDConstants.TOP_SHOOTER_FEEDFORWARD_FF);
 
-        bottomShoterPID = bottomMotor.getPIDController();
+    public Shooter(boolean isReal) {
+        this.isReal = isReal;
+        if (Robot.isReal()) {
+            topMotor = new CANSparkMax(3, CANSparkLowLevel.MotorType.kBrushless);
+            bottomMotor = new CANSparkMax(4, CANSparkLowLevel.MotorType.kBrushless);
 
-        bottomShoterPID.setP(PIDConstants.TOP_SHOOTER_PID_KP);
-        bottomShoterPID.setI(PIDConstants.TOP_SHOOTER_PID_KI);
-        bottomShoterPID.setD(PIDConstants.TOP_SHOOTER_PID_KD);
 
-        bottomShoterPID.setFF(PIDConstants.TOP_SHOOTER_FEEDFORWARD_FF);
+            topShoterPID = topMotor.getPIDController();
+
+            bottomShoterPID = bottomMotor.getPIDController();
+
+            topEncoder = topMotor.getEncoder();
+
+            bottomEncoder = bottomMotor.getEncoder();
+
+            topShoterPID.setP(Constants.MotorDefinitions.topShooter.P);
+            topShoterPID.setI(Constants.MotorDefinitions.topShooter.I);
+            topShoterPID.setD(Constants.MotorDefinitions.topShooter.D);
+            topShoterPID.setFF(Constants.MotorDefinitions.topShooter.FF);
+
+            bottomShoterPID.setP(Constants.MotorDefinitions.bottomShooter.P);
+            bottomShoterPID.setP(Constants.MotorDefinitions.bottomShooter.I);
+            bottomShoterPID.setP(Constants.MotorDefinitions.bottomShooter.D);
+            bottomShoterPID.setP(Constants.MotorDefinitions.bottomShooter.FF);
+        }
+
+        else {
+            topSimMotor = new DCMotorSim(DCMotor.getNEO(1), 1, 1);
+            bottomSimMotor = new DCMotorSim(DCMotor.getNEO(1),1,1);
+
+            topSimFF = new SimpleMotorFeedforward(0.002,0.002);
+            bottomSimFF = new SimpleMotorFeedforward(0.002,0.002);
+
+            topSimPID = new PIDController(0.002,0.002,0.002);
+            bottomSimPID = new PIDController(0.002, 0.002, 0.002);
+
+        }
+
+
     }
 
-    public void setTopShooterVelocity(double topShooterVelocity) {
-        topShoterPID.setReference(PIDConstants.TOP_SHOOTER_SETPOINT, CANSparkBase.ControlType.kVelocity);
+    @Override
+    public void periodic(){
+        if(isReal){
+            topShoterPID.setReference(topShoterVelocity, CANSparkBase.ControlType.kVelocity);
+            bottomShoterPID.setReference(bottomShoterVelocity, CANSparkBase.ControlType.kVelocity);
 
+        }
     }
 
-    public void setBottomShooterVelocity(double bottomShooterVelovity) {
-        bottomShoterPID.setReference(PIDConstants.BOTTOM_SHOOTER_SETPOINT, CANSparkBase.ControlType.kVelocity);
+    @Override
+    public void simulationPeriodic(){
+        topSimMotor.update(.2);
+        bottomSimMotor.update(.2);
+
+        topshoterCurrent = topSimMotor.getCurrentDrawAmps();
+        topShoterVelocity = topSimMotor.getAngularVelocityRPM();
+
+        bottomShoterVelocity = bottomSimMotor.getAngularVelocityRPM();
+        bottomShoterCurrent = bottomSimMotor.getCurrentDrawAmps();
+
+        topAppliedVoltage =
+                topSimPID.calculate(topShoterVelocity, topShoterSetpoint) + topSimFF.calculate(topShoterSetpoint);
+        bottomAppliedVoltage = bottomSimPID.calculate(bottomShoterVelocity, bottomShoterSetpoint) + bottomSimFF.calculate(bottomShoterSetpoint);
+
+        topSimMotor.setInputVoltage(topAppliedVoltage);
+        bottomSimMotor.setInputVoltage(bottomAppliedVoltage);
     }
 
-    public boolean shooterAtSpeedAmp() {
-        return Math
-                .abs(topShooterEncoder.getVelocity()
-                        - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_AMP
+    public void setVelocity(double topShooterSetpoint, double bottomShooterSetpoint) {
+        this.topShoterSetpoint = topShooterSetpoint;
+        this.bottomShoterSetpoint = bottomShooterSetpoint;
+    }
+
+    public boolean checkVelocity() {
+        return Math.abs(topEncoder.getVelocity() - PIDConstants.TOP_SHOOTER_AMP_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_AMP
                 &&
-                Math.abs(bottomShooterEncoder.getVelocity()
-                        - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_AMP;
+                Math.abs(bottomEncoder.getVelocity() - PIDConstants.BOTTOM_SHOOTER_AMP_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_AMP
+                ||
+                Math.abs(topEncoder.getVelocity() - PIDConstants.TOP_SHOOTER_SPEAKER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_AMP
+                        &&
+                        Math.abs(bottomEncoder.getVelocity() - PIDConstants.BOTTOM_SHOOTER_SPEAKER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_AMP;
     }
 
-    public boolean shooterAtSpeedSpeaker() {
-        return Math
-                .abs(topShooterEncoder.getVelocity()
-                        - PIDConstants.TOP_SHOOTER_SETPOINT) <= PIDConstants.TOP_SHOOTER_VELOCITY_RANGE_SPEAKER
-                &&
-                Math.abs(bottomShooterEncoder.getVelocity()
-                        - PIDConstants.BOTTOM_SHOOTER_SETPOINT) <= PIDConstants.BOTTOM_SHOOTER_VELOCITY_RANGE_SPEAKER;
-    }
 
 }

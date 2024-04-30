@@ -1,78 +1,77 @@
-
 package frc.robot;
 
-import frc.robot.Constants.PIDConstants;
-import frc.robot.Constants.controller;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import com.revrobotics.CANSparkMax;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.PIDConstants;
+import frc.robot.Constants.controller;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Indexer;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import monologue.Monologue;
+import monologue.Logged;
+import monologue.Monologue;
 
-public class RobotContainer {
+public class RobotContainer implements Logged {
 
-  private final Trigger intakeTrigger;
-  private final Trigger speakerShooterTrigger;
-  private final Trigger ampShooterTrigger;
-  private final Trigger sendToShooterTrigger;
+    private final Shooter shooterSubsystem;
+    private final Intake intakeSubsystem;
+    private final Indexer indexerSubsystem;
 
-  private final Shooter shooterSubsystem = new Shooter();
-  private final Intake intakeSubsystem = new Intake();
-  private final Indexer indexerSubsystem = new Indexer();
+    private final IntakeCommand intakeCommand;
 
-  private final IntakeCommand intakeCommand = new IntakeCommand(indexerSubsystem, intakeSubsystem);
+    public RobotContainer(boolean isReal) {
+        shooterSubsystem = new Shooter(isReal);
+        intakeSubsystem = new Intake(isReal);
+        indexerSubsystem = new Indexer(isReal);
 
-  public RobotContainer() {
-    intakeTrigger = new Trigger(() -> controller.CONTROLLER.getRightTriggerAxis() > 0.15);
-    speakerShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(6));
-    ampShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(5));
-    sendToShooterTrigger = new Trigger(
-        () -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(7) && shooterSubsystem.shooterAtSpeedAmp()
-            || shooterSubsystem.shooterAtSpeedSpeaker());
+        intakeCommand = new IntakeCommand(indexerSubsystem, intakeSubsystem);
 
-    configureBindings();
-  }
+        Monologue.setupMonologue(
+                this, "Robot", Constants.LoggerConstants.FILEONLY, Constants.LoggerConstants.LAZYLOGGING);
 
-  private void configureBindings() {
+        configureBindings();
+    }
 
-    intakeTrigger.onTrue(intakeCommand);
-    intakeTrigger.onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(0.0)),
-        new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(0.0))));
+    private void configureBindings() {
 
-    Trigger reverse = new Trigger(controller.CONTROLLER::getRightBumper);
-    reverse.onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(-(PIDConstants.INTAKE_SETPOINT))),
-        new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(-(PIDConstants.INDEXER_SETPOINT)))));
-    reverse.onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(0.0)),
-        new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(0.0))));
 
-    speakerShooterTrigger.onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> shooterSubsystem.setTopShooterVelocity(PIDConstants.TOP_SHOOTER_SETPOINT)),
-        new InstantCommand(() -> shooterSubsystem.setBottomShooterVelocity(PIDConstants.BOTTOM_SHOOTER_SETPOINT))));
-    speakerShooterTrigger.onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> shooterSubsystem.setTopShooterVelocity(0.0)),
-        new InstantCommand(() -> shooterSubsystem.setBottomShooterVelocity(0.0))));
+        Trigger intakeTrigger = new Trigger(() -> controller.CONTROLLER.getRightTriggerAxis() > 0.15);
+        intakeTrigger.onTrue(intakeCommand);
+        intakeTrigger.onFalse(new ParallelCommandGroup(
+                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(0.0), indexerSubsystem),
+                new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(0.0), intakeSubsystem)));
 
-    ampShooterTrigger.onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> shooterSubsystem.setTopShooterVelocity(PIDConstants.TOP_SHOOTER_SETPOINT)),
-        new InstantCommand(() -> shooterSubsystem.setBottomShooterVelocity(PIDConstants.BOTTOM_SHOOTER_SETPOINT))));
-    ampShooterTrigger.onFalse(new ParallelCommandGroup(
-        new InstantCommand(() -> shooterSubsystem.setTopShooterVelocity(0.0)),
-        new InstantCommand(() -> shooterSubsystem.setBottomShooterVelocity(0.0))));
+        Trigger reverse = new Trigger(controller.CONTROLLER::getRightBumper);
+        reverse.onTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(-(PIDConstants.INTAKE_SETPOINT)), intakeSubsystem),
+                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(-(PIDConstants.INDEXER_SETPOINT)), indexerSubsystem)));
+        reverse.onFalse(new ParallelCommandGroup(
+                new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(0.0), intakeSubsystem),
+                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(0.0), indexerSubsystem)));
 
-    sendToShooterTrigger.onTrue(new ParallelCommandGroup(
-        new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(PIDConstants.SEND_TO_SHOOTER_SETPOINT))));
+        Trigger speakerShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(7));
+        speakerShooterTrigger.onTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_SPEAKER_SETPOINT, PIDConstants.BOTTOM_SHOOTER_SPEAKER_SETPOINT), shooterSubsystem)
+        ));
+        speakerShooterTrigger.onFalse(new ParallelCommandGroup(
+                new InstantCommand(() -> shooterSubsystem.setVelocity(0.0, 0.0),shooterSubsystem)
+        ));
 
-  }
+        Trigger ampShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(5));
+        ampShooterTrigger.onTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_AMP_SETPOINT, PIDConstants.BOTTOM_SHOOTER_AMP_SETPOINT ),shooterSubsystem)
+        ));
+        ampShooterTrigger.onFalse(new ParallelCommandGroup(
+                new InstantCommand(() -> shooterSubsystem.setVelocity(0.0 , 0.0),shooterSubsystem)
+        ));
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-
+        Trigger sendToShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed((6)) && shooterSubsystem.checkVelocity());
+        sendToShooterTrigger.onTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(PIDConstants.SEND_TO_SHOOTER_SETPOINT), indexerSubsystem)
+        ));
+    }
 }

@@ -5,51 +5,48 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.MotorConstants;
 import frc.robot.Constants.PIDConstants;
-
-import monologue.Annotations.*;
+import monologue.Annotations.Log;
 
 public class Intake extends SubsystemBase {
-  @Log
-  private CANSparkMax IntakeMotor;
-  @Log
-  private SparkPIDController pidController;
-  @Log
-  private RelativeEncoder encoder;
-  @Log
-  private final DigitalInput intakeDigitalInput;
 
-  public Intake() {
+    @Log
+    private final DigitalInput intakeDigitalInput;
+    private final CANSparkMax IntakeMotor;
+    @Log
+    private final SparkPIDController pidController;
+    @Log
+    private RelativeEncoder encoder;
 
-    IntakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
-    intakeDigitalInput = new DigitalInput(0);
+    public Intake(boolean isReal) {
 
-    pidController = IntakeMotor.getPIDController();
+        IntakeMotor = new CANSparkMax(MotorConstants.INTAKE_MOTOR_PORT, MotorType.kBrushless);
+        intakeDigitalInput = new DigitalInput(1);
 
-    pidController.setP(PIDConstants.INTAKE_PID_KP);
-    pidController.setI(PIDConstants.INTAKE_PID_KI);
-    pidController.setD(PIDConstants.INTAKE_PID_KD);
-    pidController.setFF(PIDConstants.INTAKE_FEEDFORWARD_FF);
-  }
+        pidController = IntakeMotor.getPIDController();
 
-  public void setIntakeVelocity(double intakeMotorRPM) {
-    pidController.setReference(intakeMotorRPM, CANSparkBase.ControlType.kVelocity);
-  }
+        pidController.setP(PIDConstants.INTAKE_PID_KP);
+        pidController.setI(PIDConstants.INTAKE_PID_KI);
+        pidController.setD(PIDConstants.INTAKE_PID_KD);
+        pidController.setFF(PIDConstants.INTAKE_FEEDFORWARD_FF);
+    }
 
-  public boolean intakeNoteDetected() {
-    return intakeDigitalInput.get();
-  }
+    public void setIntakeVelocity(double intakeMotorRPM) {
+        pidController.setReference(intakeMotorRPM, CANSparkBase.ControlType.kVelocity);
+    }
 
-  @Override
-  public void periodic() {
-  }
+    public boolean intakeNoteDetected() {
+        return intakeDigitalInput.get();
+    }
+
+    @Override
+    public void periodic() {
+    }
 }

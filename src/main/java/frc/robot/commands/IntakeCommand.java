@@ -1,7 +1,6 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
@@ -13,6 +12,8 @@ public class IntakeCommand extends Command {
     public IntakeCommand(Indexer indexersubsystem, Intake intakesubststem) {
         this.indexersubsystem = indexersubsystem;
         this.intakesubststem = intakesubststem;
+
+        addRequirements(indexersubsystem,intakesubststem);
     }
 
     @Override
