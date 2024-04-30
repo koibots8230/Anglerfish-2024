@@ -1,7 +1,9 @@
 {
   "NTProvider": {
     "types": {
-      "/FMSInfo": "FMSInfo"
+      "/FMSInfo": "FMSInfo",
+      "/Robot/shooterSubsystem/bottomSimPID": "PIDController",
+      "/Robot/shooterSubsystem/topSimPID": "PIDController"
     }
   },
   "NetworkTables Info": {

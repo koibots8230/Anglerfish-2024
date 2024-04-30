@@ -57,14 +57,14 @@ public final class Constants {
         // ----------shooter----------//
 
 
-        public static final double TOP_SHOOTER_SPEAKER_SETPOINT = 0.0; // should be negitive
-        public static final double TOP_SHOOTER_AMP_SETPOINT = 0.0; // should be negitive
+        public static final double TOP_SHOOTER_SPEAKER_SETPOINT = -1000; // should be negitive
+        public static final double TOP_SHOOTER_AMP_SETPOINT = -600; // should be negitive
         public static final double TOP_SHOOTER_VELOCITY_RANGE_AMP = 20;
 
 
 
-        public static final double BOTTOM_SHOOTER_SPEAKER_SETPOINT = 0.0;
-        public static final double BOTTOM_SHOOTER_AMP_SETPOINT = 0.0;
+        public static final double BOTTOM_SHOOTER_SPEAKER_SETPOINT = 1000;
+        public static final double BOTTOM_SHOOTER_AMP_SETPOINT = -600;
         public static final double BOTTOM_SHOOTER_VELOCITY_RANGE_AMP = 20;
 
 
@@ -81,9 +81,9 @@ public final class Constants {
 
     public static class controller {
 
-        public static final XboxController CONTROLLER = new XboxController(1);
+        public static final XboxController CONTROLLER = new XboxController(0);
 
-        public static final GenericHID OPERATOR_CONTROLLER = new GenericHID(0);
+        public static final GenericHID OPERATOR_CONTROLLER = new GenericHID(1);
 
     }
 

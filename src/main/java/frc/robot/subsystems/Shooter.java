@@ -130,6 +130,28 @@ public class Shooter extends SubsystemBase implements Logged {
     public void setVelocity(double topShooterSetpoint, double bottomShooterSetpoint) {
         this.topShoterSetpoint = topShooterSetpoint;
         this.bottomShoterSetpoint = bottomShooterSetpoint;
+                System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+        System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
+System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");System.out.println("made it to set velocity");
     }
 
     public boolean checkVelocity() {
