@@ -23,6 +23,8 @@ public class RobotContainer implements Logged {
 
     private final IntakeCommand intakeCommand;
 
+    Trigger speakerShooterTrigger;
+
     public RobotContainer(boolean isReal) {
         shooterSubsystem = new Shooter(isReal);
         intakeSubsystem = new Intake(isReal);
@@ -34,7 +36,6 @@ public class RobotContainer implements Logged {
                 this, "Robot", Constants.LoggerConstants.FILEONLY, Constants.LoggerConstants.LAZYLOGGING);
         configureBindings();
     }
-    
 
     private void configureBindings() {
 
@@ -46,32 +47,47 @@ public class RobotContainer implements Logged {
 
         Trigger reverse = new Trigger(controller.CONTROLLER::getRightBumper);
         reverse.onTrue(new ParallelCommandGroup(
-                new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(-(PIDConstants.INTAKE_SETPOINT)), intakeSubsystem),
-                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(-(PIDConstants.INDEXER_SETPOINT)), indexerSubsystem)));
+                new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(-(PIDConstants.INTAKE_SETPOINT)),
+                        intakeSubsystem),
+                new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(-(PIDConstants.INDEXER_SETPOINT)),
+                        indexerSubsystem)));
         reverse.onFalse(new ParallelCommandGroup(
                 new InstantCommand(() -> intakeSubsystem.setIntakeVelocity(0.0), intakeSubsystem),
                 new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(0.0), indexerSubsystem)));
 
-        Trigger speakerShooterTrigger = new Trigger(() -> controller.CONTROLLER.getRawButtonPressed(1));
+        speakerShooterTrigger = new Trigger(() -> controller.CONTROLLER.getRawButtonPressed(1));
         speakerShooterTrigger.onTrue(new ParallelCommandGroup(
-                new InstantCommand(() -> shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_SPEAKER_SETPOINT, PIDConstants.BOTTOM_SHOOTER_SPEAKER_SETPOINT), shooterSubsystem)
-        ));
+                new InstantCommand(() -> shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_SPEAKER_SETPOINT,
+                        PIDConstants.BOTTOM_SHOOTER_SPEAKER_SETPOINT), shooterSubsystem)));
+
         speakerShooterTrigger.onFalse(new ParallelCommandGroup(
-                new InstantCommand(() -> shooterSubsystem.setVelocity(0.0, 0.0),shooterSubsystem)
-        ));
-}}
+                new InstantCommand(() -> shooterSubsystem.setVelocity(0.0, 0.0), shooterSubsystem)));
+    }
 
-//         Trigger ampShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed(5));
-//         ampShooterTrigger.onTrue(new ParallelCommandGroup(
-//                 new InstantCommand(() -> shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_AMP_SETPOINT, PIDConstants.BOTTOM_SHOOTER_AMP_SETPOINT ),shooterSubsystem)
-//         ));
-//         ampShooterTrigger.onFalse(new ParallelCommandGroup(
-//                 new InstantCommand(() -> shooterSubsystem.setVelocity(0.0 , 0.0),shooterSubsystem)
-//         ));
+    public void periodic() {
+        System.out.println(speakerShooterTrigger.getAsBoolean());
+    }
+}
 
-//         Trigger sendToShooterTrigger = new Trigger(() -> controller.OPERATOR_CONTROLLER.getRawButtonPressed((6)) && shooterSubsystem.checkVelocity());
-//         sendToShooterTrigger.onTrue(new ParallelCommandGroup(
-//                 new InstantCommand(() -> indexerSubsystem.setIndexerVelocity(PIDConstants.SEND_TO_SHOOTER_SETPOINT), indexerSubsystem)
-//         ));
-//     }
+// Trigger ampShooterTrigger = new Trigger(() ->
+// controller.OPERATOR_CONTROLLER.getRawButtonPressed(5));
+// ampShooterTrigger.onTrue(new ParallelCommandGroup(
+// new InstantCommand(() ->
+// shooterSubsystem.setVelocity(PIDConstants.TOP_SHOOTER_AMP_SETPOINT,
+// PIDConstants.BOTTOM_SHOOTER_AMP_SETPOINT ),shooterSubsystem)
+// ));
+// ampShooterTrigger.onFalse(new ParallelCommandGroup(
+// new InstantCommand(() -> shooterSubsystem.setVelocity(0.0 ,
+// 0.0),shooterSubsystem)
+// ));
+
+// Trigger sendToShooterTrigger = new Trigger(() ->
+// controller.OPERATOR_CONTROLLER.getRawButtonPressed((6)) &&
+// shooterSubsystem.checkVelocity());
+// sendToShooterTrigger.onTrue(new ParallelCommandGroup(
+// new InstantCommand(() ->
+// indexerSubsystem.setIndexerVelocity(PIDConstants.SEND_TO_SHOOTER_SETPOINT),
+// indexerSubsystem)
+// ));
+// }
 // }
