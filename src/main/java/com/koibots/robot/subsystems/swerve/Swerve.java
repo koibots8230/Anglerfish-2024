@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTablesJNI;
 import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -141,7 +142,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void addVisionMeasurement(Pose2d measurement, double timestamp) {
-        odometry.addVisionMeasurement(measurement, timestamp);
+        odometry.addVisionMeasurement(measurement, NetworkTablesJNI.now());
     }
 
     public void zeroGyro() {

@@ -51,6 +51,7 @@ public class Robot extends LoggedRobot {
         SmartDashboard.putData("Swerve Subsystem", Swerve.get());
 
         LEDs.get().send_to_rp2040(1);
+        Vision.get();
     }
 
     @Override

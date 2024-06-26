@@ -23,8 +23,10 @@ import edu.wpi.first.networktables.TimestampedDoubleArray;
 import edu.wpi.first.networktables.TimestampedInteger;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.io.IOException;
+import java.nio.file.Path;
 
 public class Vision extends SubsystemBase {
 
@@ -49,7 +51,7 @@ public class Vision extends SubsystemBase {
         }
 
         try {
-            layout = new AprilTagFieldLayout("src/main/deploy/apriltag/2024-crescendo.json");
+            layout = new AprilTagFieldLayout(Path.of(Filesystem.getDeployDirectory().getPath(), "apriltag", "2024-crescendo.json"));
         } catch (IOException e) {
             System.err.println("ERROR: Could not find apriltag field layout!");
         }
@@ -70,32 +72,20 @@ public class Vision extends SubsystemBase {
         Matrix<N3, N3> rotMatrix = new Matrix<>(Nat.N3(), Nat.N3());
         for (int a = 0; a < 3; a++) {
             for (int b = 0; b < 3; b++) {
-                rotMatrix.set(b, a, -rotation[count]);
+                rotMatrix.set(a, b, rotation[count]);
                 count++;
             }
         }
 
-        Matrix<N3, N1> transVec = new Matrix<>(Nat.N3(), Nat.N1());
-        transVec.set(0, 0, translation[0]);
-        transVec.set(1, 0, translation[1]);
-        transVec.set(2, 0, translation[2]);
-        Matrix<N3, N1> tagToCamTrans = rotMatrix.times(transVec);
-        tagToCamTrans.set(
-                0,
-                0,
-                (layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians() < Math.PI)
-                        ? tagToCamTrans.get(0, 0)
-                        : tagToCamTrans.get(0, 0) * -1);
-
-        double hypotenuse = Math.hypot(tagToCamTrans.get(0, 0), tagToCamTrans.get(0, 2));
+        double hypotenuse = Math.hypot(translation[0], translation[2]);
 
         double hypangle =
                 layout.getTagPose(tagId).get().getRotation().toRotation2d().getRadians()
-                        - Math.atan(tagToCamTrans.get(0, 0) / tagToCamTrans.get(0, 2));
+                        - Math.atan(translation[0] / translation[2]);
 
         Pose2d camPose =
                 new Pose2d(
-                        layout.getTagPose(tagId).get().getRotation().getX()
+                        layout.getTagPose(tagId).get().getX()
                                 + (hypotenuse * Math.cos(hypangle)),
                         layout.getTagPose(tagId).get().getY() + (hypotenuse * Math.sin(hypangle)),
                         new Rotation2d());
@@ -110,36 +100,34 @@ public class Vision extends SubsystemBase {
                         + Swerve.get().getGyroAngle().getRadians()
                         + 90;
 
-        Rotation3d rot = new Rotation3d(rotMatrix.transpose().times(-1));
+        Rotation2d angle = new Rotation2d(Math.PI + VisionConstants.CAMERA_POSITIONS[camera].getRotation().getRadians() + layout.getTagPose(tagId).get().getRotation().getZ() + Math.atan2(-rotMatrix.get(2, 0), Math.sqrt(Math.pow(rotMatrix.get(2, 1), 2) + Math.pow(rotMatrix.get(2, 2), 2))));
 
         return new Pose2d(
                 camPose.getX() + (hypotenuse * Math.cos(hypangle)),
                 camPose.getY() + (hypotenuse * Math.sin(hypangle)),
-                new Rotation2d(rot.getY())); // TODO: Double check where 0 is on this vs gyro
+                angle);
     }
 
     @Override
     public void periodic() {
         for (int a = 0; a < 4; a++) {
-            TimestampedDoubleArray[] tvec = vecSubscribers[a][0].readQueue();
-            TimestampedDoubleArray[] rvec = vecSubscribers[a][1].readQueue();
-            TimestampedInteger[] ids = idSubscribers[a].readQueue();
-            for (int b = 0; b < ids.length; b++) {
-                if (rvec[b].timestamp == tvec[b].timestamp
-                        && tvec[b].timestamp == ids[b].timestamp) {
-                    Pose2d pose =
-                            translateToFieldPose(
-                                    tvec[b].value, rvec[b].value, (int) ids[a].value, a);
-                    if (pose.getX() > 0
-                            && pose.getX() < layout.getFieldWidth()
-                            && pose.getY() > 0
-                            && pose.getY() < layout.getFieldLength()
-                            && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
-                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
-                            && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())
-                                    < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)) {
-                        Swerve.get().addVisionMeasurement(pose, (double) ids[b].timestamp);
-                    }
+            TimestampedDoubleArray tvec = vecSubscribers[a][0].getAtomic();
+            TimestampedDoubleArray rvec = vecSubscribers[a][1].getAtomic();
+            TimestampedInteger ids = idSubscribers[a].getAtomic();
+            if (ids.timestamp != 0) {
+                Pose2d pose =
+                        translateToFieldPose(
+                                tvec.value, rvec.value, (int) ids.value, a);
+                if (pose.getY() > 0
+                        && pose.getY() < layout.getFieldWidth()
+                        && pose.getX() > 0
+                        && pose.getX() < layout.getFieldLength()
+                        && Math.abs(pose.getX() - Swerve.get().getEstimatedPose().getX())
+                               < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
+                        && Math.abs(pose.getY() - Swerve.get().getEstimatedPose().getY())
+                               < VisionConstants.MAX_MEASUREMENT_DIFFERENCE.in(Meters)
+                               ) {
+                    Swerve.get().addVisionMeasurement(pose, ids.timestamp); //TODO: Figure out why timestamp bad
                 }
             }
         }
