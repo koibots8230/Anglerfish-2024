@@ -18,17 +18,17 @@ public class Shooter extends SubsystemBase {
 
 
     public Shooter() {
-        topMotor = new SparkMax(0, MotorType.kBrushless);
+        topMotor = new SparkMax(11, MotorType.kBrushless);
 
-        bottomMotor = new SparkMax(0, MotorType.kBrushless);
+        bottomMotor = new SparkMax(13, MotorType.kBrushless);
 
         config = new SparkMaxConfig();
 
         config.smartCurrentLimit(60);
+
+        config.inverted(true);
         
         topMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-        
-        config.inverted(true);
 
         bottomMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }

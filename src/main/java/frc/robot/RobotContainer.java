@@ -40,8 +40,8 @@ public class RobotContainer implements Logged {
     Trigger shoot = new Trigger(() -> controller.getLeftTriggerAxis() > 0.15);
     shoot.onTrue(
       Commands.sequence(
-        indexer.setSpeedCommand(0.4),
-        shooter.setSpeedCommand(0.4, 0.4)
+        indexer.setSpeedCommand(0.5),
+        shooter.setSpeedCommand(0.65, 0.65)
       )
     );
     shoot.onFalse(
@@ -54,12 +54,13 @@ public class RobotContainer implements Logged {
     Trigger intake = new Trigger(() -> controller.getRightTriggerAxis() > 0.15);
     intake.onTrue(
       Commands.sequence(
-        indexer.setSpeedCommand(-0.1),
-        shooter.setSpeedCommand(-0.1, -0.1),
+        indexer.setSpeedCommand(-0.2),
+        shooter.setSpeedCommand(-0.2, -0.2),
         Commands.waitUntil(indexer::sensorTriggered),
+        Commands.waitUntil(() -> !indexer.sensorTriggered()),
         shooter.setSpeedCommand(0, 0),
         indexer.setSpeedCommand(0.1),
-        Commands.waitUntil(() -> !indexer.sensorTriggered()),
+        Commands.waitUntil(() -> indexer.sensorTriggered()),
         indexer.setSpeedCommand(0)
       )
     );
@@ -72,11 +73,11 @@ public class RobotContainer implements Logged {
   }
 
   private void subsystemDefualtCommands() {
-    swerve.setDefaultCommand(
-        swerve.fieldOrientedCommand(
-            (() -> -1 * controller.getLeftY()),
-            (() -> -1 * controller.getLeftX()),
-            (() -> -1 * controller.getRightX())));
+    // swerve.setDefaultCommand(
+    //     swerve.fieldOrientedCommand(
+    //         (() -> -1 * controller.getLeftY()),
+    //         (() -> -1 * controller.getLeftX()),
+    //         (() -> -1 * controller.getRightX())));
   }
 
   public Command getAutonomousCommand() {

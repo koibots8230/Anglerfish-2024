@@ -19,13 +19,15 @@ public class Indexer extends SubsystemBase {
     private final DigitalInput distanceSwitch;
 
     public Indexer() {
-        motor = new SparkMax(0, MotorType.kBrushless);
+        motor = new SparkMax(9, MotorType.kBrushless);
 
         config = new SparkMaxConfig();
 
+        config.inverted(true);
+
         motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-        distanceSwitch = new DigitalInput(0);
+        distanceSwitch = new DigitalInput(1);
     }
 
     private void setSpeed(double speed) {
