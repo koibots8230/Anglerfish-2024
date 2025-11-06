@@ -40,8 +40,9 @@ public class RobotContainer implements Logged {
     Trigger shoot = new Trigger(() -> controller.getLeftTriggerAxis() > 0.15);
     shoot.onTrue(
       Commands.sequence(
-        indexer.setSpeedCommand(0.5),
-        shooter.setSpeedCommand(0.65, 0.65)
+        shooter.setSpeedCommand(0.55, 0.55),
+        Commands.waitSeconds(0.2),
+        indexer.setSpeedCommand(0.5)
       )
     );
     shoot.onFalse(
@@ -73,11 +74,11 @@ public class RobotContainer implements Logged {
   }
 
   private void subsystemDefualtCommands() {
-    // swerve.setDefaultCommand(
-    //     swerve.fieldOrientedCommand(
-    //         (() -> -1 * controller.getLeftY()),
-    //         (() -> -1 * controller.getLeftX()),
-    //         (() -> -1 * controller.getRightX())));
+    swerve.setDefaultCommand(
+        swerve.fieldOrientedCommand(
+            (() -> -1 * controller.getLeftY()),
+            (() -> -1 * controller.getLeftX()),
+            (() -> -1 * controller.getRightX())));
   }
 
   public Command getAutonomousCommand() {

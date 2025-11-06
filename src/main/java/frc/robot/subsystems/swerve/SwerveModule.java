@@ -1,22 +1,29 @@
 package frc.robot.subsystems.swerve;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Milliseconds;
+import static edu.wpi.first.units.Units.Radians;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
-import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkFlexConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -151,25 +158,15 @@ public class SwerveModule implements Logged {
   }
 
   public void setState(SwerveModuleState state) {
-    // SwerveModuleState optimizedState = SwerveModuleState.optimize(state, turnPosition);
-    SwerveModuleState optimizedState = state;
-    optimizedState.speedMetersPerSecond =
-        optimizedState.speedMetersPerSecond * optimizedState.angle.minus(turnPosition).getCos();
+    //state.optimize(Rotation2d.fromRadians(MathUtil.angleModulus(turnPosition.getRadians())));
+    state.speedMetersPerSecond *= Math.cos(state.angle.getRadians() - turnPosition.getRadians());
 
-    driveSetpoint = optimizedState.speedMetersPerSecond;
+    driveSetpoint = state.speedMetersPerSecond;
 
     turnGoalState =
-        new TrapezoidProfile.State(optimizedState.angle.getRadians() + angleOffset.getRadians(), 0);
+        new TrapezoidProfile.State(MathUtil.angleModulus(state.angle.getRadians() + angleOffset.getRadians()), 0);
 
-    turnSetpointState = turnProfile.calculate(0.02, turnSetpointState, turnGoalState);
-
-    turnPID.setReference(
-        optimizedState.angle.getRadians() + angleOffset.getRadians(),
-        ControlType.kPosition,
-        ClosedLoopSlot.kSlot0,
-        turnFF.calculate(turnSetpointState.velocity));
-
-    drivePID.setReference(optimizedState.speedMetersPerSecond, ControlType.kVelocity);
+    drivePID.setReference(state.speedMetersPerSecond, ControlType.kVelocity);
   }
 
   public void periodic() {
@@ -177,7 +174,6 @@ public class SwerveModule implements Logged {
 
     turnPosition = Rotation2d.fromRadians(turnEncoder.getPosition() - angleOffset.getRadians());
     turnVelocity = turnEncoder.getVelocity();
-    System.out.println(turnPosition);
     turnCurrent = turnMotor.getOutputCurrent();
     turnVoltage = turnMotor.getBusVoltage() * turnMotor.getAppliedOutput();
 
@@ -186,6 +182,14 @@ public class SwerveModule implements Logged {
 
     driveCurrent = driveMotor.getOutputCurrent();
     driveVoltage = driveMotor.getBusVoltage() * driveMotor.getAppliedOutput();
+
+    turnSetpointState = turnProfile.calculate(0.02, turnSetpointState, turnGoalState);
+
+    turnPID.setReference(
+        turnSetpointState.position,
+        ControlType.kPosition,
+        ClosedLoopSlot.kSlot0,
+        turnFF.calculate(turnSetpointState.velocity));
   }
 
   public void simulationPeriodic() {

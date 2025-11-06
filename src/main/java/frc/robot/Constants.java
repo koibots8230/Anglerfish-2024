@@ -26,20 +26,20 @@ public class Constants {
 
     public static final Time CAN_TIMEOUT = Milliseconds.of(20);
 
-    public static final double JOYSTICK_DEADBAND = 0.05;
+    public static final double JOYSTICK_DEADBAND = 0.1;
   }
 
   public static class SwerveConstants {
 
-    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(1.5);
+    public static final LinearVelocity MAX_LINEAR_SPEED = MetersPerSecond.of(0.75);
 
     public static final AngularVelocity MAX_ANGULAR_VELOCITY =
         RadiansPerSecond.of(2 * Math.PI);
 
     public static final AngularVelocity MAX_TURN_VELOCITY =
-        RadiansPerSecond.of(2 * Math.PI);
+        RadiansPerSecond.of(20 * Math.PI);
     public static final AngularAcceleration MAX_TURN_ACCELERATION =
-        RadiansPerSecond.per(Second).of(Math.PI * 4);
+        RadiansPerSecond.per(Second).of(Math.PI * 30);
 
     public static final SwerveDriveKinematics KINEMATICS =
         new SwerveDriveKinematics(
@@ -48,13 +48,13 @@ public class Constants {
             new Translation2d(RobotConstants.LENGTH.divide(-2), RobotConstants.WIDTH.divide(2)),
             new Translation2d(RobotConstants.LENGTH.divide(-2), RobotConstants.WIDTH.divide(-2)));
 
-    public static final PIDGains DRIVE_PID_GAINS = new PIDGains.Builder().kp(0.0001).build();
+    public static final PIDGains DRIVE_PID_GAINS = new PIDGains.Builder().kp(0.0005).build();
     public static final FeedforwardGains DRIVE_FF_GAINS =
         new FeedforwardGains.Builder().kv(0.2).build();
 
-    public static final PIDGains TURN_PID_GAINS = new PIDGains.Builder().kp(0.2).build();
+    public static final PIDGains TURN_PID_GAINS = new PIDGains.Builder().kp(0.4).build();
     public static final FeedforwardGains TURN_FF_GAINS =
-        new FeedforwardGains.Builder().ks(0).kv(0.0).build();
+        new FeedforwardGains.Builder().ks(0).kv(0.4).build();
 
     public static final PIDGains ANGLE_PID_GAINS = new PIDGains.Builder().kp(0).kd(0).build();
 
@@ -65,10 +65,10 @@ public class Constants {
 
     public static final Rotation2d[] ANGLE_OFFSETS =
         new Rotation2d[] {
-          Rotation2d.fromRadians(Math.PI / 2.0),
-          Rotation2d.fromRadians(Math.PI),
-          Rotation2d.fromRadians(0),
-          Rotation2d.fromRadians((3 * Math.PI) / 2.0)
+            Rotation2d.fromRadians((Math.PI) / 2.0),
+            Rotation2d.fromRadians(Math.PI),
+            Rotation2d.fromRadians(0),
+            Rotation2d.fromRadians((3 * Math.PI) / 2.0)
         };
 
     private static final int DRIVING_PINION_TEETH = 13;
@@ -94,7 +94,7 @@ public class Constants {
     public static final int BACK_RIGHT_DRIVE_ID = 8;
     public static final int BACK_RIGHT_TURN_ID = 7;
 
-    public static final int GYRO_ID = 18;
+    public static final int GYRO_ID = 10;
 
     // ====================AUTO====================
     public static final Distance REPLANNING_ERROR_THRESHOLD = Meters.of(1);
