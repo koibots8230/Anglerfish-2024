@@ -4,84 +4,59 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.epilogue.Logged;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.swerve.Swerve;
-import monologue.Logged;
-import monologue.Monologue;
+import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.EndEffectorConstants;
+import frc.robot.subsystems.*;
 
-public class RobotContainer implements Logged {
-
-  private XboxController controller;
+@Logged
+public class RobotContainer {
 
   private final Swerve swerve;
-  private final Indexer indexer;
-  private final Shooter shooter;
 
-  public RobotContainer(boolean isReal) {
-    controller = new XboxController(0);
+  private final CommandXboxController xboxController;
+  private final GenericHID operatorPad;
 
-    swerve = new Swerve(isReal);
-    indexer = new Indexer();
-    shooter = new Shooter();
+  private boolean isBlue;
 
-    Monologue.setupMonologue(this, "Robot", false, false);
+  public RobotContainer() {
+    swerve = new Swerve();
+
+
+    xboxController = new CommandXboxController(0);
+    operatorPad = new GenericHID(1);
 
     configureBindings();
-    subsystemDefualtCommands();
+    defualtCommands();
   }
 
   private void configureBindings() {
-    Trigger shoot = new Trigger(() -> controller.getLeftTriggerAxis() > 0.15);
-    shoot.onTrue(
-      Commands.sequence(
-        shooter.setSpeedCommand(0.55, 0.55),
-        Commands.waitSeconds(0.2),
-        indexer.setSpeedCommand(0.5)
-      )
-    );
-    shoot.onFalse(
-      Commands.sequence(
-        indexer.setSpeedCommand(0),
-        shooter.setSpeedCommand(0, 0)
-      )
-    );
 
-    Trigger intake = new Trigger(() -> controller.getRightTriggerAxis() > 0.15);
-    intake.onTrue(
-      Commands.sequence(
-        indexer.setSpeedCommand(-0.2),
-        shooter.setSpeedCommand(-0.2, -0.2),
-        Commands.waitUntil(indexer::sensorTriggered),
-        Commands.waitUntil(() -> !indexer.sensorTriggered()),
-        shooter.setSpeedCommand(0, 0),
-        indexer.setSpeedCommand(0.1),
-        Commands.waitUntil(() -> indexer.sensorTriggered()),
-        indexer.setSpeedCommand(0)
-      )
-    );
-    intake.onFalse(
-      Commands.sequence(
-        indexer.setSpeedCommand(0),
-        shooter.setSpeedCommand(0, 0)
-      )
-    );
+    Trigger zero = xboxController.b().and(xboxController.a());
+    zero.onTrue(swerve.zeroGyroCommand(isBlue));
+
   }
 
-  private void subsystemDefualtCommands() {
+  private void defualtCommands() {
     swerve.setDefaultCommand(
-        swerve.fieldOrientedCommand(
-            (() -> -1 * controller.getLeftY()),
-            (() -> -1 * controller.getLeftX()),
-            (() -> -1 * controller.getRightX())));
+        swerve.driveFieldRelativeCommand(
+            xboxController::getLeftY, xboxController::getLeftX, xboxController::getRightX));
   }
 
-  public Command getAutonomousCommand() {
-    return new WaitCommand(15);
+    public void setAlliance() {
+    isBlue = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue);
+    swerve.setIsBlue(isBlue);
   }
+
+
 }
