@@ -1,7 +1,6 @@
 package frc.lib.util;
 
 import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.Measure;
 
 public class Wheel {
   public final Distance circumfrence;

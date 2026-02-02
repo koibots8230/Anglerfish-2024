@@ -6,7 +6,6 @@ import static edu.wpi.first.units.Units.Radians;
 import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Seconds;
 
-import choreo.trajectory.SwerveSample;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import edu.wpi.first.epilogue.Logged;
 import edu.wpi.first.epilogue.NotLogged;
@@ -319,6 +318,62 @@ public class Swerve extends SubsystemBase {
                 gyroAngle.getRadians(), targetAngle.getRadians() + (isBlue ? 0 : Math.PI))));
   }
 
+  private Pose2d reefAlignAssist(double xInput, double yInput, double omega) {
+    xInput = isBlue ? xInput : -xInput;
+    yInput = isBlue ? yInput : -yInput;
+    omega = isBlue ? omega : -omega;
+
+    Pose2d closestSide = getReefSide();
+
+    Pose2d pose;
+    switch (reefAlignState) {
+      case rightSide:
+        pose =
+            new Pose2d(
+                getPoleTranslation(closestSide, true).plus(getEffectorOffset(closestSide)),
+                closestSide.getRotation());
+        break;
+      case leftSide:
+        pose =
+            new Pose2d(
+                getPoleTranslation(closestSide, false).plus(getEffectorOffset(closestSide)),
+                closestSide.getRotation());
+        break;
+      case disabled:
+        alignTarget = Pose2d.kZero;
+        return Pose2d.kZero;
+      default:
+        alignTarget = Pose2d.kZero;
+        return Pose2d.kZero;
+    }
+
+    if (distanceToPose(pose).gte(AlignConstants.MIN_DISTANCE)) {
+      alignTarget = Pose2d.kZero;
+      return Pose2d.kZero;
+    }
+
+    Rotation2d movementDirection = Rotation2d.fromRadians(Math.atan2(yInput, xInput));
+
+    Rotation2d angleRange =
+        Rotation2d.fromRadians(
+            AlignConstants.DIRECTION_ANGLE_RANGE_CLOSE.in(Radians)
+                - (distanceToPose(pose).in(Meters) * AlignConstants.DISTANCE_ANGLE_RANGE_SCALAR));
+
+    if (Math.abs(
+            (movementDirection.getRadians()
+                        - pose.getRotation().unaryMinus().getRadians()
+                        + Math.PI)
+                    % (2 * Math.PI)
+                - Math.PI)
+        > angleRange.getRadians()) {
+      alignTarget = Pose2d.kZero;
+      return Pose2d.kZero;
+    }
+
+    alignTarget = pose;
+
+    return getAssistVelocity(pose.getTranslation(), pose.getRotation(), xInput, yInput);
+  }
 
   // ===================== Teleop Driving ===================== \\
 
@@ -342,12 +397,12 @@ public class Swerve extends SubsystemBase {
             * SwerveConstants.MAX_ANGULAR_VELOCITY.in(RadiansPerSecond)
             * speedScalar;
 
-
+    Pose2d assist = reefAlignAssist(-x, y, omega);
 
     driveFieldRelative(
         MetersPerSecond.of(
             MathUtil.applyDeadband(
-                x + ( * Math.sqrt(linearMagnitude) * (isBlue ? -1 : 1)),
+                x + (assist.getX() * Math.sqrt(linearMagnitude) * (isBlue ? -1 : 1)),
                 SwerveConstants.DEADBAND)),
         MetersPerSecond.of(
             MathUtil.applyDeadband(
@@ -382,6 +437,8 @@ public class Swerve extends SubsystemBase {
     driveRobotRelative(speeds);
   }
 
+  
+
   private void toggleSpeed() {
     speedScalar = (speedScalar == 1) ? 0.5 : 1;
   }
@@ -401,6 +458,10 @@ public class Swerve extends SubsystemBase {
 
   public Command zeroGyroCommand(boolean colour) {
     return Commands.runOnce(() -> zeroGyro(), this);
+  }
+
+  public Command setReefAlignStateCommand(ReefAlignState state) {
+    return Commands.runOnce(() -> this.setReefAlignState(state));
   }
 
   public Command toggleSpeedCommand() {

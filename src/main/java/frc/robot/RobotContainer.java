@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.lib.util.EndEffectorState;
+import frc.lib.util.ReefAlignState;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.EndEffectorConstants;
 import frc.robot.subsystems.*;
@@ -23,6 +25,7 @@ import frc.robot.subsystems.*;
 public class RobotContainer {
 
   private final Swerve swerve;
+  private final Vision vision;
 
   private final CommandXboxController xboxController;
   private final GenericHID operatorPad;
@@ -32,6 +35,12 @@ public class RobotContainer {
   public RobotContainer() {
     swerve = new Swerve();
 
+    vision =
+        new Vision(
+            swerve::getEstimatedPosition,
+            swerve::getGyroAngle,
+            swerve::addVisionMeasurement,
+            swerve::getIsBlue);
 
     xboxController = new CommandXboxController(0);
     operatorPad = new GenericHID(1);
@@ -53,10 +62,13 @@ public class RobotContainer {
             xboxController::getLeftY, xboxController::getLeftX, xboxController::getRightX));
   }
 
-    public void setAlliance() {
+  public void setAlliance() {
     isBlue = (DriverStation.getAlliance().get() == DriverStation.Alliance.Blue);
     swerve.setIsBlue(isBlue);
   }
 
+  public Command rumble(double amount) {
+    return Commands.runOnce(() -> xboxController.setRumble(RumbleType.kBothRumble, amount));
+  }
 
 }
