@@ -24,6 +24,7 @@ import frc.robot.subsystems.*;
 @Logged
 public class RobotContainer {
 
+  private final Shooter shooter;
   private final Swerve swerve;
   private final Vision vision;
 
@@ -33,6 +34,7 @@ public class RobotContainer {
   private boolean isBlue;
 
   public RobotContainer() {
+    shooter = new Shooter();
     swerve = new Swerve();
 
     vision =
@@ -53,6 +55,14 @@ public class RobotContainer {
 
     Trigger zero = xboxController.b().and(xboxController.a());
     zero.onTrue(swerve.zeroGyroCommand(isBlue));
+
+    Trigger shoot = new Trigger(() -> xboxController.getRightTriggerAxis() > .15);
+    shoot.onTrue(shooter.setVelocityCommand(.2));
+    shoot.onFalse(shooter.setVelocityCommand(0));
+
+    Trigger reverse = new Trigger(() -> xboxController.getLeftTriggerAxis() > .15);
+    reverse.onTrue(shooter.setVelocityCommand(-.2));
+    shoot.onFalse(shooter.setVelocityCommand(0));
 
   }
 
